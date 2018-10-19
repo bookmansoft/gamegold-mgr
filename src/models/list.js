@@ -1,4 +1,4 @@
-import { queryFakeList, removeFakeList, addFakeList, updateFakeList } from '@/services/api';
+import { queryCPList, queryFakeList, removeFakeList, addFakeList, updateFakeList } from '@/services/api';
 
 export default {
   namespace: 'list',
@@ -8,6 +8,13 @@ export default {
   },
 
   effects: {
+    *getCpList({ payload }, { call, put }) {
+      const response = yield call(queryCPList, payload);
+      yield put({
+        type: 'queryCps',
+        payload: Array.isArray(response) ? response : [],
+      });
+    },
     *fetch({ payload }, { call, put }) {
       const response = yield call(queryFakeList, payload);
       yield put({
@@ -38,6 +45,12 @@ export default {
   },
 
   reducers: {
+    queryCps(state, action) {
+      return {
+        ...state,
+        list: action.payload,
+      };
+    },
     queryList(state, action) {
       return {
         ...state,

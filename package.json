@@ -28,8 +28,8 @@
     "@antv/data-set": "^0.9.6",
     "@babel/runtime": "^7.1.2",
     "antd": "^3.10.0",
-    "bizcharts": "^3.2.2",
-    "bizcharts-plugin-slider": "^2.0.3",
+    "bizcharts": "^3.2.4",
+    "bizcharts-plugin-slider": "^2.1.1-beta.1",
     "classnames": "^2.2.6",
     "dva": "^2.4.0",
     "enquire-js": "^0.2.1",
@@ -83,7 +83,8 @@
     "stylelint-config-standard": "^18.0.0",
     "umi": "^2.1.2",
     "umi-plugin-ga": "^1.1.3",
-    "umi-plugin-react": "^1.1.1"
+    "umi-plugin-react": "^1.1.1",
+    "webpack": "^4.21.0"
   },
   "optionalDependencies": {
     "puppeteer": "^1.9.0"

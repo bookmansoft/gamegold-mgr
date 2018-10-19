@@ -42,7 +42,10 @@ describe('Homepage', () => {
     });
 
   beforeAll(async () => {
-    browser = await puppeteer.launch({ args: ['--no-sandbox'] });
+    browser = await puppeteer.launch({ args: ['--no-sandbox'],
+      //直接指定 chrome.exe 的位置，注意路径使用双反斜杠
+      executablePath: 'C:\\Users\\admin\\AppData\\Local\\Google\\Chrome\\Application\\chrome.exe'
+    });
     page = await browser.newPage();
     jest.setTimeout(1000000);
   });
