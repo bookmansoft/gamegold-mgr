@@ -5,7 +5,7 @@ import webpackPlugin from './plugin.config';
 import defaultSettings from '../src/defaultSettings';
 
 export default {
-  // add for transfer to umi
+  // 指定插件
   plugins: [
     [
       'umi-plugin-react',
@@ -60,17 +60,19 @@ export default {
   externals: {
     '@antv/data-set': 'DataSet',
   },
-  // proxy: {
-  //   '/server/api/': {
-  //     target: 'https://preview.pro.ant.design/',
-  //     changeOrigin: true,
-  //     pathRewrite: { '^/server': '' },
-  //   },
-  // },
+  // 配置 webpack-dev-server 的 proxy 属性, 代理请求到其他服务器
+  proxy: {
+    "/api/execute": {
+      target: "http://localhost:17332",
+      changeOrigin: true,
+      pathRewrite: { "^/api/execute" : '' }
+    }
+  },
   ignoreMomentLocale: true,
   lessLoaderOptions: {
     javascriptEnabled: true,
   },
+  // 禁用 redirect 上提。出于一些原因的考虑，我们在处理路由时把所有 redirect 声明提到路由最前面进行匹配，但这导致了一些问题，所以添加了这个配置项，禁用 redirect 上提。
   disableRedirectHoist: true,
   cssLoaderOptions: {
     modules: true,
