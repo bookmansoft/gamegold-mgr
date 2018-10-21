@@ -123,7 +123,9 @@ export default function request(
   }
   return fetch(url, newOptions)
     .then(checkStatus)
-    .then(response => cachedSave(response, hashcode))
+    //todo start: 2018.10.21 如下语句缓存了频繁发起的请求的结果，但也容易造成很多歧义性现象，暂时屏蔽
+    //.then(response => cachedSave(response, hashcode))
+    //end
     .then(response => {
       // DELETE and 204 do not return data by default
       // using .json will report an error.

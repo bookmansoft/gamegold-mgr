@@ -126,14 +126,14 @@ const defaultNetworkType = 'testnet';
 
 const main = {
   apiKey: 'bookmansoft', //远程服务器基本校验密码
-  cid: 'terminal001', //终端编码，作为访问远程钱包时的终端标识
-  token: '0340129aaa7a69ac10bfbf314b9b1ca8bdda5faecce1b6dab3e7c4178b99513392', //访问钱包时的令牌固定量，通过HMAC算法，将令牌随机量和令牌固定量合成为最终的访问令牌
+  cid: 'xxxxxxxx-game-gold-root-xxxxxxxxxxxx', //授权节点编号，用于访问远程钱包时的认证
+  token: '03aee0ed00c6ad4819641c7201f4f44289564ac4e816918828703eecf49e382d08', //授权节点令牌固定量，用于访问远程钱包时的认证
 };
 
 const testnet = {
   apiKey: 'bookmansoft', //远程服务器基本校验密码
-  cid: 'terminal001', //终端编码，作为访问远程钱包时的终端标识
-  token: '0340129aaa7a69ac10bfbf314b9b1ca8bdda5faecce1b6dab3e7c4178b99513392', //访问钱包时的令牌固定量，通过HMAC算法，将令牌随机量和令牌固定量合成为最终的访问令牌
+  cid: 'xxxxxxxx-game-gold-root-xxxxxxxxxxxx', //授权节点编号，用于访问远程钱包时的认证
+  token: '03aee0ed00c6ad4819641c7201f4f44289564ac4e816918828703eecf49e382d08', //授权节点令牌固定量，用于访问远程钱包时的认证
 };
 
 /**
@@ -213,7 +213,7 @@ function fillOptions(options) {
   if ($params.token && rnd) {
     options.body.token = signHMAC($params.token, rnd);
   }
-  options.body.id = $params.id; //附加默认钱包编号
+  options.body.wid = $params.id; //附加默认钱包编号
   options.body.cid = $params.cid; //附加客户端编号
 
   let auth = {
@@ -250,19 +250,12 @@ async function queryToken() {
   }
 }
 
-export async function request(url, options) {
-  await queryToken();
-  let ret = await $req(url, options);
-  console.log('fetched:', ret); // test only
-  return ret;
-}
-
 /**
  * 访问游戏金节点的远程调用函数
  * @param {String}  method 调用方法名
  * @param {Array}   params 调用参数数组, ！！！注意不是带属性的参数对象
  */
-export async function remoting(method, params) {
+export default async function remoting(method, params) {
   await queryToken();
 
   params = params || [];

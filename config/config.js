@@ -60,14 +60,6 @@ export default {
   externals: {
     '@antv/data-set': 'DataSet',
   },
-  // 配置 webpack-dev-server 的 proxy 属性, 代理请求到其他服务器
-  proxy: {
-    "/api/execute": {
-      target: "http://localhost:17332",
-      changeOrigin: true,
-      pathRewrite: { "^/api/execute" : '' }
-    }
-  },
   ignoreMomentLocale: true,
   lessLoaderOptions: {
     javascriptEnabled: true,
@@ -114,5 +106,14 @@ export default {
   chainWebpack: webpackPlugin,
   cssnano: {
     mergeRules: false,
+  },
+  //配置 webpack-dev-server 的 proxy 属性, 代理请求到其他服务器
+  //@note 2018.10.21 当前版本必须使用 npm run start:no-mock 启动系统、禁用mock后，代理配置才能完全生效
+  proxy: {
+    "/api/execute": {
+      "target": "http://localhost:17332",
+      "changeOrigin": true,
+      "pathRewrite": { "^/api/execute" : "" }
+    }
   },
 };

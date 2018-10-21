@@ -3,7 +3,7 @@ import request from '@/utils/request';
 
 import remoting from '@/utils/remoting';
 export async function queryCPList(params) {
-  return remoting('cp.list', Object.values(params)); //将传入的参数对象转化为参数数组，以适应ggserver的接口需求
+  return remoting('sys.testlist', Object.values(params)); //将传入的参数对象转化为参数数组，以适应ggserver的接口需求
 }
 
 export async function queryProjectNotice() {

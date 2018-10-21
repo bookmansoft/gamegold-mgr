@@ -105,6 +105,11 @@ export default [
             component: './List/BasicList',
           },
           {
+            path: '/list/game-list',
+            name: 'gamelist',
+            component: './List/GameList',
+          },
+          {
             path: '/list/card-list',
             name: 'cardlist',
             component: './List/CardList',
