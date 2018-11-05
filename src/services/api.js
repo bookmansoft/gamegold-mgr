@@ -129,3 +129,7 @@ export async function queryNotices() {
 export async function getFakeCaptcha(mobile) {
   return request(`/api/captcha?mobile=${mobile}`);
 }
+
+export async function getAllMessage(params) {
+  return request(`/api/message_list?${stringify(params)}`);
+}

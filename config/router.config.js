@@ -262,6 +262,19 @@ export default [
         ],
       },
       {
+        name: 'message',
+        icon: 'check-circle-o',
+        path: '/message',
+        routes: [
+          {
+            path: '/message/index',
+            name: 'index',
+            component: './Message/index',
+          },
+        ],
+      },
+
+      {
         component: '404',
       },
     ],
