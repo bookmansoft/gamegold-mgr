@@ -10,6 +10,7 @@ export default [
       { path: '/user/register-result', component: './User/RegisterResult' },
     ],
   },
+
   // app
   {
     path: '/',
@@ -17,6 +18,19 @@ export default [
     Routes: ['src/pages/Authorized'],
     authority: ['admin', 'user'],
     routes: [
+      // usermgr
+      {
+        path: '/usermgr',
+        name: 'usermgr',
+        icon: 'table',
+        routes: [
+          {
+            path: '/usermgr/userlist',
+            name: 'userlist',
+            component: './UserMgr/UserList',
+          },
+        ],
+      },
       // dashboard
       { path: '/', redirect: '/dashboard/analysis' },
       {
