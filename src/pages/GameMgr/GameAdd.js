@@ -32,7 +32,7 @@ class GameAdd extends PureComponent {
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         dispatch({
-          type: 'form/submitRegularForm',
+          type: 'game/add',
           payload: values,
         });
       }
@@ -48,7 +48,7 @@ class GameAdd extends PureComponent {
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 7 },
+        sm: { span: 3 },
       },
       wrapperCol: {
         xs: { span: 24 },
@@ -70,171 +70,145 @@ class GameAdd extends PureComponent {
         content={<FormattedMessage id="app.forms.basic.description" />}
       >
         <Card bordered={false}>
-          <Form onSubmit={this.handleSubmit} hideRequiredMark style={{ marginTop: 8 }}>
-            <FormItem {...formItemLayout} label={<FormattedMessage id="form.title.label" />}>
-              {getFieldDecorator('title', {
+          <Form onSubmit={this.handleSubmit} hideRequiredMark={false} style={{ marginTop: 8 }}>
+            <br/>
+            <h2><b>游戏信息</b></h2>
+            <br/>
+            <FormItem {...formItemLayout} label="游戏名称">
+              {getFieldDecorator('gameName', {
                 rules: [
                   {
                     required: true,
-                    message: formatMessage({ id: 'validation.title.required' }),
+                    message: "请输入游戏名称",
                   },
                 ],
-              })(<Input placeholder={formatMessage({ id: 'form.title.placeholder' })} />)}
+              })(<Input placeholder="请输入" />)}
             </FormItem>
-            <FormItem {...formItemLayout} label={<FormattedMessage id="form.date.label" />}>
-              {getFieldDecorator('date', {
-                rules: [
-                  {
-                    required: true,
-                    message: formatMessage({ id: 'validation.date.required' }),
-                  },
-                ],
-              })(
-                <RangePicker
-                  style={{ width: '100%' }}
-                  placeholder={[
-                    formatMessage({ id: 'form.date.placeholder.start' }),
-                    formatMessage({ id: 'form.date.placeholder.end' }),
-                  ]}
-                />
+            <FormItem {...formItemLayout} label="游戏类型（多选）：">
+              {getFieldDecorator('gameType')(
+                <Select placeholder="请选择">
+                  <Option value="0">全部</Option>
+                  <Option value="1">休闲益智</Option>
+                  <Option value="2">角色扮演</Option>
+                  <Option value="3">战争策略</Option>
+                </Select>
               )}
             </FormItem>
-            <FormItem {...formItemLayout} label={<FormattedMessage id="form.goal.label" />}>
-              {getFieldDecorator('goal', {
+
+            <FormItem {...formItemLayout} label="开发者名称">
+              {getFieldDecorator('developerName', {
                 rules: [
                   {
                     required: true,
-                    message: formatMessage({ id: 'validation.goal.required' }),
+                    message: "请输入开发者名称",
+                  },
+                ],
+              })(<Input placeholder="请输入" />)}
+            </FormItem>
+            <FormItem {...formItemLayout} label="游戏URL链接">
+              {getFieldDecorator('gameUrl', {
+                rules: [
+                  {
+                    required: true,
+                    message: "请输入游戏URL链接",
+                  },
+                ],
+              })(<Input placeholder="请输入" />)}
+            </FormItem>
+            <FormItem {...formItemLayout} label="游戏简介">
+              {getFieldDecorator('gameDesc', {
+                rules: [
+                  {
+                    required: true,
+                    message: "请输入游戏简介，不超过300字",
                   },
                 ],
               })(
                 <TextArea
                   style={{ minHeight: 32 }}
-                  placeholder={formatMessage({ id: 'form.goal.placeholder' })}
+                  placeholder="请输入游戏简介，不超过300字"
                   rows={4}
                 />
               )}
             </FormItem>
-            <FormItem {...formItemLayout} label={<FormattedMessage id="form.standard.label" />}>
-              {getFieldDecorator('standard', {
+            <br/>
+            <h2><b>版本信息</b></h2>
+            <br/>
+            <FormItem {...formItemLayout} label="当前版本">
+              {getFieldDecorator('currentVersion', {
+                rules: [
+                  {
+                    required: false,
+                    message: "请输入当前版本",
+                  },
+                ],
+              })(<Input placeholder="V 请输入" />)}
+            </FormItem>
+            <br/>
+            <h2><b>素材信息</b></h2>
+            <br/>
+            <FormItem {...formItemLayout} label="ICON链接">
+              {getFieldDecorator('iconLink', {
                 rules: [
                   {
                     required: true,
-                    message: formatMessage({ id: 'validation.standard.required' }),
+                    message: "请输入ICON链接",
                   },
                 ],
-              })(
-                <TextArea
-                  style={{ minHeight: 32 }}
-                  placeholder={formatMessage({ id: 'form.standard.placeholder' })}
-                  rows={4}
-                />
-              )}
+              })(<Input placeholder="请输入" />)}
             </FormItem>
-            <FormItem
-              {...formItemLayout}
-              label={
-                <span>
-                  <FormattedMessage id="form.client.label" />
-                  <em className={styles.optional}>
-                    <FormattedMessage id="form.optional" />
-                    <Tooltip title={<FormattedMessage id="form.client.label.tooltip" />}>
-                      <Icon type="info-circle-o" style={{ marginRight: 4 }} />
-                    </Tooltip>
-                  </em>
-                </span>
-              }
-            >
-              {getFieldDecorator('client')(
-                <Input placeholder={formatMessage({ id: 'form.client.placeholder' })} />
-              )}
+            <FormItem {...formItemLayout} label="ICON预览">
+              <label>ICON建议尺寸：100*100</label>
             </FormItem>
-            <FormItem
-              {...formItemLayout}
-              label={
-                <span>
-                  <FormattedMessage id="form.invites.label" />
-                  <em className={styles.optional}>
-                    <FormattedMessage id="form.optional" />
-                  </em>
-                </span>
-              }
-            >
-              {getFieldDecorator('invites')(
-                <Input placeholder={formatMessage({ id: 'form.invites.placeholder' })} />
-              )}
+
+            <FormItem {...formItemLayout} label="封面图链接">
+              {getFieldDecorator('faceLink', {
+                rules: [
+                  {
+                    required: true,
+                    message: "请输入封面图链接",
+                  },
+                ],
+              })(<Input placeholder="请输入" />)}
             </FormItem>
-            <FormItem
-              {...formItemLayout}
-              label={
-                <span>
-                  <FormattedMessage id="form.weight.label" />
-                  <em className={styles.optional}>
-                    <FormattedMessage id="form.optional" />
-                  </em>
-                </span>
-              }
-            >
-              {getFieldDecorator('weight')(
-                <InputNumber
-                  placeholder={formatMessage({ id: 'form.weight.placeholder' })}
-                  min={0}
-                  max={100}
-                />
-              )}
-              <span className="ant-form-text">%</span>
+            <FormItem {...formItemLayout} label="封面图预览">
+              <label>封面图建议尺寸：800*600</label>
             </FormItem>
-            <FormItem
-              {...formItemLayout}
-              label={<FormattedMessage id="form.public.label" />}
-              help={<FormattedMessage id="form.public.label.help" />}
-            >
-              <div>
-                {getFieldDecorator('public', {
-                  initialValue: '1',
-                })(
-                  <Radio.Group>
-                    <Radio value="1">
-                      <FormattedMessage id="form.public.radio.public" />
-                    </Radio>
-                    <Radio value="2">
-                      <FormattedMessage id="form.public.radio.partially-public" />
-                    </Radio>
-                    <Radio value="3">
-                      <FormattedMessage id="form.public.radio.private" />
-                    </Radio>
-                  </Radio.Group>
-                )}
-                <FormItem style={{ marginBottom: 0 }}>
-                  {getFieldDecorator('publicUsers')(
-                    <Select
-                      mode="multiple"
-                      placeholder={formatMessage({ id: 'form.publicUsers.placeholder' })}
-                      style={{
-                        margin: '8px 0',
-                        display: getFieldValue('public') === '2' ? 'block' : 'none',
-                      }}
-                    >
-                      <Option value="1">
-                        <FormattedMessage id="form.publicUsers.option.A" />
-                      </Option>
-                      <Option value="2">
-                        <FormattedMessage id="form.publicUsers.option.B" />
-                      </Option>
-                      <Option value="3">
-                        <FormattedMessage id="form.publicUsers.option.C" />
-                      </Option>
-                    </Select>
-                  )}
-                </FormItem>
-              </div>
+
+            <FormItem {...formItemLayout} label="游戏截图1链接">
+              {getFieldDecorator('picture1Link', {
+                rules: [
+                  {
+                    required: true,
+                    message: "请输入游戏截图1链接",
+                  },
+                ],
+              })(<Input placeholder="请输入" />)}
             </FormItem>
+
+            <FormItem {...formItemLayout} label="游戏截图2链接">
+              {getFieldDecorator('picture2Link', {
+                rules: [
+                  {
+                    required: true,
+                    message: "请输入游戏截图2链接",
+                  },
+                ],
+              })(<Input placeholder="请输入" />)}
+            </FormItem>
+            <FormItem {...formItemLayout} label="截图预览">
+              <label>游戏截图1</label>
+              <label>游戏截图2</label>
+            </FormItem>
+
+
+ 
             <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
               <Button type="primary" htmlType="submit" loading={submitting}>
                 <FormattedMessage id="form.submit" />
               </Button>
-              <Button style={{ marginLeft: 8 }}>
-                <FormattedMessage id="form.save" />
+              <Button style={{ marginLeft: 8 }}  htmlType="reset">
+                取消
               </Button>
             </FormItem>
           </Form>

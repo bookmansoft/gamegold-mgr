@@ -18,7 +18,7 @@ export default {
   effects: {
     *add({ payload }, { call }) {
       yield call(addGameMgr, payload);
-      message.success('提交成功');
+      message.success('提交成功!');
     },
   },
 
