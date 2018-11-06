@@ -31,6 +31,19 @@ export default [
           },
         ],
       },
+      // gamemgr
+      {
+        path: '/gamemgr',
+        name: 'gamemgr',
+        icon: 'table',
+        routes: [
+          {
+            path: '/gamemgr/gamelist',
+            name: 'gamelist',
+            component: './GameMgr/GameList',
+          },
+        ],
+      },
       // dashboard
       { path: '/', redirect: '/dashboard/analysis' },
       {

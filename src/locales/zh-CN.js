@@ -70,7 +70,7 @@ export default {
   'menu.usermgr': '用户管理',
   'menu.usermgr.userlist': '用户列表',
   'menu.gamemgr': '游戏管理',
-  'menu.gamemgr.list': '游戏列表',
+  'menu.gamemgr.gamelist': '游戏列表',
   'menu.home': '首页',
   'menu.dashboard': 'Dashboard',
   'menu.dashboard.analysis': '分析页',
