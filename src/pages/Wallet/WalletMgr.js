@@ -54,36 +54,21 @@ class WalletMgr extends PureComponent {
 
   columns = [
     {
-      title: 'ID',
-      dataIndex: 'gameId',
-    },
-    {
-      title: '游戏名',
-      dataIndex: 'gameName',
-    },
-    {
-      title: '游戏类型',
-      dataIndex: 'gameTypeNames',
-    },
-    {
-      title: '状态',
-      dataIndex: 'gameStateName',
-    },
-    {
-      title: '添加时间',
+      title: '时间',
       dataIndex: 'createdAt',
       render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
     },
     {
-      title: '操作',
-      render: (text, record) => (
-        <Fragment>
-          <a onClick={() => this.handleView(true, record)}>详情</a>&nbsp;
-          <a onClick={() => this.handleDeal(true, record)}>下线</a>&nbsp;
-          <a onClick={() => this.handleEdit(true, record)}>编辑</a>&nbsp;
-          <a onClick={() => this.handleDelete(true, record)}>删除</a>&nbsp;
-        </Fragment>
-      ),
+      title: '描述',
+      dataIndex: 'desc',
+    },
+    {
+      title: '备注',
+      dataIndex: 'remark',
+    },
+    {
+      title: '金额(GDD)',
+      dataIndex: 'gameGold',
     },
   ];
 
@@ -229,7 +214,12 @@ class WalletMgr extends PureComponent {
     const { selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;
 
     return (
-      <PageHeaderWrapper title="游戏列表">
+      <PageHeaderWrapper title="钱包管理">
+        <Card bordered={false}>
+
+            <div>收支流水</div>
+
+        </Card>
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderForm()}</div>
