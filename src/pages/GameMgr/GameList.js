@@ -54,23 +54,34 @@ class GameList extends PureComponent {
 
   columns = [
     {
-      title: '用户钱包地址',
-      dataIndex: 'name',
+      title: 'ID',
+      dataIndex: 'gameId',
     },
     {
-      title: '玩过的游戏类型',
-      dataIndex: 'desc',
+      title: '游戏名',
+      dataIndex: 'gameName',
     },
     {
-      title: '注册时间',
-      dataIndex: 'updatedAt',
+      title: '游戏类型',
+      dataIndex: 'gameTypeNames',
+    },
+    {
+      title: '状态',
+      dataIndex: 'gameStateName',
+    },
+    {
+      title: '添加时间',
+      dataIndex: 'createdAt',
       render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
     },
     {
       title: '操作',
       render: (text, record) => (
         <Fragment>
-          <a onClick={() => this.handleDeal(true, record)}>赠送</a>
+          <a onClick={() => this.handleView(true, record)}>详情</a>&nbsp;
+          <a onClick={() => this.handleDeal(true, record)}>下线</a>&nbsp;
+          <a onClick={() => this.handleEdit(true, record)}>编辑</a>&nbsp;
+          <a onClick={() => this.handleDelete(true, record)}>删除</a>&nbsp;
         </Fragment>
       ),
     },
@@ -160,15 +171,21 @@ class GameList extends PureComponent {
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 16, lg: 24, xl: 48 }}>
-          <Col md={16} sm={24}>
-            <FormItem label="搜索钱包地址：">
-              {getFieldDecorator('name')(<Input placeholder="请输入" />)}
+          <Col md={6} sm={9}>
+            <FormItem label="游戏名：">
+              {getFieldDecorator('gameName')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
-          <Col md={8} sm={24} />
-          <Col md={16} sm={24}>
-            <FormItem label="选择游戏类型：">
-              {getFieldDecorator('status')(
+          <Col md={6} sm={9}>
+            <FormItem label="游戏ID：">
+              {getFieldDecorator('gameId')(<Input placeholder="请输入" />)}
+            </FormItem>
+          </Col>
+        </Row>
+        <Row gutter={{ md: 16, lg: 24, xl: 48 }}>
+          <Col md={6} sm={9}>
+            <FormItem label="游戏类型：">
+              {getFieldDecorator('gameType')(
                 <Select placeholder="请选择" style={{ width: '100%' }}>
                   <Option value="0">全部</Option>
                   <Option value="1">休闲益智</Option>
@@ -178,7 +195,18 @@ class GameList extends PureComponent {
               )}
             </FormItem>
           </Col>
-          <Col md={8} sm={24}>
+          <Col md={6} sm={9}>
+            <FormItem label="状态：">
+              {getFieldDecorator('gameState')(
+                <Select placeholder="请选择" style={{ width: '100%' }}>
+                  <Option value="1">待审核</Option>
+                  <Option value="2">已上架</Option>
+                  <Option value="3">审核不通过</Option>
+                </Select>
+              )}
+            </FormItem>
+          </Col>
+          <Col md={6} sm={9}>
             <span className={styles.submitButtons}>
               <Button type="primary" htmlType="submit">
                 搜索
@@ -201,7 +229,7 @@ class GameList extends PureComponent {
     const { selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;
 
     return (
-      <PageHeaderWrapper title="用户列表">
+      <PageHeaderWrapper title="游戏列表">
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderForm()}</div>
