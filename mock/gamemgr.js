@@ -127,7 +127,15 @@ function postGameList(req, res, u, b) {
   return res.json(result);
 }
 
+
+
+
+
+
 export default {
   'GET /gamemgr/query': getGameList,
   'POST /gamemgr/query': postGameList,
+  'POST /gamemgr/add': (req, res) => {
+    res.send({ message: 'Ok' });
+  },
 };

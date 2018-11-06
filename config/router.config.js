@@ -42,6 +42,11 @@ export default [
             name: 'gamelist',
             component: './GameMgr/GameList',
           },
+          {
+            path: '/gamemgr/gameadd',
+            name: 'gameadd',
+            component: './GameMgr/GameAdd',
+          },
         ],
       },
       // wallet
