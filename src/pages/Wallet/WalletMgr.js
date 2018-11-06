@@ -1,5 +1,6 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
+import { formatMessage, FormattedMessage } from 'umi/locale';
 import moment from 'moment';
 import {
   Row,
@@ -27,10 +28,7 @@ import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import styles from './WalletMgr.less';
 
 const FormItem = Form.Item;
-const { Step } = Steps;
-const { TextArea } = Input;
-const { Option } = Select;
-const RadioGroup = Radio.Group;
+const { RangePicker } = DatePicker;
 const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
@@ -153,51 +151,49 @@ class WalletMgr extends PureComponent {
     const {
       form: { getFieldDecorator },
     } = this.props;
+
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 16 },
+        sm: { span: 4 },
+      },
+      wrapperCol: {
+        xs: { span: 18 },
+        sm: { span: 8 },
+        md: { span: 6 },
+      },
+    };
+
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 16, lg: 24, xl: 48 }}>
-          <Col md={6} sm={9}>
-            <FormItem label="游戏名：">
-              {getFieldDecorator('gameName')(<Input placeholder="请输入" />)}
-            </FormItem>
+          <Col md={11} sm={9}>
+            <label>收支流水</label>
           </Col>
-          <Col md={6} sm={9}>
-            <FormItem label="游戏ID：">
-              {getFieldDecorator('gameId')(<Input placeholder="请输入" />)}
-            </FormItem>
-          </Col>
-        </Row>
-        <Row gutter={{ md: 16, lg: 24, xl: 48 }}>
-          <Col md={6} sm={9}>
-            <FormItem label="游戏类型：">
-              {getFieldDecorator('gameType')(
-                <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="0">全部</Option>
-                  <Option value="1">休闲益智</Option>
-                  <Option value="2">角色扮演</Option>
-                  <Option value="3">战争策略</Option>
-                </Select>
+          <Col md={11} sm={15}>
+            <FormItem {...formItemLayout} label='选择日期'>
+              {getFieldDecorator('date', {
+                rules: [
+                  {
+                    required: true,
+                    message: formatMessage({ id: 'validation.date.required' }),
+                  },
+                ],
+              })(
+                <RangePicker
+                  style={{ width: '100%' }}
+                  placeholder={[
+                    formatMessage({ id: 'form.date.placeholder.start' }),
+                    formatMessage({ id: 'form.date.placeholder.end' }),
+                  ]}
+                />
               )}
             </FormItem>
           </Col>
-          <Col md={6} sm={9}>
-            <FormItem label="状态：">
-              {getFieldDecorator('gameState')(
-                <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="1">待审核</Option>
-                  <Option value="2">已上架</Option>
-                  <Option value="3">审核不通过</Option>
-                </Select>
-              )}
-            </FormItem>
-          </Col>
-          <Col md={6} sm={9}>
+          <Col md={2} sm={4}>
             <span className={styles.submitButtons}>
               <Button type="primary" htmlType="submit">
                 搜索
-              </Button>
-              <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
-                重置
               </Button>
             </span>
           </Col>
@@ -215,25 +211,56 @@ class WalletMgr extends PureComponent {
 
     return (
       <PageHeaderWrapper title="钱包管理">
-        <Card bordered={false}>
+          <Card bordered={false}>
+            <Row>
+              <Col sm={18} xs={12}>
+                钱包管理
+              </Col>
+              <Col sm={6} xs={12}>
+                <Button type="primary">
+                  备份钱包
+                </Button> 
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <Button type="primary">
+                  查看钱包信息
+                </Button>
+              </Col>
+            </Row>
+            <Divider style={{ marginBottom: 16 }} />
+            <Row>
+              <Col sm={24} xs={24}>可用余额</Col>
+            </Row>
+            <Row>
+              <Col sm={4} xs={8}>
+                500 GDD
+              </Col>
+              <Col sm={4} xs={8}>
+                <Button type="primary">
+                  转入
+                </Button> 
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <Button>
+                  转出
+                </Button>
+              </Col>
+            </Row>
+          </Card>
 
-            <div>收支流水</div>
+          <Card bordered={false} style={{ marginTop: 24 }}>
+            <div className={styles.tableList}>
+              <div className={styles.tableListForm}>{this.renderForm()}</div>
+              <div className={styles.tableListOperator} />
+              <SimpleTable
+                selectedRows={selectedRows}
+                loading={loading}
+                data={data}
+                columns={this.columns}
+                onSelectRow={null}
+                onChange={this.handleStandardTableChange}
+              />
+            </div>
+          </Card>
 
-        </Card>
-        <Card bordered={false}>
-          <div className={styles.tableList}>
-            <div className={styles.tableListForm}>{this.renderForm()}</div>
-            <div className={styles.tableListOperator} />
-            <SimpleTable
-              selectedRows={selectedRows}
-              loading={loading}
-              data={data}
-              columns={this.columns}
-              onSelectRow={null}
-              onChange={this.handleStandardTableChange}
-            />
-          </div>
-        </Card>
       </PageHeaderWrapper>
     );
   }
