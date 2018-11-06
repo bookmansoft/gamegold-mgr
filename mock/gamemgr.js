@@ -12,7 +12,10 @@ for (let i = 0; i < 46; i += 1) {
       '设计 '
     ],
     gameState: Math.floor(Math.random() * 10) % 4,
+<<<<<<< HEAD
     gameStateName: '已上架f',
+=======
+>>>>>>> 305c4371419529c83b009db654c46255cf8e4fbd
     createdAt: new Date(`2018-11-${Math.floor(i / 2) + 1}`),
     progress: Math.ceil(Math.random() * 100),
   });
