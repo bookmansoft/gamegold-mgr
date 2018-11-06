@@ -44,6 +44,19 @@ export default [
           },
         ],
       },
+      // wallet
+      {
+        path: '/wallet',
+        name: 'wallet',
+        icon: 'table',
+        routes: [
+          {
+            path: '/wallet/walletmgr',
+            name: 'walletmgr',
+            component: './Wallet/WalletMgr',
+          },
+        ],
+      },
       // dashboard
       { path: '/', redirect: '/dashboard/analysis' },
       {
