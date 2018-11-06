@@ -71,6 +71,8 @@ export default {
   'menu.usermgr.userlist': '用户列表',
   'menu.gamemgr': '游戏管理',
   'menu.gamemgr.gamelist': '游戏列表',
+  'menu.wallet': '钱包',
+  'menu.wallet.walletmgr': '钱包管理',
   'menu.home': '首页',
   'menu.dashboard': 'Dashboard',
   'menu.dashboard.analysis': '分析页',

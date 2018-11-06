@@ -8,3 +8,7 @@ export async function queryUserMgr(params) {
 export async function queryGameMgr(params) {
   return request(`/gamemgr/query?${stringify(params)}`);
 }
+
+export async function queryWallet(params) {
+  return request(`/wallet/query?${stringify(params)}`);
+}
