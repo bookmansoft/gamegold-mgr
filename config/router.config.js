@@ -47,6 +47,18 @@ export default [
             name: 'gameadd',
             component: './GameMgr/GameAdd',
           },
+          {
+            path: '/gamemgr/gameaddsuccess',
+            name: 'gameaddsuccess',
+            component: './GameMgr/GameAddSuccess',
+            hideInMenu: true,
+          },
+          {
+            path: '/gamemgr/gameadderror',
+            name: 'gameadderror',
+            component: './GameMgr/GameAddError',
+            hideInMenu: false,
+          },
         ],
       },
       // wallet
@@ -102,6 +114,18 @@ export default [
             path: '/wallet/walletpay',
             name: 'walletpay',
             component: './Wallet/WalletPay',
+          },
+          {
+            path: '/wallet/walletpaysuccess',
+            name: 'walletpaysuccess',
+            component: './Wallet/WalletPaySuccess',
+            hideInMenu: true,
+          },
+          {
+            path: '/wallet/walletpayerror',
+            name: 'walletpayerror',
+            component: './Wallet/WalletPayError',
+            hideInMenu: false,
           },
         ],
       },
