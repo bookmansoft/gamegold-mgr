@@ -1,6 +1,6 @@
-import React, { Fragment, PureComponent } from 'react';
-import styles from './PropsDetail.less';
-import { Card, Badge, Button , Divider } from 'antd';
+import React, { PureComponent } from 'react';
+import styles from './style.less';
+import { Card, Button, Divider, List } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
@@ -9,7 +9,6 @@ import DescriptionList from '@/components/DescriptionList';
 import router from 'umi/router';
 
 const { Description } = DescriptionList;
-
 @connect(({ gameprops, loading }) => ({
   gameprops,
   loading: loading.models.gameprops,
@@ -44,8 +43,7 @@ class PropsDetail extends PureComponent {
     );
   }
   propsEdit = (id) => {
-    console.log(id);
-    router.push(`/gameprops/propsEdit/${id}`)
+    router.push(`/gameprops/edit/${id}`)
   };
   propsPro = (id) => {
     console.log(id+'生产道具');
@@ -68,7 +66,7 @@ class PropsDetail extends PureComponent {
             <Description term="生产总量">{detail.num}</Description>
             <Description term="已上架出售/赠送">{detail.unstock}</Description>
             <Description term="剩余库存">{detail.stock}</Description>
-            <Description term="最后生产时间">{moment(detail.updatedAt).fromNow()}</Description>
+            <Description term="最后生产时间">{moment(detail.updatedAt).format('YYYY-MM-DD HH:mm')}</Description>
           </DescriptionList>
         </Card>
         <Card bordered={false} headStyle={{fontWeight:600}} title="道具信息" extra={this.propsButton()}>
@@ -77,13 +75,21 @@ class PropsDetail extends PureComponent {
             <Description term="道具名称">{detail.unstock}</Description>
             <Description term="道具类型">{detail.stock}</Description>
             <Description term="所属游戏">{detail.game}</Description>
-            <Description term="创建时间">{moment(detail.updatedAt).fromNow()}</Description>
+            <Description term="创建时间">{moment(detail.updatedAt).format('YYYY-MM-DD HH:mm')}</Description>
             <Description term="游戏简介">{detail.desc}</Description>
             <Description term="道具图标">
-              <Card
-                hoverable style={{ width: 120 }}
-                cover={<img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />}>
-              </Card>
+              <img width={120} src={detail.iconImg} />
+            </Description>
+            <Description term="道具说明图">
+              <List
+                grid={{ gutter: 24, lg: 3, md: 2, sm: 1, xs: 1 }}
+                dataSource={detail.moreImg}
+                renderItem={item =>
+                  <List.Item>
+                    <img width={120} src={item}/>
+                  </List.Item>
+                }
+              />
             </Description>
           </DescriptionList>
         </Card>

@@ -99,6 +99,8 @@ function getGamePropsDetail(req, res, u) {
     status: Math.floor(Math.random() * 10) % 4,
     updatedAt: myDate.setDate(myDate.getDate() + i),
     createdAt: myDate.setDate(myDate.getDate() + i),
+    iconImg: 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png',
+    moreImg: ['https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png','https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png','https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png','https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png']
   };
   return res.json(detailDataSource);
 }

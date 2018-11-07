@@ -1,8 +1,7 @@
 import React, { Fragment, PureComponent } from 'react';
-import styles from './PropsList.less';
-import { List, Alert, Table, Icon, Form, Row, Col , Input , Select , Button  , Divider   } from 'antd';
+import styles from './style.less';
+import { Table, Form, Row, Col , Input , Select , Button  , Divider   } from 'antd';
 import { connect } from 'dva';
-import moment from 'moment';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import { FormattedMessage } from 'umi/locale';
 import Link from 'umi/link';
@@ -45,9 +44,9 @@ class PropsList extends PureComponent {
         <Fragment>
           <Link to={`/gameprops/detail/${record.id}`}>详情</Link>
           <Divider type="vertical" />
-          <a onClick={e => this.handleEdit(e, record)}>生产</a>
+          <Link to={`/gameprops/produce/${record.id}`}>生产</Link>
           <Divider type="vertical" />
-          <a onClick={e => this.handleEdit(e, record)}>赠送</a>
+          <Link to={`/gameprops/present/${record.id}`}>赠送</Link>
           <Divider type="vertical" />
           <a onClick={e => this.handleEdit(e, record)}>上架</a>
         </Fragment>
