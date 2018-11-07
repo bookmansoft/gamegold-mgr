@@ -66,8 +66,8 @@ class GameAdd extends PureComponent {
 
     return (
       <PageHeaderWrapper
-        title={<FormattedMessage id="app.forms.basic.title" />}
-        content={<FormattedMessage id="app.forms.basic.description" />}
+        title="添加新游戏"
+        content=""
       >
         <Card bordered={false}>
           <Form onSubmit={this.handleSubmit} hideRequiredMark={false} style={{ marginTop: 8 }}>

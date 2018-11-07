@@ -15,7 +15,7 @@ export async function addGameMgr(params) {
 }
 
 //--钱包流水清单
-export async function queryWallet(params) {
+export async function queryWalletLog(params) {
   return request(`/wallet/queryLog?${stringify(params)}`);
 }
 
