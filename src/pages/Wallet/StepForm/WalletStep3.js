@@ -12,40 +12,26 @@ class WalletStep3 extends React.PureComponent {
   render() {
     const { data } = this.props;
     const onFinish = () => {
-      router.push('/wallet/step-form/info');
+      router.push('/wallet/walletmgr');
     };
     const information = (
       <div className={styles.information}>
         <Row>
-          <Col xs={24} sm={8} className={styles.label}>
-            付款账户：
-          </Col>
-          <Col xs={24} sm={16}>
-            {data.payAccount}
+          <Col xs={24} sm={24}>
+<b>为什么要备份钱包？</b><br />
+游戏金钱包基于区块链技术，是完全属于您个人的去中心化钱包，钱包备份是您恢复钱包的唯一途径，因此强烈建议您立即备份钱包，并妥善保管好您的备份，切勿丢失或告知他人。
           </Col>
         </Row>
         <Row>
-          <Col xs={24} sm={8} className={styles.label}>
-            收款账户：
-          </Col>
-          <Col xs={24} sm={16}>
-            {data.receiverAccount}
+          <Col xs={24} sm={24}>
+<b>如何备份钱包？</b><br />
+点击备份钱包，屏幕上会出现12个汉字作为助记词，您务必将12个汉字助记词用纸笔抄写下来，这是您将来恢复钱包的重要凭证。请勿将助记词告知他人或使用不安全的方式保存。
           </Col>
         </Row>
         <Row>
-          <Col xs={24} sm={8} className={styles.label}>
-            收款人姓名：
-          </Col>
-          <Col xs={24} sm={16}>
-            {data.receiverName}
-          </Col>
-        </Row>
-        <Row>
-          <Col xs={24} sm={8} className={styles.label}>
-            转账金额：
-          </Col>
-          <Col xs={24} sm={16}>
-            <span className={styles.money}>{data.amount}</span> 元
+        <Col xs={24} sm={24}>
+<b>如何恢复钱包？</b><br />
+恢复钱包时，按顺序输入您备份时产生的12个汉字助记词，即可恢复钱包。
           </Col>
         </Row>
       </div>
@@ -53,16 +39,15 @@ class WalletStep3 extends React.PureComponent {
     const actions = (
       <Fragment>
         <Button type="primary" onClick={onFinish}>
-          再转一笔
+          返回钱包
         </Button>
-        <Button>查看账单</Button>
       </Fragment>
     );
     return (
       <Result
         type="success"
-        title="操作成功"
-        description="预计两小时内到账"
+        title="备份完成"
+        description="请务必保管好您的助记词"
         extra={information}
         actions={actions}
         className={styles.result}
