@@ -24,3 +24,9 @@ export async function getWalletLog(params) {
   return request(`/wallet/getLog?${stringify(params)}`);
 }
 
+
+//--钱包信息
+export async function getWalletInfo(params) {
+  return request(`/wallet/getInfo?${stringify(params)}`);
+}
+

@@ -93,6 +93,11 @@ export default [
             name: 'walletlog',
             component: './Wallet/WalletLog',
           },
+          {
+            path: '/wallet/walletinfo',
+            name: 'walletinfo',
+            component: './Wallet/WalletInfo',
+          },
         ],
       },
       // dashboard

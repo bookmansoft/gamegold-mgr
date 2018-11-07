@@ -134,9 +134,20 @@ function getWalletLog(req, res, u) {
   return res.json(result);
 }
 
+function getWalletInfo(req, res, u) {
+  const result = {
+        walletAccount: '5d4b9d8c-0a58-4f5e-ace3-f576c74afb75',
+        createAt: '2018-11-5 17:30:46',
+        walletSecure: '已备份',
+    };
+
+  return res.json(result);
+}
+
 
 export default {
   'GET /wallet/queryLog': getWalletList,
   'POST /wallet/queryLog': postWalletList,
   'GET /wallet/getLog': getWalletLog,      //钱包流水详情
+  'GET /wallet/getInfo': getWalletInfo,      //钱包信息
 };
