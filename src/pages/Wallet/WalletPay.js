@@ -21,7 +21,7 @@ const { Option } = Select;
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
-@connect(({ loading }) => ({
+@connect(({ loading }) => ({ 
   submitting: loading.effects['walletpay/add'],
 }))
 @Form.create()
