@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import { formatMessage, FormattedMessage } from 'umi/locale';
+import router from 'umi/router';
 import {
   Form,
   Input,
@@ -35,6 +36,7 @@ class WalletPay extends PureComponent {
           type: 'walletpay/add',
           payload: values,
         });
+        router.push('/wallet/walletpaysuccess');
       }
     });
   };

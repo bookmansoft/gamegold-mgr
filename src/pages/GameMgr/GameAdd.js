@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import { formatMessage, FormattedMessage } from 'umi/locale';
+import router from 'umi/router';
 import {
   Form,
   Input,
@@ -35,6 +36,7 @@ class GameAdd extends PureComponent {
           type: 'game/add',
           payload: values,
         });
+        router.push('/gamemgr/gameaddsuccess');
       }
     });
   };

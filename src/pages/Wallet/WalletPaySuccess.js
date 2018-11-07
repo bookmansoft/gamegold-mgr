@@ -6,12 +6,12 @@ import Result from '@/components/Result';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
 const onPrev = () => {
-  router.push('/gamemgr/gamelist');
+  router.push('/wallet/walletmgr');
 };
 const actions = (
   <Fragment>
     <Button type="primary" onClick={onPrev}>
-      返回列表
+      返回钱包
     </Button>
     <Button>
       查看详情
@@ -24,8 +24,8 @@ export default () => (
     <Card bordered={false}>
       <Result
         type="success"
-        title="提交成功"
-        description="请耐心等待审核，审核通过后游戏将直接上架。"
+        title="发送成功"
+        description=""
         extra=""
         actions={actions}
         style={{ marginTop: 48, marginBottom: 16 }}
