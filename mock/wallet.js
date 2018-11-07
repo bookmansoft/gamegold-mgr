@@ -4,21 +4,16 @@ import { parse } from 'url';
 let tableListDataSource = [];
 for (let i = 0; i < 46; i += 1) {
   tableListDataSource.push({
-    gameId: i,
-    gameName: `王者荣耀 ${i}`,
-    gameTypeNames: [
-      '休闲益智 ',
-      '角色扮演 ',
-      '设计 '
-    ],
-    gameState: Math.floor(Math.random() * 10) % 4,
-    gameStateName: '已上架f',
     createdAt: new Date(`2018-11-${Math.floor(i / 2) + 1}`),
-    progress: Math.ceil(Math.random() * 100),
+    desc: ['转入','转出'][i%2],
+    remark: ['办公室租用','备用金','IP授权费'][i%3],
+    gameGold: Math.floor(Math.random() * 10) % 4,
+
+
   });
 }
 
-function getGameList(req, res, u) {
+function getWalletList(req, res, u) {
   let url = u;
   if (!url || Object.prototype.toString.call(url) !== '[object String]') {
     url = req.url; // eslint-disable-line
@@ -70,7 +65,7 @@ function getGameList(req, res, u) {
   return res.json(result);
 }
 
-function postGameList(req, res, u, b) {
+function postWalletList(req, res, u, b) {
   let url = u;
   if (!url || Object.prototype.toString.call(url) !== '[object String]') {
     url = req.url; // eslint-disable-line
@@ -127,15 +122,32 @@ function postGameList(req, res, u, b) {
   return res.json(result);
 }
 
+function getWalletLog(req, res, u) {
+  const result = {
+    tradeTypeName: '转出',
+    tradeGcd: 20,
+    createAt: '2018-11-05 18:34:21',
+    relateAccount: 'mzGDKicimpQxAzMiwRWGtU8RoLZW5nTYaU',
+    tradeRemark: '交易备注完整内容写在这里哦！'
+  };
 
+  return res.json(result);
+}
 
+function getWalletInfo(req, res, u) {
+  const result = {
+        walletAccount: '5d4b9d8c-0a58-4f5e-ace3-f576c74afb75',
+        createAt: '2018-11-5 17:30:46',
+        walletSecure: '已备份',
+    };
 
+  return res.json(result);
+}
 
 
 export default {
-  'GET /gamemgr/query': getGameList,
-  'POST /gamemgr/query': postGameList,
-  'POST /gamemgr/add': (req, res) => {
-    res.send({ message: 'Ok' });
-  },
+  'GET /wallet/queryLog': getWalletList,
+  'POST /wallet/queryLog': postWalletList,
+  'GET /wallet/getLog': getWalletLog,      //钱包流水详情
+  'GET /wallet/getInfo': getWalletInfo,      //钱包信息
 };

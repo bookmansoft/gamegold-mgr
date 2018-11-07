@@ -42,6 +42,91 @@ export default [
             name: 'gamelist',
             component: './GameMgr/GameList',
           },
+          {
+            path: '/gamemgr/gameadd',
+            name: 'gameadd',
+            component: './GameMgr/GameAdd',
+          },
+          {
+            path: '/gamemgr/gameaddsuccess',
+            name: 'gameaddsuccess',
+            component: './GameMgr/GameAddSuccess',
+            hideInMenu: true,
+          },
+          {
+            path: '/gamemgr/gameadderror',
+            name: 'gameadderror',
+            component: './GameMgr/GameAddError',
+            hideInMenu: false,
+          },
+        ],
+      },
+      // wallet
+      {
+        path: '/wallet',
+        name: 'wallet',
+        icon: 'table',
+        routes: [
+          {
+            path: '/wallet/walletmgr',
+            name: 'walletmgr',
+            component: './Wallet/WalletMgr',
+          },
+          {
+            path: '/wallet/step-form',
+            name: 'walletstep',
+            component: './Wallet/StepForm',
+            hideChildrenInMenu: true,
+            routes: [
+              {
+                path: '/wallet/step-form',
+                name: 'stepform',
+                redirect: '/wallet/step-form/info',
+              },
+              {
+                path: '/wallet/step-form/info',
+                name: 'info',
+                component: './Wallet/StepForm/WalletStep1',
+              },
+              {
+                path: '/wallet/step-form/confirm',
+                name: 'confirm',
+                component: './Wallet/StepForm/WalletStep2',
+              },
+              {
+                path: '/wallet/step-form/result',
+                name: 'result',
+                component: './Wallet/StepForm/WalletStep3',
+              },
+            ],
+          },
+          {
+            path: '/wallet/walletlog',
+            name: 'walletlog',
+            component: './Wallet/WalletLog',
+          },
+          {
+            path: '/wallet/walletinfo',
+            name: 'walletinfo',
+            component: './Wallet/WalletInfo',
+          },
+          {
+            path: '/wallet/walletpay',
+            name: 'walletpay',
+            component: './Wallet/WalletPay',
+          },
+          {
+            path: '/wallet/walletpaysuccess',
+            name: 'walletpaysuccess',
+            component: './Wallet/WalletPaySuccess',
+            hideInMenu: true,
+          },
+          {
+            path: '/wallet/walletpayerror',
+            name: 'walletpayerror',
+            component: './Wallet/WalletPayError',
+            hideInMenu: false,
+          },
         ],
       },
       // dashboard
