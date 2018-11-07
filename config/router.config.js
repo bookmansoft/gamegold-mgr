@@ -289,15 +289,37 @@ export default [
         ],
       },
       {
-        name: 'message',
-        icon: 'check-circle-o',
-        path: '/message',
+        name: 'gameprops',
+        icon: 'build',
+        path: '/gameprops',
         routes: [
           {
-            path: '/message/index',
-            name: 'index',
-            component: './Message/index',
+            path: '/gameprops/list',
+            name: 'propslist',
+            component: './GameProps/PropsList',
           },
+          {
+            path: '/gameprops/detail/:id',
+            name: 'propsdetail',
+            component: './GameProps/PropsDetail',
+            hideInMenu: true,
+          },
+          {
+            path: '/gameprops/propsedit/:id',
+            name: 'propsdetail',
+            component: './GameProps/propsEdit',
+            hideInMenu: true,
+          },
+          {
+            path: '/gameprops/create',
+            name: 'propscreate',
+            component: './GameProps/PropsList',
+          },
+          {
+            path: '/gameprops/present',
+            name: 'propspresent',
+            component: './GameProps/PropsList',
+          }
         ],
       },
 

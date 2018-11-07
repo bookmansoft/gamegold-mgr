@@ -130,6 +130,9 @@ export async function getFakeCaptcha(mobile) {
   return request(`/api/captcha?mobile=${mobile}`);
 }
 
-export async function getAllMessage(params) {
-  return request(`/api/message_list?${stringify(params)}`);
+export async function getGamePropsList(params) {
+  return request(`/api/gamepropslist?${stringify(params)}`);
+}
+export async function getGamePropsDetail(params) {
+  return request(`/api/gamepropsdetail?${stringify(params)}`);
 }

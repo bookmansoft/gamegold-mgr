@@ -108,6 +108,11 @@ export default {
   'menu.account.settings': '个人设置',
   'menu.account.trigger': '触发报错',
   'menu.account.logout': '退出登录',
+  'menu.gameprops': '道具管理',
+  'menu.gameprops.propslist': '道具列表',
+  'menu.gameprops.propscreate': '创建新道具',
+  'menu.gameprops.propsdetail': '道具详情页',
+  'menu.gameprops.propspresent': '道具赠送',
   'app.login.message-invalid-credentials': '账户或密码错误（admin/888888）',
   'app.login.message-invalid-verification-code': '验证码错误',
   'app.login.tab-login-credentials': '账户密码登录',
@@ -288,6 +293,8 @@ export default {
   'app.setting.copyinfo': '拷贝成功，请到 src/defaultSettings.js 中替换默认配置',
   'app.setting.production.hint':
     '配置栏只在开发环境用于预览，生产环境不会展现，请拷贝后手动修改配置文件',
-  'menu.message': '信息管理',
-  'menu.message.index': '信息列表',
+  'app.gameprops.list' : '道具列表',
+  'app.gameprops.create' : '道具创建',
+  'app.gameprops.detail' : '道具详情',
+  'app.gameprops.present' : '道具赠送',
 };
