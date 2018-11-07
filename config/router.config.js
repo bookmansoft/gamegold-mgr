@@ -88,6 +88,11 @@ export default [
               },
             ],
           },
+          {
+            path: '/wallet/walletlog',
+            name: 'walletlog',
+            component: './Wallet/WalletLog',
+          },
         ],
       },
       // dashboard

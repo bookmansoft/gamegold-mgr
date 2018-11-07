@@ -13,7 +13,7 @@ for (let i = 0; i < 46; i += 1) {
   });
 }
 
-function getGameList(req, res, u) {
+function getWalletList(req, res, u) {
   let url = u;
   if (!url || Object.prototype.toString.call(url) !== '[object String]') {
     url = req.url; // eslint-disable-line
@@ -65,7 +65,7 @@ function getGameList(req, res, u) {
   return res.json(result);
 }
 
-function postGameList(req, res, u, b) {
+function postWalletList(req, res, u, b) {
   let url = u;
   if (!url || Object.prototype.toString.call(url) !== '[object String]') {
     url = req.url; // eslint-disable-line
@@ -122,7 +122,21 @@ function postGameList(req, res, u, b) {
   return res.json(result);
 }
 
+function getWalletLog(req, res, u) {
+  const result = {
+    tradeTypeName: '转出',
+    tradeGcd: 20,
+    createAt: '2018-11-05 18:34:21',
+    relateAccount: 'mzGDKicimpQxAzMiwRWGtU8RoLZW5nTYaU',
+    tradeRemark: '交易备注完整内容写在这里哦！'
+  };
+
+  return res.json(result);
+}
+
+
 export default {
-  'GET /wallet/query': getGameList,
-  'POST /wallet/query': postGameList,
+  'GET /wallet/queryLog': getWalletList,
+  'POST /wallet/queryLog': postWalletList,
+  'GET /wallet/getLog': getWalletLog,      //钱包流水详情
 };

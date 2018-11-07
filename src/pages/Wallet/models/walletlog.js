@@ -1,18 +1,21 @@
-import { queryWalletLog } from '@/services/gamegoldapi';
+import { getWalletLog } from '@/services/gamegoldapi';
 
 export default {
-  namespace: 'walletmgr',
+  namespace: 'walletlog',
 
   state: {
     data: {
-      list: [],
-      pagination: {},
+        tradeTypeName: '',
+        tradeGcd: 0,
+        createAt: '',
+        relateAccount: '',
+        tradeRemark: ''
     },
   },
 
   effects: {
     *fetch({ payload }, { call, put }) {
-      const response = yield call(queryWalletLog, payload);
+      const response = yield call(getWalletLog, payload);
       yield put({
         type: 'save',
         payload: response,

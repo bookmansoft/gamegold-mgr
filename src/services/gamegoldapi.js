@@ -14,7 +14,13 @@ export async function addGameMgr(params) {
   return request(`/gamemgr/add?${stringify(params)}`);
 }
 
-//--钱包
+//--钱包流水清单
 export async function queryWallet(params) {
-  return request(`/wallet/query?${stringify(params)}`);
+  return request(`/wallet/queryLog?${stringify(params)}`);
 }
+
+//--钱包流水详情
+export async function getWalletLog(params) {
+  return request(`/wallet/getLog?${stringify(params)}`);
+}
+
