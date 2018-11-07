@@ -10,8 +10,16 @@ export async function queryUserMgr(params) {
 export async function queryGameMgr(params) {
   return request(`/gamemgr/query?${stringify(params)}`);
 }
+//--添加新游戏
 export async function addGameMgr(params) {
-  return request(`/gamemgr/add?${stringify(params)}`);
+  return request('/gamemgr/add', {
+    method: 'POST',
+    body: {
+      ...params,
+      method: 'post',
+    },
+  });
+  //return request(`/gamemgr/add?${stringify(params)}`);
 }
 
 //--钱包流水清单
@@ -30,3 +38,14 @@ export async function getWalletInfo(params) {
   return request(`/wallet/getInfo?${stringify(params)}`);
 }
 
+//--钱包：转出
+export async function addWalletPay(params) {
+  return request('/wallet/addPay', {
+    method: 'POST',
+    body: {
+      ...params,
+      method: 'post',
+    },
+  });
+
+}

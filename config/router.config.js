@@ -98,6 +98,11 @@ export default [
             name: 'walletinfo',
             component: './Wallet/WalletInfo',
           },
+          {
+            path: '/wallet/walletpay',
+            name: 'walletpay',
+            component: './Wallet/WalletPay',
+          },
         ],
       },
       // dashboard

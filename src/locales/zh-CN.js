@@ -78,6 +78,7 @@ export default {
   'menu.wallet.walletmgr': '钱包管理',
   'menu.wallet.walletlog': '流水详情',
   'menu.wallet.walletinfo': '钱包信息',
+  'menu.wallet.walletpay': '转出',
   'menu.wallet.walletstep': '钱包备份',
   'menu.wallet.walletstep.info': '生成助记词',
   'menu.wallet.walletstep.confirm': '确认助记词',
