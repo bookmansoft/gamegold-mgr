@@ -60,6 +60,34 @@ export default [
             name: 'walletmgr',
             component: './Wallet/WalletMgr',
           },
+          {
+            path: '/wallet/step-form',
+            name: 'walletstep',
+            component: './Wallet/StepForm',
+            hideChildrenInMenu: true,
+            routes: [
+              {
+                path: '/wallet/step-form',
+                name: 'stepform',
+                redirect: '/wallet/step-form/info',
+              },
+              {
+                path: '/wallet/step-form/info',
+                name: 'info',
+                component: './Wallet/StepForm/WalletStep1',
+              },
+              {
+                path: '/wallet/step-form/confirm',
+                name: 'confirm',
+                component: './Wallet/StepForm/WalletStep2',
+              },
+              {
+                path: '/wallet/step-form/result',
+                name: 'result',
+                component: './Wallet/StepForm/WalletStep3',
+              },
+            ],
+          },
         ],
       },
       // dashboard
