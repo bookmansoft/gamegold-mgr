@@ -65,12 +65,12 @@ class WalletLog extends PureComponent {
     return (
       <PageHeaderWrapper title="流水详情">
           <Card bordered={false}>
-            <Row>
+            <Row style={{ marginBottom: 32 }}>
               <Col sm={24} xs={24}>
                 <b>交易详情：</b>
               </Col>
             </Row>
-            <Row>
+            <Row style={{ marginBottom: 32 }}>
               <Col sm={8} xs={12}>
                 交易类型：{data.tradeTypeName}
               </Col>
@@ -81,13 +81,13 @@ class WalletLog extends PureComponent {
                 交易时间：{data.createAt}
               </Col>
             </Row>
-            <Row>
+            <Row style={{ marginBottom: 32 }}>
               <Col sm={24} xs={24}>对方钱包地址：{data.relateAccount}</Col>
             </Row>
-            <Row>
+            <Row style={{ marginBottom: 32 }}>
               <Col sm={24} xs={24}>交易备注：{data.tradeRemark}</Col>
             </Row>
-            <Row>
+            <Row style={{ marginBottom: 32 }}>
               <Col sm={4} xs={8}>
                 <Button type="primary">
                   返回钱包
