@@ -127,14 +127,44 @@ function postGameList(req, res, u, b) {
   return res.json(result);
 }
 
+function getWalletInfo(req, res, u) {
+  const result2 = {
+        walletAccount: '5d4b9d8c-0a58-4f5e-ace3-f576c74afb75',
+        createAt: '2018-11-5 17:30:46',
+        walletSecure: '已备份',
+    };
+
+  return res.json(result2);
+}
 
 
-const gemeDate = {
-    data: {
+
+
+const gameDataJson={
+    gameState:2,
+    publishDate:'2017-11-08 10:23:22',
+    auditDate:'2017-12-02 09:21:12',
+    onlineDate:'',
+    offlineDate:'',
+    
     gameName:'英雄联盟',
-}
-}
-
+    gameTypeNames:'修仙 休闲',
+    developerName:'张祖钦工作室',
+    createAt:'2018-11-4 21:05:26',
+    contactAddress:'显示完整简介内容，支持换行。显示完整简介内。显示完整简介内容，支内容，支持换行。显示完整简介内容，支持换行。',
+    currentVersion:'V1.2.3',
+    updateAt:'2018-9-10',
+    updateContent:'显示完整简介内容，支持换行。显示完整简介内容，支持换行。显示完整简介内容，支持换行。',
+    gameIcon:'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png',
+    gameFacePicture:'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png',
+    gamePictures:[
+        'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png',
+        'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png',
+        'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png',
+        'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png',
+        'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png',
+    ]
+};
 
 export default {
   'GET /gamemgr/query': getGameList,
@@ -142,7 +172,5 @@ export default {
   'POST /gamemgr/add': (req, res) => {
     res.send({ message: 'Ok' });
   },
-  'GET /gamemgr/view': (req, res) => {
-    res.send(gemeDate);
-  },
+  'GET /gamemgr/view': gameDataJson,
 };
