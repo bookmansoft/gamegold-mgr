@@ -57,13 +57,7 @@ const desc3 = (
 
 const popoverContent = (
   <div style={{ width: 160 }}>
-    吴加号
-    <span className={styles.textSecondary} style={{ float: 'right' }}>
-      <Badge status="default" text={<span style={{ color: 'rgba(0, 0, 0, 0.45)' }}>未响应</span>} />
-    </span>
-    <div className={styles.textSecondary} style={{ marginTop: 4 }}>
-      耗时：2小时25分钟
-    </div>
+    审核细节内容
   </div>
 );
 
