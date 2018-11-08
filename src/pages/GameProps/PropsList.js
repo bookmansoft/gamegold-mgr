@@ -1,10 +1,12 @@
 import React, { Fragment, PureComponent } from 'react';
 import styles from './style.less';
-import { Table, Form, Row, Col , Input , Select , Button  , Divider   } from 'antd';
+import { Table, Form, Row, Col, Input, Select, Button, Divider, Modal } from 'antd';
 import { connect } from 'dva';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import { FormattedMessage } from 'umi/locale';
 import Link from 'umi/link';
+import router from 'umi/router';
+import moment from 'moment';
 
 const FormItem = Form.Item;
 @connect(({ gameprops, loading }) => ({
@@ -13,6 +15,14 @@ const FormItem = Form.Item;
 }))
 @Form.create()
 class PropsList extends PureComponent {
+  state = {
+    formValues: {},
+    visible: false,
+    current: undefined,
+    proposPrice : 0,
+    proposNum : 0,
+  };
+
   columns = [
     {
       title: '道具ID',
@@ -48,13 +58,17 @@ class PropsList extends PureComponent {
           <Divider type="vertical" />
           <Link to={`/gameprops/present/${record.id}`}>赠送</Link>
           <Divider type="vertical" />
-          <a onClick={e => this.handleEdit(e, record)}>上架</a>
+          <a onClick={e => {
+            e.preventDefault();
+            this.showOnsaleModal(record);
+          }}>上架</a>
         </Fragment>
       ),
     },
   ];
-  state = {
-    formValues: {},
+  formLayout = {
+    labelCol: { span: 7 },
+    wrapperCol: { span: 13 },
   };
   componentDidMount() {
     const { dispatch } = this.props;
@@ -95,6 +109,8 @@ class PropsList extends PureComponent {
     e.preventDefault();
     const { dispatch, form } = this.props;
     form.validateFields((err, fieldsValue) => {
+
+      console.log(fieldsValue);
       if (err) return;
 
       const values = {
@@ -120,6 +136,39 @@ class PropsList extends PureComponent {
     dispatch({
       type: 'gameprops/propsList',
       payload: {},
+    });
+  };
+  handleGamePropsCreate = () => {
+    router.push('/gameprops/create')
+  };
+  showOnsaleModal = item => {
+    this.setState({
+      visible: true,
+      current: item,
+    });
+  };
+  handleOnsaleCancel = () => {
+    this.setState({
+      visible: false,
+    });
+  };
+
+  handleOnsaleSubmit = e => {
+    e.preventDefault();
+    const { dispatch, form } = this.props;
+    const { current } = this.state;
+    console.log(current);
+    const id = current ? current.id : '';
+    form.validateFields((err, fieldsValue) => {
+      console.log(fieldsValue)
+      /*if (err) return;
+      this.setState({
+        done: true,
+      });
+      dispatch({
+        type: 'list/submit',
+        payload: { id, ...fieldsValue },
+      });*/
     });
   };
   renderSimpleForm() {
@@ -162,7 +211,7 @@ class PropsList extends PureComponent {
               </Button>
             </span>
             <span className={styles.createButtons}>
-              <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
+              <Button icon="plus" type="primary" onClick={() => this.handleGamePropsCreate()}>
                 创建新道具
               </Button>
             </span>
@@ -170,13 +219,16 @@ class PropsList extends PureComponent {
         </Row>
       </Form>
     );
-  }
+  };
+
   render() {
     const {
       gameprops: { data },
       loading,
       rowKey,
+      form: { getFieldDecorator },
     } = this.props;
+    const { visible, current = {} } = this.state;
     const list = data.list;
     const pagination = data.pagination;
     const showTotal = () => `共 ${pagination.total} 条记录`;
@@ -185,6 +237,39 @@ class PropsList extends PureComponent {
       showSizeChanger: true,
       showQuickJumper: true,
       ...pagination,
+    };
+    const modalFooter = { okText: '保存', onOk: this.handleOnsaleSubmit, onCancel: this.handleOnsaleCancel };
+    const getModalContent = () => {
+      return (
+        <Form onSubmit={this.handleOnsaleSubmit}>
+          <FormItem label="道具名称" {...this.formLayout}>
+            {getFieldDecorator('proposName', {})(
+              <Input  style={{ width: "50%" }} />
+            )}
+
+          </FormItem>
+          <FormItem label="单个售价" {...this.formLayout}>
+            {getFieldDecorator('proposPrice', {
+              rules: [{ required: true, message: '请输入单个售价' }],
+              initialValue: 0,
+            })(
+              <Input  style={{ width: "50%" }} addonAfter="GGD"/>
+            )}
+          </FormItem>
+
+          <FormItem label="上架数量" {...this.formLayout}>
+            {getFieldDecorator('proposNum', {
+              rules: [{ required: true, message: '请输入上架数量' }],
+              initialValue: 0,
+            })(
+              <Input  addonAfter="件" style={{ width: "50%" }} />
+            )}
+          </FormItem>
+          <FormItem label="当前库存" {...this.formLayout}>
+            500 件
+          </FormItem>
+        </Form>
+      );
     };
     return (
         <PageHeaderWrapper
@@ -200,6 +285,17 @@ class PropsList extends PureComponent {
           pagination={paginationProps}
           onChange={this.handleStandardTableChange}
         />
+          <Modal
+            title={`上架出售道具${current.name || ''}`}
+            className={styles.standardListForm}
+            width={640}
+            bodyStyle={{ padding: '28px 0 0' }}
+            destroyOnClose
+            visible={visible}
+            {...modalFooter}
+          >
+            {getModalContent()}
+          </Modal>
         </PageHeaderWrapper>
     );
   }
