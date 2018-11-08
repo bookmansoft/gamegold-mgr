@@ -1,7 +1,8 @@
 import React, { Component, Fragment } from 'react';
+import { connect } from 'dva';
 import Debounce from 'lodash-decorators/debounce';
 import Bind from 'lodash-decorators/bind';
-import { connect } from 'dva';
+
 import {
   Button,
   Menu,
@@ -109,6 +110,7 @@ const columns = [
   gameview,
   loading: loading.models.gameview,
 }))
+
 class GameView extends Component {
   state = {
     operationkey: 'tab1',
@@ -152,7 +154,10 @@ class GameView extends Component {
 
   render() {
     const { stepDirection, operationkey } = this.state;
-    const { gameview:{data}, loading } = this.props;
+    const { 
+        gameview:  {data },
+        loading 
+    } = this.props;
 
 
     return (

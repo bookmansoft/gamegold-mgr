@@ -5,15 +5,14 @@ export default {
 
   state: {
     data: {
-      gameName: 'a',
+      gameName: '',
     }
   },
 
   effects: {
-    *fetch(_, { call, put }) {
-      console.log("fetch thomas");
-      const response = yield call(getGameView);
-      console.log(JSON.stringify(response));
+    *fetch({ payload }, { call, put }) {
+        console.log("gameview 14");
+      const response = yield call(getGameView, payload);
       yield put({
         type: 'save',
         payload: response,
@@ -22,10 +21,10 @@ export default {
   },
 
   reducers: {
-    show(state, { payload }) {
+    save(state, action) {
       return {
         ...state,
-        ...payload,
+        data: action.payload,
       };
     },
   },
