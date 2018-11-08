@@ -1,30 +1,30 @@
-import { queryBasicProfile, queryAdvancedProfile } from '@/services/api';
+import { getGameView } from '@/services/gamegoldapi';
 
 export default {
   namespace: 'gameview',
 
   state: {
-    basicGoods: [],
-    advancedOperation1: [],
-    advancedOperation2: [],
-    advancedOperation3: [],
+    data: {
+      gameName: '',
+    }
   },
 
   effects: {
-    *fetch(_, { call, put }) {
-      const response = yield call(queryAdvancedProfile);
+    *fetch({ payload }, { call, put }) {
+        console.log("gameview 14");
+      const response = yield call(getGameView, payload);
       yield put({
-        type: 'show',
+        type: 'save',
         payload: response,
       });
     },
   },
 
   reducers: {
-    show(state, { payload }) {
+    save(state, action) {
       return {
         ...state,
-        ...payload,
+        data: action.payload,
       };
     },
   },

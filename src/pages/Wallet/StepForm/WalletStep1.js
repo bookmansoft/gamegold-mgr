@@ -60,7 +60,7 @@ class WalletStep1 extends React.PureComponent {
             </Button>
           </Form.Item>
         </Form>
-        <Divider style={{ margin: '40px 0 24px' }} />
+        <Divider style={{ margin: '40px 0' }} />
         <div className={styles.desc}>
           <h3>说明</h3>
           <h4>转账到支付宝账户</h4>
