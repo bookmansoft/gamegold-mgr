@@ -48,6 +48,12 @@ export default [
             component: './GameMgr/GameAdd',
           },
           {
+            path: '/gamemgr/gameview',
+            name: 'gameview',
+            component: './GameMgr/GameView',
+            hideInMenu: false,
+          },
+          {
             path: '/gamemgr/gameaddsuccess',
             name: 'gameaddsuccess',
             component: './GameMgr/GameAddSuccess',

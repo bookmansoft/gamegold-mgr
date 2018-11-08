@@ -3,6 +3,7 @@ import { message } from 'antd';
 import { fakeSubmitForm } from '@/services/api';
 import { addGameMgr } from '@/services/gamegoldapi';
 
+//此名称域为新增和编辑共用
 export default {
   namespace: 'game',
 
