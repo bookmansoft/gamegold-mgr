@@ -129,7 +129,11 @@ function postGameList(req, res, u, b) {
 
 
 
-
+const gemeDate = {
+    data: {
+    gameName:'英雄联盟',
+}
+}
 
 
 export default {
@@ -137,5 +141,8 @@ export default {
   'POST /gamemgr/query': postGameList,
   'POST /gamemgr/add': (req, res) => {
     res.send({ message: 'Ok' });
+  },
+  'GET /gamemgr/view': (req, res) => {
+    res.send(gemeDate);
   },
 };

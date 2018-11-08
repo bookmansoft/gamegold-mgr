@@ -105,9 +105,9 @@ const columns = [
   },
 ];
 
-@connect(({ profile, loading }) => ({
-  profile,
-  loading: loading.effects['gameview/fetch'],
+@connect(({ gameview, loading }) => ({
+  gameview,
+  loading: loading.models.gameview,
 }))
 class GameView extends Component {
   state = {
@@ -152,13 +152,12 @@ class GameView extends Component {
 
   render() {
     const { stepDirection, operationkey } = this.state;
-    const { profile, loading } = this.props;
-    const { advancedOperation1, advancedOperation2, advancedOperation3 } = profile;
+    const { gameview:{data}, loading } = this.props;
 
 
     return (
       <PageHeaderWrapper
-        title="魔兽世界"
+        title={data.gameName}
         action={action}
         content={null}
         extraContent={null}

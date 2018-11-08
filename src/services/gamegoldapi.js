@@ -22,6 +22,11 @@ export async function addGameMgr(params) {
   //return request(`/gamemgr/add?${stringify(params)}`);
 }
 
+//--游戏详情
+export async function getGameView() {
+  return request('/gamemgr/view');
+}
+
 //--钱包流水清单
 export async function queryWalletLog(params) {
   return request(`/wallet/queryLog?${stringify(params)}`);
@@ -49,3 +54,4 @@ export async function addWalletPay(params) {
   });
 
 }
+
