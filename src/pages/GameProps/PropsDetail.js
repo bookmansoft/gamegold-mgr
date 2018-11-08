@@ -72,8 +72,8 @@ class PropsDetail extends PureComponent {
         <Card bordered={false} headStyle={{fontWeight:600}} title="道具信息" extra={this.propsButton()}>
           <DescriptionList size="large" style={{ marginBottom: 32 }}>
             <Description term="道具ID">{detail.num}</Description>
-            <Description term="道具名称">{detail.unstock}</Description>
-            <Description term="道具类型">{detail.stock}</Description>
+            <Description term="道具名称">{detail.game}</Description>
+            <Description term="道具类型">{detail.type_cap}</Description>
             <Description term="所属游戏">{detail.game}</Description>
             <Description term="创建时间">{moment(detail.updatedAt).format('YYYY-MM-DD HH:mm')}</Description>
             <Description term="游戏简介">{detail.desc}</Description>

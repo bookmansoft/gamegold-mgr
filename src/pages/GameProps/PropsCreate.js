@@ -30,13 +30,14 @@ class PropsCreate extends PureComponent {
   state = {
     game: propsData[gameData[0]],
     gameProps: propsData[gameData[0]][0],
-    iconPreview : 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png',
-    iconMoreImg : ['https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png','https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png','https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png','https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png'],
+    iconPreview : '',
+    iconMoreImg : [],
   }
   handleSubmit = e => {
     const { dispatch, form } = this.props;
     e.preventDefault();
     form.validateFieldsAndScroll((err, values) => {
+      console.log(values);
       /*if (!err) {
         dispatch({
           type: 'form/submitRegularForm',
@@ -66,20 +67,40 @@ class PropsCreate extends PureComponent {
     form.setFieldsValue({
       keys: keys.filter(key => key !== k),
     });
+    let iconMoreImg = this.state.iconMoreImg;
+    iconMoreImg[k] = '';
+    this.setState({ iconMoreImg:  iconMoreImg});
+
   }
 
   addInputIconPreview = () => {
     const { form } = this.props;
     const keys = form.getFieldValue('keys');
-    const nextKeys = keys.concat(keys.length);
+    //按照最大值+1作为新的keys值
+    let maxNum = 0;
+    if(keys.length > 0){
+      maxNum = Math.max.apply(0, keys) + 1;
+    }else{
+      maxNum = 0;
+    }
+    const nextKeys = keys.concat(maxNum);
     form.setFieldsValue({
       keys: nextKeys,
     });
   }
+  iconPreviewFun = e => {
+    this.setState({ iconPreview: e.target.value });
+  };
+  iconMoreImgFun = (e, k) => {
+    let moreImg = this.state.iconMoreImg;
+    moreImg[k] = e.target.value;
+    this.setState({ iconMoreImg: moreImg });
+  };
 
   render() {
     const { submitting } = this.props;
-    const { game,iconPreview ,iconMoreImg } = this.state;
+    const { game,gameProps,iconPreview} = this.state;
+    const iconMoreImg = this.state.iconMoreImg.filter(v => v !== '');
     const {
       form: { getFieldDecorator, getFieldValue },
     } = this.props;
@@ -110,7 +131,7 @@ class PropsCreate extends PureComponent {
           required={false}
           key={k}
         >
-          {getFieldDecorator(`names[${k}]`, {
+          {getFieldDecorator(`iconMore[${k}]`, {
             validateTrigger: ['onChange', 'onBlur'],
             rules: [{
               required: true,
@@ -118,7 +139,7 @@ class PropsCreate extends PureComponent {
               message: "请输入或者删除.",
             }],
           })(
-            <Input placeholder={formatMessage({ id: 'form.input.placeholder' })} style={{ width: '60%', marginRight: 8 }} />
+            <Input placeholder={formatMessage({ id: 'form.input.placeholder' })} style={{ width: '60%', marginRight: 8 }} onChange={(e)=>this.iconMoreImgFun(e, k)}/>
           )}
           {keys.length > 1 ? (
             <Icon
@@ -140,23 +161,46 @@ class PropsCreate extends PureComponent {
 
         <Card title="道具信息" bordered={false}>
             <FormItem {...formItemLayout} label= "从游戏中选择">
-              <Select
-                defaultValue={gameData[0]}
-                style={{ width: "50%" }}
-                onChange={this.handleGameChange}
-              >
-                {gameData.map(game => <Option key={game}>{game}</Option>)}
-              </Select>
-              <Select
-                style={{ width: "50%" }}
-                value={this.state.gameProps}
-                onChange={this.onPropsChange}
-              >
-                {game.map(props => <Option key={props}>{props}</Option>)}
-              </Select>
+              {getFieldDecorator('belongGame', {
+                rules: [
+                  {
+                    required: true,
+                    message: "请选择游戏",
+                  },
+                ],
+              })(
+                <Select
+                  setFieldsValue={gameData[0]}
+                  style={{ width: "50%" }}
+                  onChange={this.handleGameChange}
+                >
+                  {gameData.map(game => <Option key={game}>{game}</Option>)}
+                </Select>
+
+              )}
+
+              {getFieldDecorator('belongProps', {
+                rules: [
+                  {
+                    required: true,
+                    message: "请选择装备",
+                  },
+                ],
+              })(
+                <Select
+                  style={{ width: "50%" }}
+                  setFieldsValue={this.state.gameProps}
+                  onChange={this.onPropsChange}
+                >
+                  {game.map(props => <Option key={props}>{props}</Option>)}
+                </Select>
+              )}
+
+
             </FormItem>
+
             <FormItem {...formItemLayout} label= "道具名称">
-              {getFieldDecorator('name', {
+              {getFieldDecorator('propsName', {
                 rules: [
                   {
                     required: true,
@@ -166,7 +210,7 @@ class PropsCreate extends PureComponent {
               })(<Input placeholder={formatMessage({ id: 'form.input.placeholder' })} />)}
             </FormItem>
             <FormItem {...formItemLayout} label= "道具类型">
-              {getFieldDecorator('type', {
+              {getFieldDecorator('propsType', {
                 rules: [{ required: true, message: '请选择道具类型' }],
               })(
                 <Select placeholder={formatMessage({ id: 'form.select.placeholder' })}>
@@ -208,14 +252,14 @@ class PropsCreate extends PureComponent {
 
           <Card title="素材信息" bordered={false}>
             <FormItem {...formItemLayout} label= "ICON链接">
-              {getFieldDecorator('name', {
+              {getFieldDecorator('iconUrl', {
                 rules: [
                   {
                     required: true,
                     message: "ICON链接必须填写",
                   },
                 ],
-              })(<Input placeholder={formatMessage({ id: 'form.input.placeholder' })} />)}
+              })(<Input placeholder={formatMessage({ id: 'form.input.placeholder' })} onChange={this.iconPreviewFun}/>)}
             </FormItem>
             <FormItem {...formItemLayout} label= "ICON预览">
               <img width={120} src={iconPreview} />
