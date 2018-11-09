@@ -25,6 +25,7 @@ function getList(cur = 1, pageSize = 10) {
   return tableListDataSource;
 }
 
+
 function getGamePropsList(req, res, u) {
   let url = u;
   if (!url || Object.prototype.toString.call(url) !== '[object String]') {
@@ -71,6 +72,72 @@ function getGamePropsList(req, res, u) {
     },
   };
 
+  return res.json(result);
+}
+
+
+function getUserAllList(cur = 1, pageSize = 10) {
+  var myDate = new Date();
+  let userAll = [];
+  let type_cap = ["射击"," MOBA","休闲益智","动作冒险","角色扮演"];
+  for (let i = 0; i < 50; i++) {
+    userAll.push({
+      key: i,
+      id: `${cur}${i}`,
+      walletAddr: `tb1qk879kgs5pl994fdnvr${cur}-${i}`,
+      gameType: type_cap[Math.floor(Math.random()*type_cap.length)],
+      game: `王者农药${cur}${i}`,
+      createdAt: myDate.setDate(myDate.getDate() + i),
+    });
+  }
+  return userAll;
+}
+
+function getUserAll(req, res, u) {
+  let url = u;
+  if (!url || Object.prototype.toString.call(url) !== '[object String]') {
+    url = req.url; // eslint-disable-line
+  }
+
+  const params = parse(url, true).query;
+
+  let dataSource = getUserAllList(params.currentPage, params.pageSize);
+
+  if (params.sorter) {
+    const s = params.sorter.split('_');
+    dataSource = dataSource.sort((prev, next) => {
+      if (s[1] === 'descend') {
+        return next[s[0]] - prev[s[0]];
+      }
+      return prev[s[0]] - next[s[0]];
+    });
+  }
+
+  if (params.id) {
+    dataSource = dataSource.filter(data => data.id.indexOf(params.id) > -1);
+  }
+
+  if (params.name) {
+    dataSource = dataSource.filter(data => data.gameType.indexOf(params.gameType) > -1);
+  }
+
+  if (params.game) {
+    dataSource = dataSource.filter(data => data.game.indexOf(params.game) > -1);
+  }
+
+  let pageSize = 10;
+  if (params.pageSize) {
+    pageSize = params.pageSize * 1;
+  }
+
+  const result = {
+    list: dataSource,
+    pagination: {
+      total: dataSource.length,
+      pageSize,
+      current: parseInt(params.currentPage, 10) || 1,
+    },
+  };
   return res.json(result);
 }
 
@@ -166,5 +233,6 @@ export default {
   'GET /api/gamepropsdetail': getGamePropsDetail,
   'GET /api/allgame': getAllGame,
   'GET /api/gameprops': getPropsByGame,
+  'GET /api/userall': getUserAll,
 };
 

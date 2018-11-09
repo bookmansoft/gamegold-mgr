@@ -1,4 +1,4 @@
-import { getGamePropsList, getGamePropsDetail, getPropsByGame , getAllGameList } from '@/services/api';
+import { getGamePropsList, getGamePropsDetail, getPropsByGame , getAllGameList , getUserAll } from '@/services/api';
 
 export default {
   namespace: 'gameprops',
@@ -10,14 +10,18 @@ export default {
     detail: [],
     gameList: [],
     gamePropsList: [],
+    userAllList: {
+      list: [],
+      pagination: {},
+    },
   },
 
   effects: {
     *propsList({ payload }, { call, put }) {
       const response = yield call(getGamePropsList, payload);
       yield put({
-        type: 'gamePropsList',
-        payload: response,
+        type: 'allList',
+        allListData: response,
       });
     },
     *propsDetail({ payload }, { call, put }) {
@@ -31,7 +35,7 @@ export default {
       const response = yield call(getPropsByGame, payload);
       yield put({
         type: 'gamePropsByGame',
-        propsList: response,
+        gamePropsList: response,
       });
     },
     *getAllGameList({ payload }, { call, put }) {
@@ -41,13 +45,20 @@ export default {
         gameList: response,
       });
     },
+    *getAllUser({ payload }, { call, put }) {
+      const response = yield call(getUserAll, payload);
+      yield put({
+        type: 'gameUserAll',
+        userAll: response,
+      });
+    },
   },
 
   reducers: {
-    gamePropsList(state, action) {
+    allList(state, { allListData }) {
       return {
         ...state,
-        data: action.payload,
+        data: allListData,
       };
     },
     gamePropsDetail(state, { detail }) {
@@ -56,16 +67,22 @@ export default {
         detail: detail
       };
     },
-    gamePropsByGame(state, { propsList }) {
+    gamePropsByGame(state, { gamePropsList }) {
       return {
         ...state,
-        gamePropsList: propsList
+        gamePropsList: gamePropsList
       };
     },
     gameAllGameList(state, { gameList }) {
       return {
         ...state,
         gameList: gameList
+      };
+    },
+    gameUserAll(state, {userAll} ) {
+      return {
+        ...state,
+        userAllList: userAll,
       };
     },
   },

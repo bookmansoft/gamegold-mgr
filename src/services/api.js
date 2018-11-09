@@ -133,12 +133,18 @@ export async function getFakeCaptcha(mobile) {
 export async function getGamePropsList(params) {
   return request(`/api/gamepropslist?${stringify(params)}`);
 }
+
 export async function getGamePropsDetail(params) {
   return request(`/api/gamepropsdetail?${stringify(params)}`);
 }
+
 export async function getPropsByGame(params) {
   return request(`/api/gameprops?${stringify(params)}`);
 }
+
 export async function getAllGameList(params) {
   return request(`/api/allgame?${stringify(params)}`);
+}
+export async function getUserAll(params) {
+  return request(`/api/userall?${stringify(params)}`);
 }
