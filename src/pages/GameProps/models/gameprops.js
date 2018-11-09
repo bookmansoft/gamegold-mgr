@@ -1,4 +1,4 @@
-import { getGamePropsList, getGamePropsDetail } from '@/services/api';
+import { getGamePropsList, getGamePropsDetail, getPropsByGame , getAllGameList } from '@/services/api';
 
 export default {
   namespace: 'gameprops',
@@ -7,7 +7,9 @@ export default {
       list: [],
       pagination: {},
     },
-    detail: {},
+    detail: [],
+    gameList: [],
+    gamePropsList: [],
   },
 
   effects: {
@@ -25,6 +27,20 @@ export default {
         detail: response,
       });
     },
+    *getPropsByGame({ payload }, { call, put }) {
+      const response = yield call(getPropsByGame, payload);
+      yield put({
+        type: 'gamePropsByGame',
+        propsList: response,
+      });
+    },
+    *getAllGameList({ payload }, { call, put }) {
+      const response = yield call(getAllGameList, payload);
+      yield put({
+        type: 'gameAllGameList',
+        gameList: response,
+      });
+    },
   },
 
   reducers: {
@@ -38,6 +54,18 @@ export default {
       return {
         ...state,
         detail: detail
+      };
+    },
+    gamePropsByGame(state, { propsList }) {
+      return {
+        ...state,
+        gamePropsList: propsList
+      };
+    },
+    gameAllGameList(state, { gameList }) {
+      return {
+        ...state,
+        gameList: gameList
       };
     },
   },

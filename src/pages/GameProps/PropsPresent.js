@@ -6,34 +6,56 @@ import {
   Select,
   Button,
   Input,
-  Table , Card, Modal
+  Table , Card, Modal, Col
 } from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import styles from './style.less';
 import moment from 'moment';
-
+import StandardTable from '@/components/StandardTable';
 const FormItem = Form.Item;
 const { Option } = Select;
-const gameData = ['游戏1', '游戏2'];
-const propsData = {
-  '游戏1': ['套装1', '套装2', '套装3'],
-  '游戏2': ['套装4', '套装5', '套装6'],
-};
-@connect(({ loading }) => ({
-  submitting: loading.effects['form/submitRegularForm'],
+
+
+@connect(({ gameprops, loading }) => ({
+  gameprops,
+  loading: loading.models.gameprops,
 }))
+
+/*@connect(({ loading }) => ({
+  submitting: loading.effects['form/submitRegularForm'],
+}))*/
 
 @Form.create()
 class PropsPresent extends PureComponent {
   state = {
     visible: false,
-    game: propsData[gameData[0]],
-    gameProps: propsData[gameData[0]][0]
+  };
+  componentDidMount() {
+    const {dispatch } = this.props;
+    dispatch({
+      type: 'gameprops/getAllGameList',
+      payload: {}
+    });
   }
+  handlePresentSubmit = e => {
+    const { dispatch, form } = this.props;
+    e.preventDefault();
+    form.validateFieldsAndScroll((err, values) => {
+      console.log(values);
+      /*if (!err) {
+       dispatch({
+       type: 'form/submitRegularForm',
+       payload: values,
+       });
+       }*/
+    });
+  };
+
   handleSubmit = e => {
     const { dispatch, form } = this.props;
     e.preventDefault();
     form.validateFieldsAndScroll((err, values) => {
+      console.log(values);
       /*if (!err) {
         dispatch({
           type: 'form/submitRegularForm',
@@ -43,33 +65,40 @@ class PropsPresent extends PureComponent {
     });
   };
   handleGameChange = (value) => {
-    this.setState({
-      game: propsData[value],
-      gameProps: propsData[value][0],
+    const {dispatch } = this.props;
+    dispatch({
+      type: 'gameprops/getPropsByGame',
+      payload: {id:value.key, name:value.label}
     });
   };
-
   onPropsChange = (value) => {
-    this.setState({
-      gameProps: value,
+    const { form } = this.props;
+    let curGamePropsList = this.props.gameprops.gamePropsList;
+    //根据id筛选当前选中的option 取其库存
+    let selectCur = curGamePropsList.filter(val => val.id === value);
+    form.setFieldsValue({
+      propsNum: selectCur[0].stock || 0,
     });
   };
-  showEditModal = () => {
+  showPresentModal = () => {
     this.setState({
       visible: true,
     });
   };
-  handleCancel = () => {
+  handlePresentCancel = () => {
     this.setState({
       visible: false,
     });
   };
   render() {
     const { submitting } = this.props;
-    const { game,visible } = this.state;
+    const { visible} = this.state;
     const {
       form: { getFieldDecorator, getFieldValue },
     } = this.props;
+    const gameList = this.props.gameprops.gameList;
+    const gamePropsList = this.props.gameprops.gamePropsList;
+
 
     const formItemLayout = {
       labelCol: {
@@ -89,34 +118,33 @@ class PropsPresent extends PureComponent {
         sm: { span: 10, offset: 7 },
       },
     };
-    const modalFooter = { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
+    const modalFooter = { okText: '保存', onOk: this.handlePresentSubmit, onCancel: this.handlePresentCancel };
     const dataSource = [{
       key: '1',
-      name: '胡彦斌',
-      age: 32,
-      address: '西湖区湖底公园1号'
+      moneyAddr: 'tb1qk879kgs5pl994fdnvrw66af26zvxvzqrlsrf4z',
+      playGame: '休闲益智  角色扮演  射击',
+      createAt: '2016-09-21  08:50:08'
     }, {
       key: '2',
-      name: '胡彦祖',
-      age: 42,
-      address: '西湖区湖底公园1号'
+      moneyAddr: 'tb1qk879kgs5pl994fdnvrw66af26zvxvzqrlsrf4z',
+      playGame: '角色扮演  动作冒险',
+      createAt: '2018-11-12'
     }];
 
     const columns = [{
-      title: '姓名',
-      dataIndex: 'name',
-      key: 'name',
+      title: '用户钱包地址',
+      dataIndex: 'moneyAddr',
+      key: 'moneyAddr',
     }, {
-      title: '年龄',
-      dataIndex: 'age',
-      key: 'age',
+      title: '玩过的游戏类型',
+      dataIndex: 'playGame',
+      key: 'playGame',
     }, {
-      title: '住址',
-      dataIndex: 'address',
-      key: 'address',
+      title: '注册时间',
+      dataIndex: 'createAt',
+      key: 'createAt',
     }];
-    const getModalContent = () => {
-
+    const getUserModealContent = () => {
       return (
         <Table dataSource={dataSource} columns={columns} />
       );
@@ -125,35 +153,58 @@ class PropsPresent extends PureComponent {
     return (
       <PageHeaderWrapper title= "道具赠送" >
         <Form onSubmit={this.handleSubmit} hideRequiredMark style={{ marginTop: 8 }}>
-          <Card title="素材信息" bordered={false}>
-            <FormItem {...formItemLayout} label= "选择道具">
-              <Select
-                defaultValue={gameData[0]}
-                style={{ width: "50%" }}
-                onChange={this.handleGameChange}
-              >
-                {gameData.map(game => <Option key={game}>{game}</Option>)}
-              </Select>
-              <Select
-                style={{ width: "50%" }}
-                value={this.state.gameProps}
-                onChange={this.onPropsChange}
-              >
-                {game.map(props => <Option key={props}>{props}</Option>)}
-              </Select>
+          <Card title="选择道具" bordered={false} headStyle={{fontWeight:600}}>
+            <FormItem {...formItemLayout} label= "选择游戏及道具">
+                <Col span={11}>
+                  <FormItem>
+                  {getFieldDecorator('belongGame', {
+                    rules: [
+                      {
+                        required: true,
+                        message: "请选择游戏",
+                      },
+                    ],
+                  })(
+                  <Select
+                    onChange={this.handleGameChange}
+                    labelInValue ={true}
+                  >
+                    {gameList.map(game => <Option key={game.id}>{game.name}</Option>)}
+                  </Select>
+                  )}
+                </FormItem>
+              </Col>
+              <Col span={11}>
+                  <FormItem>
+                {getFieldDecorator('belongProps', {
+                  rules: [
+                    {
+                      required: true,
+                      message: "请选择装备",
+                    },
+                  ],
+                })(
+                <Select
+                  onChange={this.onPropsChange}
+                >
+                  {gamePropsList.map(props => <Option key={props.id}>{props.name}</Option>)}
+                </Select>
+                )}
+               </FormItem>
+              </Col>
             </FormItem>
             <FormItem {...formItemLayout} label= "剩余库存">
-              {getFieldDecorator('proNum')(
-                <Input disabled style={{ width: "50%" }} />
+              {getFieldDecorator('propsNum')(
+                <Input disabled style={{ width: "100px" }} />
               )}
             </FormItem>
           </Card>
-          <Card title="选择赠送对象" bordered={false}>
+          <Card title="选择赠送对象" bordered={false} headStyle={{fontWeight:600}}>
           <FormItem {...formItemLayout} label= "选择赠送对象">
 
             <Button type="primary" onClick={e => {
               e.preventDefault();
-              this.showEditModal();
+              this.showPresentModal();
             }} style={{width: "30%"}}>
               {`添加接收人`}
             </Button>
@@ -180,7 +231,7 @@ class PropsPresent extends PureComponent {
           visible={visible}
           {...modalFooter}
         >
-          {getModalContent()}
+          {getUserModealContent()}
         </Modal>
 
       </PageHeaderWrapper>

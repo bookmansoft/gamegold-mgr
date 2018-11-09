@@ -178,20 +178,20 @@ class PropsList extends PureComponent {
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-          <Col md={4} sm={4}>
+          <Col md={4} sm={24}>
             <FormItem label="ID">
               {getFieldDecorator('id')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
-          <Col md={4} sm={4}>
+          <Col md={6} sm={24}>
             <FormItem label="道具名">
               {getFieldDecorator('name')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
-          <Col md={4} sm={4}>
+          <Col md={6} sm={24}>
             <FormItem label="所在游戏">
               {getFieldDecorator('game')(
-                <Select placeholder="请选择" style={{ width: '100%' }}>
+                <Select placeholder="请选择" style={{width:"200px"}}>
                   <Option value="0">游戏A</Option>
                   <Option value="1">游戏B</Option>
                   <Option value="2">游戏C</Option>
@@ -201,7 +201,7 @@ class PropsList extends PureComponent {
               )}
             </FormItem>
           </Col>
-          <Col md={8} sm={8}>
+          <Col md={8} sm={24}>
             <span className={styles.submitButtons}>
               <Button type="primary" htmlType="submit">
                 查询

@@ -9,6 +9,7 @@ import {
   Card,
   Icon ,
   List,
+  Col,
 } from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import styles from './style.less';
@@ -159,46 +160,48 @@ class PropsCreate extends PureComponent {
       >
         <Form onSubmit={this.handleSubmit} hideRequiredMark style={{ marginTop: 8 }}>
 
-        <Card title="道具信息" bordered={false}>
-            <FormItem {...formItemLayout} label= "从游戏中选择">
-              {getFieldDecorator('belongGame', {
-                rules: [
-                  {
-                    required: true,
-                    message: "请选择游戏",
-                  },
-                ],
-              })(
-                <Select
-                  setFieldsValue={gameData[0]}
-                  style={{ width: "50%" }}
-                  onChange={this.handleGameChange}
-                >
-                  {gameData.map(game => <Option key={game}>{game}</Option>)}
-                </Select>
+        <Card title="道具信息" bordered={false} headStyle={{fontWeight:600}}>
+          <FormItem {...formItemLayout} label= "选择游戏及道具">
+              <Col span={11}>
+                <FormItem>
+                {getFieldDecorator('belongGame', {
+                  rules: [
+                    {
+                      required: true,
+                      message: "请选择游戏",
+                    },
+                  ],
+                })(
+                  <Select
+                    setFieldsValue={gameData[0]}
+                    onChange={this.handleGameChange}
+                  >
+                    {gameData.map(game => <Option key={game}>{game}</Option>)}
+                  </Select>
 
-              )}
-
-              {getFieldDecorator('belongProps', {
-                rules: [
-                  {
-                    required: true,
-                    message: "请选择装备",
-                  },
-                ],
-              })(
-                <Select
-                  style={{ width: "50%" }}
-                  setFieldsValue={this.state.gameProps}
-                  onChange={this.onPropsChange}
-                >
-                  {game.map(props => <Option key={props}>{props}</Option>)}
-                </Select>
-              )}
-
-
+                )}
+                  </FormItem>
+                </Col>
+                <Col span={11}>
+                 <FormItem>
+                  {getFieldDecorator('belongProps', {
+                    rules: [
+                      {
+                        required: true,
+                        message: "请选择装备",
+                      },
+                    ],
+                  })(
+                    <Select
+                      setFieldsValue={this.state.gameProps}
+                      onChange={this.onPropsChange}
+                    >
+                      {game.map(props => <Option key={props}>{props}</Option>)}
+                    </Select>
+                  )}
+                </FormItem>
+                </Col>
             </FormItem>
-
             <FormItem {...formItemLayout} label= "道具名称">
               {getFieldDecorator('propsName', {
                 rules: [
@@ -250,7 +253,7 @@ class PropsCreate extends PureComponent {
 
         </Card>
 
-          <Card title="素材信息" bordered={false}>
+          <Card title="素材信息" bordered={false} headStyle={{fontWeight:600}}>
             <FormItem {...formItemLayout} label= "ICON链接">
               {getFieldDecorator('iconUrl', {
                 rules: [

@@ -74,6 +74,62 @@ function getGamePropsList(req, res, u) {
   return res.json(result);
 }
 
+
+
+function getAllGame(req, res, u) {
+  let url = u;
+  if (!url || Object.prototype.toString.call(url) !== '[object String]') {
+    url = req.url; // eslint-disable-line
+  }
+
+  const params = parse(url, true).query;
+  var myDate = new Date();
+  let allGame = [];
+  let type_cap = ["TD塔防","魔兽世界","王者农药","荒野行动"];
+  for (let i = 1; i < 20; i++) {
+    allGame.push({
+      id: `${i}`,
+      type: Math.floor(Math.random() * 10),
+      name: type_cap[Math.floor(Math.random()*type_cap.length)] + `版本`+i,
+      desc: `这是${i}游戏的一段描述`,
+      status: Math.floor(Math.random() * 10) % 4,
+      updatedAt: myDate.setDate(myDate.getDate() + i),
+      createdAt: myDate.setDate(myDate.getDate() + i),
+    });
+  }
+  return res.json(allGame);
+}
+
+
+function getPropsByGame(req, res, u) {
+  let url = u;
+  if (!url || Object.prototype.toString.call(url) !== '[object String]') {
+    url = req.url; // eslint-disable-line
+  }
+
+  const params = parse(url, true).query;
+  let gameId = params.id || '';
+  let gameName = params.name || '';
+  var myDate = new Date();
+  let gameProps = [];
+  let type_cap = ["装备","消耗","装饰","其他"];
+  for (let i = 1; i < 10; i++) {
+    gameProps.push({
+      id: `${i}`,
+      gameId: gameId,
+      name: `${gameName}-`+type_cap[Math.floor(Math.random()*type_cap.length)],
+      type: Math.floor(Math.random() * 10),
+      desc: `这是${i}道具一段描述`,
+      num: Math.floor(Math.random() * 1000),
+      stock: Math.floor(Math.random() * 1000),
+      status: Math.floor(Math.random() * 10) % 4,
+      updatedAt: myDate.setDate(myDate.getDate() + i),
+      createdAt: myDate.setDate(myDate.getDate() + i),
+    });
+  }
+  return res.json(gameProps);
+}
+
 function getGamePropsDetail(req, res, u) {
   let url = u;
   if (!url || Object.prototype.toString.call(url) !== '[object String]') {
@@ -108,5 +164,7 @@ function getGamePropsDetail(req, res, u) {
 export default {
   'GET /api/gamepropslist': getGamePropsList,
   'GET /api/gamepropsdetail': getGamePropsDetail,
+  'GET /api/allgame': getAllGame,
+  'GET /api/gameprops': getPropsByGame,
 };
 
