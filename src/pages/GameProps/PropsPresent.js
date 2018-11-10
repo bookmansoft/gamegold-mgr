@@ -10,7 +10,7 @@ import {
 } from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import styles from './style.less';
-import PropsListUserTable from '@/components/PropsListUserTable';
+import PropsSelectUser from '@/components/PropsSelectUser';
 const FormItem = Form.Item;
 const { Option } = Select;
 
@@ -29,53 +29,21 @@ class PropsPresent extends PureComponent {
   state = {
     visible: false,
     selectedRows: [],
+    selectedRowKeys: [],
   };
-  columns = [
-    {
-      title: '用户钱包地址',
-      dataIndex: 'walletAddr',
-    },
-    {
-      title: '玩过的游戏类型',
-      dataIndex: 'gameType',
-    },
-    {
-      title: '注册时间',
-      dataIndex: 'createdAt',
-      sorter: true,
-      align: 'right',
-    }
-  ];
+
   componentDidMount() {
     const {dispatch } = this.props;
     dispatch({
       type: 'gameprops/getAllGameList',
       payload: {}
     });
-    dispatch({
-      type: 'gameprops/getAllUser',
-      payload: {}
-    });
   }
-  handlePresentSubmit = e => {
-    const { dispatch, form } = this.props;
-    e.preventDefault();
-    form.validateFieldsAndScroll((err, values) => {
-      console.log(this.state.selectedRows);
-      console.log(values);
-      /*if (!err) {
-       dispatch({
-       type: 'form/submitRegularForm',
-       payload: values,
-       });
-       }*/
-    });
-  };
-
   handleSubmit = e => {
     const { dispatch, form } = this.props;
     e.preventDefault();
     form.validateFieldsAndScroll((err, values) => {
+      console.log(this.state.selectedRows);
       console.log(values);
       /*if (!err) {
         dispatch({
@@ -111,112 +79,29 @@ class PropsPresent extends PureComponent {
       visible: false,
     });
   };
-  handleSearch = e => {
-    e.preventDefault();
+  handlePresentSubmit = (e) => {
+    //获取到选择的用户信息
+    //console.log(this.state.selectedRows);
+    //关闭选择弹窗
+    this.setState({
+      visible: false,
+    });
 
-    const { dispatch, form } = this.props;
-
-    form.validateFields((err, fieldsValue) => {
-      if (err) return;
-
-      const values = {
-        ...fieldsValue,
-        updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
-      };
-
-      this.setState({
-        formValues: values,
-      });
-
-      dispatch({
-        type: 'gameprops/getAllUser',
-        payload: values,
-      });
+  };
+  SetSelectedRowKeys = (val) => {
+    this.setState({
+      selectedRowKeys : val
     });
   };
-  renderForm() {
-    const {
-      form: { getFieldDecorator },
-    } = this.props;
-    return (
-      <Form onSubmit={this.handleSearch} layout="inline">
-        <Row gutter={{ md: 8, lg: 24, xl: 48 }} style={{margin:"10px 0"}}>
-          <Col md={24} sm={24}>
-            <FormItem label="搜索钱包地址">
-              {getFieldDecorator('walletAddress')(<Input placeholder="请输入" />)}
-            </FormItem>
-          </Col>
-        </Row>
-        <Row  gutter={{ md: 8, lg: 24, xl: 48 }} style={{margin:"10px 0"}}>
-          <Col md={24} sm={24}>
-            <FormItem label="按所玩游戏搜索">
-            {getFieldDecorator('gameType')(
-                <Select placeholder="请选择" style={{ width: '200px' }}>
-                  <Option value="0">关闭</Option>
-                  <Option value="1">运行中</Option>
-                </Select>
-              )}
-            </FormItem>
-            <FormItem>
-              {getFieldDecorator('game')(
-                <Select placeholder="请选择" style={{ width: '200px' }}>
-                  <Option value="0">关闭</Option>
-                  <Option value="1">运行中</Option>
-                </Select>
-              )}
-            </FormItem>
-          </Col>
-        </Row>
-        <Row  gutter={{ md: 8, lg: 24, xl: 48 }} style={{margin:"10px 0"}}>
-          <Col md={24} sm={24}>
-            <span className={styles.createButtons}>
-              <Button type="primary" htmlType="submit">
-                查询
-              </Button>
-              <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
-                重置
-              </Button>
-            </span>
-          </Col>
-        </Row>
-      </Form>
-    );
-  };
+
   handleSelectRows = rows => {
     this.setState({
       selectedRows: rows,
     });
-    console.log(this.state.selectedRows);
-
-  };
-  handlePropsListUserTableChange = (pagination, filtersArg, sorter) => {
-    const { dispatch } = this.props;
-    const { formValues } = this.state;
-
-    const filters = Object.keys(filtersArg).reduce((obj, key) => {
-      const newObj = { ...obj };
-      newObj[key] = getValue(filtersArg[key]);
-      return newObj;
-    }, {});
-
-    const params = {
-      currentPage: pagination.current,
-      pageSize: pagination.pageSize,
-      ...formValues,
-      ...filters,
-    };
-    if (sorter.field) {
-      params.sorter = `${sorter.field}_${sorter.order}`;
-    }
-
-    dispatch({
-      type: 'gameprops/getAllUser',
-      payload: params,
-    });
   };
   render() {
     const { submitting,loading, gameprops: { userAllList }} = this.props;
-    const { visible,selectedRows} = this.state;
+    const { visible,selectedRows,selectedRowKeys} = this.state;
     const {
       form: { getFieldDecorator, getFieldValue },
     } = this.props;
@@ -242,28 +127,7 @@ class PropsPresent extends PureComponent {
         sm: { span: 10, offset: 7 },
       },
     };
-    const modalFooter = { okText: '保存', onOk: this.handlePresentSubmit, onCancel: this.handlePresentCancel };
 
-    const getUserModealContent = () => {
-      return (
-        <PageHeaderWrapper title="添加接收人">
-          <Card bordered={false}>
-            <div className={styles.tableList}>
-              <div className={styles.tableListForm}>{this.renderForm()}</div>
-              <PropsListUserTable
-                selectedRows={selectedRows}
-                loading={loading}
-                data={userAllList}
-                columns={this.columns}
-                onSelectRow={this.handleSelectRows}
-                onChange={this.handlePropsListUserTableChange}
-              />
-            </div>
-          </Card>
-        </PageHeaderWrapper>
-
-      );
-    };
 
     return (
       <PageHeaderWrapper title= "道具赠送" >
@@ -325,7 +189,7 @@ class PropsPresent extends PureComponent {
             </Button>
           </FormItem>
           <FormItem {...formItemLayout} label= "已添加接收人数量">
-            已添加接收人数量  100 人
+            已添加接收人数量  {selectedRows.length} 人
           </FormItem>
           </Card>
 
@@ -338,16 +202,16 @@ class PropsPresent extends PureComponent {
               </Button>
             </FormItem>
         </Form>
-        <Modal
-          title="选择"
-          className={styles.standardListForm}
-          width={800}
-          destroyOnClose
+
+        <PropsSelectUser
           visible={visible}
-          {...modalFooter}
-        >
-          {getUserModealContent()}
-        </Modal>
+          selectedRows={selectedRows}
+          selectedRowKeys={selectedRowKeys}
+          SetSelectedRowKeys={this.SetSelectedRowKeys}
+          handleSelectRows={this.handleSelectRows}
+          handlePresentCancel={this.handlePresentCancel}
+          handlePresentSubmit={this.handlePresentSubmit}
+        />
 
       </PageHeaderWrapper>
     );

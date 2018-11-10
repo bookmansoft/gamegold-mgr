@@ -8,7 +8,6 @@ class PropsListUserTable extends PureComponent {
     const { columns } = props;
 
     this.state = {
-      selectedRowKeys: [],
     };
   }
 
@@ -23,12 +22,11 @@ class PropsListUserTable extends PureComponent {
   }
 
   handleRowSelectChange = (selectedRowKeys, selectedRows) => {
-    const { onSelectRow } = this.props;
+    const { onSelectRow,SetSelectedRowKeys } = this.props;
     if (onSelectRow) {
       onSelectRow(selectedRows);
     }
-
-    this.setState({ selectedRowKeys });
+    SetSelectedRowKeys(selectedRowKeys)
   };
 
   handleTableChange = (pagination, filters, sorter) => {
@@ -43,12 +41,12 @@ class PropsListUserTable extends PureComponent {
   };
 
   render() {
-    const { selectedRowKeys } = this.state;
     const {
       data: { list, pagination },
       loading,
       columns,
       rowKey,
+      selectedRowKeys
     } = this.props;
 
     const paginationProps = {
