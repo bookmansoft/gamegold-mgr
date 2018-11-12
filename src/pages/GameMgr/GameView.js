@@ -65,6 +65,31 @@ const customDot = (dot, { status }) =>
   ) : (
     dot
   );
+
+
+  const CreateForm = Form.create()(props => {
+    const {  form } = props;
+
+    return (
+      <Modal
+        destroyOnClose
+        title="新建规则"
+        visible={true}
+
+      >
+        <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="描述">
+          {form.getFieldDecorator('desc', {
+            rules: [{ required: true, message: '请输入至少五个字符的规则描述！', min: 5 }],
+          })(<Input placeholder="请输入" />)}
+        </FormItem>
+      </Modal>
+    );
+  });
+  
+
+
+
+
 //--编辑
 function doEdit() {
   //没干啥
