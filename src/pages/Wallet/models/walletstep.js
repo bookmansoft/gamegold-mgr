@@ -6,12 +6,8 @@ export default {
   namespace: 'walletstep',
 
   state: {
-    step: {
-      payAccount: 'ant-design@alipay.com',
-      receiverAccount: 'test@example.com',
-      receiverName: 'Alex',
-      amount: '499',
-    },
+      remenberWord: '东南西北中发梅兰竹菊葱蒜',
+      checkRemenberWord:'x',
   },
 
   effects: {
@@ -34,6 +30,17 @@ export default {
   },
 
   reducers: {
+    appendText(state, { payload }) {
+      //payload.theText
+      payload.checkRemenberWord="xxx";//payload.step.checkRemenberWord+payload.step.appendText;
+      return {
+        ...state,
+        step: {
+          ...state.step,
+          ...payload,
+        },
+      };
+    },
     saveStepFormData(state, { payload }) {
       return {
         ...state,

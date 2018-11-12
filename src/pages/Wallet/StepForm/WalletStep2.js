@@ -1,10 +1,10 @@
 import React, { Fragment } from 'react';
 import { connect } from 'dva';
-import { Form, Input, Button, Alert, Divider } from 'antd';
+import { Form, Input, Button, Alert, Divider,Row,Col } from 'antd';
 import router from 'umi/router';
 import { digitUppercase } from '@/utils/utils';
 import styles from './style.less';
-
+const FormItem = Form.Item;
 const formItemLayout = {
   labelCol: {
     span: 5,
@@ -16,10 +16,19 @@ const formItemLayout = {
 
 @connect(({ walletstep, loading }) => ({
   submitting: loading.effects['wallet/submitStepForm'],
-  data: walletstep.step,
+  data: walletstep,
 }))
 @Form.create()
 class WalletStep2 extends React.PureComponent {
+  appendText(theText) {
+    this.props.dispatch({
+      type: 'walletstep/appendText',
+      payload: {
+        theText,
+      },
+    })
+    alert(theText);
+  }
   render() {
     const { form, data, dispatch, submitting } = this.props;
     const { getFieldDecorator, validateFields } = form;
@@ -49,9 +58,52 @@ class WalletStep2 extends React.PureComponent {
           message="请按顺序点击下方助记词，确保你的助记词备份正常"
           style={{ marginBottom: 24 }}
         />
-        <Input style={{fontSize:24,letterSpacing:10,textAlign:"center"}} value="东西南北中发梅兰竹菊葱蒜" />
-        <br/><br/>
+            <FormItem>
+              {getFieldDecorator('gameName', {
+                rules: [
+                  {
+                    required: true,
+                    message: "请顺序选择所有助记词",
+                  },
+                ],
+              })(<Input style={{fontSize:24,letterSpacing:10,textAlign:"center"}} value={data.checkRemenberWord} />)}
+            </FormItem>
+
         
+        <br/><br/>
+
+        <Row>
+          <Col sm={2} xs={2}><Button onClick={()=>this.appendText(data.remenberWord[0])}>{data.remenberWord[0]}</Button></Col>
+          <Col sm={1} xs={1}></Col>
+          <Col sm={2} xs={2}><Button onClick={()=>this.appendText(data.remenberWord[1])}>{data.remenberWord[1]}</Button></Col>
+          <Col sm={1} xs={1}></Col>
+          <Col sm={2} xs={2}><Button onClick={()=>this.appendText(data.remenberWord[2])}>{data.remenberWord[2]}</Button></Col>
+          <Col sm={1} xs={1}></Col>
+          <Col sm={2} xs={2}><Button onClick={()=>this.appendText(data.remenberWord[3])}>{data.remenberWord[3]}</Button></Col>
+          <Col sm={1} xs={1}></Col>
+          <Col sm={2} xs={2}><Button onClick={()=>this.appendText(data.remenberWord[4])}>{data.remenberWord[4]}</Button></Col>
+          <Col sm={1} xs={1}></Col>
+          <Col sm={2} xs={2}><Button onClick={()=>this.appendText(data.remenberWord[5])}>{data.remenberWord[5]}</Button></Col>
+        </Row>
+        <Row>
+          <Col sm={1} xs={1}>&nbsp;</Col>
+        </Row>
+        <Row>
+          <Col sm={2} xs={2}><Button onClick={()=>this.appendText(data.remenberWord[6])}>{data.remenberWord[6]}</Button></Col>
+          <Col sm={1} xs={1}></Col>
+          <Col sm={2} xs={2}><Button onClick={()=>this.appendText(data.remenberWord[7])}>{data.remenberWord[7]}</Button></Col>
+          <Col sm={1} xs={1}></Col>
+          <Col sm={2} xs={2}><Button onClick={()=>this.appendText(data.remenberWord[8])}>{data.remenberWord[8]}</Button></Col>
+          <Col sm={1} xs={1}></Col>
+          <Col sm={2} xs={2}><Button onClick={()=>this.appendText(data.remenberWord[9])}>{data.remenberWord[9]}</Button></Col>
+          <Col sm={1} xs={1}></Col>
+          <Col sm={2} xs={2}><Button onClick={()=>this.appendText(data.remenberWord[10])}>{data.remenberWord[10]}</Button></Col>
+          <Col sm={1} xs={1}></Col>
+          <Col sm={2} xs={2}><Button onClick={()=>this.appendText(data.remenberWord[11])}>{data.remenberWord[11]}</Button></Col>
+        </Row>
+        <Row>
+          <Col sm={1} xs={1}>&nbsp;</Col>
+        </Row>
         <Button type="primary" onClick={onValidateForm} loading={submitting}>
           提交
         </Button>
