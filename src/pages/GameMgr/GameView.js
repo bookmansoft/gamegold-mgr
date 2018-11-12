@@ -38,31 +38,24 @@ const PublishForm = Form.create()(
       return (
         <Modal
           visible={visible}
-          title="Create a new collection"
-          okText="Create"
+          title="发布更新"
+          okText="提交"
           onCancel={onCancel}
           onOk={onCreate}
         >
           <Form layout="vertical">
-            <FormItem label="Title">
+            <FormItem label="更新版本">
               {getFieldDecorator('title', {
-                rules: [{ required: true, message: 'Please input the title of collection!' }],
+                rules: [{ required: true, message: '请输入版本号!' }],
               })(
-                <Input />
+                <Input placeholder="请输入版本号!"/>
               )}
             </FormItem>
-            <FormItem label="Description">
-              {getFieldDecorator('description')(<Input type="textarea" />)}
-            </FormItem>
-            <FormItem className="collection-create-form_last-form-item">
-              {getFieldDecorator('modifier', {
-                initialValue: 'public',
-              })(
-                <Radio.Group>
-                  <Radio value="public">Public</Radio>
-                  <Radio value="private">Private</Radio>
-                </Radio.Group>
-              )}
+            <FormItem label="更新内容">
+              {getFieldDecorator('description', {
+                rules: [{ required: true, max:300, message: '请输入更新内容，不超过300字!' }],
+              }
+              )(<Input placeholder="请输入更新内容，不超过300字!" type="textarea" />)}
             </FormItem>
           </Form>
         </Modal>
@@ -188,7 +181,7 @@ class GameView extends Component {
         return;
       }
 
-      console.log('Received values of form: ', values);
+      console.log('此处收到表单数据: ', values);
       form.resetFields();
       this.setState({ visible: false });
     });
