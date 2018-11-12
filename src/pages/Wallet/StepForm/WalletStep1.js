@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { connect } from 'dva';
-import { Form, Input, Button, Select, Divider } from 'antd';
+import { Form, Input, Button, Select,Alert, Divider } from 'antd';
 import router from 'umi/router';
 import styles from './style.less';
 
@@ -37,14 +37,15 @@ class WalletStep1 extends React.PureComponent {
     return (
       <Fragment>
         <Form layout="horizontal" className={styles.stepForm} hideRequiredMark>
+          <Alert
+            closable
+            showIcon
+            message="请按仔细记下这些助记词。"
+            style={{ marginBottom: 24 }}
+          />
+          <Input style={{fontSize:24,letterSpacing:10,textAlign:"center"}} value="东西南北中发梅兰竹菊葱蒜" />
 
-          <Form.Item {...formItemLayout} label="请按顺序点击下方助记词，确保你的助记词备份正常">
-            {getFieldDecorator('receiverName', {
-              initialValue: data.receiverName,
-              rules: [{ required: true, message: '请输入收款人姓名' }],
-            })(<Input placeholder="请输入收款人姓名" />)}
-          </Form.Item>
- 
+          <br /><br />
           <Form.Item
             wrapperCol={{
               xs: { span: 24, offset: 0 },
