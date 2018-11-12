@@ -18,15 +18,63 @@ import {
   Tooltip,
   Divider,
   Modal,
+  Form, 
+  Input,
+  Radio,
 } from 'antd';
 import classNames from 'classnames';
 import DescriptionList from '@/components/DescriptionList';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import styles from './GameView.less';
 
+const FormItem = Form.Item;
 const { Step } = Steps;
-const { Description } = DescriptionList;
-const ButtonGroup = Button.Group;
+
+const PublishForm = Form.create()(
+  class extends React.Component {
+    render() {
+      const { visible, onCancel, onCreate, form } = this.props;
+      const { getFieldDecorator } = form;
+      return (
+        <Modal
+          visible={visible}
+          title="Create a new collection"
+          okText="Create"
+          onCancel={onCancel}
+          onOk={onCreate}
+        >
+          <Form layout="vertical">
+            <FormItem label="Title">
+              {getFieldDecorator('title', {
+                rules: [{ required: true, message: 'Please input the title of collection!' }],
+              })(
+                <Input />
+              )}
+            </FormItem>
+            <FormItem label="Description">
+              {getFieldDecorator('description')(<Input type="textarea" />)}
+            </FormItem>
+            <FormItem className="collection-create-form_last-form-item">
+              {getFieldDecorator('modifier', {
+                initialValue: 'public',
+              })(
+                <Radio.Group>
+                  <Radio value="public">Public</Radio>
+                  <Radio value="private">Private</Radio>
+                </Radio.Group>
+              )}
+            </FormItem>
+          </Form>
+        </Modal>
+      );
+    }
+  }
+);
+
+
+
+
+
 
 const getWindowWidth = () => window.innerWidth || document.documentElement.clientWidth;
 
@@ -68,19 +116,6 @@ const customDot = (dot, { status }) =>
 //--编辑
 function doEdit() {
   //没干啥
-}
-//--发布更新
-function doPublishChange() {
-  Modal.confirm({
-    title: '重新上线需要重新审核',
-    content: '审核通过后将自动上线',
-    onOk() {
-      return new Promise((resolve, reject) => {
-        setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
-      }).catch(() => console.log('Oops errors!'));
-    },
-    onCancel() {},
-  });
 }
 
 //--下线
@@ -133,9 +168,35 @@ function doReOnline() {
 
 class GameView extends Component {
   state = {
+    visible: false, //发布更新表单可见性
     operationkey: 'tab1',
     stepDirection: 'horizontal',
   };
+  //显示发布更新表单
+  showModal = () => {
+    this.setState({ visible: true });
+  }
+  //隐藏发布更新表单
+  handleCancel = () => {
+    this.setState({ visible: false });
+  }
+  //提交发布更新表单
+  handleCreate = () => {
+    const form = this.formRef.props.form;
+    form.validateFields((err, values) => {
+      if (err) {
+        return;
+      }
+
+      console.log('Received values of form: ', values);
+      form.resetFields();
+      this.setState({ visible: false });
+    });
+  }
+  //传递引用
+  saveFormRef = (formRef) => {
+    this.formRef = formRef;
+  }
 
   componentDidMount() {
     const { dispatch } = this.props;
@@ -190,6 +251,7 @@ class GameView extends Component {
         extraContent={null}
         tabList={null}
       >
+      
         <Card title="流程状态（审核中）" style={{ marginBottom: 24 }} bordered={false}>
           <Row style={{ marginBottom: 32 }}>
             <Col sm={24} xs={24}>
@@ -204,7 +266,7 @@ class GameView extends Component {
                   <Button type="primary"  style={{ marginRight: 24 }}  onClick={doEdit}>编辑</Button>
                 }
                 {data.gameState ==2 &&
-                  <Button type="primary"  style={{ marginRight: 24 }} onClick={doPublishChange} >发布更新</Button>
+                  <Button type="primary"  style={{ marginRight: 24 }} onClick={this.showModal} >发布更新</Button>
                 }
                 {data.gameState ==2 &&
                   <Button type="primary"  style={{ marginRight: 24 }} onClick={doOffline} >下线</Button>
@@ -277,7 +339,12 @@ class GameView extends Component {
               </Col>
           </Row>
         </Card>
-
+        <PublishForm
+          wrappedComponentRef={this.saveFormRef}
+          visible={this.state.visible}
+          onCancel={this.handleCancel}
+          onCreate={this.handleCreate}
+        />
       </PageHeaderWrapper>
     );
   }
