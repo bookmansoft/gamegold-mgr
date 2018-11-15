@@ -2,6 +2,25 @@ import { stringify } from 'qs';
 import request from '@/utils/request';
 import {gameconn} from 'gamegoldtoolkit';
 
+  //创建连接器对象
+  let remote = new gameconn(
+    gameconn.CommMode.get,             //使用短连接 get / post
+    {
+        "UrlHead": "http",              //协议选择: http/https
+        "webserver": {
+            "host": "127.0.0.1",        //远程主机地址
+            "port": 9901                //远程主机端口
+        },
+        "auth": {
+            "openid": "18681223392",    //用户标识
+            "openkey": "18681223392",   //和用户标识关联的用户令牌
+            "domain": "tx.IOS",         //用户所在的域，tx是提供登录验证服务的厂商类别，IOS是该厂商下的服务器组别
+        }
+    }
+  )
+
+
+
 //--用户
 export async function queryUserMgr(params) {
   return request(`/usermgr/query?${stringify(params)}`);
@@ -47,29 +66,14 @@ export async function getWalletInfo(params) {
 
 //--钱包：转出
 export async function addWalletPay(params) {
-  //创建连接器对象
-  let remote = new gameconn(
-    gameconn.CommMode.get,             //使用短连接 get / post
-    {
-        "UrlHead": "http",              //协议选择: http/https
-        "webserver": {
-            "host": "127.0.0.1",        //远程主机地址
-            "port": 9901                //远程主机端口
-        },
-        "auth": {
-            "openid": "18681223392",    //用户标识
-            "openkey": "18681223392",   //和用户标识关联的用户令牌
-            "domain": "tx.IOS",         //用户所在的域，tx是提供登录验证服务的厂商类别，IOS是该厂商下的服务器组别
-        }
-    }
-  )
+
 
   remote.NotifyType = gameconn.NotifyType;//不知道干嘛的
 
   remote.auth({openid: `${Math.random()*1000000000 | 0}`}, msg => {
     remote.isSuccess(msg); //使用断言，对返回值进行合理性判定，如判定失败则抛出异常，下面的 done 就不会被执行
     remote.fetching({func: "test.Retrieve", id: 5}, msg => {
-        remote.log(msg);
+        //remote.log(msg);
         remote.log("勇敢尝试新生事物的结果："+JSON.stringify(msg))
     });
   });
