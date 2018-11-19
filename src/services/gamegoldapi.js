@@ -67,7 +67,7 @@ export async function getWalletInfo(params) {
 //--钱包：转出
 export async function addWalletPay(params) {
 
-
+/** 已作废
   remote.NotifyType = gameconn.NotifyType;//不知道干嘛的
 
   remote.auth({openid: `${Math.random()*1000000000 | 0}`}, msg => {
@@ -77,7 +77,13 @@ export async function addWalletPay(params) {
         remote.log("勇敢尝试新生事物的结果："+JSON.stringify(msg))
     });
   });
-  console.log("这里是本地看起来后出现的字符串");
+ */
+  let msg = await remote.login({openid: `${Math.random()*1000000000 | 0}`});
+  if(remote.isSuccess(msg)) {
+      console.log("同步调用:");
+      console.log(await remote.fetching({func: "test.Retrieve", id: 2}));
+  }
+  console.log("看起来本地比较迟的消息");
 
 
 
