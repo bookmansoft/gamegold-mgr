@@ -33,7 +33,7 @@
     "classnames": "^2.2.6",
     "dva": "^2.4.0",
     "enquire-js": "^0.2.1",
-    "gamegoldtoolkit": "^1.5.2",
+    "gamegoldtoolkit": "^1.5.7",
     "hash.js": "^1.1.5",
     "lodash": "^4.17.10",
     "lodash-decorators": "^6.0.0",
