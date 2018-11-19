@@ -78,10 +78,12 @@ export async function addWalletPay(params) {
     });
   });
  */
+//remote.NotifyType = gameconn.NotifyType;
   let msg = await remote.login({openid: `${Math.random()*1000000000 | 0}`});
   if(remote.isSuccess(msg)) {
       console.log("同步调用:");
       console.log(await remote.fetching({func: "test.Retrieve", id: 2}));
+      console.log(await remote.fetching({func: "cp.List"}));
   }
   console.log("看起来本地比较迟的消息");
 
