@@ -1,4 +1,4 @@
-import { getGamePropsList, getGamePropsDetail, getPropsByGame , getAllGameList , getUserAll } from '@/services/api';
+import { getGamePropsList, getGamePropsDetail, getPropsByGame , getAllGameList , getUserAll } from '@/services/gamegoldapi';
 
 export default {
   namespace: 'gameprops',
