@@ -21,12 +21,6 @@ export default {
       console.log(payload);
       let ret=yield call(addGameMgr, payload);
       return ret;
-      // if (ret.code==0 && ret.data==null) {
-      //   router.push('/gamemgr/gameaddsuccess');
-      // }
-      // else {
-      //   router.push('/gamemgr/gameadderror');
-      // }
     },
   },
 

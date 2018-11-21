@@ -52,15 +52,9 @@ export async function addGameMgr(params) {
   let ret={};
   if(remote.isSuccess(msg)) {
       console.log("添加新游戏:"+JSON.stringify(params));
-      //ret=await remote.fetching({func: "cp.Create",items:['swxf1125', 'http://920.cc' ]});
       ret=await remote.fetching({func: "cp.Create",items:[params.gameName,params.gameUrl]});
   }
   console.log("添加新游戏结果："+JSON.stringify(ret));
-
-
-  // 添加新游戏结果：{"code":0,"data":{"name":"swxf1125","url":"http://920.cc","ip":"","cid":"0f4a49d0-ed55-11e8-b73c-3572ec77796e","oper":"cpRegister","txid":"09ccc716b4e6f6e4149df8ce0f6bb3212b5e5bbf40a2ceb238cce77c1a4e6a60"}}
-  // 【对照组：添加重复记录的结果】
-  // 添加新游戏结果：{"code":0,"data":null}
   return ret;
   // return request('/gamemgr/add', {
   //   method: 'POST',
@@ -69,7 +63,6 @@ export async function addGameMgr(params) {
   //     method: 'post',
   //   },
   // });
-
 }
 
 //--游戏详情

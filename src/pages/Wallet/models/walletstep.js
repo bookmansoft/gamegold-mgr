@@ -12,8 +12,9 @@ export default {
 
   effects: {
     *submitRegularForm({ payload }, { call }) {
-      yield call(fakeSubmitForm, payload);
+      let ret=yield call(fakeSubmitForm, payload);
       message.success('提交成功');
+      return ret;
     },
     *submitStepForm({ payload }, { call, put }) {
       yield call(fakeSubmitForm, payload);
@@ -24,8 +25,9 @@ export default {
       yield put(routerRedux.push('/wallet/step-form/result'));
     },
     *submitAdvancedForm({ payload }, { call }) {
-      yield call(fakeSubmitForm, payload);
+      let ret=yield call(fakeSubmitForm, payload);
       message.success('提交成功');
+      return ret;
     },
   },
 
