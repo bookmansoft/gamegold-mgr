@@ -77,7 +77,12 @@ export async function getGameView(params) {
       ret=await remote.fetching({func: "cp.ById",items:[params.id]});
   }
   console.log("查看新游戏结果："+JSON.stringify(ret));
-  return ret;
+  if (ret.data===null) {
+    return {};
+  }
+  else {
+    return ret.data;
+  }
   //return request(`/gamemgr/view?${stringify(params)}`);
 }
 
