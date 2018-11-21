@@ -55,11 +55,11 @@ class GameList extends PureComponent {
   columns = [
     {
       title: 'ID',
-      dataIndex: 'gameId',
+      dataIndex: 'cid',
     },
     {
       title: '游戏名',
-      dataIndex: 'gameName',
+      dataIndex: 'name',
     },
     {
       title: '游戏类型',
@@ -173,12 +173,12 @@ class GameList extends PureComponent {
         <Row gutter={{ md: 16, lg: 24, xl: 48 }}>
           <Col md={6} sm={9}>
             <FormItem label="游戏名：">
-              {getFieldDecorator('gameName')(<Input placeholder="请输入" />)}
+              {getFieldDecorator('name')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
           <Col md={6} sm={9}>
             <FormItem label="游戏ID：">
-              {getFieldDecorator('gameId')(<Input placeholder="请输入" />)}
+              {getFieldDecorator('cid')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
         </Row>

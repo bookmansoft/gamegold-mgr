@@ -31,16 +31,23 @@ class GameAdd extends PureComponent {
     const { dispatch, form } = this.props;
     e.preventDefault();
     form.validateFieldsAndScroll((err, values) => {
-      if (!err) {
+      console.log(values);
+      if (!err) { 
         dispatch({
           type: 'game/add',
           payload: values,
-        });
-        router.push('/gamemgr/gameaddsuccess');
-      }
-    });
-  };
-
+        }).then((ret) => {
+          console.log(ret);
+          if (ret.code === 0 && ret.data===null) {
+            router.push('/gamemgr/gameadderror');
+          } else {
+            router.push('/gamemgr/gameaddsuccess');
+         };
+        }
+      );
+    };
+  });
+}
   render() {
     const { submitting } = this.props;
     const {
@@ -207,7 +214,7 @@ class GameAdd extends PureComponent {
  
             <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
               <Button type="primary" htmlType="submit" loading={submitting}>
-                <FormattedMessage id="form.submit" />
+                提交
               </Button>
               <Button style={{ marginLeft: 8 }}  htmlType="reset">
                 取消
