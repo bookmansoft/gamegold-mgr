@@ -5,13 +5,12 @@ export default {
 
   state: {
     data: {
-      gameName: '',
     }
   },
 
   effects: {
     *fetch({ payload }, { call, put }) {
-        console.log("gameview 14");
+      console.log("gameview model："+payload.id);
       const response = yield call(getGameView, payload);
       yield put({
         type: 'save',

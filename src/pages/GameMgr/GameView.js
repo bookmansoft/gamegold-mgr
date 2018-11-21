@@ -32,6 +32,7 @@ const { Step } = Steps;
 
 const PublishForm = Form.create()(
   class extends React.Component {
+
     render() {
       const { visible, onCancel, onCreate, form } = this.props;
       const { getFieldDecorator } = form;
@@ -160,6 +161,8 @@ function doReOnline() {
 }))
 
 class GameView extends Component {
+
+
   state = {
     visible: false, //发布更新表单可见性
     operationkey: 'tab1',
@@ -193,8 +196,10 @@ class GameView extends Component {
 
   componentDidMount() {
     const { dispatch } = this.props;
+    console.log(this.props.location.query.id);
     dispatch({
       type: 'gameview/fetch',
+      payload: {id:this.props.location.query.id},//这里
     });
 
     this.setStepDirection();
@@ -225,8 +230,6 @@ class GameView extends Component {
       });
     }
   }
-  
-  
 
   render() {
     const { stepDirection, operationkey } = this.state;

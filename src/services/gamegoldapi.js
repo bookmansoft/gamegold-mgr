@@ -65,9 +65,20 @@ export async function addGameMgr(params) {
   // });
 }
 
-//--游戏详情
-export async function getGameView() {
-  return request('/gamemgr/view');
+// 游戏详情
+// params.id 查看的页面参数值。（其中params对应于model中的payload）
+export async function getGameView(params) {
+  console.log(params.id);
+  //接下来好好查询并返回这个页面的数据
+  let msg = await remote.login({openid: theOpenId});
+  let ret={};
+  if(remote.isSuccess(msg)) {
+      console.log("查看新游戏:"+JSON.stringify(params));
+      ret=await remote.fetching({func: "cp.ById",items:[params.id]});
+  }
+  console.log("查看新游戏结果："+JSON.stringify(ret));
+  return ret;
+  //return request(`/gamemgr/view?${stringify(params)}`);
 }
 
 //--钱包流水清单
