@@ -237,7 +237,7 @@ class WalletMgr extends PureComponent {
             </Row>
             <Row>
               <Col sm={4} xs={8}>
-                {JSON.stringify(info.data.confirmed/100000000)} GDD
+                {(info.data!=null) && JSON.stringify(info.data.confirmed/100000000)} GDD
               </Col>
               <Col sm={4} xs={8}>
                 <Button type="primary">
