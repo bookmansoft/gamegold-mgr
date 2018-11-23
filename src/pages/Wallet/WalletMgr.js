@@ -75,6 +75,9 @@ class WalletMgr extends PureComponent {
     dispatch({
       type: 'walletmgr/fetch',
     });
+    dispatch({
+      type: 'walletmgr/fetchInfo',
+    });
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
@@ -204,7 +207,7 @@ class WalletMgr extends PureComponent {
 
   render() {
     const {
-      walletmgr: { data },
+      walletmgr: { data,info },
       loading,
     } = this.props;
     const { selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;
@@ -232,7 +235,7 @@ class WalletMgr extends PureComponent {
             </Row>
             <Row>
               <Col sm={4} xs={8}>
-                500 GDD
+                {info.balanceAll} GDD
               </Col>
               <Col sm={4} xs={8}>
                 <Button type="primary">

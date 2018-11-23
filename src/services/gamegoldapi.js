@@ -88,7 +88,8 @@ export async function getGameView(params) {
 
 //--钱包流水清单
 export async function queryWalletLog(params) {
-  return request(`/wallet/queryLog?${stringify(params)}`);
+  let list=request(`/wallet/queryLog?${stringify(params)}`);
+  return list;
 }
 
 //--钱包流水详情
@@ -99,6 +100,7 @@ export async function getWalletLog(params) {
 
 //--钱包信息
 export async function getWalletInfo(params) {
+  //todo：在此实现获取钱包信息方法
   return request(`/wallet/getInfo?${stringify(params)}`);
 }
 
