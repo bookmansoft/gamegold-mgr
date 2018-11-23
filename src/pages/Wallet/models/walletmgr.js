@@ -1,4 +1,4 @@
-import { queryWalletLog } from '@/services/gamegoldapi';
+import { queryWalletLog,getWalletInfo,getBalanceAll } from '@/services/gamegoldapi';
 
 export default {
   namespace: 'walletmgr',
@@ -24,11 +24,12 @@ export default {
     },
 
       //修改info
-    *fetchInfo({ payload }, { call, put }) {
-      //const responseInfo = yield call(queryWalletInfo, payload);
+    *fetchBalanceAll({ payload }, { call, put }) {
+      const response = yield call(getBalanceAll, payload);
       yield put({
         type: 'saveInfo',
-        payload: {balanceAll:999},
+        payload: response,
+        // payload: {balanceAll:999},
       });
     },
   },

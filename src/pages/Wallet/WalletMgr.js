@@ -76,7 +76,7 @@ class WalletMgr extends PureComponent {
       type: 'walletmgr/fetch',
     });
     dispatch({
-      type: 'walletmgr/fetchInfo',
+      type: 'walletmgr/fetchBalanceAll',
     });
   }
 
@@ -235,7 +235,7 @@ class WalletMgr extends PureComponent {
             </Row>
             <Row>
               <Col sm={4} xs={8}>
-                {info.balanceAll} GDD
+                {info.data.confirmed/100000000} GDD
               </Col>
               <Col sm={4} xs={8}>
                 <Button type="primary">

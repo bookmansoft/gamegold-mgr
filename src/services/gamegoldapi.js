@@ -100,8 +100,28 @@ export async function getWalletLog(params) {
 
 //--钱包信息
 export async function getWalletInfo(params) {
-  //todo：在此实现获取钱包信息方法
-  return request(`/wallet/getInfo?${stringify(params)}`);
+  let msg = await remote.login({openid: theOpenId});
+  let ret={};
+  if(remote.isSuccess(msg)) {
+      console.log("获取钱包信息:"+JSON.stringify(params));
+      ret=await remote.fetching({func: "wallet.Info",items:[]});
+  }
+  console.log("获取钱包信息结果："+JSON.stringify(ret));
+  return ret;
+  //return request(`/wallet/getInfo?${stringify(params)}`);
+}
+
+//--账户余额
+export async function getBalanceAll(params) {
+  let msg = await remote.login({openid: theOpenId});
+  let ret={};
+  if(remote.isSuccess(msg)) {
+      console.log("获取余额:"+JSON.stringify(params));
+      ret=await remote.fetching({func: "account.BalanceAll",items:[]});
+  }
+  console.log("获取余额："+JSON.stringify(ret));
+  return ret;
+  //return request(`/wallet/getInfo?${stringify(params)}`);
 }
 
 //--钱包：转出
