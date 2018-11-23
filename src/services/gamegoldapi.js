@@ -86,10 +86,18 @@ export async function getGameView(params) {
   //return request(`/gamemgr/view?${stringify(params)}`);
 }
 
-//--钱包流水清单
+//--（交易）钱包收支清单
 export async function queryWalletLog(params) {
-  let list=request(`/wallet/queryLog?${stringify(params)}`);
-  return list;
+  let msg = await remote.login({openid: theOpenId});
+  let ret={};
+  if(remote.isSuccess(msg)) {
+      console.log("获取钱包收支详情:"+JSON.stringify(params));
+      ret=await remote.fetching({func: "tx.GetWallet",items:[params.address]});
+  }
+  console.log("获取钱包收支详情结果："+JSON.stringify(ret));
+  return ret;
+  // let list=request(`/wallet/queryLog?${stringify(params)}`);
+  // return list;
 }
 
 //--钱包流水详情
@@ -116,10 +124,10 @@ export async function getBalanceAll(params) {
   let msg = await remote.login({openid: theOpenId});
   let ret={};
   if(remote.isSuccess(msg)) {
-      console.log("获取余额:"+JSON.stringify(params));
+      console.log("获取余额参数:"+JSON.stringify(params));
       ret=await remote.fetching({func: "account.BalanceAll",items:[]});
   }
-  console.log("获取余额："+JSON.stringify(ret));
+  console.log("获取余额结果："+JSON.stringify(ret));
   return ret;
   //return request(`/wallet/getInfo?${stringify(params)}`);
 }

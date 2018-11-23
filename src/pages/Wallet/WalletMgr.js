@@ -74,6 +74,7 @@ class WalletMgr extends PureComponent {
     const { dispatch } = this.props;
     dispatch({
       type: 'walletmgr/fetch',
+      payload: {address:'b8b6681ca6ee4614321c8d34a5b3edf8c5a9fb49b44375024e55d84eea57840d'}
     });
     dispatch({
       type: 'walletmgr/fetchBalanceAll',
@@ -95,6 +96,7 @@ class WalletMgr extends PureComponent {
       pageSize: pagination.pageSize,
       ...formValues,
       ...filters,
+      address: 'b8b6681ca6ee4614321c8d34a5b3edf8c5a9fb49b44375024e55d84eea57840d',
     };
     if (sorter.field) {
       params.sorter = `${sorter.field}_${sorter.order}`;
@@ -235,7 +237,7 @@ class WalletMgr extends PureComponent {
             </Row>
             <Row>
               <Col sm={4} xs={8}>
-                {info.data.confirmed/100000000} GDD
+                {JSON.stringify(info.data.confirmed/100000000)} GDD
               </Col>
               <Col sm={4} xs={8}>
                 <Button type="primary">

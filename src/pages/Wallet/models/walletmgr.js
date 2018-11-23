@@ -16,6 +16,7 @@ export default {
   effects: {
     //分两部分，先修改data再修改info
     *fetch({ payload }, { call, put }) {
+      console.log(payload);
       const response = yield call(queryWalletLog, payload);
       yield put({
         type: 'saveData',
@@ -25,6 +26,7 @@ export default {
 
       //修改info
     *fetchBalanceAll({ payload }, { call, put }) {
+      console.log(payload);
       const response = yield call(getBalanceAll, payload);
       yield put({
         type: 'saveInfo',
