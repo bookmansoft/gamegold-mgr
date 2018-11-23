@@ -91,18 +91,29 @@ export async function queryWalletLog(params) {
   let msg = await remote.login({openid: theOpenId});
   let ret={};
   if(remote.isSuccess(msg)) {
-      console.log("获取钱包收支详情:"+JSON.stringify(params));
-      ret=await remote.fetching({func: "tx.GetWallet",items:[params.address]});
+      console.log("获取钱包收支流水:"+JSON.stringify(params));
+      ret=await remote.fetching({func: "tx.List",items:[]});
   }
-  console.log("获取钱包收支详情结果："+JSON.stringify(ret));
-  return ret;
+  console.log("获取钱包收支流水结果："+JSON.stringify(ret));
+  let theResult= {list:ret.data,pagination:{current:1,pageSize:10}};
+  // let theResult= request(`/wallet/getLog?${stringify(params)}`);
+  console.log("实际输出格式");
+  console.log(theResult);
+  return theResult;
   // let list=request(`/wallet/queryLog?${stringify(params)}`);
   // return list;
 }
 
 //--钱包流水详情
 export async function getWalletLog(params) {
-  return request(`/wallet/getLog?${stringify(params)}`);
+  let msg = await remote.login({openid: theOpenId});
+  let ret={};
+  if(remote.isSuccess(msg)) {
+      console.log("获取钱包收支详情:"+JSON.stringify(params));
+      ret=await remote.fetching({func: "tx.GetWallet",items:[params.address]});
+  }
+  console.log("获取钱包收支详情结果："+JSON.stringify(ret));
+  return ret;
 }
 
 

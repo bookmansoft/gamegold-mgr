@@ -53,7 +53,7 @@ class WalletMgr extends PureComponent {
   columns = [
     {
       title: '时间',
-      dataIndex: 'createdAt',
+      dataIndex: 'time',
       render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
     },
     {
@@ -66,7 +66,7 @@ class WalletMgr extends PureComponent {
     },
     {
       title: '金额(GDD)',
-      dataIndex: 'gameGold',
+      dataIndex: 'amount',
     },
   ];
 
@@ -96,7 +96,7 @@ class WalletMgr extends PureComponent {
       pageSize: pagination.pageSize,
       ...formValues,
       ...filters,
-      address: 'b8b6681ca6ee4614321c8d34a5b3edf8c5a9fb49b44375024e55d84eea57840d',
+      address: {adress},
     };
     if (sorter.field) {
       params.sorter = `${sorter.field}_${sorter.order}`;

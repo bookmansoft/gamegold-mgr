@@ -11,6 +11,8 @@ export default {
     info: {
 
     },
+    //这是模型参数的一部分，在查看交易详情时候传入交易地址。以下是一个有效的测试地址
+    address: 'b8b6681ca6ee4614321c8d34a5b3edf8c5a9fb49b44375024e55d84eea57840d',
   },
 
   effects: {
