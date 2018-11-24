@@ -110,10 +110,15 @@ export async function getWalletLog(params) {
   let ret={};
   if(remote.isSuccess(msg)) {
       console.log("获取钱包收支详情:"+JSON.stringify(params));
-      ret=await remote.fetching({func: "tx.GetWallet",items:[params.address]});
+      ret=await remote.fetching({func: "tx.GetWallet",items:[params.id]});
   }
   console.log("获取钱包收支详情结果："+JSON.stringify(ret));
-  return ret;
+  if (ret.data!=null) {
+    return ret.data;
+  }
+  else {
+    return ret;
+  }
 }
 
 
