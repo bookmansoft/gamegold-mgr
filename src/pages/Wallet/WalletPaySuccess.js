@@ -5,8 +5,7 @@ import router from 'umi/router';
 import Result from '@/components/Result';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 const onDetail=() => {
-  // let s=this.props.location.query.id;
-  router.push(`/wallet/walletlog?id=todo`);
+  router.push('/wallet/walletlog'+window.location.search)
 }
 const onPrev = () => {
   router.push('/wallet/walletmgr');
