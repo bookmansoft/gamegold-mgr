@@ -73,7 +73,7 @@ class WalletMgr extends PureComponent {
       title: '操作',
       render: (text, record) => (
         <Fragment>
-          <a onClick={() => this.handleView(true, record)}>交易详情</a>
+          <a onClick={() => this.handleView(record)}>交易详情</a>
         </Fragment>
       ),
     },
@@ -162,8 +162,13 @@ class WalletMgr extends PureComponent {
   };
 
   //查看详情
-  handleView = (flag, record) => {
+  handleView = (record) => {
     router.push('/wallet/walletlog?id='+record.txid);
+  };
+
+  //查看详情
+  handlePay = () => {
+    router.push('/wallet/walletpay');
   };
 
   renderForm() {
@@ -258,7 +263,7 @@ class WalletMgr extends PureComponent {
                   转入
                 </Button> 
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <Button>
+                <Button onClick={() => this.handlePay()}>
                   转出
                 </Button>
               </Col>

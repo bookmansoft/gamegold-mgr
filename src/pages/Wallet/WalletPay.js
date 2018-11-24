@@ -32,11 +32,21 @@ class WalletPay extends PureComponent {
     e.preventDefault();
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
+        console.log(values);
         dispatch({
           type: 'walletpay/add',
           payload: values,
-        });
-        router.push('/wallet/walletpaysuccess');
+        }).then((ret) => {
+          console.log(ret);
+          if (ret.code === 0 && ret.data===null) {
+            router.push('/wallet/walletpayerror');
+          } else {
+            //此处的id表示交易id
+            let txid=ret.hash;//此处的hash才是交易流水（即交易哈希值）
+            router.push(`/wallet/walletpaysuccess?id=${txid}`);
+          };
+         }
+        );
       }
     });
   };

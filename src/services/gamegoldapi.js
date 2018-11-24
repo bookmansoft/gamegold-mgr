@@ -151,22 +151,22 @@ export async function getBalanceAll(params) {
 //--钱包：转出
 export async function addWalletPay(params) {
   let msg = await remote.login({openid: theOpenId});
+  let ret={};
   if(remote.isSuccess(msg)) {
-      console.log("同步调用:");
-      console.log(await remote.fetching({func: "test.Retrieve", id: 2}));
-      console.log(await remote.fetching({func: "cp.List"}));
+      console.log("钱包转出:");
+      ret=await remote.fetching({func: "tx.Send",items:["tb1qlsnuxc5d5rufuavwgsrw9v96r65rmlwcdkexel",999]});
   }
   console.log("看起来本地比较迟的消息");
 
+  return ret;
 
-
-  return request('/wallet/addPay', {
-    method: 'POST',
-    body: {
-      ...params,
-      method: 'post',
-    },
-  });
+  // return request('/wallet/addPay', {
+  //   method: 'POST',
+  //   body: {
+  //     ...params,
+  //     method: 'post',
+  //   },
+  // });
 
 }
 
