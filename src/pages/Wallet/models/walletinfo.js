@@ -5,9 +5,6 @@ export default {
 
   state: {
     data: {
-        walletAccount: '',
-        createAt: '',
-        walletSecure: '',
     },
   },
 
