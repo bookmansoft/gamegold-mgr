@@ -154,7 +154,8 @@ export async function addWalletPay(params) {
   let ret={};
   if(remote.isSuccess(msg)) {
       console.log("钱包转出:");
-      ret=await remote.fetching({func: "tx.Send",items:["tb1qlsnuxc5d5rufuavwgsrw9v96r65rmlwcdkexel",999]});
+      // ret=await remote.fetching({func: "tx.Send",items:["tb1qlsnuxc5d5rufuavwgsrw9v96r65rmlwcdkexel",999]});
+      ret=await remote.fetching({func: "tx.Send",items:[params.address,params.value]});
   }
   console.log("看起来本地比较迟的消息");
 

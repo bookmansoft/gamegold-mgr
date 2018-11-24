@@ -13,9 +13,6 @@ const actions = (
     <Button type="primary" onClick={onPrev}>
       返回钱包
     </Button>
-    <Button>
-      查看详情
-    </Button>
   </Fragment>
 );
 
@@ -24,7 +21,7 @@ export default () => (
     <Card bordered={false}>
       <Result
         type="error"
-        title="发送成功"
+        title="发送失败"
         description=""
         extra=""
         actions={actions}

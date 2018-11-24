@@ -38,7 +38,7 @@ class WalletPay extends PureComponent {
           payload: values,
         }).then((ret) => {
           console.log(ret);
-          if (ret.code === 0 && ret.data===null) {
+          if (ret==null) {
             router.push('/wallet/walletpayerror');
           } else {
             //此处的id表示交易id
@@ -87,7 +87,7 @@ class WalletPay extends PureComponent {
             <h2><b>转出</b></h2>
             <br/>
             <FormItem {...formItemLayout} label="接收人地址">
-              {getFieldDecorator('relateAccount', {
+              {getFieldDecorator('address', {
                 rules: [
                   {
                     required: true,
@@ -98,7 +98,7 @@ class WalletPay extends PureComponent {
             </FormItem>
 
             <FormItem {...formItemLayout} label="发送金额">
-              {getFieldDecorator('developerName', {
+              {getFieldDecorator('value', {
                 rules: [
                   {
                     required: true,
