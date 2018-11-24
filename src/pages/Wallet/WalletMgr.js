@@ -1,6 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import { formatMessage, FormattedMessage } from 'umi/locale';
+import router from 'umi/router';
 import moment from 'moment';
 import {
   Row,
@@ -67,6 +68,14 @@ class WalletMgr extends PureComponent {
     {
       title: '金额(GDD)',
       dataIndex: 'amount',
+    },
+    {
+      title: '操作',
+      render: (text, record) => (
+        <Fragment>
+          <a onClick={() => this.handleView(true, record)}>交易详情</a>
+        </Fragment>
+      ),
     },
   ];
 
@@ -150,6 +159,11 @@ class WalletMgr extends PureComponent {
       updateModalVisible: !!flag,
       stepFormValues: record || {},
     });
+  };
+
+  //查看详情
+  handleView = (flag, record) => {
+    router.push('/wallet/walletlog?id='+record.txid);
   };
 
   renderForm() {
