@@ -172,7 +172,30 @@ export async function addWalletPay(params) {
 }
 
 export async function getGamePropsList(params) {
-  return request(`/api/gamepropslist?${stringify(params)}`);
+
+  let msg = await remote.login({openid: `${Math.random()*1000000000 | 0}`});
+  let result = {};
+  let pageSize = 10;
+  if(remote.isSuccess(msg)) {
+    let page=  params.currentPage;
+  //所有的控制器都拥有echo方法
+      msg = await remote.fetching({func: "prop.List",items:[page]});
+      console.log(msg);
+      if(remote.isSuccess(msg)){
+        result = {
+          list: msg.data,
+          pagination: {
+            total: 1000,
+            pageSize,
+            current: page,
+          },
+        };
+        console.log(result);
+      }
+  }
+  return result;
+
+  //return request(`/api/gamepropslist?${stringify(params)}`);
 }
 
 export async function getGamePropsDetail(params) {
