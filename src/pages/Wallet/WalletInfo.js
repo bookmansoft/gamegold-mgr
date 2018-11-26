@@ -1,6 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import { formatMessage, FormattedMessage } from 'umi/locale';
+import router from 'umi/router';
 import moment from 'moment';
 import {
   Row,
@@ -47,7 +48,9 @@ class WalletInfo extends PureComponent {
       type: 'walletinfo/fetch',
     });
   }
-
+  handleBack = () => {
+    router.push('/wallet/step-form');
+  };
 
   render() {
     const {
@@ -65,22 +68,17 @@ class WalletInfo extends PureComponent {
             </Row>
             <Row style={{ marginBottom: 32 }}>
               <Col sm={24} xs={24}>
-                收款地址：{JSON.stringify(data)}
+                收款地址：{(data.list!=null && data.list.account!=null) && (data.list.account.receiveAddress)}
               </Col>
             </Row>
             <Row style={{ marginBottom: 32 }}>
               <Col sm={24} xs={24}>
-                添加时间：{data.createAt}
-              </Col>
-            </Row>
-            <Row style={{ marginBottom: 32 }}>
-              <Col sm={24} xs={24}>
-                钱包安全：{data.walletSecure}
+                钱包安全：未备份(todo)
               </Col>
             </Row>
             <Row style={{ marginBottom: 32 }}>
               <Col sm={4} xs={8}>
-                <Button type="primary">
+                <Button type="primary" onClick={this.handleBack}>
                   立即备份
                 </Button> 
               </Col>
