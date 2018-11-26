@@ -63,7 +63,7 @@ export default [
             path: '/gamemgr/gameadderror',
             name: 'gameadderror',
             component: './GameMgr/GameAddError',
-            hideInMenu: false,
+            hideInMenu: true,
           },
         ],
       },
