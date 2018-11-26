@@ -65,7 +65,7 @@ class WalletInfo extends PureComponent {
             </Row>
             <Row style={{ marginBottom: 32 }}>
               <Col sm={24} xs={24}>
-                钱包地址：{data.walletAccount}
+                收款地址：{JSON.stringify(data)}
               </Col>
             </Row>
             <Row style={{ marginBottom: 32 }}>

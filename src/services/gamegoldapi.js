@@ -77,45 +77,97 @@ export async function getGameView(params) {
       ret=await remote.fetching({func: "cp.ById",items:[params.id]});
   }
   console.log("查看新游戏结果："+JSON.stringify(ret));
-  return ret;
+  if (ret.data===null) {
+    return {};
+  }
+  else {
+    return ret.data;
+  }
   //return request(`/gamemgr/view?${stringify(params)}`);
 }
 
-//--钱包流水清单
+//--（交易）钱包收支清单
 export async function queryWalletLog(params) {
-  return request(`/wallet/queryLog?${stringify(params)}`);
+  let msg = await remote.login({openid: theOpenId});
+  let ret={};
+  if(remote.isSuccess(msg)) {
+      console.log("获取钱包收支流水:"+JSON.stringify(params));
+      ret=await remote.fetching({func: "tx.List",items:[]});
+  }
+  console.log("获取钱包收支流水结果："+JSON.stringify(ret));
+  let theResult= {list:ret.data,pagination:{current:1,pageSize:10}};
+  // let theResult= request(`/wallet/getLog?${stringify(params)}`);
+  console.log("实际输出格式");
+  console.log(theResult);
+  return theResult;
+  // let list=request(`/wallet/queryLog?${stringify(params)}`);
+  // return list;
 }
 
 //--钱包流水详情
 export async function getWalletLog(params) {
-  return request(`/wallet/getLog?${stringify(params)}`);
+  let msg = await remote.login({openid: theOpenId});
+  let ret={};
+  if(remote.isSuccess(msg)) {
+      console.log("获取钱包收支详情:"+JSON.stringify(params));
+      ret=await remote.fetching({func: "tx.GetWallet",items:[params.id]});
+  }
+  console.log("获取钱包收支详情结果："+JSON.stringify(ret));
+  if (ret.data!=null) {
+    return ret.data;
+  }
+  else {
+    return ret;
+  }
 }
 
 
 //--钱包信息
 export async function getWalletInfo(params) {
-  return request(`/wallet/getInfo?${stringify(params)}`);
+  let msg = await remote.login({openid: theOpenId});
+  let ret={};
+  if(remote.isSuccess(msg)) {
+      console.log("获取钱包信息:"+JSON.stringify(params));
+      ret=await remote.fetching({func: "wallet.Info",items:[]});
+  }
+  console.log("获取钱包信息结果："+JSON.stringify(ret));
+  return ret;
+  //return request(`/wallet/getInfo?${stringify(params)}`);
+}
+
+//--账户余额
+export async function getBalanceAll(params) {
+  let msg = await remote.login({openid: theOpenId});
+  let ret={};
+  if(remote.isSuccess(msg)) {
+      console.log("获取余额参数:"+JSON.stringify(params));
+      ret=await remote.fetching({func: "account.BalanceAll",items:[]});
+  }
+  console.log("获取余额结果："+JSON.stringify(ret));
+  return ret;
+  //return request(`/wallet/getInfo?${stringify(params)}`);
 }
 
 //--钱包：转出
 export async function addWalletPay(params) {
   let msg = await remote.login({openid: theOpenId});
+  let ret={};
   if(remote.isSuccess(msg)) {
-      console.log("同步调用:");
-      console.log(await remote.fetching({func: "test.Retrieve", id: 2}));
-      console.log(await remote.fetching({func: "cp.List"}));
+      console.log("钱包转出:");
+      // ret=await remote.fetching({func: "tx.Send",items:["tb1qlsnuxc5d5rufuavwgsrw9v96r65rmlwcdkexel",999]});
+      ret=await remote.fetching({func: "tx.Send",items:[params.address,params.value]});
   }
   console.log("看起来本地比较迟的消息");
 
+  return ret;
 
-
-  return request('/wallet/addPay', {
-    method: 'POST',
-    body: {
-      ...params,
-      method: 'post',
-    },
-  });
+  // return request('/wallet/addPay', {
+  //   method: 'POST',
+  //   body: {
+  //     ...params,
+  //     method: 'post',
+  //   },
+  // });
 
 }
 

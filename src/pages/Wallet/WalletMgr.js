@@ -1,6 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import { formatMessage, FormattedMessage } from 'umi/locale';
+import router from 'umi/router';
 import moment from 'moment';
 import {
   Row,
@@ -53,7 +54,7 @@ class WalletMgr extends PureComponent {
   columns = [
     {
       title: '时间',
-      dataIndex: 'createdAt',
+      dataIndex: 'time',
       render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
     },
     {
@@ -66,7 +67,15 @@ class WalletMgr extends PureComponent {
     },
     {
       title: '金额(GDD)',
-      dataIndex: 'gameGold',
+      dataIndex: 'amount',
+    },
+    {
+      title: '操作',
+      render: (text, record) => (
+        <Fragment>
+          <a onClick={() => this.handleView(record)}>交易详情</a>
+        </Fragment>
+      ),
     },
   ];
 
@@ -74,6 +83,10 @@ class WalletMgr extends PureComponent {
     const { dispatch } = this.props;
     dispatch({
       type: 'walletmgr/fetch',
+      payload: {address:'b8b6681ca6ee4614321c8d34a5b3edf8c5a9fb49b44375024e55d84eea57840d'}
+    });
+    dispatch({
+      type: 'walletmgr/fetchBalanceAll',
     });
   }
 
@@ -92,6 +105,7 @@ class WalletMgr extends PureComponent {
       pageSize: pagination.pageSize,
       ...formValues,
       ...filters,
+      address: {adress},
     };
     if (sorter.field) {
       params.sorter = `${sorter.field}_${sorter.order}`;
@@ -145,6 +159,16 @@ class WalletMgr extends PureComponent {
       updateModalVisible: !!flag,
       stepFormValues: record || {},
     });
+  };
+
+  //查看详情
+  handleView = (record) => {
+    router.push('/wallet/walletlog?id='+record.txid);
+  };
+
+  //查看详情
+  handlePay = () => {
+    router.push('/wallet/walletpay');
   };
 
   renderForm() {
@@ -204,7 +228,7 @@ class WalletMgr extends PureComponent {
 
   render() {
     const {
-      walletmgr: { data },
+      walletmgr: { data,info },
       loading,
     } = this.props;
     const { selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;
@@ -232,14 +256,14 @@ class WalletMgr extends PureComponent {
             </Row>
             <Row>
               <Col sm={4} xs={8}>
-                500 GDD
+                {(info.data!=null) && JSON.stringify(info.data.confirmed/100000000)} GDD
               </Col>
               <Col sm={4} xs={8}>
                 <Button type="primary">
                   转入
                 </Button> 
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <Button>
+                <Button onClick={() => this.handlePay()}>
                   转出
                 </Button>
               </Col>

@@ -32,11 +32,21 @@ class WalletPay extends PureComponent {
     e.preventDefault();
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
+        console.log(values);
         dispatch({
           type: 'walletpay/add',
           payload: values,
-        });
-        router.push('/wallet/walletpaysuccess');
+        }).then((ret) => {
+          console.log(ret);
+          if (ret==null) {
+            router.push('/wallet/walletpayerror');
+          } else {
+            //此处的id表示交易id
+            let txid=ret.hash;//此处的hash才是交易流水（即交易哈希值）
+            router.push(`/wallet/walletpaysuccess?id=${txid}`);
+          };
+         }
+        );
       }
     });
   };
@@ -77,7 +87,7 @@ class WalletPay extends PureComponent {
             <h2><b>转出</b></h2>
             <br/>
             <FormItem {...formItemLayout} label="接收人地址">
-              {getFieldDecorator('relateAccount', {
+              {getFieldDecorator('address', {
                 rules: [
                   {
                     required: true,
@@ -88,7 +98,7 @@ class WalletPay extends PureComponent {
             </FormItem>
 
             <FormItem {...formItemLayout} label="发送金额">
-              {getFieldDecorator('developerName', {
+              {getFieldDecorator('value', {
                 rules: [
                   {
                     required: true,

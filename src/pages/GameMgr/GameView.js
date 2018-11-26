@@ -241,7 +241,7 @@ class GameView extends Component {
 
     return (
       <PageHeaderWrapper
-        title={data.gameName}
+        title={data.name}
         action={null}
         content={null}
         extraContent={null}
@@ -296,7 +296,7 @@ class GameView extends Component {
             </Col>
           </Row>
           <Row style={{ marginBottom: 32 }}>
-              <Col sm={24} xs={24}>联系地址：{data.contactAddress}</Col>
+              <Col sm={24} xs={24}>联系地址：{data.url}{data.contactAddress}</Col>
           </Row>
 
           <Divider style={{ margin: '20px 0' }} />

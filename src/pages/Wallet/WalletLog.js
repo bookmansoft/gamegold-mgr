@@ -2,6 +2,7 @@ import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import { formatMessage, FormattedMessage } from 'umi/locale';
 import moment from 'moment';
+import router from 'umi/router';
 import {
   Row,
   Col,
@@ -33,6 +34,9 @@ const getValue = obj =>
     .map(key => obj[key])
     .join(',');
 
+
+
+
 /* eslint react/no-multi-comp:0 */
 @connect(({ walletlog, loading }) => ({
   walletlog,
@@ -40,21 +44,17 @@ const getValue = obj =>
 }))
 @Form.create()
 class WalletLog extends PureComponent {
-
-
-
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
       type: 'walletlog/fetch',
+      payload: {id:this.props.location.query.id},//这里传入交易id值
     });
   }
 
-
-
-
-
-
+  handleBack = () => {
+    history.back();
+  };
 
   render() {
     const {
@@ -67,29 +67,34 @@ class WalletLog extends PureComponent {
           <Card bordered={false}>
             <Row style={{ marginBottom: 32 }}>
               <Col sm={24} xs={24}>
-                <b>交易详情：</b>
+                <h3><b>交易详情</b></h3>
+              </Col>
+            </Row>
+            <Row style={{ marginBottom: 32 }}>
+              <Col sm={24} xs={24}>
+                交易流水：{data.txid}
               </Col>
             </Row>
             <Row style={{ marginBottom: 32 }}>
               <Col sm={8} xs={12}>
-                交易类型：{data.tradeTypeName}
+                交易类型：{(data.details!=null) && (data.details[0].category)}
               </Col>
               <Col sm={8} xs={12}>
-                交易GCD数量：{data.tradeGcd}
+                交易GCD数量：{data.amount}
               </Col>
               <Col sm={8} xs={12}>
-                交易时间：{data.createAt}
+                交易时间：{moment(data.time).format('YYYY-MM-DD HH:mm:ss')}
               </Col>
             </Row>
             <Row style={{ marginBottom: 32 }}>
-              <Col sm={24} xs={24}>对方钱包地址：{data.relateAccount}</Col>
+              <Col sm={24} xs={24}>对方钱包地址：{(data.details!=null) && (data.details[0].address)}</Col>
             </Row>
             <Row style={{ marginBottom: 32 }}>
-              <Col sm={24} xs={24}>交易备注：{data.tradeRemark}</Col>
+              <Col sm={24} xs={24}>交易备注：{(data.details!=null) && (data.details[0].label)}</Col>
             </Row>
             <Row style={{ marginBottom: 32 }}>
               <Col sm={4} xs={8}>
-                <Button type="primary">
+                <Button type="primary" onClick={this.handleBack}>
                   返回钱包
                 </Button> 
               </Col>

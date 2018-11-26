@@ -110,6 +110,7 @@ export default [
             path: '/wallet/walletlog',
             name: 'walletlog',
             component: './Wallet/WalletLog',
+            hideInMenu: true,
           },
           {
             path: '/wallet/walletinfo',

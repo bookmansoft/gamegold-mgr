@@ -5,11 +5,6 @@ export default {
 
   state: {
     data: {
-        tradeTypeName: '',
-        tradeGcd: 0,
-        createAt: '',
-        relateAccount: '',
-        tradeRemark: ''
     },
   },
 

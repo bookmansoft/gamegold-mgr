@@ -4,7 +4,9 @@ import { Button, Row, Col, Icon, Steps, Card } from 'antd';
 import router from 'umi/router';
 import Result from '@/components/Result';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-
+const onDetail=() => {
+  router.push('/wallet/walletlog'+window.location.search)
+}
 const onPrev = () => {
   router.push('/wallet/walletmgr');
 };
@@ -13,7 +15,7 @@ const actions = (
     <Button type="primary" onClick={onPrev}>
       返回钱包
     </Button>
-    <Button>
+    <Button onClick={onDetail}>
       查看详情
     </Button>
   </Fragment>

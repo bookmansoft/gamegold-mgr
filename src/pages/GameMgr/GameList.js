@@ -156,6 +156,12 @@ class GameList extends PureComponent {
     });
   };
 
+  //查看页面
+  handleView= (flag, record) => {
+    console.log(record);
+    this.props.history.push("./gameview?id="+record.cid);
+  };
+
   //赠送道具
   handleDeal = (flag, record) => {
     this.setState({
