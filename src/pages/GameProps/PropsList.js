@@ -26,27 +26,34 @@ class PropsList extends PureComponent {
   columns = [
     {
       title: '道具ID',
-      dataIndex: 'id',
+      dataIndex: 'pid',
     },
     {
       title: '道具名',
-      dataIndex: 'name',
+      dataIndex: 'cid',
+     
     },
     {
       title: '道具类型',
-      dataIndex: 'type_cap',
+      dataIndex: 'oper',
+      render(val) {
+        return val.hash;
+      },
     },
     {
       title: '所属游戏',
-      dataIndex: 'game',
+      dataIndex: 'cp',
+      render(val) {
+        return val.name;
+      },
     },
     {
       title: '制作总量',
-      dataIndex: 'num',
+      dataIndex: 'gold',
     },
     {
       title: '库存数量',
-      dataIndex: 'stock',
+      dataIndex: 'status',
     },
     {
       title: '操作',
@@ -74,6 +81,7 @@ class PropsList extends PureComponent {
     const { dispatch } = this.props;
     dispatch({
       type: 'gameprops/propsList',
+      payload: {currentPage:1},
     });
   }
   handleEdit = (e, item) => {
@@ -279,7 +287,7 @@ class PropsList extends PureComponent {
 
         <Table
           loading={loading}
-          rowKey={rowKey || 'id'}
+          rowKey={rowKey || 'pid'}
           dataSource={list}
           columns={this.columns}
           pagination={paginationProps}

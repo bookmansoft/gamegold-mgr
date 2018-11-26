@@ -18,10 +18,6 @@ const FormItem = Form.Item;
 const { Option } = Select;
 const { TextArea } = Input;
 const gameData = ['游戏1', '游戏2'];
-const propsData = {
-  '游戏1': ['套装1', '套装2', '套装3'],
-  '游戏2': ['套装4', '套装5', '套装6'],
-};
 @connect(({ loading }) => ({
   submitting: loading.effects['form/submitRegularForm'],
 }))
@@ -29,8 +25,7 @@ const propsData = {
 @Form.create()
 class PropsCreate extends PureComponent {
   state = {
-    game: propsData[gameData[0]],
-    gameProps: propsData[gameData[0]][0],
+    game: gameData[0],
     iconPreview : '',
     iconMoreImg : [],
   }
@@ -49,16 +44,10 @@ class PropsCreate extends PureComponent {
   };
   handleGameChange = (value) => {
     this.setState({
-      game: propsData[value],
-      gameProps: propsData[value][0],
+      game: value,
     });
   };
 
-  onPropsChange = (value) => {
-    this.setState({
-      gameProps: value,
-    });
-  };
   removeInputIconPreview = (k) => {
     const { form } = this.props;
     const keys = form.getFieldValue('keys');
@@ -181,25 +170,6 @@ class PropsCreate extends PureComponent {
 
                 )}
                   </FormItem>
-                </Col>
-                <Col span={11}>
-                 <FormItem>
-                  {getFieldDecorator('belongProps', {
-                    rules: [
-                      {
-                        required: true,
-                        message: "请选择装备",
-                      },
-                    ],
-                  })(
-                    <Select
-                      setFieldsValue={this.state.gameProps}
-                      onChange={this.onPropsChange}
-                    >
-                      {game.map(props => <Option key={props}>{props}</Option>)}
-                    </Select>
-                  )}
-                </FormItem>
                 </Col>
             </FormItem>
             <FormItem {...formItemLayout} label= "道具名称">
