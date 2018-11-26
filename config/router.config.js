@@ -132,7 +132,7 @@ export default [
             path: '/wallet/walletpayerror',
             name: 'walletpayerror',
             component: './Wallet/WalletPayError',
-            hideInMenu: false,
+            hideInMenu: true,
           },
         ],
       },
