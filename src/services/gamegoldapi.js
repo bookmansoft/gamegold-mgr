@@ -34,14 +34,23 @@ export async function queryGameMgr(params) {
   let ret={};
   if(remote.isSuccess(msg)) {
       console.log("从数据库查询游戏列表cp.ListRecord:"+stringify(params));//currentPage=2&pageSize=10
-      console.log(JSON.stringify(params));
+      if (params==null) {
+        params={
+          currentPage:1,
+          pageSize:10,
+          cp_id:'',
+          cp_name:'',
+          cp_type:'',
+          cp_state:'',
+        };
+      };
       ret=await remote.fetching({func: "cp.ListRecord",
-        // currentPage:params.currentPage,
-        // pageSize:params.pageSize,
-        // cp_id:params.cp_id,
-        // cp_name:params.cp_name,
-        // cp_type:params.cp_type,
-        // cp_state:params.cp_state,
+        currentPage:params.currentPage,
+        pageSize:params.pageSize,
+        cp_id:typeof(params.cp_id)=="undefined"?'':params.cp_id,
+        cp_name:typeof(params.cp_name)=="undefined"?'':params.cp_name,
+        cp_type:typeof(params.cp_type)=="undefined"?'':params.cp_type,
+        cp_state:typeof(params.cp_state)=="undefined"?'':params.cp_state,
       });
   }
   console.log("游戏管理结果列表："+JSON.stringify(ret));
