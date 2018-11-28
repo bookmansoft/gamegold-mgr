@@ -33,8 +33,16 @@ export async function queryGameMgr(params) {
   let msg = await remote.login({openid: theOpenId});
   let ret={};
   if(remote.isSuccess(msg)) {
-      console.log("从数据库查询游戏列表:");
-      ret=await remote.fetching({func: "cp.ListRecord"});
+      console.log("从数据库查询游戏列表cp.ListRecord:"+stringify(params));//currentPage=2&pageSize=10
+      console.log(JSON.stringify(params));
+      ret=await remote.fetching({func: "cp.ListRecord",
+        // currentPage:params.currentPage,
+        // pageSize:params.pageSize,
+        // cp_id:params.cp_id,
+        // cp_name:params.cp_name,
+        // cp_type:params.cp_type,
+        // cp_state:params.cp_state,
+      });
   }
   console.log("游戏管理结果列表："+JSON.stringify(ret));
   return ret;

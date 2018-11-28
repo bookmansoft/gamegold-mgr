@@ -76,7 +76,7 @@ class GameList extends PureComponent {
     {
       title: '添加时间',
       dataIndex: 'publish_time',
-      render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
+       render: val => <span>{555 && moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
     },
     {
       title: '操作',
@@ -183,19 +183,19 @@ class GameList extends PureComponent {
         <Row gutter={{ md: 16, lg: 24, xl: 48 }}>
           <Col md={6} sm={9}>
             <FormItem label="游戏名：">
-              {getFieldDecorator('name')(<Input placeholder="请输入" />)}
+              {getFieldDecorator('cp_name')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
           <Col md={6} sm={9}>
             <FormItem label="游戏ID：">
-              {getFieldDecorator('cid')(<Input placeholder="请输入" />)}
+              {getFieldDecorator('cp_id')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
         </Row>
         <Row gutter={{ md: 16, lg: 24, xl: 48 }}>
           <Col md={6} sm={9}>
             <FormItem label="游戏类型：">
-              {getFieldDecorator('gameType')(
+              {getFieldDecorator('cp_type')(
                 <Select placeholder="请选择" style={{ width: '100%' }}>
                   <Option value="0">全部</Option>
                   <Option value="1">休闲益智</Option>
@@ -207,7 +207,7 @@ class GameList extends PureComponent {
           </Col>
           <Col md={6} sm={9}>
             <FormItem label="状态：">
-              {getFieldDecorator('gameState')(
+              {getFieldDecorator('cp_state')(
                 <Select placeholder="请选择" style={{ width: '100%' }}>
                   <Option value="1">待审核</Option>
                   <Option value="2">已上架</Option>
