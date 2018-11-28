@@ -12,12 +12,13 @@ import {
   Col,
 } from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-import styles from './style.less';
-
+import DescriptionList from '@/components/DescriptionList';
 const FormItem = Form.Item;
+const { Description } = DescriptionList;
 const { Option } = Select;
-const { TextArea } = Input;
-const gameData = ['游戏1', '游戏2'];
+@connect(({ gameprops }) => ({
+  gameprops
+}))
 @connect(({ loading }) => ({
   submitting: loading.effects['form/submitRegularForm'],
 }))
@@ -25,72 +26,71 @@ const gameData = ['游戏1', '游戏2'];
 @Form.create()
 class PropsCreate extends PureComponent {
   state = {
-    game: gameData[0],
-    iconPreview : '',
-    iconMoreImg : [],
+    gameId: 0,
+    gamePropsId: 0,
+    propsSearchList:[],
+    statePropsDetail:{},
   }
-  handleSubmit = e => {
-    const { dispatch, form } = this.props;
-    e.preventDefault();
-    form.validateFieldsAndScroll((err, values) => {
-      console.log(values);
-      /*if (!err) {
-        dispatch({
-          type: 'form/submitRegularForm',
-          payload: values,
-        });
-      }*/
+  componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'gameprops/getAllGameList',
     });
+  }
+
+  handleSubmit = e => {
+    console.log(this.state);
+    e.preventDefault();
+    
   };
   handleGameChange = (value) => {
+    const { dispatch } = this.props;
+    //获取游戏对应的道具列表
+    console.log('选择游戏ID：'+ value);
+    if(value > 0){
+      
+      this.setState({
+        gameId: value,
+      });
+      dispatch({
+        type: 'gameprops/getPropsByGame',
+        payload: {
+          id:value
+        },
+      });
+      
+
+    }
+  };
+
+  onPropsChange = (value) => {
+    console.log('选择装备ID：'+ value);
     this.setState({
-      game: value,
+      gamePropsId: value,
     });
   };
-
-  removeInputIconPreview = (k) => {
-    const { form } = this.props;
-    const keys = form.getFieldValue('keys');
-    if (keys.length === 1) {
-      return;
+  
+  //道具预览
+  previewProp = () => {
+    const { dispatch } = this.props;
+    let curPropsId = this.state.gamePropsId;
+    if(curPropsId > 0){
+      dispatch({
+        type: 'gameprops/propsDetail',
+        payload: {
+          id:curPropsId
+        },
+      });
     }
-    form.setFieldsValue({
-      keys: keys.filter(key => key !== k),
-    });
-    let iconMoreImg = this.state.iconMoreImg;
-    iconMoreImg[k] = '';
-    this.setState({ iconMoreImg:  iconMoreImg});
-
   }
-
-  addInputIconPreview = () => {
-    const { form } = this.props;
-    const keys = form.getFieldValue('keys');
-    //按照最大值+1作为新的keys值
-    let maxNum = 0;
-    if(keys.length > 0){
-      maxNum = Math.max.apply(0, keys) + 1;
-    }else{
-      maxNum = 0;
-    }
-    const nextKeys = keys.concat(maxNum);
-    form.setFieldsValue({
-      keys: nextKeys,
-    });
-  }
-  iconPreviewFun = e => {
-    this.setState({ iconPreview: e.target.value });
-  };
-  iconMoreImgFun = (e, k) => {
-    let moreImg = this.state.iconMoreImg;
-    moreImg[k] = e.target.value;
-    this.setState({ iconMoreImg: moreImg });
-  };
+ 
 
   render() {
-    const { submitting } = this.props;
-    const { game,gameProps,iconPreview} = this.state;
-    const iconMoreImg = this.state.iconMoreImg.filter(v => v !== '');
+    const { gameprops: { gameList,gamePropsList,propsDetail },submitting } = this.props;
+    this.setState({
+      statePropsDetail:propsDetail
+    })
+    console.log(propsDetail);
     const {
       form: { getFieldDecorator, getFieldValue },
     } = this.props;
@@ -150,8 +150,8 @@ class PropsCreate extends PureComponent {
         <Form onSubmit={this.handleSubmit} hideRequiredMark style={{ marginTop: 8 }}>
 
         <Card title="道具信息" bordered={false} headStyle={{fontWeight:600}}>
-          <FormItem {...formItemLayout} label= "选择游戏及道具">
-              <Col span={11}>
+          <FormItem {...formItemLayout} label= "从游戏中选择道具">
+              <Col span={8}>
                 <FormItem>
                 {getFieldDecorator('belongGame', {
                   rules: [
@@ -162,100 +162,70 @@ class PropsCreate extends PureComponent {
                   ],
                 })(
                   <Select
-                    setFieldsValue={gameData[0]}
+                    setFieldsValue={0}
                     onChange={this.handleGameChange}
                   >
-                    {gameData.map(game => <Option key={game}>{game}</Option>)}
+                    {gameList.map(game => <Option key={game.id}>{game.cp_name}</Option>)}
                   </Select>
 
                 )}
                   </FormItem>
                 </Col>
+                <Col span={8} style={{ marginLeft: 32 }}>
+                 <FormItem>
+                  {getFieldDecorator('belongProps', {
+                    rules: [
+                      {
+                        required: true,
+                        message: "请选择装备",
+                      },
+                    ],
+                  })(
+                    <Select
+                      setFieldsValue={0}
+                      onChange={this.onPropsChange}
+                    >
+                      {gamePropsList.map(props => <Option key={props.id}>{props.name}</Option>)}
+                    </Select>
+                  )}
+                </FormItem>
+                </Col>
+                <Col span={4}>
+                <FormItem style={{ marginLeft: 32 }}>
+                <Button type="primary" onClick={this.previewProp} > <FormattedMessage id="form.preview" /></Button>
+                </FormItem>
+                </Col>
             </FormItem>
-            <FormItem {...formItemLayout} label= "道具名称">
-              {getFieldDecorator('propsName', {
-                rules: [
-                  {
-                    required: true,
-                    message: "道具名称必须填写",
-                  },
-                ],
-              })(<Input placeholder={formatMessage({ id: 'form.input.placeholder' })} />)}
-            </FormItem>
-            <FormItem {...formItemLayout} label= "道具类型">
-              {getFieldDecorator('propsType', {
-                rules: [{ required: true, message: '请选择道具类型' }],
-              })(
-                <Select placeholder={formatMessage({ id: 'form.select.placeholder' })}>
-                  <Option value="private">私密</Option>
-                  <Option value="public">公开</Option>
-                </Select>
-              )}
-            </FormItem>
-
-            <FormItem {...formItemLayout} label= "所属游戏">
-              {getFieldDecorator('game', {
-                rules: [{ required: true, message: '请选择所属游戏' }],
-              })(
-                <Select placeholder={formatMessage({ id: 'form.select.placeholder' })}>
-                  <Option value="private">私密</Option>
-                  <Option value="public">公开</Option>
-                </Select>
-              )}
-            </FormItem>
-
-            <FormItem {...formItemLayout} label="道具简介">
-              {getFieldDecorator('desc', {
-                rules: [
-                  {
-                    required: true,
-                    message: "请输入道具简介",
-                  },
-                ],
-              })(
-                <TextArea
-                  style={{ minHeight: 32 }}
-                  placeholder= {formatMessage({ id: 'form.input.placeholder' })}
-                  rows={4}
-                />
-              )}
-            </FormItem>
-
+            
         </Card>
 
-          <Card title="素材信息" bordered={false} headStyle={{fontWeight:600}}>
-            <FormItem {...formItemLayout} label= "ICON链接">
-              {getFieldDecorator('iconUrl', {
-                rules: [
-                  {
-                    required: true,
-                    message: "ICON链接必须填写",
-                  },
-                ],
-              })(<Input placeholder={formatMessage({ id: 'form.input.placeholder' })} onChange={this.iconPreviewFun}/>)}
-            </FormItem>
-            <FormItem {...formItemLayout} label= "ICON预览">
-              <img width={120} src={iconPreview} />
-            </FormItem>
-            <FormItem {...formItemLayout} label= "道具说明图2链接">
-              {addIconPreviewItems}
-              <Button type="dashed" onClick={this.addInputIconPreview} style={{ width: '60%' }}>
-                <Icon type="plus" /> Add field
-              </Button>
-            </FormItem>
-            <FormItem {...formItemLayout} label= "说明图预览">
+        <Card bordered={false} headStyle={{fontWeight:600}} title="道具信息">
+          <DescriptionList size="large" style={{ marginBottom: 32 }}>
+            <Description term="道具ID">{propsDetail.id || ''}</Description>
+            <Description term="道具名称">{propsDetail.name || ''}</Description>
+            <Description term="道具类型">{propsDetail.type || ''}</Description>
+            <Description term="所属游戏">{propsDetail.game || ''}</Description>
+            <Description term="游戏简介">{propsDetail.desc || ''}</Description>
+          </DescriptionList>
+          <DescriptionList size="large" style={{ borderTop: '1px solid #ddd',marginTop: 32}}>
+            <Description term="道具图标">
+              <img width={120} src={propsDetail.iconImg || ''} />
+            </Description>
+            <Description term="道具说明图">
               <List
                 grid={{ gutter: 24, lg: 3, md: 2, sm: 1, xs: 1 }}
-                dataSource={iconMoreImg}
+                dataSource={propsDetail.moreImg || ''}
                 renderItem={item =>
                   <List.Item>
                     <img width={120} src={item}/>
                   </List.Item>
                 }
               />
-
-            </FormItem>
-            <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
+            </Description>
+          </DescriptionList>
+        </Card>
+        <Card>
+          <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
               <Button type="primary" htmlType="submit" loading={submitting}>
                 <FormattedMessage id="form.submit" />
               </Button>
@@ -263,8 +233,7 @@ class PropsCreate extends PureComponent {
                 <FormattedMessage id="form.cancel" />
               </Button>
             </FormItem>
-
-          </Card>
+        </Card>
 
         </Form>
 

@@ -215,11 +215,25 @@ export async function getGamePropsDetail(params) {
 }
 
 export async function getPropsByGame(params) {
+  //游戏厂商获取所有游戏道具
   return request(`/api/gameprops?${stringify(params)}`);
 }
 
 export async function getAllGameList(params) {
-  return request(`/api/allgame?${stringify(params)}`);
+  let msg = await remote.login({openid: theOpenId});
+  let ret= [];
+  if(remote.isSuccess(msg)) {
+      let res =await remote.fetching({func: "cp.ListAllRecord"});
+      console.log(res);
+      if(remote.isSuccess(res)) {
+          for (let i in res['data']) {
+            ret.push(res['data'][i]); //属性
+          }
+      }
+  }
+  console.log(JSON.stringify(ret));
+  return ret;
+  //return request(`/api/allgame?${stringify(params)}`);
 }
 export async function getUserAll(params) {
   return request(`/api/userall?${stringify(params)}`);

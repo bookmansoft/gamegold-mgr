@@ -7,7 +7,7 @@ export default {
       list: [],
       pagination: {},
     },
-    detail: [],
+    propsDetail: [],
     gameList: [],
     gamePropsList: [],
     userAllList: {
@@ -64,7 +64,7 @@ export default {
     gamePropsDetail(state, { detail }) {
       return {
         ...state,
-        detail: detail
+        propsDetail: detail
       };
     },
     gamePropsByGame(state, { gamePropsList }) {

@@ -176,7 +176,6 @@ function getPropsByGame(req, res, u) {
 
   const params = parse(url, true).query;
   let gameId = params.id || '';
-  let gameName = params.name || '';
   var myDate = new Date();
   let gameProps = [];
   let type_cap = ["装备","消耗","装饰","其他"];
@@ -184,14 +183,7 @@ function getPropsByGame(req, res, u) {
     gameProps.push({
       id: `${i}`,
       gameId: gameId,
-      name: `${gameName}-`+type_cap[Math.floor(Math.random()*type_cap.length)],
-      type: Math.floor(Math.random() * 10),
-      desc: `这是${i}道具一段描述`,
-      num: Math.floor(Math.random() * 1000),
-      stock: Math.floor(Math.random() * 1000),
-      status: Math.floor(Math.random() * 10) % 4,
-      updatedAt: myDate.setDate(myDate.getDate() + i),
-      createdAt: myDate.setDate(myDate.getDate() + i),
+      name: `游戏ID：${gameId}-`+type_cap[Math.floor(Math.random()*type_cap.length)],
     });
   }
   return res.json(gameProps);
