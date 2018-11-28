@@ -54,24 +54,28 @@ class GameList extends PureComponent {
 
   columns = [
     {
-      title: 'ID',
-      dataIndex: 'cid',
+      title: '流水号',
+      dataIndex: 'id',
+    },
+    {
+      title: '游戏ID',
+      dataIndex: 'cp_id',
     },
     {
       title: '游戏名',
-      dataIndex: 'name',
+      dataIndex: 'cp_name',
     },
     {
       title: '游戏类型',
-      dataIndex: 'gameTypeNames',
+      dataIndex: 'cp_type',
     },
     {
       title: '状态',
-      dataIndex: 'gameStateName',
+      dataIndex: 'cp_state',
     },
     {
       title: '添加时间',
-      dataIndex: 'createdAt',
+      dataIndex: 'publish_time',
       render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
     },
     {

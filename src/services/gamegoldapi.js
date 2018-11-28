@@ -33,16 +33,11 @@ export async function queryGameMgr(params) {
   let msg = await remote.login({openid: theOpenId});
   let ret={};
   if(remote.isSuccess(msg)) {
-      console.log("游戏管理:");
-      ret=await remote.fetching({func: "cp.List"});
+      console.log("从数据库查询游戏列表:");
+      ret=await remote.fetching({func: "cp.ListRecord"});
   }
   console.log("游戏管理结果列表："+JSON.stringify(ret));
-  if (ret.code==0) {
-    return ret.data;
-  }
-  else {
-    return {};
-  }
+  return ret;
   //return request(`/gamemgr/query?${stringify(params)}`);
 
 }
