@@ -103,11 +103,11 @@ export async function getGameView(params) {
       }
       else {
         //有数据
-        if (ret.data.cp_url!=null) {
+        if (ret.data.picture_url!=null) {
           try {
-            ret.data.icon_url=JSON.parse(ret.data.cp_url).icon_url;
-            ret.data.face_url=JSON.parse(ret.data.cp_url).face_url;
-            ret.data.pic_urls=JSON.parse(ret.data.cp_url).pic_urls;//游戏截图数组
+            ret.data.icon_url=JSON.parse(ret.data.picture_url).icon_url;
+            ret.data.face_url=JSON.parse(ret.data.picture_url).face_url;
+            ret.data.pic_urls=JSON.parse(ret.data.picture_url).pic_urls;//游戏截图数组
           }
           catch (ex) {
             //忽略

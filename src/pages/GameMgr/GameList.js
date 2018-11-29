@@ -216,6 +216,11 @@ class GameList extends PureComponent {
                 </Select>
               )}
             </FormItem>
+            {/* <FormItem>
+                {getFieldDecorator('currentPage', {
+                  initialValue: '1',
+                })(<Input style={{ display: 'none' }}/>)}
+            </FormItem> */}
           </Col>
           <Col md={6} sm={9}>
             <span className={styles.submitButtons}>
