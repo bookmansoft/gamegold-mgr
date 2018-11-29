@@ -102,7 +102,17 @@ export async function getGameView(params) {
         return {};
       }
       else {
-        console.log(ret.data);
+        //有数据
+        if (ret.data.cp_url!=null) {
+          try {
+            ret.data.icon_url=JSON.parse(ret.data.cp_url).icon_url;
+            ret.data.face_url=JSON.parse(ret.data.cp_url).face_url;
+            ret.data.pic_urls=JSON.parse(ret.data.cp_url).pic_urls;//游戏截图数组
+          }
+          catch (ex) {
+            //忽略
+          }
+        }
         return ret.data;
       }
   }

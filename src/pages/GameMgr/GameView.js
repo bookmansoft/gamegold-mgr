@@ -162,6 +162,16 @@ function doReOnline() {
 
 class GameView extends Component {
 
+  renderImg= (text) => {
+    if (text && text.length) {
+      const imgs = text.map((item, index) =>
+        <img width={120} src={item} key={index} />
+      )
+      return imgs;
+    }
+  }
+
+
 
   state = {
     visible: false, //发布更新表单可见性
@@ -296,7 +306,7 @@ class GameView extends Component {
             </Col>
           </Row>
           <Row style={{ marginBottom: 32 }}>
-              <Col sm={24} xs={24}>联系地址：{data.url}{data.wallet_addr}</Col>
+              <Col sm={24} xs={24}>URL地址：{data.cp_url}</Col>
           </Row>
 
           <Divider style={{ margin: '20px 0' }} />
@@ -321,17 +331,17 @@ class GameView extends Component {
           </Row>
           <Row style={{ marginBottom: 32 }}>
             <Col sm={24} xs={24}>
-              游戏图标：<img width={120} src={data.pictureUrl} />
+              游戏图标：<img width={120} src={data.icon_url} />
             </Col>
           </Row>
           <Row style={{ marginBottom: 32 }}>
             <Col sm={24} xs={24}>
-              封面图片：<img width={120} src={data.pictureUrl} />
+              封面图片：<img width={120} src={data.face_url} />
             </Col>
           </Row>
           <Row style={{ marginBottom: 32 }}>
               <Col sm={24} xs={24}>
-                游戏截图：
+                游戏截图：{this.renderImg(data.pic_urls)}
               </Col>
           </Row>
         </Card>
