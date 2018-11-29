@@ -241,7 +241,7 @@ class GameView extends Component {
 
     return (
       <PageHeaderWrapper
-        title={data.name}
+        title={data.cp_name}
         action={null}
         content={null}
         extraContent={null}
@@ -252,28 +252,28 @@ class GameView extends Component {
           <Row style={{ marginBottom: 32 }}>
             <Col sm={24} xs={24}>
               <div align="right">
-                {data.gameState ==1 &&
+                {data.cp_state ==1 &&
                   <Button type="primary" style={{ marginRight: 24 }}>编辑</Button>
                 }
-                {data.gameState ==1 &&
+                {data.cp_state ==1 &&
                   <Button type="primary" style={{ marginRight: 24 }} onClick={doDeleteGame}>删除</Button>
                 }
-                {data.gameState ==2 &&
+                {data.cp_state ==2 &&
                   <Button type="primary"  style={{ marginRight: 24 }}  onClick={doEdit}>编辑</Button>
                 }
-                {data.gameState ==2 &&
+                {data.cp_state ==2 &&
                   <Button type="primary"  style={{ marginRight: 24 }} onClick={this.showModal} >发布更新</Button>
                 }
-                {data.gameState ==2 &&
+                {data.cp_state ==2 &&
                   <Button type="primary"  style={{ marginRight: 24 }} onClick={doOffline} >下线</Button>
                 }
-                {data.gameState ==3 &&
+                {data.cp_state ==3 &&
                   <Button type="primary"  style={{ marginRight: 24 }} onClick={doReOnline}>重新上线</Button>
                 }
               </div>
             </Col>
           </Row>
-          <Steps direction={stepDirection} progressDot={customDot} current={data.gameState}>
+          <Steps direction={stepDirection} progressDot={customDot} current={data.cp_state}>
             <Step title="提交发布" description={desc1} />
             <Step title="审核中" description={desc2} />
             <Step title="上线" description={desc3}/>
@@ -286,17 +286,17 @@ class GameView extends Component {
           </Row>
           <Row style={{ marginBottom: 32 }}>
             <Col sm={8} xs={12}>
-              游戏类型：{data.gameTypeNames}
+              游戏类型：{data.cp_type}
             </Col>
             <Col sm={8} xs={12}>
-              开发者：{data.developerName}
+              开发者：{data.develop_name}
             </Col>
             <Col sm={8} xs={12}>
-              发布时间：{data.createAt}
+              发布时间：{data.publish_time}
             </Col>
           </Row>
           <Row style={{ marginBottom: 32 }}>
-              <Col sm={24} xs={24}>联系地址：{data.url}{data.contactAddress}</Col>
+              <Col sm={24} xs={24}>联系地址：{data.url}{data.wallet_addr}</Col>
           </Row>
 
           <Divider style={{ margin: '20px 0' }} />
@@ -305,14 +305,14 @@ class GameView extends Component {
           </Row>
           <Row style={{ marginBottom: 32 }}>
             <Col sm={8} xs={12}>
-              当前版本：{data.currentVersion}
+              当前版本：{data.cp_version}
             </Col>
             <Col sm={8} xs={12}>
-              更新时间：{data.updateAt}
+              更新时间：{data.publish_time}
             </Col>
           </Row>
           <Row style={{ marginBottom: 32 }}>
-              <Col sm={24} xs={24}>更新内容：{data.updateContent}</Col>
+              <Col sm={24} xs={24}>更新内容：{data.cp_desc}</Col>
           </Row>
 
           <Divider style={{ margin: '20px 0' }} />
@@ -321,12 +321,12 @@ class GameView extends Component {
           </Row>
           <Row style={{ marginBottom: 32 }}>
             <Col sm={24} xs={24}>
-              游戏图标：<img width={120} src={data.gameIcon} />
+              游戏图标：<img width={120} src={data.pictureUrl} />
             </Col>
           </Row>
           <Row style={{ marginBottom: 32 }}>
             <Col sm={24} xs={24}>
-              封面图片：<img width={120} src={data.gameFacePicture} />
+              封面图片：<img width={120} src={data.pictureUrl} />
             </Col>
           </Row>
           <Row style={{ marginBottom: 32 }}>

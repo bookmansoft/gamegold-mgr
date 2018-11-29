@@ -163,7 +163,8 @@ class GameList extends PureComponent {
   //查看页面
   handleView= (flag, record) => {
     console.log(record);
-    this.props.history.push("./gameview?id="+record.cid);
+    // this.props.history.push("./gameview?id="+record.cp_id);
+    this.props.history.push("./gameview?id="+record.id);
   };
 
   //赠送道具

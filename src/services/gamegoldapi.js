@@ -82,18 +82,29 @@ export async function addGameMgr(params) {
 export async function getGameView(params) {
   console.log(params.id);
   //接下来好好查询并返回这个页面的数据
+  // let msg = await remote.login({openid: theOpenId});
+  // let ret={};
+  // if(remote.isSuccess(msg)) {
+  //     console.log("查看新游戏:"+JSON.stringify(params));
+  //     ret=await remote.fetching({func: "cp.ById",items:[params.id]});
+  // }
+  // console.log("查看新游戏结果："+JSON.stringify(ret));
+  // if (ret.data===null) {
+  //   return {};
+  // }
+  // else {
+  //   return ret.data;
+  // }
   let msg = await remote.login({openid: theOpenId});
-  let ret={};
   if(remote.isSuccess(msg)) {
-      console.log("查看新游戏:"+JSON.stringify(params));
-      ret=await remote.fetching({func: "cp.ById",items:[params.id]});
-  }
-  console.log("查看新游戏结果："+JSON.stringify(ret));
-  if (ret.data===null) {
-    return {};
-  }
-  else {
-    return ret.data;
+      let ret=await remote.fetching({func: "cp.Retrieve", id: params.id});
+      if (ret.data===null) {
+        return {};
+      }
+      else {
+        console.log(ret.data);
+        return ret.data;
+      }
   }
   //return request(`/gamemgr/view?${stringify(params)}`);
 }
