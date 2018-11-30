@@ -59,11 +59,11 @@ class PropsList extends PureComponent {
       title: '操作',
       render: (e, record) => (
         <Fragment>
-          <Link to={`/gameprops/detail/${record.id}`}>详情</Link>
+          <Link to={`/gameprops/detail/${record.pid}`}>详情</Link>
           <Divider type="vertical" />
-          <Link to={`/gameprops/produce/${record.id}`}>生产</Link>
+          <Link to={`/gameprops/produce/${record.pid}`}>生产</Link>
           <Divider type="vertical" />
-          <Link to={`/gameprops/present/${record.id}`}>赠送</Link>
+          <Link to={`/gameprops/present/${record.pid}`}>赠送</Link>
           <Divider type="vertical" />
           <a onClick={e => {
             e.preventDefault();
