@@ -1,4 +1,4 @@
-import { getGamePropsList, getGamePropsDetail, getPropsByGame , getAllGameList , getUserAll } from '@/services/gamegoldapi';
+import { getGamePropsList, getGamePropsDetail, getPropsByGame , getAllGameList , getUserAll ,CreatePropRemote} from '@/services/gamegoldapi';
 
 export default {
   namespace: 'gameprops',
@@ -51,6 +51,10 @@ export default {
         type: 'gameUserAll',
         userAll: response,
       });
+    },
+    *createpropremote({ payload }, { call }) {
+      const res = yield call(CreatePropRemote, payload);
+      return res;
     },
   },
 

@@ -17,7 +17,7 @@ class PropsDetail extends PureComponent {
 
   state = {
     id: '',
-    detail: {},
+    propsDetail: {},
   };
   componentDidMount() {
     this.state.id = this.props.match.params.id;
@@ -57,8 +57,10 @@ class PropsDetail extends PureComponent {
 
   render() {
     const {
-      gameprops: { detail },
+      gameprops: { propsDetail },
     } = this.props;
+    let detail = propsDetail.data || [];
+    let iconPreview = eval('(' + detail.icon_preview + ')');
     return (
         <PageHeaderWrapper title={detail.name}>
         <Card bordered={false} headStyle={{fontWeight:600}} title="生产信息"  extra={this.mainButton()}>
@@ -71,19 +73,19 @@ class PropsDetail extends PureComponent {
         </Card>
         <Card bordered={false} headStyle={{fontWeight:600}} title="道具信息" extra={this.propsButton()}>
           <DescriptionList size="large" style={{ marginBottom: 32 }}>
-            <Description term="道具ID">{detail.num}</Description>
-            <Description term="道具名称">{detail.game}</Description>
-            <Description term="道具类型">{detail.type_cap}</Description>
-            <Description term="所属游戏">{detail.game}</Description>
+            <Description term="道具ID">{detail.id}</Description>
+            <Description term="道具名称">{detail.props_name}</Description>
+            <Description term="道具类型">{detail.props_type}</Description>
+            <Description term="所属游戏">{detail.pid}</Description>
             <Description term="创建时间">{moment(detail.updatedAt).format('YYYY-MM-DD HH:mm')}</Description>
-            <Description term="游戏简介">{detail.desc}</Description>
+            <Description term="道具简介">{detail.props_desc}</Description>
             <Description term="道具图标">
-              <img width={120} src={detail.iconImg} />
+              <img width={120} src={detail.icon_url} />
             </Description>
             <Description term="道具说明图">
               <List
                 grid={{ gutter: 24, lg: 3, md: 2, sm: 1, xs: 1 }}
-                dataSource={detail.moreImg}
+                dataSource={iconPreview}
                 renderItem={item =>
                   <List.Item>
                     <img width={120} src={item}/>

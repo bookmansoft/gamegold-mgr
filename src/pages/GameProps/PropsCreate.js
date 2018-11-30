@@ -40,7 +40,26 @@ class PropsCreate extends PureComponent {
 
   handleSubmit = e => {
     console.log(this.state);
+    const { dispatch } = this.props;
     e.preventDefault();
+    //调用道具上链
+   /*  dispatch({
+      type: 'gameprops/createpropremote',
+      payload: {
+        'pid': 123,
+        'cid': 123,
+        'gold': 123,
+      },
+    }).then((ret) => {
+      console.log(ret);
+      if (ret.code === 0 && ret.data===null) {
+        router.push('/gamemgr/gameadderror');
+      } else {
+        router.push('/gamemgr/gameaddsuccess');
+     };
+    } */
+
+    //本地道具创建
     
   };
   handleGameChange = (value) => {

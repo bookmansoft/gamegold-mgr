@@ -202,6 +202,13 @@ export async function addWalletPay(params) {
 
 }
 
+/**
+ *
+ * 从链上获取游戏道具列表
+ * @export
+ * @param {*} params
+ * @returns
+ */
 export async function getGamePropsList(params) {
 
   let msg = await remote.login({openid: `${Math.random()*1000000000 | 0}`});
@@ -229,8 +236,36 @@ export async function getGamePropsList(params) {
   //return request(`/api/gamepropslist?${stringify(params)}`);
 }
 
+export async function CreatePropRemote(params) {
+  console.log('道具上链请求开始');
+  console.log(params);
+  console.log('道具上链请求结束');
+  let msg = await remote.login({openid: `${Math.random()*1000000000 | 0}`});
+  if(remote.isSuccess(msg)) {
+      let res = await remote.fetching({func: "prop.CreateProp",items:[params.pid,params.cid,params.gold]});
+      if(remote.isSuccess(res)){
+        return res;
+      }else{
+        return {};
+      }
+  }
+  return {};
+  //return request(`/api/gamepropsdetail?${stringify(params)}`);
+}
+
 export async function getGamePropsDetail(params) {
-  return request(`/api/gamepropsdetail?${stringify(params)}`);
+  //本地库直接读取详情
+  let msg = await remote.login({openid: `${Math.random()*1000000000 | 0}`});
+  if(remote.isSuccess(msg)) {
+      let res = await remote.fetching({func: "prop.LocalDetail",id:1});
+      if(remote.isSuccess(res)){
+        return res;
+      }else{
+        return [];
+      }
+  }
+  return [];
+  //return request(`/api/gamepropsdetail?${stringify(params)}`);
 }
 
 export async function getPropsByGame(params) {
