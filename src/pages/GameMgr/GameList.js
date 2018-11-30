@@ -198,7 +198,7 @@ class GameList extends PureComponent {
             <FormItem label="游戏类型：">
               {getFieldDecorator('cp_type')(
                 <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="0">全部</Option>
+                  <Option value="">全部</Option>
                   <Option value="1">休闲益智</Option>
                   <Option value="2">角色扮演</Option>
                   <Option value="3">战争策略</Option>
