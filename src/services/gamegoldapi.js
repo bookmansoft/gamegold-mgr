@@ -39,7 +39,7 @@ export async function queryGameMgr(params) {
           currentPage:1,
           pageSize:10,
           cp_id:'',
-          cp_name:'',
+          cp_text:'',
           cp_type:'',
           cp_state:'',
         };
@@ -48,7 +48,7 @@ export async function queryGameMgr(params) {
         currentPage:params.currentPage,
         pageSize:params.pageSize,
         cp_id:typeof(params.cp_id)=="undefined"?'':params.cp_id,
-        cp_name:typeof(params.cp_name)=="undefined"?'':params.cp_name,
+        cp_text:typeof(params.cp_text)=="undefined"?'':params.cp_text,
         cp_type:typeof(params.cp_type)=="undefined"?'':params.cp_type,
         cp_state:typeof(params.cp_state)=="undefined"?'':params.cp_state,
       });

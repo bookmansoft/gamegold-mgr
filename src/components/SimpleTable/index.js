@@ -71,7 +71,7 @@ class SimpleTable extends PureComponent {
     } = this.props;
 
     const paginationProps = {
-      showSizeChanger: true,
+      showSizeChanger: false,
       showQuickJumper: true,
       ...pagination,
     };
