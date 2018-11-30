@@ -8,16 +8,7 @@ import {
   Form,
   Input,
   Select,
-  Icon,
   Button,
-  Dropdown,
-  Menu,
-  InputNumber,
-  DatePicker,
-  Modal,
-  message,
-  Badge,
-  Divider,
   Steps,
   Radio,
 } from 'antd';
@@ -27,10 +18,7 @@ import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import styles from './GameList.less';
 
 const FormItem = Form.Item;
-const { Step } = Steps;
-const { TextArea } = Input;
 const { Option } = Select;
-const RadioGroup = Radio.Group;
 const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
@@ -62,8 +50,8 @@ class GameList extends PureComponent {
       dataIndex: 'cp_id',
     },
     {
-      title: '游戏名',
-      dataIndex: 'cp_name',
+      title: '游戏全名',
+      dataIndex: 'cp_text',
     },
     {
       title: '游戏类型',
@@ -183,8 +171,8 @@ class GameList extends PureComponent {
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 16, lg: 24, xl: 48 }}>
           <Col md={6} sm={9}>
-            <FormItem label="游戏名：">
-              {getFieldDecorator('cp_name')(<Input placeholder="请输入" />)}
+            <FormItem label="游戏全名：">
+              {getFieldDecorator('cp_text')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
           <Col md={6} sm={9}>
@@ -216,11 +204,6 @@ class GameList extends PureComponent {
                 </Select>
               )}
             </FormItem>
-            {/* <FormItem>
-                {getFieldDecorator('currentPage', {
-                  initialValue: '1',
-                })(<Input style={{ display: 'none' }}/>)}
-            </FormItem> */}
           </Col>
           <Col md={6} sm={9}>
             <span className={styles.submitButtons}>
