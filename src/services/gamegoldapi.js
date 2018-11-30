@@ -77,24 +77,23 @@ export async function addGameMgr(params) {
   // });
 }
 
+//从指定URL中获取游戏内容（已测试通过）
+//params.cp_url 准备保存为cp_url的外部URL字段值
+export async function getGameFromUrl(params) {
+  let msg = await remote.login({openid: theOpenId});
+  if(remote.isSuccess(msg)) {
+      let ret=await remote.fetching({func: "cp.getGameFromUrl", cp_url: params.cp_url});
+      console.log(ret);
+      return ret;
+  }
+}
+
+
 // 游戏详情
 // params.id 查看的页面参数值。（其中params对应于model中的payload）
 export async function getGameView(params) {
   console.log(params.id);
   //接下来好好查询并返回这个页面的数据
-  // let msg = await remote.login({openid: theOpenId});
-  // let ret={};
-  // if(remote.isSuccess(msg)) {
-  //     console.log("查看新游戏:"+JSON.stringify(params));
-  //     ret=await remote.fetching({func: "cp.ById",items:[params.id]});
-  // }
-  // console.log("查看新游戏结果："+JSON.stringify(ret));
-  // if (ret.data===null) {
-  //   return {};
-  // }
-  // else {
-  //   return ret.data;
-  // }
   let msg = await remote.login({openid: theOpenId});
   if(remote.isSuccess(msg)) {
       let ret=await remote.fetching({func: "cp.Retrieve", id: params.id});
@@ -116,7 +115,6 @@ export async function getGameView(params) {
         return ret.data;
       }
   }
-  //return request(`/gamemgr/view?${stringify(params)}`);
 }
 
 //--（交易）钱包收支清单

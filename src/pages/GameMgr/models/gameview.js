@@ -1,4 +1,4 @@
-import { getGameView } from '@/services/gamegoldapi';
+import { getGameView,getGameFromUrl } from '@/services/gamegoldapi';
 
 export default {
   namespace: 'gameview',

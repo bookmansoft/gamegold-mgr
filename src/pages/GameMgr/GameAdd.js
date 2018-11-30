@@ -27,6 +27,15 @@ const { TextArea } = Input;
 }))
 @Form.create()
 class GameAdd extends PureComponent {
+  componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'game/fetch',
+      payload: {cp_url:"http://localhost:9101/client/cp1.json"},//这里
+    });
+
+  }
+
   handleSubmit = e => {
     const { dispatch, form } = this.props;
     e.preventDefault();
