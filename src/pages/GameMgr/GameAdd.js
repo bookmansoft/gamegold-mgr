@@ -37,12 +37,12 @@ class GameAdd extends PureComponent {
     console.log("36");
     dispatch({
       type: 'game/fetch',
-      payload: {cp_url:"http://localhost:9101/client/cp1.json"},//这里
+      payload: { cp_url: "http://localhost:9101/client/cp1.json" },//这里
     });
 
   }
 
-  renderImg= (text) => {
+  renderImg = (text) => {
     if (text && text.length) {
       const imgs = text.map((item, index) =>
         <img width={120} src={item} key={index} />
@@ -56,26 +56,26 @@ class GameAdd extends PureComponent {
     e.preventDefault();
     form.validateFieldsAndScroll((err, values) => {
       console.log(values);
-      if (!err) { 
+      if (!err) {
         dispatch({
           type: 'game/add',
           payload: values,
         }).then((ret) => {
           console.log(ret);
-          if (ret.code === 0 && ret.data===null) {
+          if (ret.code === 0 && ret.data === null) {
             router.push('/gamemgr/gameadderror');
           } else {
             router.push('/gamemgr/gameaddsuccess');
-         };
+          };
         }
-      );
-    };
-  });
-}
+        );
+      };
+    });
+  }
   render() {
     const { submitting } = this.props;
     const {
-      game:  {data },
+      game: { data },
       form: { getFieldDecorator, getFieldValue },
     } = this.props;
 
@@ -103,100 +103,100 @@ class GameAdd extends PureComponent {
         title="添加新游戏"
         content=""
       >
-          <Form onSubmit={this.handleSubmit} hideRequiredMark={false} style={{ marginTop: 8 }}>
-        <Card bordered={false}>
-        <Row style={{ marginBottom: 32 }}>
-            <br/>
-            <h2><b>发布游戏</b></h2>
-            <br/>
+        <Form onSubmit={this.handleSubmit} hideRequiredMark={false} style={{ marginTop: 8 }}>
+          <Card bordered={false}>
+            <Row style={{ marginBottom: 32 }}>
+              <br />
+              <h2><b>发布游戏</b></h2>
+              <br />
             </Row>
             <Row style={{ marginBottom: 32 }}>
-            <FormItem {...formItemLayout} label="游戏URL链接">
-              {getFieldDecorator('cp_url', {
-                rules: [
-                  {
-                    required: true,
-                    message: "请输入游戏URL链接",
-                  },
-                ],
-              })(<Input placeholder="请输入" />)}
-            </FormItem>
+              <FormItem {...formItemLayout} label="游戏URL链接">
+                {getFieldDecorator('cp_url', {
+                  rules: [
+                    {
+                      required: true,
+                      message: "请输入游戏URL链接",
+                    },
+                  ],
+                })(<Input placeholder="请输入" />)}
+              </FormItem>
             </Row>
             <Row style={{ marginBottom: 32 }}>
-            <FormItem {...formItemLayout} label="结算钱包地址">
-              {getFieldDecorator('wallet_addr', {
-                rules: [
-                  {
-                    required: true,
-                    message: "请输入结算钱包地址",
-                  },
-                ],
-              })(<Input placeholder="请输入" />)}
-            </FormItem>
+              <FormItem {...formItemLayout} label="结算钱包地址">
+                {getFieldDecorator('wallet_addr', {
+                  rules: [
+                    {
+                      required: true,
+                      message: "请输入结算钱包地址",
+                    },
+                  ],
+                })(<Input placeholder="请输入" />)}
+              </FormItem>
             </Row>
-            <br/>
+            <br />
             <h2><b>基本信息预览</b></h2>
-            <br/>
+            <br />
             <Row style={{ marginBottom: 32 }}>
-            <Col sm={8} xs={12}>
-              游戏类型：{data.cp_type}
-            </Col>
-            <Col sm={8} xs={12}>
-              开发者：{data.develop_name}
-            </Col>
-            <Col sm={8} xs={12}>
-              发布时间：{data.publish_time}
-            </Col>
-          </Row>
-          <Row style={{ marginBottom: 32 }}>
+              <Col sm={8} xs={12}>
+                游戏类型：{data.cp_type}
+              </Col>
+              <Col sm={8} xs={12}>
+                开发者：{data.develop_name}
+              </Col>
+              <Col sm={8} xs={12}>
+                发布时间：{data.publish_time}
+              </Col>
+            </Row>
+            <Row style={{ marginBottom: 32 }}>
               <Col sm={24} xs={24}>URL地址：{data.cp_url}</Col>
-          </Row>
+            </Row>
 
-          <Divider style={{ margin: '20px 0' }} />
-          <Row style={{ marginBottom: 16 }}>
+            <Divider style={{ margin: '20px 0' }} />
+            <Row style={{ marginBottom: 16 }}>
               <Col sm={24} xs={24}><h3><b>版本信息</b></h3></Col>
-          </Row>
-          <Row style={{ marginBottom: 32 }}>
-            <Col sm={8} xs={12}>
-              当前版本：{data.cp_version}
-            </Col>
-            <Col sm={8} xs={12}>
-              更新时间：{data.publish_time}
-            </Col>
-          </Row>
-          <Row style={{ marginBottom: 32 }}>
+            </Row>
+            <Row style={{ marginBottom: 32 }}>
+              <Col sm={8} xs={12}>
+                当前版本：{data.cp_version}
+              </Col>
+              <Col sm={8} xs={12}>
+                更新时间：{data.publish_time}
+              </Col>
+            </Row>
+            <Row style={{ marginBottom: 32 }}>
               <Col sm={24} xs={24}>更新内容：{data.cp_desc}</Col>
-          </Row>
+            </Row>
 
-          <Divider style={{ margin: '20px 0' }} />
-          <Row style={{ marginBottom: 16 }}>
+            <Divider style={{ margin: '20px 0' }} />
+            <Row style={{ marginBottom: 16 }}>
               <Col sm={24} xs={24}><h3><b>素材信息</b></h3></Col>
-          </Row>
-          <Row style={{ marginBottom: 32 }}>
-            <Col sm={24} xs={24}>
-              游戏图标：<img width={120} src={data.icon_url} />
-            </Col>
-          </Row>
-          <Row style={{ marginBottom: 32 }}>
-            <Col sm={24} xs={24}>
-              封面图片：<img width={120} src={data.face_url} />
-            </Col>
-          </Row>
-          <Row style={{ marginBottom: 32 }}>
+            </Row>
+            <Row style={{ marginBottom: 32 }}>
+              <Col sm={24} xs={24}>
+                游戏图标：<img width={120} src={data.icon_url} />
+              </Col>
+            </Row>
+            <Row style={{ marginBottom: 32 }}>
+              <Col sm={24} xs={24}>
+                封面图片：<img width={120} src={data.face_url} />
+              </Col>
+            </Row>
+            <Row style={{ marginBottom: 32 }}>
               <Col sm={24} xs={24}>
                 游戏截图：{this.renderImg(data.pic_urls)}
               </Col>
-          </Row>
+            </Row>
             <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
               <Button type="primary" htmlType="submit" loading={submitting}>
                 提交
               </Button>
-              <Button style={{ marginLeft: 8 }}  htmlType="reset">
+              <Button style={{ marginLeft: 8 }} htmlType="reset">
                 取消
               </Button>
             </FormItem>
-            </Card>
-          </Form>
+          </Card>
+        </Form>
 
       </PageHeaderWrapper>
     );
