@@ -9,6 +9,9 @@ import {
   Select,
   Button,
   Card,
+  Row,
+  Col,
+  Divider,
   InputNumber,
   Radio,
   Icon,
@@ -22,18 +25,30 @@ const { Option } = Select;
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
-@connect(({ loading }) => ({
+@connect(({ game, loading }) => ({
+  game,
+  loading: loading.models.game,
   submitting: loading.effects['game/add'],
 }))
 @Form.create()
 class GameAdd extends PureComponent {
   componentDidMount() {
     const { dispatch } = this.props;
+    console.log("36");
     dispatch({
       type: 'game/fetch',
       payload: {cp_url:"http://localhost:9101/client/cp1.json"},//这里
     });
 
+  }
+
+  renderImg= (text) => {
+    if (text && text.length) {
+      const imgs = text.map((item, index) =>
+        <img width={120} src={item} key={index} />
+      )
+      return imgs;
+    }
   }
 
   handleSubmit = e => {
@@ -60,6 +75,7 @@ class GameAdd extends PureComponent {
   render() {
     const { submitting } = this.props;
     const {
+      game:  {data },
       form: { getFieldDecorator, getFieldValue },
     } = this.props;
 
@@ -87,44 +103,16 @@ class GameAdd extends PureComponent {
         title="添加新游戏"
         content=""
       >
-        <Card bordered={false}>
           <Form onSubmit={this.handleSubmit} hideRequiredMark={false} style={{ marginTop: 8 }}>
+        <Card bordered={false}>
+        <Row style={{ marginBottom: 32 }}>
             <br/>
-            <h2><b>游戏信息</b></h2>
+            <h2><b>发布游戏</b></h2>
             <br/>
-            <FormItem {...formItemLayout} label="游戏名称">
-              {getFieldDecorator('gameName', {
-                rules: [
-                  {
-                    required: true,
-                    message: "请输入游戏名称",
-                  },
-                ],
-              })(<Input placeholder="请输入" />)}
-            </FormItem>
-            <FormItem {...formItemLayout} label="游戏类型（多选）：">
-              {getFieldDecorator('gameType')(
-                <Select placeholder="请选择">
-                  <Option value="0">全部</Option>
-                  <Option value="1">休闲益智</Option>
-                  <Option value="2">角色扮演</Option>
-                  <Option value="3">战争策略</Option>
-                </Select>
-              )}
-            </FormItem>
-
-            <FormItem {...formItemLayout} label="开发者名称">
-              {getFieldDecorator('developerName', {
-                rules: [
-                  {
-                    required: true,
-                    message: "请输入开发者名称",
-                  },
-                ],
-              })(<Input placeholder="请输入" />)}
-            </FormItem>
+            </Row>
+            <Row style={{ marginBottom: 32 }}>
             <FormItem {...formItemLayout} label="游戏URL链接">
-              {getFieldDecorator('gameUrl', {
+              {getFieldDecorator('cp_url', {
                 rules: [
                   {
                     required: true,
@@ -133,94 +121,72 @@ class GameAdd extends PureComponent {
                 ],
               })(<Input placeholder="请输入" />)}
             </FormItem>
-            <FormItem {...formItemLayout} label="游戏简介">
-              {getFieldDecorator('gameDesc', {
+            </Row>
+            <Row style={{ marginBottom: 32 }}>
+            <FormItem {...formItemLayout} label="结算钱包地址">
+              {getFieldDecorator('wallet_addr', {
                 rules: [
                   {
                     required: true,
-                    message: "请输入游戏简介，不超过300字",
-                  },
-                ],
-              })(
-                <TextArea
-                  style={{ minHeight: 32 }}
-                  placeholder="请输入游戏简介，不超过300字"
-                  rows={4}
-                />
-              )}
-            </FormItem>
-            <br/>
-            <h2><b>版本信息</b></h2>
-            <br/>
-            <FormItem {...formItemLayout} label="当前版本">
-              {getFieldDecorator('currentVersion', {
-                rules: [
-                  {
-                    required: false,
-                    message: "请输入当前版本",
-                  },
-                ],
-              })(<Input placeholder="V 请输入" />)}
-            </FormItem>
-            <br/>
-            <h2><b>素材信息</b></h2>
-            <br/>
-            <FormItem {...formItemLayout} label="ICON链接">
-              {getFieldDecorator('iconLink', {
-                rules: [
-                  {
-                    required: true,
-                    message: "请输入ICON链接",
+                    message: "请输入结算钱包地址",
                   },
                 ],
               })(<Input placeholder="请输入" />)}
             </FormItem>
-            <FormItem {...formItemLayout} label="ICON预览">
-              <label>ICON建议尺寸：100*100</label>
-            </FormItem>
+            </Row>
+            <br/>
+            <h2><b>基本信息预览</b></h2>
+            <br/>
+            <Row style={{ marginBottom: 32 }}>
+            <Col sm={8} xs={12}>
+              游戏类型：{data.cp_type}
+            </Col>
+            <Col sm={8} xs={12}>
+              开发者：{data.develop_name}
+            </Col>
+            <Col sm={8} xs={12}>
+              发布时间：{data.publish_time}
+            </Col>
+          </Row>
+          <Row style={{ marginBottom: 32 }}>
+              <Col sm={24} xs={24}>URL地址：{data.cp_url}</Col>
+          </Row>
 
-            <FormItem {...formItemLayout} label="封面图链接">
-              {getFieldDecorator('faceLink', {
-                rules: [
-                  {
-                    required: true,
-                    message: "请输入封面图链接",
-                  },
-                ],
-              })(<Input placeholder="请输入" />)}
-            </FormItem>
-            <FormItem {...formItemLayout} label="封面图预览">
-              <label>封面图建议尺寸：800*600</label>
-            </FormItem>
+          <Divider style={{ margin: '20px 0' }} />
+          <Row style={{ marginBottom: 16 }}>
+              <Col sm={24} xs={24}><h3><b>版本信息</b></h3></Col>
+          </Row>
+          <Row style={{ marginBottom: 32 }}>
+            <Col sm={8} xs={12}>
+              当前版本：{data.cp_version}
+            </Col>
+            <Col sm={8} xs={12}>
+              更新时间：{data.publish_time}
+            </Col>
+          </Row>
+          <Row style={{ marginBottom: 32 }}>
+              <Col sm={24} xs={24}>更新内容：{data.cp_desc}</Col>
+          </Row>
 
-            <FormItem {...formItemLayout} label="游戏截图1链接">
-              {getFieldDecorator('picture1Link', {
-                rules: [
-                  {
-                    required: true,
-                    message: "请输入游戏截图1链接",
-                  },
-                ],
-              })(<Input placeholder="请输入" />)}
-            </FormItem>
-
-            <FormItem {...formItemLayout} label="游戏截图2链接">
-              {getFieldDecorator('picture2Link', {
-                rules: [
-                  {
-                    required: true,
-                    message: "请输入游戏截图2链接",
-                  },
-                ],
-              })(<Input placeholder="请输入" />)}
-            </FormItem>
-            <FormItem {...formItemLayout} label="截图预览">
-              <label>游戏截图1</label>
-              <label>游戏截图2</label>
-            </FormItem>
-
-
- 
+          <Divider style={{ margin: '20px 0' }} />
+          <Row style={{ marginBottom: 16 }}>
+              <Col sm={24} xs={24}><h3><b>素材信息</b></h3></Col>
+          </Row>
+          <Row style={{ marginBottom: 32 }}>
+            <Col sm={24} xs={24}>
+              游戏图标：<img width={120} src={data.icon_url} />
+            </Col>
+          </Row>
+          <Row style={{ marginBottom: 32 }}>
+            <Col sm={24} xs={24}>
+              封面图片：<img width={120} src={data.face_url} />
+            </Col>
+          </Row>
+          <Row style={{ marginBottom: 32 }}>
+              <Col sm={24} xs={24}>
+                游戏截图：{this.renderImg(data.pic_urls)}
+              </Col>
+          </Row>
             <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
               <Button type="primary" htmlType="submit" loading={submitting}>
                 提交
@@ -229,8 +195,9 @@ class GameAdd extends PureComponent {
                 取消
               </Button>
             </FormItem>
+            </Card>
           </Form>
-        </Card>
+
       </PageHeaderWrapper>
     );
   }
