@@ -30,21 +30,21 @@ class PropsList extends PureComponent {
     },
     {
       title: '道具名',
-      dataIndex: 'cid',
+      dataIndex: 'props_name',
      
     },
     {
       title: '道具类型',
-      dataIndex: 'oper',
+      dataIndex: 'props_type',
       render(val) {
-        return val.hash;
+        return val;
       },
     },
     {
       title: '所属游戏',
       dataIndex: 'cp',
       render(val) {
-        return val.name;
+        return val;
       },
     },
     {
@@ -81,7 +81,7 @@ class PropsList extends PureComponent {
     const { dispatch } = this.props;
     dispatch({
       type: 'gameprops/propsList',
-      payload: {currentPage:1},
+      payload: {currentPage:1, pageSize: 10},
     });
   }
   handleEdit = (e, item) => {
@@ -107,6 +107,9 @@ class PropsList extends PureComponent {
     if (sorter.field) {
       params.sorter = `${sorter.field}_${sorter.order}`;
     }
+    params.props_id = formValues.id;
+    params.props_name = formValues.name;
+    params.cid = formValues.game;
 
     dispatch({
       type: 'gameprops/propsList',
@@ -128,10 +131,15 @@ class PropsList extends PureComponent {
       this.setState({
         formValues: values,
       });
-
+      let searchParam = {};
+      searchParam.currentPage = values.currentPage || 1;
+      searchParam.pageSize = values.currentPage || 10;
+      searchParam.props_id = values.id;
+      searchParam.props_name = values.name;
+      searchParam.cid = values.game;
       dispatch({
         type: 'gameprops/propsList',
-        payload: values,
+        payload: searchParam,
       });
     });
   };
