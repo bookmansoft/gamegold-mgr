@@ -15,6 +15,7 @@ export default {
   },
 
   effects: {
+    //从url中获取信息
     *fetch({ payload }, { call, put }) {
       const response=yield call(getGameFromUrl,payload);
       yield put({
@@ -22,15 +23,22 @@ export default {
         payload: response,
       });
     },
-
+    //保存整个表单的内容（到数据库及全节点）
     *add({ payload }, { call }) {
-      //console.log(payload);
       let ret=yield call(addGameMgr, payload);
       return ret;
     },
+
+
   },
 
   reducers: {
+    save(state, action) {
+      return {
+        ...state,
+        data: action.payload,
+      };
+    },
     saveStepFormData(state, { payload }) {
       return {
         ...state,

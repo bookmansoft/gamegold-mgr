@@ -34,11 +34,10 @@ const { TextArea } = Input;
 class GameAdd extends PureComponent {
   componentDidMount() {
     const { dispatch } = this.props;
-    console.log("36");
-    dispatch({
-      type: 'game/fetch',
-      payload: { cp_url: "http://localhost:9101/client/cp1.json" },//这里
-    });
+    // dispatch({
+    //   type: 'game/fetch',
+    //   payload: { cp_url: "http://localhost:9101/client/cp1.json" },//这里用于调试时使用
+    // });
 
   }
 
@@ -51,6 +50,7 @@ class GameAdd extends PureComponent {
     }
   }
 
+  //获取URL内容的操作
   handleSubmit = e => {
     const { dispatch, form } = this.props;
     e.preventDefault();
@@ -58,20 +58,40 @@ class GameAdd extends PureComponent {
       console.log(values);
       if (!err) {
         dispatch({
-          type: 'game/add',
+          type: 'game/fetch',
           payload: values,
         }).then((ret) => {
+          console.log("获取数据成功");
           console.log(ret);
-          if (ret.code === 0 && ret.data === null) {
-            router.push('/gamemgr/gameadderror');
-          } else {
-            router.push('/gamemgr/gameaddsuccess');
-          };
+          
+
         }
         );
       };
     });
   }
+  //旧版提交，准备作为第二次提交使用
+  // handleSubmit = e => {
+  //   const { dispatch, form } = this.props;
+  //   e.preventDefault();
+  //   form.validateFieldsAndScroll((err, values) => {
+  //     console.log(values);
+  //     if (!err) {
+  //       dispatch({
+  //         type: 'game/add',
+  //         payload: values,
+  //       }).then((ret) => {
+  //         console.log(ret);
+  //         if (ret.code === 0 && ret.data === null) {
+  //           router.push('/gamemgr/gameadderror');
+  //         } else {
+  //           router.push('/gamemgr/gameaddsuccess');
+  //         };
+  //       }
+  //       );
+  //     };
+  //   });
+  // }
   render() {
     const { submitting } = this.props;
     const {
@@ -121,6 +141,9 @@ class GameAdd extends PureComponent {
                   ],
                 })(<Input placeholder="请输入" />)}
               </FormItem>
+              <Button type="primary" htmlType="submit" loading={submitting}>
+                验证
+              </Button>
             </Row>
             <Row style={{ marginBottom: 32 }}>
               <FormItem {...formItemLayout} label="结算钱包地址">
@@ -189,7 +212,7 @@ class GameAdd extends PureComponent {
             </Row>
             <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
               <Button type="primary" htmlType="submit" loading={submitting}>
-                提交
+                提交(需修改)
               </Button>
               <Button style={{ marginLeft: 8 }} htmlType="reset">
                 取消
