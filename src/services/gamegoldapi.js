@@ -206,35 +206,35 @@ export async function addWalletPay(params) {
 
 /**
  *
- * 从链上获取游戏道具列表
+ * 从本地获取游戏道具列表
  * @export
  * @param {*} params
  * @returns
  */
 export async function getGamePropsList(params) {
-
   let msg = await remote.login({openid: `${Math.random()*1000000000 | 0}`});
   let result = {};
-  let pageSize = 10;
   if(remote.isSuccess(msg)) {
-    let page=  params.currentPage;
-  //所有的控制器都拥有echo方法
-      msg = await remote.fetching({func: "prop.List",items:[page]});
-      console.log(msg);
-      if(remote.isSuccess(msg)){
-        result = {
-          list: msg.data,
-          pagination: {
-            total: 1000,
-            pageSize,
-            current: page,
-          },
-        };
-        console.log(result);
-      }
+    
+    if (params==null) {
+      params={
+        currentPage:1,
+        pageSize:10,
+        props_id:'',
+        props_name:'',
+        cid:'',
+      };
+    };
+
+    result=await remote.fetching({func: "prop.LocalList",
+      currentPage:params.currentPage,
+      pageSize:params.pageSize,
+      props_id:typeof(params.props_id)=="undefined"?'':params.props_id,
+      props_name:typeof(params.props_name)=="undefined"?'':params.props_name,
+      cid:typeof(params.cid)=="undefined"?'':params.cid,
+    });
   }
   return result;
-
   //return request(`/api/gamepropslist?${stringify(params)}`);
 }
 
