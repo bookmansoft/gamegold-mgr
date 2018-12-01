@@ -60,13 +60,7 @@ class GameAdd extends PureComponent {
         dispatch({
           type: 'game/fetch',
           payload: values,
-        }).then((ret) => {
-          console.log("获取数据成功");
-          console.log(ret);
-          
-
-        }
-        );
+        });
       };
     });
   }
@@ -106,8 +100,8 @@ class GameAdd extends PureComponent {
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 12 },
-        md: { span: 10 },
+        sm: { span: 16 },
+        md: { span: 12 },
       },
     };
 
@@ -141,11 +135,6 @@ class GameAdd extends PureComponent {
                   ],
                 })(<Input placeholder="请输入" />)}
               </FormItem>
-              <Button type="primary" htmlType="submit" loading={submitting}>
-                验证
-              </Button>
-            </Row>
-            <Row style={{ marginBottom: 32 }}>
               <FormItem {...formItemLayout} label="结算钱包地址">
                 {getFieldDecorator('wallet_addr', {
                   rules: [
@@ -156,6 +145,9 @@ class GameAdd extends PureComponent {
                   ],
                 })(<Input placeholder="请输入" />)}
               </FormItem>
+              <Button type="primary" htmlType="submit" loading={submitting}>
+                验证
+              </Button>
             </Row>
             <br />
             <h2><b>基本信息预览</b></h2>
