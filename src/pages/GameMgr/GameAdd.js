@@ -40,6 +40,24 @@ class GameAdd extends PureComponent {
     // });
 
   }
+  //创建
+  handleCreate = () => {
+    const { dispatch, form } = this.props;
+    form.validateFieldsAndScroll((err, values) => {
+      dispatch({
+        type: 'game/add',
+        payload: values,
+      }).then((ret) => {
+        console.log(ret);
+        if (ret.code === 0 && ret.data === null) {
+          router.push('/gamemgr/gameadderror');
+        } else {
+          router.push('/gamemgr/gameaddsuccess');
+        };
+      }
+      );
+    });
+  };
 
   renderImg = (text) => {
     if (text && text.length) {
@@ -153,6 +171,10 @@ class GameAdd extends PureComponent {
             <h2><b>基本信息预览</b></h2>
             <br />
             <Row style={{ marginBottom: 32 }}>
+              <Col sm={8} xs={12}>游戏名称：{data.cp_text}</Col>
+              <Col sm={8} xs={12}>游戏简称：{data.cp_name}</Col>
+            </Row>
+            <Row style={{ marginBottom: 32 }}>
               <Col sm={8} xs={12}>
                 游戏类型：{data.cp_type}
               </Col>
@@ -203,11 +225,8 @@ class GameAdd extends PureComponent {
               </Col>
             </Row>
             <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
-              <Button type="primary" htmlType="submit" loading={submitting}>
-                提交(需修改)
-              </Button>
-              <Button style={{ marginLeft: 8 }} htmlType="reset">
-                取消
+              <Button type="primary" onClick={() => this.handleCreate()}>>
+                提交
               </Button>
             </FormItem>
           </Card>

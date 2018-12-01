@@ -86,6 +86,7 @@ export async function getGameFromUrl(params) {
     let data = await remote.fetching({ func: "cp.getGameFromUrl", cp_url: params.cp_url });
     console.log(data);
     //有数据
+    data.cp_url=params.cp_url;
     if (data.picture_url != null) {
       try {
         data.icon_url = JSON.parse(data.picture_url).icon_url;
