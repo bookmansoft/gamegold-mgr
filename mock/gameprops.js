@@ -219,12 +219,36 @@ function getGamePropsDetail(req, res, u) {
   };
   return res.json(detailDataSource);
 }
+function getCpPropsDetail(req, res, u) {
+  let url = u;
+  if (!url || Object.prototype.toString.call(url) !== '[object String]') {
+    url = req.url; // eslint-disable-line
+  }
+
+  const params = parse(url, true).query;
+  var myDate = new Date();
+  let type_cap = ["装备","消耗","装饰","其他"];
+  let cur = 1;
+  let i = params.id || 0;
+  let detailDataSource = {
+    pid: `xxxxxxxx-game-gold-boss-tokenxxx0004${i}`,
+    oid: `xxxxxxxx-game-gold-boss-tokenxxx0004${i}`,
+    name: `三级头盔 ${cur}-${i}`,
+    type: Math.floor(Math.random() * 10),
+    game: `xxxxxxxx-game-gold-boss-xxxxxxxxxxxx`,
+    desc: `这是${cur}-${i}的一段描述`,
+    iconImg: 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png',
+    moreImg: ['https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png','https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png','https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png','https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png']
+  };
+  return res.json(detailDataSource);
+}
 
 export default {
   'GET /api/gamepropslist': getGamePropsList,
   'GET /api/gamepropsdetail': getGamePropsDetail,
   'GET /api/allgame': getAllGame,
   'GET /api/gameprops': getPropsByGame,
+  'GET /api/getcppropsdetail': getCpPropsDetail,
   'GET /api/userall': getUserAll,
 };
 

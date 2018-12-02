@@ -10,17 +10,18 @@ import {
   Icon ,
   List,
   Col,
+  Modal,
 } from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import DescriptionList from '@/components/DescriptionList';
+import moment from 'moment';
+import router from 'umi/router';
 const FormItem = Form.Item;
 const { Description } = DescriptionList;
 const { Option } = Select;
+const confirm = Modal.confirm;
 @connect(({ gameprops }) => ({
   gameprops
-}))
-@connect(({ loading }) => ({
-  submitting: loading.effects['form/submitRegularForm'],
 }))
 
 @Form.create()
@@ -39,9 +40,66 @@ class PropsCreate extends PureComponent {
   }
 
   handleSubmit = e => {
-    console.log(this.state);
-    const { dispatch } = this.props;
     e.preventDefault();
+
+    const { gameprops: { cpPropsDetail } ,dispatch} = this.props;
+    if(cpPropsDetail == null || typeof cpPropsDetail == 'undefined' || cpPropsDetail.length == 0){
+      Modal.error({
+        title: '错误',
+        content: '请选择游戏以及道具！',
+      });
+      return ;
+    }
+    //TODO 请求一次CP信息
+    let param = {};
+    param.props_name = cpPropsDetail.name;
+    param.props_type = cpPropsDetail.type;
+    param.cid = cpPropsDetail.game;
+    param.props_desc = cpPropsDetail.desc;
+    param.icon_url = cpPropsDetail.iconImg;
+    param.icon_preview = cpPropsDetail.moreImg;
+    param.pid = cpPropsDetail.pid;
+    param.oid = cpPropsDetail.oid;
+    param.oper = '';
+    param.prev = '';
+    param.current = '';
+    param.gold = 0;
+    param.status = 0;
+    param.stock = 0;
+    param.pro_num = 0;
+    param.cp = '';
+    param.createdAt = moment().format('YYYY-MM-DD HH:mm:ss');
+    param.updatedAt = moment().format('YYYY-MM-DD HH:mm:ss');
+    //本地道具创建
+    dispatch({
+      type: 'gameprops/createproplocal',
+      payload:param,
+    }).then((ret) => {
+      console.log(ret);
+
+      if (ret.code == 0) {
+          confirm({
+            title: '创建成功',
+            content: '道具创建成功，您可以前往道具列表查看！',
+            okText: '返回列表',
+            okType: 'primary',
+            cancelText: '查看详情',
+            cancelType: 'primary',
+            onOk() {
+              router.push('/gameprops/list');
+            },
+            onCancel() {
+              router.push(`/gameprops/detail/${ret.data}`);
+            },
+          });
+      } else {
+
+        Modal.error({
+          title: '错误',
+          content: '道具创建失败，请重试！',
+        });
+          
+     }; 
     //调用道具上链
    /*  dispatch({
       type: 'gameprops/createpropremote',
@@ -58,9 +116,7 @@ class PropsCreate extends PureComponent {
         router.push('/gamemgr/gameaddsuccess');
      };
     } */
-
-    //本地道具创建
-    
+  });
   };
   handleGameChange = (value) => {
     const { dispatch } = this.props;
@@ -89,13 +145,13 @@ class PropsCreate extends PureComponent {
     });
   };
   
-  //道具预览
+  //道具预览 请求游戏厂商
   previewProp = () => {
     const { dispatch } = this.props;
     let curPropsId = this.state.gamePropsId;
     if(curPropsId > 0){
       dispatch({
-        type: 'gameprops/propsDetail',
+        type: 'gameprops/cpPropsDetail',
         payload: {
           id:curPropsId
         },
@@ -105,11 +161,7 @@ class PropsCreate extends PureComponent {
  
 
   render() {
-    const { gameprops: { gameList,gamePropsList,propsDetail },submitting } = this.props;
-    this.setState({
-      statePropsDetail:propsDetail
-    })
-    console.log(propsDetail);
+    const { gameprops: { gameList,gamePropsList,cpPropsDetail },submitting } = this.props;
     const {
       form: { getFieldDecorator, getFieldValue },
     } = this.props;
@@ -184,7 +236,7 @@ class PropsCreate extends PureComponent {
                     setFieldsValue={0}
                     onChange={this.handleGameChange}
                   >
-                    {gameList.map(game => <Option key={game.id}>{game.cp_name}</Option>)}
+                    {gameList.map(game => <Option key={game.id}>{game.cp_text}</Option>)}
                   </Select>
 
                 )}
@@ -220,20 +272,20 @@ class PropsCreate extends PureComponent {
 
         <Card bordered={false} headStyle={{fontWeight:600}} title="道具信息">
           <DescriptionList size="large" style={{ marginBottom: 32 }}>
-            <Description term="道具ID">{propsDetail.id || ''}</Description>
-            <Description term="道具名称">{propsDetail.name || ''}</Description>
-            <Description term="道具类型">{propsDetail.type || ''}</Description>
-            <Description term="所属游戏">{propsDetail.game || ''}</Description>
-            <Description term="游戏简介">{propsDetail.desc || ''}</Description>
+            <Description term="道具ID">{cpPropsDetail.id || ''}</Description>
+            <Description term="道具名称">{cpPropsDetail.name || ''}</Description>
+            <Description term="道具类型">{cpPropsDetail.type || ''}</Description>
+            <Description term="所属游戏">{cpPropsDetail.game || ''}</Description>
+            <Description term="游戏简介">{cpPropsDetail.desc || ''}</Description>
           </DescriptionList>
           <DescriptionList size="large" style={{ borderTop: '1px solid #ddd',marginTop: 32}}>
             <Description term="道具图标">
-              <img width={120} src={propsDetail.iconImg || ''} />
+              <img width={120} src={cpPropsDetail.iconImg || ''} />
             </Description>
             <Description term="道具说明图">
               <List
                 grid={{ gutter: 24, lg: 3, md: 2, sm: 1, xs: 1 }}
-                dataSource={propsDetail.moreImg || ''}
+                dataSource={cpPropsDetail.moreImg || ''}
                 renderItem={item =>
                   <List.Item>
                     <img width={120} src={item}/>

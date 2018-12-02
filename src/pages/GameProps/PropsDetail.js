@@ -65,8 +65,8 @@ class PropsDetail extends PureComponent {
         <PageHeaderWrapper title={detail.name}>
         <Card bordered={false} headStyle={{fontWeight:600}} title="生产信息"  extra={this.mainButton()}>
           <DescriptionList size="large" style={{ marginBottom: 32 }}>
-            <Description term="生产总量">{detail.num}</Description>
-            <Description term="已上架出售/赠送">{detail.unstock}</Description>
+            <Description term="生产总量">{detail.pro_num}</Description>
+            <Description term="已上架出售/赠送">{detail.pro_num - detail.stock}</Description>
             <Description term="剩余库存">{detail.stock}</Description>
             <Description term="最后生产时间">{moment(detail.updatedAt).format('YYYY-MM-DD HH:mm')}</Description>
           </DescriptionList>
@@ -77,7 +77,7 @@ class PropsDetail extends PureComponent {
             <Description term="道具名称">{detail.props_name}</Description>
             <Description term="道具类型">{detail.props_type}</Description>
             <Description term="所属游戏">{detail.pid}</Description>
-            <Description term="创建时间">{moment(detail.updatedAt).format('YYYY-MM-DD HH:mm')}</Description>
+            <Description term="创建时间">{moment(detail.createdAt).format('YYYY-MM-DD HH:mm')}</Description>
             <Description term="道具简介">{detail.props_desc}</Description>
             <Description term="道具图标">
               <img width={120} src={detail.icon_url} />

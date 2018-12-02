@@ -250,6 +250,42 @@ export async function getGamePropsList(params) {
   //return request(`/api/gamepropslist?${stringify(params)}`);
 }
 
+export async function CreatePropLocal(params) {
+  console.log('道具本地创建请求开始');
+  console.log(params);
+  console.log('道具本地创建请求结束');
+  let msg = await remote.login({ openid: `${Math.random() * 1000000000 | 0}` });
+  if (remote.isSuccess(msg)) {
+    let res = await remote.fetching({ func: "prop.CreateLocal", 
+  
+    props_name:params.props_name,
+    props_type:params.props_type,
+    cid:params.cid,
+    props_desc:params.props_desc,
+    icon_url: params.icon_url,
+    icon_preview:params.icon_preview,
+    pid:params.pid,
+    oid:params.oid,
+    oper:params.oper,
+    prev:params.prev,
+    current:params.current,
+    gold:params.gold,
+    status:params.status,
+    cp:params.cp,
+    stock :params.stock,
+    pro_num :params.pro_num,
+    createdAt :params.createdAt,
+    updatedAt :params.updatedAt
+    });
+    if (remote.isSuccess(res)) {
+      return res;
+    } else {
+      return {};
+    }
+  }
+  return {};
+  //return request(`/api/gamepropsdetail?${stringify(params)}`);
+}
 export async function CreatePropRemote(params) {
   console.log('道具上链请求开始');
   console.log(params);
@@ -271,7 +307,7 @@ export async function getGamePropsDetail(params) {
   //本地库直接读取详情
   let msg = await remote.login({ openid: `${Math.random() * 1000000000 | 0}` });
   if (remote.isSuccess(msg)) {
-    let res = await remote.fetching({ func: "prop.LocalDetail", id: 1 });
+    let res = await remote.fetching({ func: "prop.LocalDetail", id:params.id });
     if (remote.isSuccess(res)) {
       return res;
     } else {
@@ -280,6 +316,11 @@ export async function getGamePropsDetail(params) {
   }
   return [];
   //return request(`/api/gamepropsdetail?${stringify(params)}`);
+}
+
+export async function getCpPropsDetail(params) {
+  //游戏接口获取道具详情
+  return request(`/api/getcppropsdetail?${stringify(params)}`);
 }
 
 export async function getPropsByGame(params) {
