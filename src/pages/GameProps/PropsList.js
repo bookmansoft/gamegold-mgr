@@ -44,26 +44,27 @@ class PropsList extends PureComponent {
       title: '所属游戏',
       dataIndex: 'cp',
       render(val) {
-        return val;
+       // val = eval('(' + val + ')');
+        return val.name;
       },
     },
     {
       title: '制作总量',
-      dataIndex: 'gold',
+      dataIndex: 'pro_num',
     },
     {
       title: '库存数量',
-      dataIndex: 'status',
+      dataIndex: 'stock',
     },
     {
       title: '操作',
       render: (e, record) => (
         <Fragment>
-          <Link to={`/gameprops/detail/${record.pid}`}>详情</Link>
+          <Link to={`/gameprops/detail/${record.id}`}>详情</Link>
           <Divider type="vertical" />
-          <Link to={`/gameprops/produce/${record.pid}`}>生产</Link>
+          <Link to={`/gameprops/produce/${record.id}`}>生产</Link>
           <Divider type="vertical" />
-          <Link to={`/gameprops/present/${record.pid}`}>赠送</Link>
+          <Link to={`/gameprops/present/${record.id}`}>赠送</Link>
           <Divider type="vertical" />
           <a onClick={e => {
             e.preventDefault();
