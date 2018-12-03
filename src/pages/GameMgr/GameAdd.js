@@ -41,22 +41,21 @@ class GameAdd extends PureComponent {
 
   }
   //创建
-  handleCreate = () => {
+  handleCreate = (theData) => {
     const { dispatch, form } = this.props;
-    form.validateFieldsAndScroll((err, values) => {
-      dispatch({
-        type: 'game/add',
-        payload: values,
-      }).then((ret) => {
-        console.log(ret);
-        if (ret.code === 0 && ret.data === null) {
-          router.push('/gamemgr/gameadderror');
-        } else {
-          router.push('/gamemgr/gameaddsuccess');
-        };
-      }
-      );
-    });
+    console.log(theData);
+    dispatch({
+      type: 'game/add',
+      payload: theData,
+    }).then((ret) => {
+      console.log(ret);
+      if (ret.code === 0 && ret.data === null) {
+        router.push('/gamemgr/gameadderror');
+      } else {
+        router.push('/gamemgr/gameaddsuccess');
+      };
+    }
+    );
   };
 
   renderImg = (text) => {
@@ -225,7 +224,7 @@ class GameAdd extends PureComponent {
               </Col>
             </Row>
             <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
-              <Button type="primary" onClick={() => this.handleCreate()}>>
+              <Button type="primary" onClick={() => this.handleCreate(this.props.game.data)}>
                 提交
               </Button>
             </FormItem>

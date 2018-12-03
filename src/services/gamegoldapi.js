@@ -114,6 +114,7 @@ export async function getGameView(params) {
       return {};
     }
     else {
+      console.log(ret.data);
       //有数据
       if (ret.data.picture_url != null) {
         try {
