@@ -288,7 +288,13 @@ export async function getGamePropsList(params) {
   return result;
   //return request(`/api/gamepropslist?${stringify(params)}`);
 }
-
+/**
+ *
+ * 本地创建游戏道具
+ * @export
+ * @param {*} params
+ * @returns
+ */
 export async function CreatePropLocal(params) {
   console.log('道具本地创建请求开始');
   console.log(params);
@@ -326,6 +332,14 @@ export async function CreatePropLocal(params) {
   return {};
   //return request(`/api/gamepropsdetail?${stringify(params)}`);
 }
+
+/**
+ *
+ * 游戏道具上链
+ * @export
+ * @param {*} params
+ * @returns
+ */
 export async function CreatePropRemote(params) {
   console.log('道具上链请求开始');
   console.log(params);
@@ -343,6 +357,14 @@ export async function CreatePropRemote(params) {
   //return request(`/api/gamepropsdetail?${stringify(params)}`);
 }
 
+/**
+ *
+ * 本地库获取游戏道具的详情
+ * @export
+ * @param {*} params
+ * @returns
+ */
+
 export async function getGamePropsDetail(params) {
   //本地库直接读取详情
   let msg = await remote.login({ openid: `${Math.random() * 1000000000 | 0}` });
@@ -358,16 +380,37 @@ export async function getGamePropsDetail(params) {
   //return request(`/api/gamepropsdetail?${stringify(params)}`);
 }
 
+/**
+ * 游戏接口获取道具详情
+ * @export
+ * @param {*} params
+ * @returns
+ */
 export async function getCpPropsDetail(params) {
-  //游戏接口获取道具详情
   return request(`/api/getcppropsdetail?${stringify(params)}`);
 }
 
+
+/**
+ *
+ * 游戏厂商获取所有游戏道具
+ * @export
+ * @param {*} params
+ * @returns
+ */
+
 export async function getPropsByGame(params) {
-  //游戏厂商获取所有游戏道具
   return request(`/api/gameprops?${stringify(params)}`);
 }
 
+
+/**
+ *
+ * 本地库获取游戏所有列表
+ * @export
+ * @param {*} params
+ * @returns
+ */
 export async function getAllGameList(params) {
   let msg = await remote.login({ openid: theOpenId });
   let ret = [];

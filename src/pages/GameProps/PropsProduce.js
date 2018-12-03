@@ -68,13 +68,11 @@ class PropsProduce extends PureComponent {
 
 
   render() {
-    const { submitting } = this.props;
+    const { gameprops: { gameList,gamePropsList },submitting } = this.props;
     const { game } = this.state;
     const {
       form: { getFieldDecorator, getFieldValue },
     } = this.props;
-    const gameList = this.props.gameprops.gameList;
-    const gamePropsList = this.props.gameprops.gamePropsList;
 
     const formItemLayout = {
       labelCol: {
@@ -113,7 +111,7 @@ class PropsProduce extends PureComponent {
                       onChange={this.handleGameChange}
                       labelInValue ={true}
                     >
-                      {gameList.map(game => <Option key={game.id}>{game.name}</Option>)}
+                     {gameList.map(game => <Option key={game.id}>{game.cp_text}</Option>)}
                     </Select>
                   )}
                 </FormItem>
@@ -124,7 +122,7 @@ class PropsProduce extends PureComponent {
                     rules: [
                       {
                         required: true,
-                        message: "请选择装备",
+                        message: "请选择道具",
                       },
                     ],
                   })(
