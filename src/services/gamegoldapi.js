@@ -60,13 +60,50 @@ export async function queryGameMgr(params) {
 
 }
 //--添加新游戏
+// 步骤：
+// 首先调用在链上创建的语句
+// 如果成功，则调用数据库的插入方法
+// 实际调试中，可以先验证插入方法的调用
 export async function addGameMgr(params) {
   let msg = await remote.login({ openid: theOpenId });
   let ret = {};
+
+  // 调用保存记录的方法
   if (remote.isSuccess(msg)) {
+    //先调用链上的保存方法
     console.log("添加新游戏:" + JSON.stringify(params));
-    ret = await remote.fetching({ func: "cp.Create", items: [params.gameName, params.gameUrl] });
+    ret = await remote.fetching({ func: "cp.Create", items: [params.cp_name, params.cp_url] });
+    //判断返回值是否正确
+    console.log(ret);
+    if (ret.code!=0 || ret.data==null) {
+      return {code:-1,msg:"调用区块链创建游戏失败！"};
+    }
+    let cp_id=ret.data.cid;//返回的cpid值
+    console.log("调用保存记录的方法:" + JSON.stringify(params));
+    let msg = await remote.fetching({
+      func: "cp.CreateRecord",
+      cp_id: cp_id,
+      cp_name: params.cp_name,
+      cp_text: params.cp_text,
+      cp_url: params.cp_url,
+      wallet_addr: params.wallet_addr,
+      cp_type: params.cp_type,
+      develop_name: params.develop_name,
+      cp_desc: params.cp_desc,
+      cp_version: params.cp_version,
+      picture_url: params.picture_url,
+      cp_state: 1,
+      publish_time: params.publish_time,
+      audit_time: params.audit_time,
+      online_time: params.online_time,
+      offline_time: params.offline_time,
+    });
   }
+  console.log("ok 92!");
+
+
+
+
   console.log("添加新游戏结果：" + JSON.stringify(ret));
   return ret;
   // return request('/gamemgr/add', {
@@ -86,7 +123,8 @@ export async function getGameFromUrl(params) {
     let data = await remote.fetching({ func: "cp.getGameFromUrl", cp_url: params.cp_url });
     console.log(data);
     //有数据
-    data.cp_url=params.cp_url;
+    data.wallet_addr = params.wallet_addr;
+    data.cp_url = params.cp_url;
     if (data.picture_url != null) {
       try {
         data.icon_url = JSON.parse(data.picture_url).icon_url;
@@ -257,26 +295,27 @@ export async function CreatePropLocal(params) {
   console.log('道具本地创建请求结束');
   let msg = await remote.login({ openid: `${Math.random() * 1000000000 | 0}` });
   if (remote.isSuccess(msg)) {
-    let res = await remote.fetching({ func: "prop.CreateLocal", 
-  
-    props_name:params.props_name,
-    props_type:params.props_type,
-    cid:params.cid,
-    props_desc:params.props_desc,
-    icon_url: params.icon_url,
-    icon_preview:params.icon_preview,
-    pid:params.pid,
-    oid:params.oid,
-    oper:params.oper,
-    prev:params.prev,
-    current:params.current,
-    gold:params.gold,
-    status:params.status,
-    cp:params.cp,
-    stock :params.stock,
-    pro_num :params.pro_num,
-    createdAt :params.createdAt,
-    updatedAt :params.updatedAt
+    let res = await remote.fetching({
+      func: "prop.CreateLocal",
+
+      props_name: params.props_name,
+      props_type: params.props_type,
+      cid: params.cid,
+      props_desc: params.props_desc,
+      icon_url: params.icon_url,
+      icon_preview: params.icon_preview,
+      pid: params.pid,
+      oid: params.oid,
+      oper: params.oper,
+      prev: params.prev,
+      current: params.current,
+      gold: params.gold,
+      status: params.status,
+      cp: params.cp,
+      stock: params.stock,
+      pro_num: params.pro_num,
+      createdAt: params.createdAt,
+      updatedAt: params.updatedAt
     });
     if (remote.isSuccess(res)) {
       return res;
@@ -308,7 +347,7 @@ export async function getGamePropsDetail(params) {
   //本地库直接读取详情
   let msg = await remote.login({ openid: `${Math.random() * 1000000000 | 0}` });
   if (remote.isSuccess(msg)) {
-    let res = await remote.fetching({ func: "prop.LocalDetail", id:params.id });
+    let res = await remote.fetching({ func: "prop.LocalDetail", id: params.id });
     if (remote.isSuccess(res)) {
       return res;
     } else {
