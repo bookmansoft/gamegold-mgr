@@ -54,23 +54,25 @@ class OperatorList extends PureComponent {
 
   columns = [
     {
-      title: '用户钱包地址',
-      dataIndex: 'name',
+      title: '登录名',
+      dataIndex: 'login_name',
     },
     {
-      title: '玩过的游戏类型',
-      dataIndex: 'desc',
+      title: 'CID',
+      dataIndex: 'cid',
     },
     {
-      title: '注册时间',
-      dataIndex: 'updatedAt',
-      render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
+      title: '备注',
+      dataIndex: 'remark',
     },
     {
       title: '操作',
       render: (text, record) => (
         <Fragment>
-          <a onClick={() => this.handleDeal(true, record)}>赠送</a>
+          <a onClick={() => this.handleDeal(true, record)}>
+          {(record.state==1) && "禁用"}
+          {(record.state==0) &&"启用"}
+          </a>
         </Fragment>
       ),
     },
@@ -160,25 +162,12 @@ class OperatorList extends PureComponent {
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 16, lg: 24, xl: 48 }}>
-          <Col md={16} sm={24}>
-            <FormItem label="搜索钱包地址：">
-              {getFieldDecorator('name')(<Input placeholder="请输入" />)}
+          <Col md={12} sm={24}>
+            <FormItem label="操作员登录名：">
+              {getFieldDecorator('login_name')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
-          <Col md={8} sm={24} />
-          <Col md={16} sm={24}>
-            <FormItem label="选择游戏类型：">
-              {getFieldDecorator('status')(
-                <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="0">全部</Option>
-                  <Option value="1">休闲益智</Option>
-                  <Option value="2">角色扮演</Option>
-                  <Option value="3">战争策略</Option>
-                </Select>
-              )}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
+          <Col md={12} sm={24}>
             <span className={styles.submitButtons}>
               <Button type="primary" htmlType="submit">
                 搜索
@@ -201,7 +190,7 @@ class OperatorList extends PureComponent {
     const { selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;
 
     return (
-      <PageHeaderWrapper title="用户列表">
+      <PageHeaderWrapper title="操作员列表">
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderForm()}</div>
