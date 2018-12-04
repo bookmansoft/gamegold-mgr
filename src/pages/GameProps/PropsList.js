@@ -152,7 +152,7 @@ class PropsList extends PureComponent {
     });
     dispatch({
       type: 'gameprops/propsList',
-      payload: {},
+      payload: {currentPage:1, pageSize: 10},
     });
   };
   handleGamePropsCreate = () => {
