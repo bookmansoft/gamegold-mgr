@@ -27,8 +27,8 @@ const confirm = Modal.confirm;
 @Form.create()
 class PropsCreate extends PureComponent {
   state = {
-    gameId: 0,
-    gamePropsId: 0,
+    cid: '',
+    pid: '',
     propsSearchList:[],
     statePropsDetail:{},
   }
@@ -54,7 +54,7 @@ class PropsCreate extends PureComponent {
     let param = {};
     param.props_name = cpPropsDetail.name;
     param.props_type = cpPropsDetail.type;
-    param.cid = cpPropsDetail.game;
+    param.cid = this.state.cid;
     param.props_desc = cpPropsDetail.desc;
     param.icon_url = cpPropsDetail.iconImg;
     param.icon_preview = cpPropsDetail.moreImg;
@@ -64,7 +64,7 @@ class PropsCreate extends PureComponent {
     param.prev = '';
     param.current = '';
     param.gold = 0;
-    param.status = 0;
+    param.status = 1;
     param.stock = 0;
     param.pro_num = 0;
     param.cp = '';
@@ -121,11 +121,14 @@ class PropsCreate extends PureComponent {
   handleGameChange = (value) => {
     const { dispatch } = this.props;
     //获取游戏对应的道具列表
-    console.log('选择游戏ID：'+ value);
-    if(value > 0){
-      
+    //option key唯一用id|cp_id格式
+    if(typeof value != 'undefined' && value != ''){
+      let cid_arr = value.split('|');
+      let cid= cid_arr[1] || '';
+    console.log('选择游戏cid：'+ cid);
+
       this.setState({
-        gameId: value,
+        cid: cid,
       });
       dispatch({
         type: 'gameprops/getPropsByGame',
@@ -141,14 +144,14 @@ class PropsCreate extends PureComponent {
   onPropsChange = (value) => {
     console.log('选择装备ID：'+ value);
     this.setState({
-      gamePropsId: value,
+      pid: value,
     });
   };
   
   //道具预览 请求游戏厂商
   previewProp = () => {
     const { dispatch } = this.props;
-    let curPropsId = this.state.gamePropsId;
+    let curPropsId = this.state.pid;
     if(curPropsId > 0){
       dispatch({
         type: 'gameprops/cpPropsDetail',
@@ -236,7 +239,7 @@ class PropsCreate extends PureComponent {
                     setFieldsValue={0}
                     onChange={this.handleGameChange}
                   >
-                    {gameList.map(game => <Option key={game.id}>{game.cp_text}</Option>)}
+                    {gameList.map(game => <Option key={game.id+'|'+game.cp_id}>{game.cp_text}</Option>)}
                   </Select>
 
                 )}
@@ -275,7 +278,7 @@ class PropsCreate extends PureComponent {
             <Description term="道具OID">{cpPropsDetail.oid || ''}</Description>
             <Description term="道具名称">{cpPropsDetail.name || ''}</Description>
             <Description term="道具类型">{cpPropsDetail.type || ''}</Description>
-            <Description term="所属游戏">{cpPropsDetail.game || ''}</Description>
+            <Description term="所属游戏">{this.state.cid || ''}</Description>
             <Description term="游戏简介">{cpPropsDetail.desc || ''}</Description>
           </DescriptionList>
           <DescriptionList size="large" style={{ borderTop: '1px solid #ddd',marginTop: 32}}>

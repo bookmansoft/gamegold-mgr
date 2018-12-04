@@ -1,4 +1,4 @@
-import { getGamePropsList, getGamePropsDetail,getCpPropsDetail, getPropsByGame , getAllGameList , getUserAll ,CreatePropLocal,CreatePropRemote} from '@/services/gamegoldapi';
+import { getGamePropsList, getGamePropsDetail,getCpPropsDetail, getPropsByGame , getAllGameList , getUserAll ,CreatePropLocal,CreatePropRemote,getAllPropsByParams} from '@/services/gamegoldapi';
 
 export default {
   namespace: 'gameprops',
@@ -15,6 +15,7 @@ export default {
       list: [],
       pagination: {},
     },
+    propByParams:[]
   },
 
   effects: {
@@ -51,6 +52,13 @@ export default {
       yield put({
         type: 'gameAllGameList',
         gameList: response,
+      });
+    },
+    *getAllPropsByParams({ payload }, { call, put }) {
+      const response = yield call(getAllPropsByParams, payload);
+      yield put({
+        type: 'propsByParams',
+        propByParams: response,
       });
     },
     *getAllUser({ payload }, { call, put }) {
@@ -99,6 +107,12 @@ export default {
       return {
         ...state,
         gameList: gameList
+      };
+    },
+    propsByParams(state, { propByParams }) {
+      return {
+        ...state,
+        propByParams: propByParams
       };
     },
     gameUserAll(state, {userAll} ) {

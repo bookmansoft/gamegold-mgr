@@ -148,7 +148,7 @@ class PropsPresent extends PureComponent {
                     onChange={this.handleGameChange}
                     labelInValue ={true}
                   >
-                    {gameList.map(game => <Option key={game.id}>{game.name}</Option>)}
+                   {gameList.map(game => <Option key={game.id+'|'+game.cp_id}>{game.cp_text}</Option>)}
                   </Select>
                   )}
                 </FormItem>

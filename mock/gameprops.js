@@ -179,11 +179,11 @@ function getPropsByGame(req, res, u) {
   var myDate = new Date();
   let gameProps = [];
   let type_cap = ["装备","消耗","装饰","其他"];
-  for (let i = 1; i < 10; i++) {
+  for (let i = 1; i < 5; i++) {
     gameProps.push({
       id: `${i}`,
-      gameId: gameId,
-      name: `游戏ID：${gameId}-`+type_cap[Math.floor(Math.random()*type_cap.length)],
+      oid: 'xxxxxxxx-game-gold-boss-tokenxxx00042',
+      name: `游戏道具`+type_cap[Math.floor(Math.random()*type_cap.length)],
     });
   }
   return res.json(gameProps);
@@ -234,7 +234,6 @@ function getCpPropsDetail(req, res, u) {
     oid: `xxxxxxxx-game-gold-boss-tokenxxx00042`,
     name: type_cap[Math.floor(Math.random()*type_cap.length)],
     type: Math.floor(Math.random() * 10),
-    game: `8993ee70-f783-11e8-b7aa-b7ccf462e0a1`,
     desc: `这是${cur}-${i}的一段描述`,
     iconImg: 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png',
     moreImg: ['https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png','https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png','https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png','https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png']

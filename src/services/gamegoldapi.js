@@ -285,19 +285,21 @@ export async function getGamePropsList(params) {
       params = {
         currentPage: 1,
         pageSize: 10,
-        props_id: '',
+        pid: '',
         props_name: '',
         cid: '',
       };
     };
-
+    let cid = typeof (params.cid) == "undefined" ? '' : params.cid;
+    let cid_arr = cid.split('|');
+    cid= cid_arr[1] || '';
     result = await remote.fetching({
       func: "prop.LocalList",
       currentPage: params.currentPage,
       pageSize: params.pageSize,
-      props_id: typeof (params.props_id) == "undefined" ? '' : params.props_id,
-      props_name: typeof (params.props_name) == "undefined" ? '' : params.props_name,
-      cid: typeof (params.cid) == "undefined" ? '' : params.cid,
+      pid: typeof (params.pid) == "undefined" ? '' : params.pid,
+      props_name:typeof (params.props_name) == "undefined" ? '' : params.props_name,
+      cid: cid,
     });
   }
   return result;
@@ -423,22 +425,42 @@ export async function getPropsByGame(params) {
  *
  * 本地库获取游戏所有列表
  * @export
- * @param {*} params
  * @returns
  */
-export async function getAllGameList(params) {
+export async function getAllGameList() {
   let msg = await remote.login({ openid: theOpenId });
   let ret = [];
   if (remote.isSuccess(msg)) {
     let res = await remote.fetching({ func: "cp.ListAllRecord" });
-    console.log(res);
     if (remote.isSuccess(res)) {
       for (let i in res['data']) {
         ret.push(res['data'][i]); //属性
       }
     }
   }
-  console.log(JSON.stringify(ret));
+  return ret;
+  //return request(`/api/allgame?${stringify(params)}`);
+}
+/**
+ *
+ * 本地库获取道具根据游戏和状态
+ * @export
+ * @param {*} params
+ * @returns
+ */
+export async function getAllPropsByParams(params) {
+  let msg = await remote.login({ openid: theOpenId });
+  let ret = [];
+  if (remote.isSuccess(msg)) {
+    let res = await remote.fetching({ func: "prop.getAllPropsByParams",
+    cid: typeof (params.cid) == "undefined" ? '' : params.cid,
+    status:typeof (params.status) == "undefined" ? '' : params.status});
+    if (remote.isSuccess(res)) {
+      for (let i in res['data']) {
+        ret.push(res['data'][i]); //属性
+      }
+    }
+  }
   return ret;
   //return request(`/api/allgame?${stringify(params)}`);
 }

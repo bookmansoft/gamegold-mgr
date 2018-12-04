@@ -7,7 +7,7 @@ import { FormattedMessage } from 'umi/locale';
 import Link from 'umi/link';
 import router from 'umi/router';
 import moment from 'moment';
-
+const { Option } = Select;
 const FormItem = Form.Item;
 @connect(({ gameprops, loading }) => ({
   gameprops,
@@ -58,20 +58,35 @@ class PropsList extends PureComponent {
     },
     {
       title: '操作',
-      render: (e, record) => (
-        <Fragment>
-          <Link to={`/gameprops/detail/${record.id}`}>详情</Link>
-          <Divider type="vertical" />
-          <Link to={`/gameprops/produce/${record.id}`}>生产</Link>
-          <Divider type="vertical" />
-          <Link to={`/gameprops/present/${record.id}`}>赠送</Link>
-          <Divider type="vertical" />
-          <a onClick={e => {
-            e.preventDefault();
-            this.showOnsaleModal(record);
-          }}>上架</a>
-        </Fragment>
-      ),
+      render: (e, record) => {
+        console.log(record);
+        if(record.status == 0){
+          return (
+            <Fragment>
+              <Link to={`/gameprops/detail/${record.id}`}>详情</Link>
+              <Divider type="vertical" />
+              <Link to={`/gameprops/produce/${record.id}`}>生产</Link>
+              <Divider type="vertical" />
+            </Fragment>
+          );
+        }else{
+          return (
+            <Fragment>
+              <Link to={`/gameprops/detail/${record.id}`}>详情</Link>
+              <Divider type="vertical" />
+              <Link to={`/gameprops/produce/${record.id}`}>生产</Link>
+              <Divider type="vertical" />
+              <Link to={`/gameprops/present/${record.id}`}>赠送</Link>
+              <Divider type="vertical" />
+              <a onClick={e => {
+                e.preventDefault();
+                this.showOnsaleModal(record);
+              }}>上架</a>
+            </Fragment>
+          );
+        }
+        
+      }
     },
   ];
   formLayout = {
@@ -80,6 +95,9 @@ class PropsList extends PureComponent {
   };
   componentDidMount() {
     const { dispatch } = this.props;
+    dispatch({
+      type: 'gameprops/getAllGameList',
+    });
     dispatch({
       type: 'gameprops/propsList',
       payload: {currentPage:1, pageSize: 10},
@@ -108,7 +126,7 @@ class PropsList extends PureComponent {
     if (sorter.field) {
       params.sorter = `${sorter.field}_${sorter.order}`;
     }
-    params.props_id = formValues.id;
+    params.pid = formValues.pid;
     params.props_name = formValues.name;
     params.cid = formValues.game;
 
@@ -135,7 +153,7 @@ class PropsList extends PureComponent {
       let searchParam = {};
       searchParam.currentPage = values.currentPage || 1;
       searchParam.pageSize = values.currentPage || 10;
-      searchParam.props_id = values.id;
+      searchParam.pid = values.pid;
       searchParam.props_name = values.name;
       searchParam.cid = values.game;
       dispatch({
@@ -190,6 +208,7 @@ class PropsList extends PureComponent {
   };
   renderSimpleForm() {
     const {
+      gameprops: { gameList},
       form: { getFieldDecorator },
       } = this.props;
     return (
@@ -197,7 +216,7 @@ class PropsList extends PureComponent {
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={4} sm={24}>
             <FormItem label="ID">
-              {getFieldDecorator('id')(<Input placeholder="请输入" />)}
+              {getFieldDecorator('pid')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
@@ -208,13 +227,13 @@ class PropsList extends PureComponent {
           <Col md={6} sm={24}>
             <FormItem label="所在游戏">
               {getFieldDecorator('game')(
-                <Select placeholder="请选择" style={{width:"200px"}}>
-                  <Option value="0">游戏A</Option>
-                  <Option value="1">游戏B</Option>
-                  <Option value="2">游戏C</Option>
-                  <Option value="3">游戏D</Option>
-                  <Option value="4">游戏E</Option>
+                  <Select
+                  setFieldsValue={0}
+                  style={{width:"200px"}}
+                >
+                  {gameList.map(game => <Option key={game.id+'|'+game.cp_id}>{game.cp_text}</Option>)}
                 </Select>
+
               )}
             </FormItem>
           </Col>

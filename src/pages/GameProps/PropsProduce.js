@@ -52,24 +52,30 @@ class PropsProduce extends PureComponent {
   handleGameChange = (value) => {
     const {dispatch } = this.props;
     //获取已经创建的本地道具库，未生产
-    dispatch({
-      type: 'gameprops/getPropsByGame',
-      payload: {id:value.key, name:value.label}
-    });
+
+    if(typeof value.key != 'undefined' && value.key != ''){
+      let cid_str = value.key;
+      let cid_arr = cid_str.split('|');
+      let cid= cid_arr[1] || '';
+      dispatch({
+        type: 'gameprops/getAllPropsByParams',
+        payload: {cid:cid, status:1}
+      });
+    }
+    
   };
   onPropsChange = (value) => {
     const { form } = this.props;
-    let curGamePropsList = this.props.gameprops.gamePropsList;
+    let curpropByParams = this.props.gameprops.propByParams;
     //根据id筛选当前选中的option 取其库存
-    let selectCur = curGamePropsList.filter(val => val.id === value);
-    form.setFieldsValue({
-      propsNum: selectCur[0].stock || 0,
-    });
+    let selectCur = curpropByParams.filter(val => val.id == value);
+    console.log(selectCur);
+    
   };
 
 
   render() {
-    const { gameprops: { gameList,gamePropsList },submitting } = this.props;
+    const { gameprops: { gameList,propByParams },submitting } = this.props;
     const { game } = this.state;
     const {
       form: { getFieldDecorator, getFieldValue },
@@ -112,7 +118,7 @@ class PropsProduce extends PureComponent {
                       onChange={this.handleGameChange}
                       labelInValue ={true}
                     >
-                     {gameList.map(game => <Option key={game.id}>{game.cp_text}</Option>)}
+                     {gameList.map(game => <Option key={game.id+'|'+game.cp_id}>{game.cp_text}</Option>)}
                     </Select>
                   )}
                 </FormItem>
@@ -130,7 +136,7 @@ class PropsProduce extends PureComponent {
                     <Select
                       onChange={this.onPropsChange}
                     >
-                      {gamePropsList.map(props => <Option key={props.id}>{props.name}</Option>)}
+                      {propByParams.map(props => <Option key={props.id}>{props.props_name}</Option>)}
                     </Select>
                   )}
                 </FormItem>
