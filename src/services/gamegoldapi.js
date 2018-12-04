@@ -27,6 +27,10 @@ export async function queryUserMgr(params) {
   return request(`/usermgr/query?${stringify(params)}`);
 }
 
+//--操作员,mock先随意，很快就切换到正式的服务器了
+export async function queryOperatorMgr(params) {
+  return request(`/usermgr/query?${stringify(params)}`);
+}
 
 //--游戏管理
 export async function queryGameMgr(params) {

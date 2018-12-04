@@ -18,6 +18,19 @@ export default [
     Routes: ['src/pages/Authorized'],
     authority: ['admin', 'user'],
     routes: [
+      // operatormgr
+      {
+        path: '/operator',
+        name: 'operator',
+        icon: 'table',
+        routes: [
+          {
+            path: '/operator/operatorlist',
+            name: 'operatorlist',
+            component: './Operator/OperatorList',
+          },
+        ],
+      },
       // usermgr
       {
         path: '/usermgr',
