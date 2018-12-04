@@ -167,7 +167,18 @@ class OperatorList extends PureComponent {
               {getFieldDecorator('login_name')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
-          <Col md={12} sm={24}>
+          <Col md={6} sm={24}>
+            <FormItem label="状态：">
+              {getFieldDecorator('state')(
+                <Select placeholder="请选择" style={{ width: '100%' }}>
+                  <Option value="">全部</Option>
+                  <Option value="1">正常</Option>
+                  <Option value="0">作废</Option>
+                </Select>
+              )}
+            </FormItem>
+          </Col>
+          <Col md={6} sm={24}>
             <span className={styles.submitButtons}>
               <Button type="primary" htmlType="submit">
                 搜索

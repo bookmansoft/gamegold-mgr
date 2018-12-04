@@ -20,6 +20,10 @@ for (let i = 0; i < 46; i += 1) {
     updatedAt: new Date(`2017-07-${Math.floor(i / 2) + 1}`),
     createdAt: new Date(`2017-07-${Math.floor(i / 2) + 1}`),
     progress: Math.ceil(Math.random() * 100),
+    login_name:'Thomas',
+    cid:"Thomas",
+    remark:'备注',
+    state:1,
   });
 }
 

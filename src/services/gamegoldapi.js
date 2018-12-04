@@ -29,7 +29,30 @@ export async function queryUserMgr(params) {
 
 //--操作员,mock先随意，很快就切换到正式的服务器了
 export async function queryOperatorMgr(params) {
-  return request(`/usermgr/query?${stringify(params)}`);
+  let msg = await remote.login({ openid: theOpenId });
+  let ret = {};
+  if (remote.isSuccess(msg)) {
+    console.log("从数据库查询操作员列表operator.ListRecord:" + stringify(params));
+    if (params == null) {
+      params = {
+        currentPage: 1,
+        pageSize: 10,
+        login_name: '',
+        state: '',
+      };
+    };
+    ret = await remote.fetching({
+      func: "operator.ListRecord",
+      currentPage: params.currentPage,
+      pageSize: params.pageSize,
+      login_name: typeof (params.login_name) == "undefined" ? '' : params.login_name,
+      state: typeof (params.state) == "undefined" ? '' : params.state,
+    });
+  }
+  console.log("操作员管理结果列表：" + JSON.stringify(ret));
+  return ret;
+
+  // return request(`/usermgr/query?${stringify(params)}`);
 }
 
 //--游戏管理
@@ -103,20 +126,8 @@ export async function addGameMgr(params) {
       offline_time: params.offline_time,
     });
   }
-  console.log("ok 92!");
-
-
-
-
   console.log("添加新游戏结果：" + JSON.stringify(ret));
   return ret;
-  // return request('/gamemgr/add', {
-  //   method: 'POST',
-  //   body: {
-  //     ...params,
-  //     method: 'post',
-  //   },
-  // });
 }
 
 //从指定URL中获取游戏内容（已测试通过）
