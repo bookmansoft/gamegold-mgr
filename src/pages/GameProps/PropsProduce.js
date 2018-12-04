@@ -51,6 +51,7 @@ class PropsProduce extends PureComponent {
   };
   handleGameChange = (value) => {
     const {dispatch } = this.props;
+    //获取已经创建的本地道具库，未生产
     dispatch({
       type: 'gameprops/getPropsByGame',
       payload: {id:value.key, name:value.label}

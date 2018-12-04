@@ -231,11 +231,10 @@ function getCpPropsDetail(req, res, u) {
   let cur = 1;
   let i = params.id || 0;
   let detailDataSource = {
-    pid: `xxxxxxxx-game-gold-boss-tokenxxx0004${i}`,
-    oid: `xxxxxxxx-game-gold-boss-tokenxxx0004${i}`,
-    name: `三级头盔 ${cur}-${i}`,
+    oid: `xxxxxxxx-game-gold-boss-tokenxxx00042`,
+    name: type_cap[Math.floor(Math.random()*type_cap.length)],
     type: Math.floor(Math.random() * 10),
-    game: `xxxxxxxx-game-gold-boss-xxxxxxxxxxxx`,
+    game: `8993ee70-f783-11e8-b7aa-b7ccf462e0a1`,
     desc: `这是${cur}-${i}的一段描述`,
     iconImg: 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png',
     moreImg: ['https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png','https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png','https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png','https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png']

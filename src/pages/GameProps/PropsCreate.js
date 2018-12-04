@@ -58,7 +58,7 @@ class PropsCreate extends PureComponent {
     param.props_desc = cpPropsDetail.desc;
     param.icon_url = cpPropsDetail.iconImg;
     param.icon_preview = cpPropsDetail.moreImg;
-    param.pid = cpPropsDetail.pid;
+    param.pid = cpPropsDetail.oid +'-'+moment().unix().toString();//TODO 搞个唯一id处理
     param.oid = cpPropsDetail.oid;
     param.oper = '';
     param.prev = '';
@@ -83,13 +83,13 @@ class PropsCreate extends PureComponent {
             content: '道具创建成功，您可以前往道具列表查看！',
             okText: '返回列表',
             okType: 'primary',
-            cancelText: '查看详情',
+            cancelText: '道具生产',
             cancelType: 'primary',
             onOk() {
               router.push('/gameprops/list');
             },
             onCancel() {
-              router.push(`/gameprops/detail/${ret.data}`);
+              router.push(`/gameprops/produce`);
             },
           });
       } else {
@@ -272,7 +272,7 @@ class PropsCreate extends PureComponent {
 
         <Card bordered={false} headStyle={{fontWeight:600}} title="道具信息">
           <DescriptionList size="large" style={{ marginBottom: 32 }}>
-            <Description term="道具ID">{cpPropsDetail.id || ''}</Description>
+            <Description term="道具OID">{cpPropsDetail.oid || ''}</Description>
             <Description term="道具名称">{cpPropsDetail.name || ''}</Description>
             <Description term="道具类型">{cpPropsDetail.type || ''}</Description>
             <Description term="所属游戏">{cpPropsDetail.game || ''}</Description>
