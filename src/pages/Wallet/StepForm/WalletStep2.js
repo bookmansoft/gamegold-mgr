@@ -27,7 +27,7 @@ class WalletStep2 extends React.PureComponent {
         theText,
       },
     })
-    alert(theText);
+    // alert(theText);
   }
   render() {
     const { form, data, dispatch, submitting } = this.props;
@@ -39,6 +39,11 @@ class WalletStep2 extends React.PureComponent {
       e.preventDefault();
       validateFields((err, values) => {
         if (!err) {
+          if (data.checkRemenberWord!=data.remenberWord) {
+            console.log("不匹配");
+            router.push('/wallet/step-form/info');
+            return;
+          }
           dispatch({
             type: 'walletstep/submitStepForm',
             payload: {
@@ -60,34 +65,20 @@ class WalletStep2 extends React.PureComponent {
         />
             <FormItem>
               {getFieldDecorator('gameName', {
+                initialValue: data.checkRemenberWord,
                 rules: [
                   {
                     required: true,
                     message: "请顺序选择所有助记词",
                   },
                 ],
-              })(<Input style={{fontSize:24,letterSpacing:10,textAlign:"center"}} value={data.checkRemenberWord} />)}
+              })(<Input style={{fontSize:24,letterSpacing:10,textAlign:"center"}} />)}
             </FormItem>
 
         
         <br/><br/>
 
-        <Row>
-          <Col sm={2} xs={2}><Button onClick={()=>this.appendText(data.remenberWord[0])}>{data.remenberWord[0]}</Button></Col>
-          <Col sm={1} xs={1}></Col>
-          <Col sm={2} xs={2}><Button onClick={()=>this.appendText(data.remenberWord[1])}>{data.remenberWord[1]}</Button></Col>
-          <Col sm={1} xs={1}></Col>
-          <Col sm={2} xs={2}><Button onClick={()=>this.appendText(data.remenberWord[2])}>{data.remenberWord[2]}</Button></Col>
-          <Col sm={1} xs={1}></Col>
-          <Col sm={2} xs={2}><Button onClick={()=>this.appendText(data.remenberWord[3])}>{data.remenberWord[3]}</Button></Col>
-          <Col sm={1} xs={1}></Col>
-          <Col sm={2} xs={2}><Button onClick={()=>this.appendText(data.remenberWord[4])}>{data.remenberWord[4]}</Button></Col>
-          <Col sm={1} xs={1}></Col>
-          <Col sm={2} xs={2}><Button onClick={()=>this.appendText(data.remenberWord[5])}>{data.remenberWord[5]}</Button></Col>
-        </Row>
-        <Row>
-          <Col sm={1} xs={1}>&nbsp;</Col>
-        </Row>
+
         <Row>
           <Col sm={2} xs={2}><Button onClick={()=>this.appendText(data.remenberWord[6])}>{data.remenberWord[6]}</Button></Col>
           <Col sm={1} xs={1}></Col>
@@ -100,6 +91,22 @@ class WalletStep2 extends React.PureComponent {
           <Col sm={2} xs={2}><Button onClick={()=>this.appendText(data.remenberWord[10])}>{data.remenberWord[10]}</Button></Col>
           <Col sm={1} xs={1}></Col>
           <Col sm={2} xs={2}><Button onClick={()=>this.appendText(data.remenberWord[11])}>{data.remenberWord[11]}</Button></Col>
+        </Row>
+        <Row>
+          <Col sm={1} xs={1}>&nbsp;</Col>
+        </Row>
+        <Row>
+          <Col sm={2} xs={2}><Button onClick={()=>this.appendText(data.remenberWord[0])}>{data.remenberWord[0]}</Button></Col>
+          <Col sm={1} xs={1}></Col>
+          <Col sm={2} xs={2}><Button onClick={()=>this.appendText(data.remenberWord[1])}>{data.remenberWord[1]}</Button></Col>
+          <Col sm={1} xs={1}></Col>
+          <Col sm={2} xs={2}><Button onClick={()=>this.appendText(data.remenberWord[2])}>{data.remenberWord[2]}</Button></Col>
+          <Col sm={1} xs={1}></Col>
+          <Col sm={2} xs={2}><Button onClick={()=>this.appendText(data.remenberWord[3])}>{data.remenberWord[3]}</Button></Col>
+          <Col sm={1} xs={1}></Col>
+          <Col sm={2} xs={2}><Button onClick={()=>this.appendText(data.remenberWord[4])}>{data.remenberWord[4]}</Button></Col>
+          <Col sm={1} xs={1}></Col>
+          <Col sm={2} xs={2}><Button onClick={()=>this.appendText(data.remenberWord[5])}>{data.remenberWord[5]}</Button></Col>
         </Row>
         <Row>
           <Col sm={1} xs={1}>&nbsp;</Col>

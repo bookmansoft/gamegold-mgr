@@ -8,7 +8,7 @@ export default {
 
   state: {
       remenberWord: '东南西北中发梅兰竹菊葱蒜',
-      checkRemenberWord:'x',
+      checkRemenberWord:'',
       data: {},
   },
 
@@ -52,7 +52,10 @@ export default {
             +remenberWordArray[9]+remenberWordArray[10]+remenberWordArray[11];
           yield put({
             type: 'save',
-            payload: {remenberWord:remenberWord},
+            payload: {
+              remenberWord:remenberWord,
+              checkRemenberWord: '',
+            },
           });
         }
       }
@@ -73,8 +76,9 @@ export default {
     },
 
     appendText(state, { payload }) {
-      //payload.theText
-      payload.checkRemenberWord="xxx";//payload.step.checkRemenberWord+payload.step.appendText;
+      console.log(payload.theText);
+      
+      state.checkRemenberWord=state.checkRemenberWord+payload.theText;
       return {
         ...state,
         step: {
