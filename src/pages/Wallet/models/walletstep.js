@@ -41,9 +41,15 @@ export default {
         console.log(response);
         if (response.list!=null && response.list.mnemonic!=null) {
           //符合条件时才传递
-          let remenberWord=response.list.mnemonic.phrase;
+          let orignRemenberWord=response.list.mnemonic.phrase;
           console.log("43:初始化文本");
-          console.log(remenberWord);
+          console.log(orignRemenberWord);
+          //转化为去掉空格的格式
+          let remenberWordArray=orignRemenberWord.split(" ");
+          let remenberWord=remenberWordArray[0]+remenberWordArray[1]+remenberWordArray[2]
+            +remenberWordArray[3]+remenberWordArray[4]+remenberWordArray[5]
+            +remenberWordArray[6]+remenberWordArray[7]+remenberWordArray[8]
+            +remenberWordArray[9]+remenberWordArray[10]+remenberWordArray[11];
           yield put({
             type: 'save',
             payload: {remenberWord:remenberWord},
