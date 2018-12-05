@@ -81,28 +81,6 @@ class GameAdd extends PureComponent {
       };
     });
   }
-  //旧版提交，准备作为第二次提交使用
-  // handleSubmit = e => {
-  //   const { dispatch, form } = this.props;
-  //   e.preventDefault();
-  //   form.validateFieldsAndScroll((err, values) => {
-  //     console.log(values);
-  //     if (!err) {
-  //       dispatch({
-  //         type: 'game/add',
-  //         payload: values,
-  //       }).then((ret) => {
-  //         console.log(ret);
-  //         if (ret.code === 0 && ret.data === null) {
-  //           router.push('/gamemgr/gameadderror');
-  //         } else {
-  //           router.push('/gamemgr/gameaddsuccess');
-  //         };
-  //       }
-  //       );
-  //     };
-  //   });
-  // }
   render() {
     const { submitting } = this.props;
     const {
