@@ -35,15 +35,15 @@ export async function addOperator(params) {
   if (remote.isSuccess(msg)) {
     //先调用链上的保存方法
     console.log("添加操作员:" + JSON.stringify(params));
-    let msg = await remote.fetching({func: "operator.CreateRecord",
-        login_name: `operator${Math.random()*1000 | 0}`,
-        password: `${Math.random()*1000000 | 0}`,
-        remark: 'whoami',
+    let ret = await remote.fetching({func: "operator.CreateRecord",
+        login_name: params.login_name,
+        password: params.password,
+        remark: params.remark,
         state:1,
     });
     //判断返回值是否正确
     console.log(ret);
-    if (ret.code!=0 || ret.data==null) {
+    if (ret.code!=0) {
       return {code:-1,msg:"添加操作员失败！"};
     }
   }

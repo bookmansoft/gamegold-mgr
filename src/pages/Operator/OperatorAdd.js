@@ -112,39 +112,42 @@ class OperatorAdd extends PureComponent {
         <Form onSubmit={this.handleSubmit} hideRequiredMark={false} style={{ marginTop: 8 }}>
           <Card bordered={false}>
             <Row style={{ marginBottom: 32 }}>
-              <br />
-              <h2><b>添加操作员</b></h2>
-              <br />
-            </Row>
-            <Row style={{ marginBottom: 32 }}>
-              <FormItem {...formItemLayout} label="游戏URL链接">
-                {getFieldDecorator('cp_url', {
+              <FormItem {...formItemLayout} label="登录名">
+                {getFieldDecorator('login_name', {
                   rules: [
                     {
                       required: true,
-                      message: "请输入游戏URL链接",
+                      message: "请输入操作员登录名",
                     },
                   ],
                 })(<Input placeholder="请输入" />)}
               </FormItem>
-              <FormItem {...formItemLayout} label="结算钱包地址">
-                {getFieldDecorator('wallet_addr', {
+              <FormItem {...formItemLayout} label="密码">
+                {getFieldDecorator('password', {
                   rules: [
                     {
                       required: true,
-                      message: "请输入结算钱包地址",
+                      message: "请输入密码",
                     },
                   ],
                 })(<Input placeholder="请输入" />)}
               </FormItem>
-              <Button type="primary" htmlType="submit" loading={submitting}>
-                验证
-              </Button>
+              <FormItem {...formItemLayout} label="备注">
+                {getFieldDecorator('remark', {
+                  rules: [
+                    {
+                      required: true,
+                      message: "请输入备注",
+                    },
+                  ],
+                })(<Input placeholder="请输入" />)}
+              </FormItem>
+
             </Row>
             <br />
             <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
-              <Button type="primary" onClick={() => this.handleCreate(this.props.operator.data)}>
-                提交
+              <Button type="primary" htmlType="submit" loading={submitting}>
+                验证
               </Button>
             </FormItem>
           </Card>
