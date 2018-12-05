@@ -15,11 +15,20 @@ const formItemLayout = {
   },
 };
 
-@connect(({ walletstep }) => ({
+@connect(({ walletstep, loading }) => ({
   data: walletstep,
+  loading: loading.models.walletstep,
 }))
 @Form.create()
 class WalletStep1 extends React.PureComponent {
+  componentDidMount() {
+    console.log("didmount");
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'walletstep/fetch',
+    });
+    console.log("didmount ok");
+  }
   render() {
     const { form, dispatch, data } = this.props;
     const { getFieldDecorator, validateFields } = form;
@@ -43,7 +52,7 @@ class WalletStep1 extends React.PureComponent {
             message="请按仔细记下这些助记词。"
             style={{ marginBottom: 24 }}
           />
-          <Input style={{fontSize:24,letterSpacing:10,textAlign:"center"}} value={data.remenberWord} />
+          <Input style={{fontSize:24,letterSpacing:2,textAlign:"center"}} value={data.remenberWord} />
 
           <br /><br />
           <Form.Item

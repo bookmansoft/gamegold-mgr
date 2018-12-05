@@ -220,6 +220,20 @@ export async function getWalletLog(params) {
 }
 
 
+
+//--获取钱包助记词
+export async function getKeyMaster(params) {
+  let msg = await remote.login({ openid: theOpenId });
+  let ret = {};
+  if (remote.isSuccess(msg)) {
+    console.log("获取钱包助记词信息:" + JSON.stringify(params));
+    ret = await remote.fetching({ func: "wallet.KeyMaster", items: [] });
+  }
+  console.log("获取钱包助记词信息结果：" + JSON.stringify(ret));
+  return ret;
+}
+
+
 //--钱包信息
 export async function getWalletInfo(params) {
   let msg = await remote.login({ openid: theOpenId });

@@ -1,6 +1,7 @@
 import { routerRedux } from 'dva/router';
 import { message } from 'antd';
 import { fakeSubmitForm } from '@/services/api';
+import { getKeyMaster} from '@/services/gamegoldapi';
 
 export default {
   namespace: 'walletstep',
@@ -8,6 +9,7 @@ export default {
   state: {
       remenberWord: '东南西北中发梅兰竹菊葱蒜',
       checkRemenberWord:'x',
+      data: {},
   },
 
   effects: {
@@ -29,9 +31,41 @@ export default {
       message.success('提交成功');
       return ret;
     },
+
+
+    //初始页面使用
+    *fetch({ payload }, { call,put }) {
+      try {
+        console.log('walletstep fetch');
+        const response = yield call(getKeyMaster, payload);
+        console.log(response);
+        if (response.list!=null && response.list.mnemonic!=null) {
+          //符合条件时才传递
+          let remenberWord=response.list.mnemonic.phrase;
+          console.log("43:初始化文本");
+          console.log(remenberWord);
+          yield put({
+            type: 'save',
+            payload: {remenberWord:remenberWord},
+          });
+        }
+      }
+      catch (ex) {
+        console.log(ex);
+      }
+    }
   },
 
   reducers: {
+    // fetch对应的代码，只在step1（即info）显示使用。
+    save(state, { payload }) {
+      // console.log(payload);
+      return {
+        ...state,
+        ...payload,
+      };
+    },
+
     appendText(state, { payload }) {
       //payload.theText
       payload.checkRemenberWord="xxx";//payload.step.checkRemenberWord+payload.step.appendText;
