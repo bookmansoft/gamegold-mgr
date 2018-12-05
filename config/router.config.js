@@ -29,6 +29,23 @@ export default [
             name: 'operatorlist',
             component: './Operator/OperatorList',
           },
+          {
+            path: '/operator/operatoradd',
+            name: 'operatoradd',
+            component: './Operator/OperatorAdd',
+          },
+          {
+            path: '/operator/operatoraddsuccess',
+            name: 'operatoraddsuccess',
+            component: './Operator/OperatorAddSuccess',
+            hideInMenu: false,
+          },
+          {
+            path: '/operator/operatoradderror',
+            name: 'operatoradderror',
+            component: './Operator/OperatorAddError',
+            hideInMenu: false,
+          },
         ],
       },
       // usermgr

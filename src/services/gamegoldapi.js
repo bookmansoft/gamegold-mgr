@@ -26,7 +26,30 @@ let remote = new gameconn(
 export async function queryUserMgr(params) {
   return request(`/usermgr/query?${stringify(params)}`);
 }
+//--操作员
+export async function addOperator(params) {
+  let msg = await remote.login({ openid: theOpenId });
+  let ret = {};
 
+  // 调用保存记录的方法
+  if (remote.isSuccess(msg)) {
+    //先调用链上的保存方法
+    console.log("添加操作员:" + JSON.stringify(params));
+    let msg = await remote.fetching({func: "operator.CreateRecord",
+        login_name: `operator${Math.random()*1000 | 0}`,
+        password: `${Math.random()*1000000 | 0}`,
+        remark: 'whoami',
+        state:1,
+    });
+    //判断返回值是否正确
+    console.log(ret);
+    if (ret.code!=0 || ret.data==null) {
+      return {code:-1,msg:"添加操作员失败！"};
+    }
+  }
+  console.log("添加新游戏结果：" + JSON.stringify(ret));
+  return ret;
+}
 //--操作员,mock先随意，很快就切换到正式的服务器了
 export async function queryOperatorMgr(params) {
   let msg = await remote.login({ openid: theOpenId });
@@ -51,8 +74,6 @@ export async function queryOperatorMgr(params) {
   }
   console.log("操作员管理结果列表：" + JSON.stringify(ret));
   return ret;
-
-  // return request(`/usermgr/query?${stringify(params)}`);
 }
 
 //--游戏管理
