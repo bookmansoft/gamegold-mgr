@@ -43,9 +43,7 @@ export async function addOperator(params) {
     });
     //判断返回值是否正确
     console.log(ret);
-    if (ret.code!=0) {
-      return {code:-1,msg:"添加操作员失败！"};
-    }
+    return ret;
   }
   console.log("添加新游戏结果：" + JSON.stringify(ret));
   return ret;

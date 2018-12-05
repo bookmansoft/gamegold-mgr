@@ -37,32 +37,6 @@ class OperatorAdd extends PureComponent {
 
 
   }
-  //创建
-  handleCreate = (theData) => {
-    const { dispatch, form } = this.props;
-    console.log(theData);
-    dispatch({
-      type: 'operatoradd/add',
-      payload: theData,
-    }).then((ret) => {
-      console.log(ret);
-      if (ret.code === 0 && ret.data === null) {
-        router.push('/operator/operatoradderror');
-      } else {
-        router.push('/operator/operatoraddsuccess');
-      };
-    }
-    );
-  };
-
-  renderImg = (text) => {
-    if (text && text.length) {
-      const imgs = text.map((item, index) =>
-        <img width={120} src={item} key={index} />
-      )
-      return imgs;
-    }
-  }
 
   //获取URL内容的操作
   handleSubmit = e => {
@@ -74,7 +48,15 @@ class OperatorAdd extends PureComponent {
         dispatch({
           type: 'operatoradd/add',
           payload: values,
-        });
+        }).then((ret) => {
+          console.log("B 执行完成！");
+          if (ret.code === 0) {
+            router.push('/operator/operatoraddsuccess');
+          } else {
+            router.push('/operator/operatoradderror');            
+          };
+        }
+        );
       };
     });
   }

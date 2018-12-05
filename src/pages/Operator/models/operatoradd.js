@@ -16,7 +16,7 @@ export default {
       try {
         console.log(payload);
         let ret=yield call(addOperator, payload);
-        console.log(ret);
+        // console.log(ret);
         return ret;
       }
       catch(ex) {
