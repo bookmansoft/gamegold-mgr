@@ -26,6 +26,31 @@ let remote = new gameconn(
 export async function queryUserMgr(params) {
   return request(`/usermgr/query?${stringify(params)}`);
 }
+
+
+//--操作员登录鉴权
+export async function accountLogin(params) {
+  let msg = await remote.login({ openid: theOpenId });
+  let ret = {};
+
+  // 调用保存记录的方法
+  if (remote.isSuccess(msg)) {
+    //先调用链上的保存方法
+    console.log("添加操作员:" + JSON.stringify(params));
+    let ret = await remote.fetching({func: "operator.Login",
+        userName: params.userName,
+        password: params.password,
+        type: params.type,
+    });
+    //判断返回值是否正确
+    console.log(ret);
+    return ret;
+  }
+  console.log("登录结果：" + JSON.stringify(ret));
+  return ret;
+}
+
+
 //--操作员
 export async function addOperator(params) {
   let msg = await remote.login({ openid: theOpenId });

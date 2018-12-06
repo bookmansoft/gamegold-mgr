@@ -109,6 +109,7 @@ export async function updateFakeList(params) {
 }
 
 export async function fakeAccountLogin(params) {
+  console.log(JSON.stringify(params));
   return request('/api/login/account', {
     method: 'POST',
     body: params,
