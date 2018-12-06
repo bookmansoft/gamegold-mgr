@@ -123,12 +123,10 @@ class PropsCreate extends PureComponent {
     //获取游戏对应的道具列表
     //option key唯一用id|cp_id格式
     if(typeof value != 'undefined' && value != ''){
-      let cid_arr = value.split('|');
-      let cid= cid_arr[1] || '';
-    console.log('选择游戏cid：'+ cid);
+    console.log('选择游戏cid：'+ value);
 
       this.setState({
-        cid: cid,
+        cid: value,
       });
       dispatch({
         type: 'gameprops/getPropsByGame',
@@ -239,7 +237,7 @@ class PropsCreate extends PureComponent {
                     setFieldsValue={0}
                     onChange={this.handleGameChange}
                   >
-                    {gameList.map(game => <Option key={game.id+'|'+game.cp_id}>{game.cp_text}</Option>)}
+                    {gameList.map(game => <Option key={game.cp_id}>{game.cp_text}</Option>)}
                   </Select>
 
                 )}

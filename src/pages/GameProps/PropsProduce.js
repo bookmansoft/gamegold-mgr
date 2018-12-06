@@ -28,13 +28,25 @@ const { Option } = Select;
 
 @Form.create()
 class PropsProduce extends PureComponent {
-  state = {};
+  state = {
+    proNum : 0,
+    coinNum : 0,
+    allNum: 0
+  };
   componentDidMount() {
     const {dispatch } = this.props;
+    let id = this.props.match.params.id || '';
     dispatch({
       type: 'gameprops/getAllGameList',
       payload: {}
     });
+    if(id != ''){
+      dispatch({
+        type: 'gameprops/propsDetail',
+        payload: {id: id}
+      });
+    }
+   
   }
   handleSubmit = e => {
     const { dispatch, form } = this.props;
@@ -52,35 +64,41 @@ class PropsProduce extends PureComponent {
   handleGameChange = (value) => {
     const {dispatch } = this.props;
     //获取已经创建的本地道具库，未生产
-
-    if(typeof value.key != 'undefined' && value.key != ''){
-      let cid_str = value.key;
-      let cid_arr = cid_str.split('|');
-      let cid= cid_arr[1] || '';
+    if(typeof value != 'undefined' && value != ''){
       dispatch({
         type: 'gameprops/getAllPropsByParams',
-        payload: {cid:cid, status:1}
+        payload: {cid:value, status:1}
       });
     }
     
   };
-  onPropsChange = (value) => {
-    const { form } = this.props;
-    let curpropByParams = this.props.gameprops.propByParams;
-    //根据id筛选当前选中的option 取其库存
-    let selectCur = curpropByParams.filter(val => val.id == value);
-    console.log(selectCur);
-    
+  handleProNum = (value) => {
+
+    this.setState(
+     {
+      proNum: parseInt(value),
+      allNum: this.state.coinNum * parseInt(value)
+     }
+    );
+  };
+  handleCoinNum = (value) => {
+    this.setState(
+      {
+       coinNum: parseInt(value),
+       allNum: this.state.proNum * parseInt(value)
+      }
+     );
+
   };
 
 
   render() {
-    const { gameprops: { gameList,propByParams },submitting } = this.props;
-    const { game } = this.state;
-    const {
-      form: { getFieldDecorator, getFieldValue },
-    } = this.props;
-
+    const { gameprops: { gameList,propByParams,propsDetail },submitting ,form: { getFieldDecorator }} = this.props;
+    let detail = propsDetail.data || [];
+    let showDefaultProp = 0;
+    if(detail !='' && propByParams == ''){
+      showDefaultProp = 1
+    }
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -107,6 +125,7 @@ class PropsProduce extends PureComponent {
               <Col span={11}>
                 <FormItem>
                   {getFieldDecorator('belongGame', {
+                    initialValue:detail.cid,
                     rules: [
                       {
                         required: true,
@@ -115,10 +134,9 @@ class PropsProduce extends PureComponent {
                     ],
                   })(
                     <Select
-                      onChange={this.handleGameChange}
-                      labelInValue ={true}
+                      onSelect={this.handleGameChange}
                     >
-                     {gameList.map(game => <Option key={game.id+'|'+game.cp_id}>{game.cp_text}</Option>)}
+                     {gameList.map(game => <Option  key={game.cp_id} value={game.cp_id}>{game.cp_text}</Option>)}
                     </Select>
                   )}
                 </FormItem>
@@ -126,6 +144,7 @@ class PropsProduce extends PureComponent {
               <Col span={11}>
                 <FormItem>
                   {getFieldDecorator('belongProps', {
+                    initialValue:detail.id,
                     rules: [
                       {
                         required: true,
@@ -133,10 +152,8 @@ class PropsProduce extends PureComponent {
                       },
                     ],
                   })(
-                    <Select
-                      onChange={this.onPropsChange}
-                    >
-                      {propByParams.map(props => <Option key={props.id}>{props.props_name}</Option>)}
+                    <Select>
+                      {showDefaultProp ? <Option key={detail.cp_id}  value={detail.id}>{detail.props_name}</Option> : propByParams.map(proplist => <Option key={proplist.id}>{proplist.props_name}</Option>)}
                     </Select>
                   )}
                 </FormItem>
@@ -148,10 +165,10 @@ class PropsProduce extends PureComponent {
                   {
                     required: true,
                     message: "请输入数量",
-                  },
+                  }
                 ],
               })(
-                <InputNumber placeholder={formatMessage({ id: 'form.weight.placeholder' })} min={1}  addonAfter="件" style={{ width: "50%" }} />
+                <InputNumber placeholder={formatMessage({ id: 'form.weight.placeholder' })+'数量'} onChange = {this.handleProNum} min={1}  style={{ width: "50%" }} />
               )}
             </FormItem>
           <FormItem {...formItemLayout} label= "单件道具含游戏金量">
@@ -163,11 +180,11 @@ class PropsProduce extends PureComponent {
                 },
               ],
             })(
-              <InputNumber placeholder={formatMessage({ id: 'form.weight.placeholder' })} min={1}  addonAfter="单位" style={{ width: "50%" }}/>
+              <InputNumber placeholder={formatMessage({ id: 'form.weight.placeholder' })+'单位'} onChange = {this.handleCoinNum}  min={1}  style={{ width: "50%" }}/>
             )}
             </FormItem>
             <FormItem {...formItemLayout} label= "本次生产消耗游戏金总量">
-              50 GGD （当前钱包余额 60 GGD）
+              {this.state.allNum} GGD （当前钱包余额 60 GGD）
             </FormItem>
             <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
               <Button type="primary" htmlType="submit" loading={submitting}>

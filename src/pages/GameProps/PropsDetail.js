@@ -76,7 +76,7 @@ class PropsDetail extends PureComponent {
             <Description term="道具ID">{detail.id}</Description>
             <Description term="道具名称">{detail.props_name}</Description>
             <Description term="道具类型">{detail.props_type}</Description>
-            <Description term="所属游戏">{detail.pid}</Description>
+            <Description term="所属游戏">{detail.cp_name}</Description>
             <Description term="创建时间">{moment(detail.createdAt).format('YYYY-MM-DD HH:mm')}</Description>
             <Description term="道具简介">{detail.props_desc}</Description>
             <Description term="道具图标">

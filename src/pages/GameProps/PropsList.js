@@ -26,7 +26,7 @@ class PropsList extends PureComponent {
   columns = [
     {
       title: '道具ID',
-      dataIndex: 'pid',
+      dataIndex: 'id',
     },
     {
       title: '道具名',
@@ -42,11 +42,7 @@ class PropsList extends PureComponent {
     },
     {
       title: '所属游戏',
-      dataIndex: 'cp',
-      render(val) {
-       // val = eval('(' + val + ')');
-        return val.name;
-      },
+      dataIndex: 'cp_name',
     },
     {
       title: '制作总量',
@@ -59,7 +55,6 @@ class PropsList extends PureComponent {
     {
       title: '操作',
       render: (e, record) => {
-        console.log(record);
         if(record.status == 0){
           return (
             <Fragment>
@@ -126,7 +121,7 @@ class PropsList extends PureComponent {
     if (sorter.field) {
       params.sorter = `${sorter.field}_${sorter.order}`;
     }
-    params.pid = formValues.pid;
+    params.id = formValues.id;
     params.props_name = formValues.name;
     params.cid = formValues.game;
 
@@ -153,7 +148,7 @@ class PropsList extends PureComponent {
       let searchParam = {};
       searchParam.currentPage = values.currentPage || 1;
       searchParam.pageSize = values.currentPage || 10;
-      searchParam.pid = values.pid;
+      searchParam.id = values.id;
       searchParam.props_name = values.name;
       searchParam.cid = values.game;
       dispatch({
@@ -216,7 +211,7 @@ class PropsList extends PureComponent {
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={4} sm={24}>
             <FormItem label="ID">
-              {getFieldDecorator('pid')(<Input placeholder="请输入" />)}
+              {getFieldDecorator('id')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
@@ -231,7 +226,7 @@ class PropsList extends PureComponent {
                   setFieldsValue={0}
                   style={{width:"200px"}}
                 >
-                  {gameList.map(game => <Option key={game.id+'|'+game.cp_id}>{game.cp_text}</Option>)}
+                  {gameList.map(game => <Option key={game.cp_id}>{game.cp_text}</Option>)}
                 </Select>
 
               )}
@@ -315,7 +310,7 @@ class PropsList extends PureComponent {
 
         <Table
           loading={loading}
-          rowKey={rowKey || 'pid'}
+          rowKey={rowKey || 'id'}
           dataSource={list}
           columns={this.columns}
           pagination={paginationProps}
