@@ -23,6 +23,7 @@ export default [
         path: '/operator',
         name: 'operator',
         icon: 'table',
+        authority: ['admin'],
         routes: [
           {
             path: '/operator/operatorlist',
@@ -53,6 +54,7 @@ export default [
         path: '/usermgr',
         name: 'usermgr',
         icon: 'table',
+        authority: ['user'],
         routes: [
           {
             path: '/usermgr/userlist',
@@ -66,6 +68,7 @@ export default [
         path: '/gamemgr',
         name: 'gamemgr',
         icon: 'table',
+        authority: ['user'],
         routes: [
           {
             path: '/gamemgr/gamelist',
@@ -102,6 +105,7 @@ export default [
         path: '/wallet',
         name: 'wallet',
         icon: 'table',
+        authority: ['admin'],
         routes: [
           {
             path: '/wallet/walletmgr',
@@ -166,12 +170,68 @@ export default [
           },
         ],
       },
+      {
+        name: 'gameprops',
+        icon: 'build',
+        path: '/gameprops',
+        authority: ['user'],
+        routes: [
+          {
+            path: '/gameprops/list',
+            name: 'propslist',
+            component: './GameProps/PropsList',
+          },
+          {
+            path: '/gameprops/detail/:id',
+            name: 'propsdetail',
+            component: './GameProps/PropsDetail',
+            hideInMenu: true,
+          },
+          {
+            path: '/gameprops/edit/:id',
+            name: 'propsdetail',
+            component: './GameProps/propsEdit',
+            hideInMenu: true,
+          },
+          {
+            path: '/gameprops/create',
+            name: 'propscreate',
+            component: './GameProps/PropsCreate',
+          },
+          {
+            path: '/gameprops/produce',
+            name: 'propsproduce',
+            component: './GameProps/PropsProduce',
+          },
+          {
+            path: '/gameprops/produce/:id',
+            name: 'propsproduce',
+            component: './GameProps/PropsProduce',
+            hideInMenu: true,
+          },
+          {
+            path: '/gameprops/present/:id',
+            name: 'propspresent',
+            component: './GameProps/PropsPresent',
+            hideInMenu: true,
+          },
+          {
+            path: '/gameprops/present',
+            name: 'propspresent',
+            component: './GameProps/PropsPresent',
+          }
+        ],
+      },
+
+      //---------------------------------------------------------------------------
+
       // dashboard
       { path: '/', redirect: '/dashboard/analysis' },
       {
         path: '/dashboard',
         name: 'dashboard',
         icon: 'dashboard',
+        hideInMenu: true,
         routes: [
           {
             path: '/dashboard/analysis',
@@ -195,6 +255,7 @@ export default [
         path: '/form',
         icon: 'form',
         name: 'form',
+        hideInMenu: true,
         routes: [
           {
             path: '/form/basic-form',
@@ -242,6 +303,7 @@ export default [
         path: '/list',
         icon: 'table',
         name: 'list',
+        hideInMenu: true,
         routes: [
           {
             path: '/list/table-list',
@@ -295,6 +357,7 @@ export default [
         path: '/profile',
         name: 'profile',
         icon: 'profile',
+        hideInMenu: true,
         routes: [
           // profile
           {
@@ -314,6 +377,7 @@ export default [
         name: 'result',
         icon: 'check-circle-o',
         path: '/result',
+        hideInMenu: true,
         routes: [
           // result
           {
@@ -328,6 +392,7 @@ export default [
         name: 'exception',
         icon: 'warning',
         path: '/exception',
+        hideInMenu: true,
         routes: [
           // exception
           {
@@ -357,6 +422,7 @@ export default [
         name: 'account',
         icon: 'user',
         path: '/account',
+        hideInMenu: true,
         routes: [
           {
             path: '/account/center',
@@ -410,57 +476,7 @@ export default [
           },
         ],
       },
-      {
-        name: 'gameprops',
-        icon: 'build',
-        path: '/gameprops',
-        routes: [
-          {
-            path: '/gameprops/list',
-            name: 'propslist',
-            component: './GameProps/PropsList',
-          },
-          {
-            path: '/gameprops/detail/:id',
-            name: 'propsdetail',
-            component: './GameProps/PropsDetail',
-            hideInMenu: true,
-          },
-          {
-            path: '/gameprops/edit/:id',
-            name: 'propsdetail',
-            component: './GameProps/propsEdit',
-            hideInMenu: true,
-          },
-          {
-            path: '/gameprops/create',
-            name: 'propscreate',
-            component: './GameProps/PropsCreate',
-          },
-          {
-            path: '/gameprops/produce',
-            name: 'propsproduce',
-            component: './GameProps/PropsProduce',
-          },
-          {
-            path: '/gameprops/produce/:id',
-            name: 'propsproduce',
-            component: './GameProps/PropsProduce',
-            hideInMenu: true,
-          },
-          {
-            path: '/gameprops/present/:id',
-            name: 'propspresent',
-            component: './GameProps/PropsPresent',
-            hideInMenu: true,
-          },
-          {
-            path: '/gameprops/present',
-            name: 'propspresent',
-            component: './GameProps/PropsPresent',
-          }
-        ],
-      },
+
 
       {
         component: '404',
