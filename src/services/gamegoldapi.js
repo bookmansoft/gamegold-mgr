@@ -20,6 +20,11 @@ let remote = new gameconn(
   }
 )
 
+//--登录以后的用户信息，可修改
+let userinfo={id:-1};
+
+
+
 
 
 //--用户
@@ -37,13 +42,14 @@ export async function accountLogin(params) {
   if (remote.isSuccess(msg)) {
     //先调用链上的保存方法
     console.log("添加操作员:" + JSON.stringify(params));
-    let ret = await remote.fetching({func: "operator.Login",
+    let ret = await remote.fetching({func: "operator.Login",userinfo:userinfo,
         userName: params.userName,
         password: params.password,
         type: params.type,
     });
-    //判断返回值是否正确
+    //判断返回值是否正确--增加一个返回值项 userinfo:{id:5} ;其中id为实际的userid
     console.log(ret);
+    userinfo=ret.userinfo;
     return ret;
   }
   console.log("登录结果：" + JSON.stringify(ret));
@@ -60,7 +66,7 @@ export async function addOperator(params) {
   if (remote.isSuccess(msg)) {
     //先调用链上的保存方法
     console.log("添加操作员:" + JSON.stringify(params));
-    let ret = await remote.fetching({func: "operator.CreateRecord",
+    let ret = await remote.fetching({func: "operator.CreateRecord",userinfo:userinfo,
         login_name: params.login_name,
         password: params.password,
         remark: params.remark,
@@ -88,7 +94,7 @@ export async function queryOperatorMgr(params) {
       };
     };
     ret = await remote.fetching({
-      func: "operator.ListRecord",
+      func: "operator.ListRecord",userinfo:userinfo,
       currentPage: params.currentPage,
       pageSize: params.pageSize,
       login_name: typeof (params.login_name) == "undefined" ? '' : params.login_name,
@@ -116,7 +122,7 @@ export async function queryGameMgr(params) {
       };
     };
     ret = await remote.fetching({
-      func: "cp.ListRecord",
+      func: "cp.ListRecord",userinfo:userinfo,
       currentPage: params.currentPage,
       pageSize: params.pageSize,
       cp_id: typeof (params.cp_id) == "undefined" ? '' : params.cp_id,
@@ -143,7 +149,7 @@ export async function addGameMgr(params) {
   if (remote.isSuccess(msg)) {
     //先调用链上的保存方法
     console.log("添加新游戏:" + JSON.stringify(params));
-    ret = await remote.fetching({ func: "cp.Create", items: [params.cp_name, params.cp_url] });
+    ret = await remote.fetching({ func: "cp.Create",userinfo:userinfo,items: [params.cp_name, params.cp_url] });
     //判断返回值是否正确
     console.log(ret);
     if (ret.code!=0 || ret.data==null) {
@@ -152,7 +158,7 @@ export async function addGameMgr(params) {
     let cp_id=ret.data.cid;//返回的cpid值
     console.log("调用保存记录的方法:" + JSON.stringify(params));
     let msg = await remote.fetching({
-      func: "cp.CreateRecord",
+      func: "cp.CreateRecord",userinfo:userinfo,
       cp_id: cp_id,
       cp_name: params.cp_name,
       cp_text: params.cp_text,
@@ -179,7 +185,7 @@ export async function addGameMgr(params) {
 export async function getGameFromUrl(params) {
   let msg = await remote.login({ openid: theOpenId });
   if (remote.isSuccess(msg)) {
-    let data = await remote.fetching({ func: "cp.getGameFromUrl", cp_url: params.cp_url });
+    let data = await remote.fetching({ func: "cp.getGameFromUrl",userinfo:userinfo, cp_url: params.cp_url });
     console.log(data);
     //有数据
     data.wallet_addr = params.wallet_addr;
@@ -206,7 +212,7 @@ export async function getGameView(params) {
   //接下来好好查询并返回这个页面的数据
   let msg = await remote.login({ openid: theOpenId });
   if (remote.isSuccess(msg)) {
-    let ret = await remote.fetching({ func: "cp.Retrieve", id: params.id });
+    let ret = await remote.fetching({ func: "cp.Retrieve",userinfo:userinfo, id: params.id });
     if (ret.data === null) {
       return {};
     }
@@ -234,16 +240,14 @@ export async function queryWalletLog(params) {
   let ret = {};
   if (remote.isSuccess(msg)) {
     console.log("获取钱包收支流水:" + JSON.stringify(params));
-    ret = await remote.fetching({ func: "tx.List", items: [] });
+    ret = await remote.fetching({ func: "tx.List",userinfo:userinfo, items: [] });
   }
   console.log("获取钱包收支流水结果：" + JSON.stringify(ret));
   let theResult = { list: ret.data, pagination: { current: 1, pageSize: 10 } };
-  // let theResult= request(`/wallet/getLog?${stringify(params)}`);
+
   console.log("实际输出格式");
   console.log(theResult);
   return theResult;
-  // let list=request(`/wallet/queryLog?${stringify(params)}`);
-  // return list;
 }
 
 //--钱包流水详情
@@ -252,7 +256,7 @@ export async function getWalletLog(params) {
   let ret = {};
   if (remote.isSuccess(msg)) {
     console.log("获取钱包收支详情:" + JSON.stringify(params));
-    ret = await remote.fetching({ func: "tx.GetWallet", items: [params.id] });
+    ret = await remote.fetching({ func: "tx.GetWallet",userinfo:userinfo, items: [params.id] });
   }
   console.log("获取钱包收支详情结果：" + JSON.stringify(ret));
   if (ret.data != null) {
@@ -271,7 +275,7 @@ export async function getKeyMaster(params) {
   let ret = {};
   if (remote.isSuccess(msg)) {
     console.log("获取钱包助记词信息:" + JSON.stringify(params));
-    ret = await remote.fetching({ func: "wallet.KeyMaster", items: [] });
+    ret = await remote.fetching({ func: "wallet.KeyMaster",userinfo:userinfo, items: [] });
   }
   console.log("获取钱包助记词信息结果：" + JSON.stringify(ret));
   return ret;
@@ -284,7 +288,7 @@ export async function getWalletInfo(params) {
   let ret = {};
   if (remote.isSuccess(msg)) {
     console.log("获取钱包信息:" + JSON.stringify(params));
-    ret = await remote.fetching({ func: "wallet.Info", items: [] });
+    ret = await remote.fetching({ func: "wallet.Info",userinfo:userinfo, items: [] });
   }
   console.log("获取钱包信息结果：" + JSON.stringify(ret));
   return ret;
@@ -297,7 +301,7 @@ export async function getBalanceAll(params) {
   let ret = {};
   if (remote.isSuccess(msg)) {
     console.log("获取余额参数:" + JSON.stringify(params));
-    ret = await remote.fetching({ func: "account.BalanceAll", items: [] });
+    ret = await remote.fetching({ func: "account.BalanceAll",userinfo:userinfo, items: [] });
   }
   console.log("获取余额结果：" + JSON.stringify(ret));
   return ret;
@@ -310,20 +314,11 @@ export async function addWalletPay(params) {
   let ret = {};
   if (remote.isSuccess(msg)) {
     console.log("钱包转出:");
-    // ret=await remote.fetching({func: "tx.Send",items:["tb1qlsnuxc5d5rufuavwgsrw9v96r65rmlwcdkexel",999]});
-    ret = await remote.fetching({ func: "tx.Send", items: [params.address, params.value] });
+    ret = await remote.fetching({ func: "tx.Send",userinfo:userinfo, items: [params.address, params.value] });
   }
   console.log("看起来本地比较迟的消息");
 
   return ret;
-
-  // return request('/wallet/addPay', {
-  //   method: 'POST',
-  //   body: {
-  //     ...params,
-  //     method: 'post',
-  //   },
-  // });
 
 }
 
@@ -349,7 +344,7 @@ export async function getGamePropsList(params) {
       };
     };
     result = await remote.fetching({
-      func: "prop.LocalList",
+      func: "prop.LocalList",userinfo:userinfo,
       currentPage: params.currentPage,
       pageSize: params.pageSize,
       id: typeof (params.id) == "undefined" ? '' : params.id,
@@ -374,7 +369,7 @@ export async function CreatePropLocal(params) {
   let msg = await remote.login({ openid: `${Math.random() * 1000000000 | 0}` });
   if (remote.isSuccess(msg)) {
     let res = await remote.fetching({
-      func: "prop.CreateLocal",
+      func: "prop.CreateLocal",userinfo:userinfo,
 
       props_name: params.props_name,
       props_type: params.props_type,
@@ -418,7 +413,7 @@ export async function CreatePropRemote(params) {
   console.log('道具上链请求结束');
   let msg = await remote.login({ openid: `${Math.random() * 1000000000 | 0}` });
   if (remote.isSuccess(msg)) {
-    let res = await remote.fetching({ func: "prop.CreateProp", items: [params.pid, params.cid, params.gold] });
+    let res = await remote.fetching({ func: "prop.CreateProp",userinfo:userinfo, items: [params.pid, params.cid, params.gold] });
     if (remote.isSuccess(res)) {
       return res;
     } else {
@@ -441,7 +436,7 @@ export async function getGamePropsDetail(params) {
   //本地库直接读取详情
   let msg = await remote.login({ openid: `${Math.random() * 1000000000 | 0}` });
   if (remote.isSuccess(msg)) {
-    let res = await remote.fetching({ func: "prop.LocalDetail", id: params.id });
+    let res = await remote.fetching({ func: "prop.LocalDetail",userinfo:userinfo, id: params.id });
     if (remote.isSuccess(res)) {
       return res;
     } else {
@@ -486,7 +481,7 @@ export async function getAllGameList() {
   let msg = await remote.login({ openid: theOpenId });
   let ret = [];
   if (remote.isSuccess(msg)) {
-    let res = await remote.fetching({ func: "cp.ListAllRecord" });
+    let res = await remote.fetching({ func: "cp.ListAllRecord" ,userinfo:userinfo});
     if (remote.isSuccess(res)) {
       for (let i in res['data']) {
         ret.push(res['data'][i]); //属性
@@ -507,7 +502,7 @@ export async function getAllPropsByParams(params) {
   let msg = await remote.login({ openid: theOpenId });
   let ret = [];
   if (remote.isSuccess(msg)) {
-    let res = await remote.fetching({ func: "prop.getAllPropsByParams",
+    let res = await remote.fetching({ func: "prop.getAllPropsByParams",userinfo:userinfo,
     cid: typeof (params.cid) == "undefined" ? '' : params.cid,
     status:typeof (params.status) == "undefined" ? '' : params.status});
     if (remote.isSuccess(res)) {
