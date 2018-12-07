@@ -348,16 +348,13 @@ export async function getGamePropsList(params) {
         cid: '',
       };
     };
-    let cid = typeof (params.cid) == "undefined" ? '' : params.cid;
-    let cid_arr = cid.split('|');
-    cid= cid_arr[1] || '';
     result = await remote.fetching({
       func: "prop.LocalList",
       currentPage: params.currentPage,
       pageSize: params.pageSize,
-      pid: typeof (params.pid) == "undefined" ? '' : params.pid,
+      id: typeof (params.id) == "undefined" ? '' : params.id,
       props_name:typeof (params.props_name) == "undefined" ? '' : params.props_name,
-      cid: cid,
+      cid: typeof (params.cid) == "undefined" ? '' : params.cid,
     });
   }
   return result;
