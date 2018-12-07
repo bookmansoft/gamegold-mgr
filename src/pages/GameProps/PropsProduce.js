@@ -8,18 +8,14 @@ import {
   InputNumber,
   Col,
   Card,
+  Modal
 } from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-import styles from './style.less';
 
 const FormItem = Form.Item;
 const { Option } = Select;
 
-/*
-@connect(({ loading }) => ({
-  submitting: loading.effects['form/submitRegularForm'],
-}))
-*/
+
 
 @connect(({ gameprops, loading }) => ({
   gameprops,
@@ -31,7 +27,8 @@ class PropsProduce extends PureComponent {
   state = {
     proNum : 0,
     coinNum : 0,
-    allNum: 0
+    allNum: 0,
+    confirmed : 0
   };
   componentDidMount() {
     const {dispatch } = this.props;
@@ -46,19 +43,80 @@ class PropsProduce extends PureComponent {
         payload: {id: id}
       });
     }
+    dispatch({
+      type: 'gameprops/getwalletinfo',
+      payload: {}
+    }).then((ret) => {
+      if (ret.code === 0 ) {
+        this.setState({
+          confirmed:JSON.stringify(ret.list.state.confirmed/100000000),
+        });
+      } 
+    });
    
   }
   handleSubmit = e => {
     const { dispatch, form } = this.props;
     e.preventDefault();
     form.validateFieldsAndScroll((err, values) => {
-      console.log(values);
-      /*if (!err) {
-        dispatch({
-          type: 'form/submitRegularForm',
-          payload: values,
+      let requestData = new Array();
+      let allCoinNum = values.coinNum * values.proNum;
+      if(allCoinNum > this.state.confirmed){
+        Modal.error({
+          title: '错误',
+          content: '生产消耗的游戏金总量不得高于钱包余额',
         });
-      }*/
+        return;
+      }
+      let belongProps = values.belongProps;
+      let belongPropsArr = belongProps.split("|");
+      let oid = belongPropsArr[1] || '';
+
+      if(oid == ''){
+        Modal.error({
+          title: '错误',
+          content: '装备选择失败，请重试！',
+        });
+        return;
+      }
+      if(typeof values.proNum == 'undefined' ||  values.proNum== ''){
+        Modal.error({
+          title: '错误',
+          content: '请输入生产数量！',
+        });
+        return;
+      }
+      if(typeof values.coinNum == 'undefined' ||  values.coinNum== ''){
+        Modal.error({
+          title: '错误',
+          content: '请输入游戏金含量！',
+        });
+        return;
+      }
+      requestData['pid'] = values.belongGame;
+      requestData['oid'] = oid;
+      requestData['gold'] = values.coinNum;
+      requestData['num'] = values.proNum;
+      if(requestData){
+            //调用道具上链
+            dispatch({
+              type: 'gameprops/propcreatelistremote',
+              payload: requestData,
+            }).then((ret) => {
+              if (ret.code === 0 && ret.data===null) {
+                Modal.success({
+                  title: '恭喜',
+                  content: '道具生产成功！',
+                });
+              } else {
+                Modal.error({
+                  title: '错误',
+                  content: '道具生产失败，请重试！',
+                });
+              }
+            })
+      }
+      
     });
   };
   handleGameChange = (value) => {
@@ -72,6 +130,7 @@ class PropsProduce extends PureComponent {
     }
     
   };
+  
   handleProNum = (value) => {
 
     this.setState(
@@ -94,6 +153,7 @@ class PropsProduce extends PureComponent {
 
   render() {
     const { gameprops: { gameList,propByParams,propsDetail },submitting ,form: { getFieldDecorator }} = this.props;
+    let walletInfo = this.state.walletInfo;
     let detail = propsDetail.data || [];
     let showDefaultProp = 0;
     if(detail !='' && propByParams == ''){
@@ -144,7 +204,7 @@ class PropsProduce extends PureComponent {
               <Col span={11}>
                 <FormItem>
                   {getFieldDecorator('belongProps', {
-                    initialValue:detail.id,
+                    initialValue:detail.id+'|'+detail.oid,
                     rules: [
                       {
                         required: true,
@@ -153,7 +213,7 @@ class PropsProduce extends PureComponent {
                     ],
                   })(
                     <Select>
-                      {showDefaultProp ? <Option key={detail.cp_id}  value={detail.id}>{detail.props_name}</Option> : propByParams.map(proplist => <Option key={proplist.id}>{proplist.props_name}</Option>)}
+                      {showDefaultProp ? <Option value={detail.id+'|'+detail.oid}>{detail.props_name}</Option> : propByParams.map(proplist => <Option key={proplist.id+'|'+proplist.oid} >{proplist.props_name}</Option>)}
                     </Select>
                   )}
                 </FormItem>
@@ -184,7 +244,7 @@ class PropsProduce extends PureComponent {
             )}
             </FormItem>
             <FormItem {...formItemLayout} label= "本次生产消耗游戏金总量">
-              {this.state.allNum} GGD （当前钱包余额 60 GGD）
+              {this.state.allNum} GGD （当前钱包余额 {this.state.confirmed} GDD）
             </FormItem>
             <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
               <Button type="primary" htmlType="submit" loading={submitting}>
