@@ -49,7 +49,7 @@ class PropsProduce extends PureComponent {
     }).then((ret) => {
       if (ret.code === 0 ) {
         this.setState({
-          confirmed:JSON.stringify(ret.list.state.confirmed/100000000),
+          confirmed:JSON.stringify(ret.list.state.confirmed),
         });
       } 
     });
@@ -70,6 +70,7 @@ class PropsProduce extends PureComponent {
       }
       let belongProps = values.belongProps;
       let belongPropsArr = belongProps.split("|");
+      let id = belongPropsArr[0] || '';
       let oid = belongPropsArr[1] || '';
 
       if(oid == ''){
@@ -93,7 +94,8 @@ class PropsProduce extends PureComponent {
         });
         return;
       }
-      requestData['pid'] = values.belongGame;
+      requestData['id'] = id;
+      requestData['cid'] = values.belongGame;
       requestData['oid'] = oid;
       requestData['gold'] = values.coinNum;
       requestData['num'] = values.proNum;
@@ -103,7 +105,7 @@ class PropsProduce extends PureComponent {
               type: 'gameprops/propcreatelistremote',
               payload: requestData,
             }).then((ret) => {
-              if (ret.code === 0 && ret.data===null) {
+              if (ret.code == 1) {
                 Modal.success({
                   title: '恭喜',
                   content: '道具生产成功！',
@@ -111,7 +113,7 @@ class PropsProduce extends PureComponent {
               } else {
                 Modal.error({
                   title: '错误',
-                  content: '道具生产失败，请重试！',
+                  content: ret.msg || '道具生产失败，请重试！',
                 });
               }
             })

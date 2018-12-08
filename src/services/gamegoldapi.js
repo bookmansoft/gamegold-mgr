@@ -377,16 +377,11 @@ export async function CreatePropLocal(params) {
       props_desc: params.props_desc,
       icon_url: params.icon_url,
       icon_preview: params.icon_preview,
-      pid: params.pid,
       oid: params.oid,
-      oper: params.oper,
-      prev: params.prev,
-      current: params.current,
-      gold: params.gold,
       status: params.status,
-      cp: params.cp,
       stock: params.stock,
       pro_num: params.pro_num,
+      create_res: params.create_res,
       createdAt: params.createdAt,
       updatedAt: params.updatedAt
     });
@@ -408,24 +403,22 @@ export async function CreatePropLocal(params) {
  * @returns
  */
 export async function PropCreateListRemote(params) {
-  console.log('道具批量上链请求开始');
-  console.log(params);
-  console.log('道具批量上链请求结束');
   let msg = await remote.login({ openid: `${Math.random() * 1000000000 | 0}` });
   if (remote.isSuccess(msg)) {
     let res = await remote.fetching({ func: "prop.CreatePropListRemote",userinfo:userinfo, 
-      pid :params.pid, 
+      id :params.id, 
+      cid :params.cid, 
       oid :params.oid, 
       gold :params.gold, 
       num :params.num
     });
     if (remote.isSuccess(res)) {
-      return res;
+      return {code: 1};
     } else {
-      return {};
+      return {code: 0, msg: res.msg || "生产失败"};
     }
   }
-  return {};
+  return {code: 0, msg: "用户登录失败"};
   //return request(`/api/gamepropsdetail?${stringify(params)}`);
 }
 

@@ -55,7 +55,7 @@ class PropsList extends PureComponent {
     {
       title: '操作',
       render: (e, record) => {
-        if(record.status == 0){
+        if(record.status == 1){
           return (
             <Fragment>
               <Link to={`/gameprops/detail/${record.id}`}>详情</Link>
@@ -64,12 +64,10 @@ class PropsList extends PureComponent {
               <Divider type="vertical" />
             </Fragment>
           );
-        }else{
+        }else if(record.status == 2){
           return (
             <Fragment>
               <Link to={`/gameprops/detail/${record.id}`}>详情</Link>
-              <Divider type="vertical" />
-              <Link to={`/gameprops/produce/${record.id}`}>生产</Link>
               <Divider type="vertical" />
               <Link to={`/gameprops/present/${record.id}`}>赠送</Link>
               <Divider type="vertical" />

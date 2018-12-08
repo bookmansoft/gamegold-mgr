@@ -1,10 +1,8 @@
 import React, { PureComponent } from 'react';
-import styles from './style.less';
 import { Card, Button, Divider, List } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-import { FormattedMessage } from 'umi/locale';
 import DescriptionList from '@/components/DescriptionList';
 import router from 'umi/router';
 

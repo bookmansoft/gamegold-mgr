@@ -58,16 +58,11 @@ class PropsCreate extends PureComponent {
     param.props_desc = cpPropsDetail.desc;
     param.icon_url = cpPropsDetail.iconImg;
     param.icon_preview = cpPropsDetail.moreImg;
-    param.pid = cpPropsDetail.oid +'-'+moment().unix().toString();//TODO 搞个唯一id处理
     param.oid = cpPropsDetail.oid;
-    param.oper = '';
-    param.prev = '';
-    param.current = '';
-    param.gold = 0;
     param.status = 1;
     param.stock = 0;
     param.pro_num = 0;
-    param.cp = '';
+    param.create_res = '';
     param.createdAt = moment().format('YYYY-MM-DD HH:mm:ss');
     param.updatedAt = moment().format('YYYY-MM-DD HH:mm:ss');
     //本地道具创建
