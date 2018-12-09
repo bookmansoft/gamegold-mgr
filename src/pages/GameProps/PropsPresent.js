@@ -30,14 +30,22 @@ class PropsPresent extends PureComponent {
     visible: false,
     selectedRows: [],
     selectedRowKeys: [],
+    stock:0
   };
 
   componentDidMount() {
     const {dispatch } = this.props;
+    let id = this.props.match.params.id || '';
     dispatch({
       type: 'gameprops/getAllGameList',
       payload: {}
     });
+    if(id != ''){
+      dispatch({
+        type: 'gameprops/propsDetail',
+        payload: {id: id}
+      });
+    }
   }
   handleSubmit = e => {
     const { dispatch, form } = this.props;
@@ -55,18 +63,22 @@ class PropsPresent extends PureComponent {
   };
   handleGameChange = (value) => {
     const {dispatch } = this.props;
-    dispatch({
-      type: 'gameprops/getPropsByGame',
-      payload: {id:value.key, name:value.label}
-    });
+    //获取已经创建的本地道具库，未生产
+    if(typeof value != 'undefined' && value != ''){
+      dispatch({
+        type: 'gameprops/getAllPropsByParams',
+        payload: {cid:value, status:1}
+      });
+    }
   };
   onPropsChange = (value) => {
     const { form } = this.props;
-    let curGamePropsList = this.props.gameprops.gamePropsList;
-    //根据id筛选当前选中的option 取其库存
-    let selectCur = curGamePropsList.filter(val => val.id === value);
+    let propsArr = value.split("|");
+    let id = propsArr[0] || '';
+    let oid = propsArr[1] || '';
+    let stock = propsArr[2] || '';
     form.setFieldsValue({
-      propsNum: selectCur[0].stock || 0,
+      stock: stock || 0,
     });
   };
   showPresentModal = () => {
@@ -100,14 +112,13 @@ class PropsPresent extends PureComponent {
     });
   };
   render() {
-    const { submitting,loading, gameprops: { userAllList }} = this.props;
+    const { submitting, gameprops: { gameList,propByParams,propsDetail },form: { getFieldDecorator }} = this.props;
     const { visible,selectedRows,selectedRowKeys} = this.state;
-    const {
-      form: { getFieldDecorator, getFieldValue },
-    } = this.props;
-    const gameList = this.props.gameprops.gameList;
-    const gamePropsList = this.props.gameprops.gamePropsList;
-
+    let detail = propsDetail.data || [];
+    let showDefaultProp = 0;
+    if(detail !='' && propByParams == ''){
+      showDefaultProp = 1;
+    }
 
     const formItemLayout = {
       labelCol: {
@@ -135,8 +146,9 @@ class PropsPresent extends PureComponent {
           <Card title="选择道具" bordered={false} headStyle={{fontWeight:600}}>
             <FormItem {...formItemLayout} label= "选择游戏及道具">
                 <Col span={11}>
-                  <FormItem>
+                <FormItem>
                   {getFieldDecorator('belongGame', {
+                    initialValue:detail.cid,
                     rules: [
                       {
                         required: true,
@@ -144,36 +156,38 @@ class PropsPresent extends PureComponent {
                       },
                     ],
                   })(
-                  <Select
-                    onChange={this.handleGameChange}
-                    labelInValue ={true}
-                  >
-                   {gameList.map(game => <Option key={game.id+'|'+game.cp_id}>{game.cp_text}</Option>)}
-                  </Select>
+                    <Select
+                      onChange={this.handleGameChange}
+                    >
+                     {gameList.map(game => <Option  key={game.cp_id} value={game.cp_id}>{game.cp_text}</Option>)}
+                    </Select>
                   )}
                 </FormItem>
               </Col>
               <Col span={11}>
-                  <FormItem>
-                {getFieldDecorator('belongProps', {
-                  rules: [
-                    {
-                      required: true,
-                      message: "请选择装备",
-                    },
-                  ],
-                })(
-                <Select
-                  onChange={this.onPropsChange}
-                >
-                  {gamePropsList.map(props => <Option key={props.id}>{props.name}</Option>)}
-                </Select>
-                )}
-               </FormItem>
+              <FormItem>
+                  {getFieldDecorator('belongProps', {
+                    initialValue: typeof detail.id != 'undefined' && typeof detail.oid != 'undefined' ? detail.id+'|'+detail.oid+'|'+detail.stock : '',
+                    rules: [
+                      {
+                        required: true,
+                        message: "请选择道具",
+                      },
+                    ],
+                  })(
+                    <Select
+                    onChange={this.onPropsChange}
+                    >
+                      {showDefaultProp == 1 ? <Option value={detail.id+'|'+detail.oid+'|'+detail.stock}>{detail.props_name}</Option> : propByParams.map(propbyparams => <Option key={propbyparams.id+'|'+propbyparams.oid+'|'+propbyparams.stock} >{propbyparams.props_name}</Option>)}
+                    </Select>
+                  )}
+                </FormItem>
               </Col>
             </FormItem>
             <FormItem {...formItemLayout} label= "剩余库存">
-              {getFieldDecorator('propsNum')(
+              {getFieldDecorator('stock',{
+                initialValue: showDefaultProp == 1 ? detail.stock : 0,
+              })(
                 <Input disabled style={{ width: "100px" }} />
               )}
             </FormItem>

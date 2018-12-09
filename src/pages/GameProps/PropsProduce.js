@@ -155,11 +155,10 @@ class PropsProduce extends PureComponent {
 
   render() {
     const { gameprops: { gameList,propByParams,propsDetail },submitting ,form: { getFieldDecorator }} = this.props;
-    let walletInfo = this.state.walletInfo;
     let detail = propsDetail.data || [];
     let showDefaultProp = 0;
     if(detail !='' && propByParams == ''){
-      showDefaultProp = 1
+      showDefaultProp = 1;
     }
     const formItemLayout = {
       labelCol: {
@@ -206,7 +205,7 @@ class PropsProduce extends PureComponent {
               <Col span={11}>
                 <FormItem>
                   {getFieldDecorator('belongProps', {
-                    initialValue:detail.id+'|'+detail.oid,
+                    initialValue: typeof detail.id != 'undefined' && typeof detail.oid != 'undefined' ? detail.id+'|'+detail.oid : '',
                     rules: [
                       {
                         required: true,
@@ -215,7 +214,7 @@ class PropsProduce extends PureComponent {
                     ],
                   })(
                     <Select>
-                      {showDefaultProp ? <Option value={detail.id+'|'+detail.oid}>{detail.props_name}</Option> : propByParams.map(proplist => <Option key={proplist.id+'|'+proplist.oid} >{proplist.props_name}</Option>)}
+                      {showDefaultProp == 1 ? <Option value={detail.id+'|'+detail.oid}>{detail.props_name}</Option> : propByParams.map(propbyparams => <Option key={propbyparams.id+'|'+propbyparams.oid} >{propbyparams.props_name}</Option>)}
                     </Select>
                   )}
                 </FormItem>

@@ -363,14 +363,10 @@ export async function getGamePropsList(params) {
  * @returns
  */
 export async function CreatePropLocal(params) {
-  console.log('道具本地创建请求开始');
-  console.log(params);
-  console.log('道具本地创建请求结束');
   let msg = await remote.login({ openid: `${Math.random() * 1000000000 | 0}` });
   if (remote.isSuccess(msg)) {
     let res = await remote.fetching({
       func: "prop.CreateLocal",userinfo:userinfo,
-
       props_name: params.props_name,
       props_type: params.props_type,
       cid: params.cid,

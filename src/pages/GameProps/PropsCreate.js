@@ -71,7 +71,6 @@ class PropsCreate extends PureComponent {
       payload:param,
     }).then((ret) => {
       console.log(ret);
-
       if (ret.code == 0) {
           confirm({
             title: '创建成功',
@@ -84,7 +83,7 @@ class PropsCreate extends PureComponent {
               router.push('/gameprops/list');
             },
             onCancel() {
-              router.push(`/gameprops/produce`);
+              router.push(`/gameprops/produce/${ret.data.id}`);
             },
           });
       } else {
