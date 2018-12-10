@@ -29,7 +29,27 @@ let userinfo={id:-1};
 
 //--用户
 export async function queryUserMgr(params) {
-  return request(`/usermgr/query?${stringify(params)}`);
+  let msg = await remote.login({ openid: theOpenId });
+  let ret = {};
+  if (remote.isSuccess(msg)) {
+    console.log("从数据库查询用户地址列表address.Filter:" + stringify(params));
+    if (params == null) {
+      params = {
+        currentPage: 1,
+        pageSize: 10,
+        cp_type: null,
+        amount: null,
+        max_second: null, //90天(3600*24*90)
+      };
+    };
+    ret = await remote.fetching({
+      func: "address.Filter",userinfo:userinfo,
+      items: [null,null,null,params.currentPage,params.pageSize]
+    });
+  }
+  console.log("操作员管理结果列表：" + JSON.stringify(ret));
+  return ret;
+  // return request(`/usermgr/query?${stringify(params)}`);
 }
 
 
@@ -57,7 +77,7 @@ export async function accountLogin(params) {
 }
 
 
-//--操作员
+//--新增操作员
 export async function addOperator(params) {
   let msg = await remote.login({ openid: theOpenId });
   let ret = {};
@@ -76,10 +96,10 @@ export async function addOperator(params) {
     console.log(ret);
     return ret;
   }
-  console.log("添加新游戏结果：" + JSON.stringify(ret));
+  console.log("添加操作员结果：" + JSON.stringify(ret));
   return ret;
 }
-//--操作员,mock先随意，很快就切换到正式的服务器了
+//--操作员列表
 export async function queryOperatorMgr(params) {
   let msg = await remote.login({ openid: theOpenId });
   let ret = {};
