@@ -160,22 +160,29 @@ class UserList extends PureComponent {
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 16, lg: 24, xl: 48 }}>
+
           <Col md={16} sm={24}>
-            <FormItem label="搜索钱包地址：">
-              {getFieldDecorator('name')(<Input placeholder="请输入" />)}
+            <FormItem label="选择游戏类型：">
+              {getFieldDecorator('cp_type')(
+                <Select placeholder="请选择" style={{ width: '100%' }}>
+                  <Option value="">全部</Option>
+                  <Option value="LNG">休闲益智</Option>
+                  <Option value="RPG">角色扮演</Option>
+                  <Option value="WAR">战争策略</Option>
+                </Select>
+              )}
             </FormItem>
           </Col>
           <Col md={8} sm={24} />
           <Col md={16} sm={24}>
-            <FormItem label="选择游戏类型：">
-              {getFieldDecorator('status')(
-                <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="0">全部</Option>
-                  <Option value="1">休闲益智</Option>
-                  <Option value="2">角色扮演</Option>
-                  <Option value="3">战争策略</Option>
-                </Select>
-              )}
+            <FormItem label="最小游戏金：">
+              {getFieldDecorator('amount')(<Input placeholder="请输入" />)}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24} />
+          <Col md={16} sm={24}>
+            <FormItem label="有效期（天）：">
+              {getFieldDecorator('max_second')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
