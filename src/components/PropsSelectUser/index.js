@@ -27,17 +27,11 @@ class PropsSelectUser extends PureComponent {
   columns = [
     {
       title: '用户钱包地址',
-      dataIndex: 'walletAddr',
+      dataIndex: 'addr',
     },
     {
-      title: '玩过的游戏类型',
-      dataIndex: 'gameType',
-    },
-    {
-      title: '注册时间',
-      dataIndex: 'createdAt',
-      sorter: true,
-      align: 'right',
+      title: '累计支付游戏金',
+      dataIndex: 'sum',
     }
   ];
   componentDidMount() {
