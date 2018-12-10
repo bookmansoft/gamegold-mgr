@@ -55,16 +55,11 @@ class UserList extends PureComponent {
   columns = [
     {
       title: '用户钱包地址',
-      dataIndex: 'name',
+      dataIndex: 'addr',
     },
     {
-      title: '玩过的游戏类型',
-      dataIndex: 'desc',
-    },
-    {
-      title: '注册时间',
-      dataIndex: 'updatedAt',
-      render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
+      title: '累计支付游戏金',
+      dataIndex: 'sum',
     },
     {
       title: '操作',
@@ -131,7 +126,6 @@ class UserList extends PureComponent {
 
       const values = {
         ...fieldsValue,
-        updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
       };
 
       this.setState({
@@ -147,10 +141,8 @@ class UserList extends PureComponent {
 
   //赠送道具
   handleDeal = (flag, record) => {
-    this.setState({
-      updateModalVisible: !!flag,
-      stepFormValues: record || {},
-    });
+    console.log(record.addr);
+    this.props.history.push("../gameprops/present?id="+record.addr);
   };
 
   renderForm() {
