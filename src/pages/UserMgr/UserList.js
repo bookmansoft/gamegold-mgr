@@ -142,7 +142,7 @@ class UserList extends PureComponent {
   //赠送道具
   handleDeal = (flag, record) => {
     console.log(record.addr);
-    this.props.history.push("../gameprops/present?id="+record.addr);
+    this.props.history.push("../gameprops/present?address="+record.addr);
   };
 
   renderForm() {
