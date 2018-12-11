@@ -157,7 +157,7 @@ export default [
             path: '/wallet/walletpay',
             name: 'walletpay',
             component: './Wallet/WalletPay',
-            authority: ['admin'],
+            authority: ['admin','user'],
           },
           {
             path: '/wallet/walletpaysuccess',
