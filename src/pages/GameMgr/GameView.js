@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
 import Debounce from 'lodash-decorators/debounce';
 import Bind from 'lodash-decorators/bind';
+import moment from 'moment';
 
 import {
   Button,
@@ -13,14 +14,11 @@ import {
   Steps,
   Card,
   Popover,
-  Badge,
-  Table,
-  Tooltip,
   Divider,
   Modal,
   Form, 
   Input,
-  Radio,
+  
 } from 'antd';
 import classNames from 'classnames';
 import DescriptionList from '@/components/DescriptionList';
@@ -302,7 +300,7 @@ class GameView extends Component {
               开发者：{data.develop_name}
             </Col>
             <Col sm={8} xs={12}>
-              发布时间：{data.publish_time}
+              发布时间：{moment(data.publish_time*1000).format('YYYY-MM-DD HH:mm:ss')}
             </Col>
           </Row>
           <Row style={{ marginBottom: 32 }}>
@@ -318,7 +316,7 @@ class GameView extends Component {
               当前版本：{data.cp_version}
             </Col>
             <Col sm={8} xs={12}>
-              更新时间：{data.publish_time}
+              更新时间：{moment(data.online_time*1000).format('YYYY-MM-DD HH:mm:ss')}
             </Col>
           </Row>
           <Row style={{ marginBottom: 32 }}>
