@@ -9,14 +9,14 @@ const FooterView = () => (
       links={[
         {
           key: '游戏金链 百谷王',
-          title: '游戏金链',
+          title: '游戏金链 官网',
           href: 'http://www.gamegold.xin',
           blankTarget: true,
         },
       ]}
       copyright={
         <Fragment>
-          Copyright <Icon type="copyright" /> 2018 百谷王 游戏金链
+          Copyright <Icon type="copyright" /> 2018 百谷王
         </Fragment>
       }
     />
