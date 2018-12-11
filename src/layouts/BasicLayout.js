@@ -178,13 +178,13 @@ class BasicLayout extends React.PureComponent {
     const currRouterData = this.matchParamsPath(pathname);
 
     if (!currRouterData) {
-      return 'Ant Design Pro';
+      return 'Gamegold管理平台';
     }
     const message = formatMessage({
       id: currRouterData.locale || currRouterData.name,
       defaultMessage: currRouterData.name,
     });
-    return `${message} - Ant Design Pro`;
+    return `${message} - Gamegold管理平台`;
   };
 
   getLayoutStyle = () => {
