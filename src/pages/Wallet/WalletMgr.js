@@ -55,7 +55,7 @@ class WalletMgr extends PureComponent {
     {
       title: '时间',
       dataIndex: 'time',
-      render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
+      render: val => <span>{moment(val*1000).format('YYYY-MM-DD HH:mm:ss')}</span>,
     },
     {
       title: '描述',
@@ -83,7 +83,7 @@ class WalletMgr extends PureComponent {
     const { dispatch } = this.props;
     dispatch({
       type: 'walletmgr/fetch',
-      payload: {address:'b8b6681ca6ee4614321c8d34a5b3edf8c5a9fb49b44375024e55d84eea57840d'}
+      payload: {address:''}
     });
     dispatch({
       type: 'walletmgr/fetchBalanceAll',

@@ -105,17 +105,18 @@ export default [
         path: '/wallet',
         name: 'wallet',
         icon: 'table',
-        authority: ['admin'],
         routes: [
           {
             path: '/wallet/walletmgr',
             name: 'walletmgr',
             component: './Wallet/WalletMgr',
+            authority: ['admin','user'],
           },
           {
             path: '/wallet/step-form',
             name: 'walletstep',
             component: './Wallet/StepForm',
+            authority: ['admin'],
             hideChildrenInMenu: true,
             routes: [
               {
@@ -150,11 +151,13 @@ export default [
             path: '/wallet/walletinfo',
             name: 'walletinfo',
             component: './Wallet/WalletInfo',
+            authority: ['admin','user'],
           },
           {
             path: '/wallet/walletpay',
             name: 'walletpay',
             component: './Wallet/WalletPay',
+            authority: ['admin'],
           },
           {
             path: '/wallet/walletpaysuccess',

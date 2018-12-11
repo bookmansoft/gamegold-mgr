@@ -337,7 +337,7 @@ export async function addWalletPay(params) {
   let ret = {};
   if (remote.isSuccess(msg)) {
     console.log("钱包转出:");
-    ret = await remote.fetching({ func: "tx.Send",userinfo:JSON.parse(localStorage.userinfo), items: [params.address, params.value] });
+    ret = await remote.fetching({ func: "tx.Send",userinfo:JSON.parse(localStorage.userinfo), items: [params.address, params.value*100000000] });
   }
   console.log("看起来本地比较迟的消息");
 
