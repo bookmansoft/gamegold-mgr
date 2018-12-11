@@ -100,6 +100,58 @@ export default [
           },
         ],
       },
+      {
+        name: 'gameprops',
+        icon: 'build',
+        path: '/gameprops',
+        authority: ['user'],
+        routes: [
+          {
+            path: '/gameprops/list',
+            name: 'propslist',
+            component: './GameProps/PropsList',
+          },
+          {
+            path: '/gameprops/detail/:id',
+            name: 'propsdetail',
+            component: './GameProps/PropsDetail',
+            hideInMenu: true,
+          },
+          {
+            path: '/gameprops/edit/:id',
+            name: 'propsdetail',
+            component: './GameProps/propsEdit',
+            hideInMenu: true,
+          },
+          {
+            path: '/gameprops/create',
+            name: 'propscreate',
+            component: './GameProps/PropsCreate',
+          },
+          {
+            path: '/gameprops/produce',
+            name: 'propsproduce',
+            component: './GameProps/PropsProduce',
+          },
+          {
+            path: '/gameprops/produce/:id',
+            name: 'propsproduce',
+            component: './GameProps/PropsProduce',
+            hideInMenu: true,
+          },
+          {
+            path: '/gameprops/present/:id',
+            name: 'propspresent',
+            component: './GameProps/PropsPresent',
+            hideInMenu: true,
+          },
+          {
+            path: '/gameprops/present',
+            name: 'propspresent',
+            component: './GameProps/PropsPresent',
+          }
+        ],
+      },
       // wallet
       {
         path: '/wallet',
@@ -173,58 +225,7 @@ export default [
           },
         ],
       },
-      {
-        name: 'gameprops',
-        icon: 'build',
-        path: '/gameprops',
-        authority: ['user'],
-        routes: [
-          {
-            path: '/gameprops/list',
-            name: 'propslist',
-            component: './GameProps/PropsList',
-          },
-          {
-            path: '/gameprops/detail/:id',
-            name: 'propsdetail',
-            component: './GameProps/PropsDetail',
-            hideInMenu: true,
-          },
-          {
-            path: '/gameprops/edit/:id',
-            name: 'propsdetail',
-            component: './GameProps/propsEdit',
-            hideInMenu: true,
-          },
-          {
-            path: '/gameprops/create',
-            name: 'propscreate',
-            component: './GameProps/PropsCreate',
-          },
-          {
-            path: '/gameprops/produce',
-            name: 'propsproduce',
-            component: './GameProps/PropsProduce',
-          },
-          {
-            path: '/gameprops/produce/:id',
-            name: 'propsproduce',
-            component: './GameProps/PropsProduce',
-            hideInMenu: true,
-          },
-          {
-            path: '/gameprops/present/:id',
-            name: 'propspresent',
-            component: './GameProps/PropsPresent',
-            hideInMenu: true,
-          },
-          {
-            path: '/gameprops/present',
-            name: 'propspresent',
-            component: './GameProps/PropsPresent',
-          }
-        ],
-      },
+
 
       //---------------------------------------------------------------------------
 

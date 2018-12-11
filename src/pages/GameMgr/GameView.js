@@ -258,7 +258,7 @@ class GameView extends Component {
         tabList={null}
       >
       
-        <Card title="流程状态（审核中）" style={{ marginBottom: 24 }} bordered={false}>
+        {/* <Card title="流程状态（审核中）" style={{ marginBottom: 24 }} bordered={false}>
           <Row style={{ marginBottom: 32 }}>
             <Col sm={24} xs={24}>
               <div align="right">
@@ -289,7 +289,7 @@ class GameView extends Component {
             <Step title="上线" description={desc3}/>
             <Step title="下线" description={desc4}/>
           </Steps>  
-        </Card>
+        </Card> */}
         <Card style={null} bordered={false}>
           <Row style={{ marginBottom: 16 }}>
               <Col sm={24} xs={24}><h3><b>游戏信息</b></h3></Col>

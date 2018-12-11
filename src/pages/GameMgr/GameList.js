@@ -58,22 +58,15 @@ class GameList extends PureComponent {
       dataIndex: 'cp_type',
     },
     {
-      title: '状态',
-      dataIndex: 'cp_state',
-    },
-    {
       title: '添加时间',
       dataIndex: 'publish_time',
-       render: val => <span>{555 && moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
+       render: val => <span>{moment(val*1000).format('YYYY-MM-DD HH:mm:ss')}</span>,
     },
     {
       title: '操作',
       render: (text, record) => (
         <Fragment>
           <a onClick={() => this.handleView(true, record)}>详情</a>&nbsp;
-          <a onClick={() => this.handleDeal(true, record)}>下线</a>&nbsp;
-          <a onClick={() => this.handleEdit(true, record)}>编辑</a>&nbsp;
-          <a onClick={() => this.handleDelete(true, record)}>删除</a>&nbsp;
         </Fragment>
       ),
     },
@@ -180,8 +173,6 @@ class GameList extends PureComponent {
               {getFieldDecorator('cp_id')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
-        </Row>
-        <Row gutter={{ md: 16, lg: 24, xl: 48 }}>
           <Col md={6} sm={9}>
             <FormItem label="游戏类型：">
               {getFieldDecorator('cp_type')(
@@ -194,7 +185,7 @@ class GameList extends PureComponent {
               )}
             </FormItem>
           </Col>
-          <Col md={6} sm={9}>
+          {/* <Col md={6} sm={9}>
             <FormItem label="状态：">
               {getFieldDecorator('cp_state')(
                 <Select placeholder="请选择" style={{ width: '100%' }}>
@@ -204,7 +195,7 @@ class GameList extends PureComponent {
                 </Select>
               )}
             </FormItem>
-          </Col>
+          </Col> */}
           <Col md={6} sm={9}>
             <span className={styles.submitButtons}>
               <Button type="primary" htmlType="submit">
