@@ -60,6 +60,7 @@ class UserList extends PureComponent {
     {
       title: '累计支付游戏金',
       dataIndex: 'sum',
+      render: val => <span>{val/100000000}</span>,
     },
     {
       title: '操作',

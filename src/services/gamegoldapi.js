@@ -46,7 +46,7 @@ export async function queryUserMgr(params) {
     console.log(JSON.parse(localStorage.userinfo));
     ret = await remote.fetching({
       func: "address.Filter",userinfo:JSON.parse(localStorage.userinfo),
-      items: [params.cp_type,params.amount,params.max_second,params.currentPage,params.pageSize]
+      items: [params.cp_type,params.amount*100000000,params.max_second*3600*24,params.currentPage,params.pageSize]
     });
   }
   console.log("操作员管理结果列表：" + JSON.stringify(ret));
