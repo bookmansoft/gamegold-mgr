@@ -72,7 +72,8 @@ export async function accountLogin(params) {
     //判断返回值是否正确--增加一个返回值项 userinfo:{id:5} ;其中id为实际的userid
     console.log(ret);
     userinfo=ret.userinfo;
-    localStorage.userinfo=JSON.stringify(userinfo);
+    localStorage.userinfo=JSON.stringify(userinfo);//每次提交给服务端的数据
+    localStorage.username=params.userName;//页面显示用的数据
     return ret;
   }
   console.log("登录结果：" + JSON.stringify(ret));

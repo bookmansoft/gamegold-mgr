@@ -51,7 +51,7 @@ export default class GlobalHeaderRight extends PureComponent {
     } = this.props;
     const menu = (
       <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
-        <Menu.Item key="userCenter">
+        {/* <Menu.Item key="userCenter">
           <Icon type="user" />
           <FormattedMessage id="menu.account.center" defaultMessage="account center" />
         </Menu.Item>
@@ -62,7 +62,7 @@ export default class GlobalHeaderRight extends PureComponent {
         <Menu.Item key="triggerError">
           <Icon type="close-circle" />
           <FormattedMessage id="menu.account.trigger" defaultMessage="Trigger Error" />
-        </Menu.Item>
+        </Menu.Item> */}
         <Menu.Divider />
         <Menu.Item key="logout">
           <Icon type="logout" />
@@ -77,7 +77,7 @@ export default class GlobalHeaderRight extends PureComponent {
     }
     return (
       <div className={className}>
-        <HeaderSearch
+        {/* <HeaderSearch
           className={`${styles.action} ${styles.search}`}
           placeholder={formatMessage({ id: 'component.globalHeader.search' })}
           dataSource={[
@@ -91,18 +91,18 @@ export default class GlobalHeaderRight extends PureComponent {
           onPressEnter={value => {
             console.log('enter', value); // eslint-disable-line
           }}
-        />
+        /> */}
         <Tooltip title={formatMessage({ id: 'component.globalHeader.help' })}>
           <a
             target="_blank"
-            href="https://pro.ant.design/docs/getting-started"
+            href="https://github.com/bookmansoft/gamegoldapi/tree/master/content"
             rel="noopener noreferrer"
             className={styles.action}
           >
             <Icon type="question-circle-o" />
           </a>
         </Tooltip>
-        <NoticeIcon
+        {/* <NoticeIcon
           className={styles.action}
           count={currentUser.notifyCount}
           onItemClick={(item, tabProps) => {
@@ -138,7 +138,7 @@ export default class GlobalHeaderRight extends PureComponent {
             emptyText={formatMessage({ id: 'component.globalHeader.event.empty' })}
             emptyImage="https://gw.alipayobjects.com/zos/rmsportal/HsIsxMZiWKrNUavQUXqx.svg"
           />
-        </NoticeIcon>
+        </NoticeIcon> */}
         {currentUser.name ? (
           <Dropdown overlay={menu}>
             <span className={`${styles.action} ${styles.account}`}>
@@ -148,13 +148,13 @@ export default class GlobalHeaderRight extends PureComponent {
                 src={currentUser.avatar}
                 alt="avatar"
               />
-              <span className={styles.name}>{currentUser.name}</span>
+              <span className={styles.name}>{localStorage.getItem("username")}</span>
             </span>
           </Dropdown>
         ) : (
           <Spin size="small" style={{ marginLeft: 8, marginRight: 8 }} />
         )}
-        <SelectLang className={styles.action} />
+        {/* <SelectLang className={styles.action} /> */}
       </div>
     );
   }
