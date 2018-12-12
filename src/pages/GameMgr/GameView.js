@@ -16,9 +16,9 @@ import {
   Popover,
   Divider,
   Modal,
-  Form, 
+  Form,
   Input,
-  
+
 } from 'antd';
 import classNames from 'classnames';
 import DescriptionList from '@/components/DescriptionList';
@@ -47,12 +47,12 @@ const PublishForm = Form.create()(
               {getFieldDecorator('title', {
                 rules: [{ required: true, message: '请输入版本号!' }],
               })(
-                <Input placeholder="请输入版本号!"/>
+                <Input placeholder="请输入版本号!" />
               )}
             </FormItem>
             <FormItem label="更新内容">
               {getFieldDecorator('description', {
-                rules: [{ required: true, max:300, message: '请输入更新内容，不超过300字!' }],
+                rules: [{ required: true, max: 300, message: '请输入更新内容，不超过300字!' }],
               }
               )(<Input placeholder="请输入更新内容，不超过300字!" type="textarea" />)}
             </FormItem>
@@ -82,12 +82,12 @@ const desc2 = (
 );
 const desc3 = (
   <div className={classNames(styles.textSecondary, styles.stepDescription)}>
-    
+
   </div>
 );
 const desc4 = (
   <div className={classNames(styles.textSecondary, styles.stepDescription)}>
-    
+
   </div>
 );
 
@@ -103,8 +103,8 @@ const customDot = (dot, { status }) =>
       {dot}
     </Popover>
   ) : (
-    dot
-  );
+      dot
+    );
 //--编辑
 function doEdit() {
   //没干啥
@@ -120,7 +120,7 @@ function doOffline() {
         setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
       }).catch(() => console.log('Oops errors!'));
     },
-    onCancel() {},
+    onCancel() { },
   });
 }
 
@@ -134,7 +134,7 @@ function doDeleteGame() {
         setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
       }).catch(() => console.log('Oops errors!'));
     },
-    onCancel() {},
+    onCancel() { },
   });
 }
 
@@ -148,7 +148,7 @@ function doReOnline() {
         setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
       }).catch(() => console.log('Oops errors!'));
     },
-    onCancel() {},
+    onCancel() { },
   });
 }
 
@@ -160,7 +160,7 @@ function doReOnline() {
 
 class GameView extends Component {
 
-  renderImg= (text) => {
+  renderImg = (text) => {
     if (text && text.length) {
       const imgs = text.map((item, index) =>
         <img width={120} src={item} key={index} />
@@ -202,12 +202,16 @@ class GameView extends Component {
     this.formRef = formRef;
   }
 
+  handleBack = () => {
+    history.back();
+  };
+
   componentDidMount() {
     const { dispatch } = this.props;
     console.log(this.props.location.query.id);
     dispatch({
       type: 'gameview/fetch',
-      payload: {id:this.props.location.query.id},//这里
+      payload: { id: this.props.location.query.id },//这里
     });
 
     this.setStepDirection();
@@ -241,9 +245,9 @@ class GameView extends Component {
 
   render() {
     const { stepDirection, operationkey } = this.state;
-    const { 
-        gameview:  {data },
-        loading 
+    const {
+      gameview: { data },
+      loading
     } = this.props;
 
 
@@ -255,7 +259,7 @@ class GameView extends Component {
         extraContent={null}
         tabList={null}
       >
-      
+
         {/* <Card title="流程状态（审核中）" style={{ marginBottom: 24 }} bordered={false}>
           <Row style={{ marginBottom: 32 }}>
             <Col sm={24} xs={24}>
@@ -290,7 +294,7 @@ class GameView extends Component {
         </Card> */}
         <Card style={null} bordered={false}>
           <Row style={{ marginBottom: 16 }}>
-              <Col sm={24} xs={24}><h3><b>游戏信息</b></h3></Col>
+            <Col sm={24} xs={24}><h3><b>游戏信息</b></h3></Col>
           </Row>
           <Row style={{ marginBottom: 32 }}>
             <Col sm={8} xs={12}>
@@ -300,32 +304,32 @@ class GameView extends Component {
               开发者：{data.develop_name}
             </Col>
             <Col sm={8} xs={12}>
-              发布时间：{moment(data.publish_time*1000).format('YYYY-MM-DD HH:mm:ss')}
+              发布时间：{moment(data.publish_time * 1000).format('YYYY-MM-DD HH:mm:ss')}
             </Col>
           </Row>
           <Row style={{ marginBottom: 32 }}>
-              <Col sm={24} xs={24}>URL地址：{data.cp_url}</Col>
+            <Col sm={24} xs={24}>URL地址：{data.cp_url}</Col>
           </Row>
 
           <Divider style={{ margin: '20px 0' }} />
           <Row style={{ marginBottom: 16 }}>
-              <Col sm={24} xs={24}><h3><b>版本信息</b></h3></Col>
+            <Col sm={24} xs={24}><h3><b>版本信息</b></h3></Col>
           </Row>
           <Row style={{ marginBottom: 32 }}>
             <Col sm={8} xs={12}>
               当前版本：{data.cp_version}
             </Col>
             <Col sm={8} xs={12}>
-              更新时间：{moment(data.online_time*1000).format('YYYY-MM-DD HH:mm:ss')}
+              更新时间：{moment(data.online_time * 1000).format('YYYY-MM-DD HH:mm:ss')}
             </Col>
           </Row>
           <Row style={{ marginBottom: 32 }}>
-              <Col sm={24} xs={24}>更新内容：{data.cp_desc}</Col>
+            <Col sm={24} xs={24}>更新内容：{data.cp_desc}</Col>
           </Row>
 
           <Divider style={{ margin: '20px 0' }} />
           <Row style={{ marginBottom: 16 }}>
-              <Col sm={24} xs={24}><h3><b>素材信息</b></h3></Col>
+            <Col sm={24} xs={24}><h3><b>素材信息</b></h3></Col>
           </Row>
           <Row style={{ marginBottom: 32 }}>
             <Col sm={24} xs={24}>
@@ -338,9 +342,16 @@ class GameView extends Component {
             </Col>
           </Row>
           <Row style={{ marginBottom: 32 }}>
-              <Col sm={24} xs={24}>
-                游戏截图：{this.renderImg(data.pic_urls)}
-              </Col>
+            <Col sm={24} xs={24}>
+              游戏截图：{this.renderImg(data.pic_urls)}
+            </Col>
+          </Row>
+          <Row style={{ marginBottom: 32 }}>
+            <Col sm={4} xs={8}>
+              <Button type="primary" onClick={this.handleBack}>
+                返回游戏列表
+                </Button>
+            </Col>
           </Row>
         </Card>
         <PublishForm
