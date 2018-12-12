@@ -253,9 +253,9 @@ class PropsCreate extends PureComponent {
           <DescriptionList size="large" style={{ marginBottom: 32 }}>
             <Description term="道具OID">{cpPropsDetail.oid || ''}</Description>
             <Description term="道具名称">{cpPropsDetail.name || ''}</Description>
-            <Description term="道具类型">{cpPropsDetail.type || ''}</Description>
+            <Description term="道具属性">{cpPropsDetail.type || ''}</Description>
             <Description term="所属游戏">{this.state.cid || ''}</Description>
-            <Description term="游戏简介">{cpPropsDetail.desc || ''}</Description>
+            <Description term="道具描述">{cpPropsDetail.desc || ''}</Description>
           </DescriptionList>
           <DescriptionList size="large" style={{ borderTop: '1px solid #ddd',marginTop: 32}}>
             <Description term="道具图标">

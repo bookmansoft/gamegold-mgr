@@ -95,10 +95,13 @@ class PropsProduce extends PureComponent {
         return;
       }
       requestData['id'] = id;
-      requestData['cid'] = values.belongGame;
+      //requestData['cid'] = values.belongGame;
+      requestData['cid'] = 'e26f7a20-fcef-11e8-af9c-9f3accf37b7f';//TODO 后期根据cp调整删除这个
       requestData['oid'] = oid;
       requestData['gold'] = values.coinNum;
       requestData['num'] = values.proNum;
+      console.log(requestData);
+
       if(requestData){
             //调用道具上链
             dispatch({
