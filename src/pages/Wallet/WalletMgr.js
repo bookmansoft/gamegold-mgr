@@ -55,7 +55,7 @@ class WalletMgr extends PureComponent {
     {
       title: '时间',
       dataIndex: 'time',
-      render: val => <span>{moment(val*1000).format('YYYY-MM-DD HH:mm:ss')}</span>,
+      render: val => <span>{moment(val * 1000).format('YYYY-MM-DD HH:mm:ss')}</span>,
     },
     {
       title: '描述',
@@ -83,7 +83,7 @@ class WalletMgr extends PureComponent {
     const { dispatch } = this.props;
     dispatch({
       type: 'walletmgr/fetch',
-      payload: {address:''}
+      payload: { address: '' }
     });
     dispatch({
       type: 'walletmgr/fetchBalanceAll',
@@ -105,7 +105,7 @@ class WalletMgr extends PureComponent {
       pageSize: pagination.pageSize,
       ...formValues,
       ...filters,
-      address: {adress},
+      address: { adress },
     };
     if (sorter.field) {
       params.sorter = `${sorter.field}_${sorter.order}`;
@@ -163,10 +163,20 @@ class WalletMgr extends PureComponent {
 
   //查看详情
   handleView = (record) => {
-    router.push('/wallet/walletlog?id='+record.txid);
+    router.push('/wallet/walletlog?id=' + record.txid);
   };
 
-  //查看详情
+  //查看钱包信息
+  handleViewWallet = () => {
+    router.push('/wallet/walletinfo');
+  };
+
+  //备份钱包信息
+  handleBackupWallet = () => {
+    router.push('/wallet/step-form');
+  };
+
+  //转出
   handlePay = () => {
     router.push('/wallet/walletpay');
   };
@@ -228,62 +238,61 @@ class WalletMgr extends PureComponent {
 
   render() {
     const {
-      walletmgr: { data,info },
+      walletmgr: { data, info },
       loading,
     } = this.props;
     const { selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;
 
     return (
       <PageHeaderWrapper title="钱包管理">
-          <Card bordered={false}>
-            <Row>
-              <Col sm={18} xs={12}>
-                钱包管理
+        <Card bordered={false}>
+          <Row>
+            <Col sm={18} xs={12}>
+              钱包管理
               </Col>
-              <Col sm={6} xs={12}>
-                <Button type="primary">
-                  备份钱包
-                </Button> 
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <Button type="primary">
-                  查看钱包信息
+            <Col sm={6} xs={12}>
+              {localStorage.currentAuthority == 'admin' && <Button type="primary" onClick={() => this.handleBackupWallet()}>
+                备份钱包</Button>}
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <Button type="primary" onClick={() => this.handleViewWallet()}>
+                查看钱包信息
                 </Button>
+            </Col>
+          </Row>
+          <Divider style={{ marginBottom: 16 }} />
+          <Row>
+            <Col sm={24} xs={24}>可用余额</Col>
+          </Row>
+          <Row>
+            <Col sm={4} xs={8}>
+              {(info.data != null) && JSON.stringify(info.data.confirmed / 100000000)} GDD
               </Col>
-            </Row>
-            <Divider style={{ marginBottom: 16 }} />
-            <Row>
-              <Col sm={24} xs={24}>可用余额</Col>
-            </Row>
-            <Row>
-              <Col sm={4} xs={8}>
-                {(info.data!=null) && JSON.stringify(info.data.confirmed/100000000)} GDD
-              </Col>
-              <Col sm={4} xs={8}>
-                <Button type="primary">
-                  转入
-                </Button> 
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <Col sm={4} xs={8}>
+              <Button type="primary">
+                转入
+                </Button>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <Button onClick={() => this.handlePay()}>
-                  转出
+                转出
                 </Button>
-              </Col>
-            </Row>
-          </Card>
+            </Col>
+          </Row>
+        </Card>
 
-          <Card bordered={false} style={{ marginTop: 24 }}>
-            <div className={styles.tableList}>
-              <div className={styles.tableListForm}>{this.renderForm()}</div>
-              <div className={styles.tableListOperator} />
-              <SimpleTable
-                selectedRows={selectedRows}
-                loading={loading}
-                data={data}
-                columns={this.columns}
-                onSelectRow={null}
-                onChange={this.handleStandardTableChange}
-              />
-            </div>
-          </Card>
+        <Card bordered={false} style={{ marginTop: 24 }}>
+          <div className={styles.tableList}>
+            <div className={styles.tableListForm}>{this.renderForm()}</div>
+            <div className={styles.tableListOperator} />
+            <SimpleTable
+              selectedRows={selectedRows}
+              loading={loading}
+              data={data}
+              columns={this.columns}
+              onSelectRow={null}
+              onChange={this.handleStandardTableChange}
+            />
+          </div>
+        </Card>
 
       </PageHeaderWrapper>
     );

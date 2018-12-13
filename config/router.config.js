@@ -84,7 +84,7 @@ export default [
             path: '/gamemgr/gameview',
             name: 'gameview',
             component: './GameMgr/GameView',
-            hideInMenu: false,
+            hideInMenu: true,
           },
           {
             path: '/gamemgr/gameaddsuccess',

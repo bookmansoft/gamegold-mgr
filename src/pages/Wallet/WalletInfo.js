@@ -78,9 +78,9 @@ class WalletInfo extends PureComponent {
             </Row>
             <Row style={{ marginBottom: 32 }}>
               <Col sm={4} xs={8}>
-                <Button type="primary" onClick={this.handleBack}>
-                  立即备份
-                </Button> 
+              {localStorage.currentAuthority == 'admin' &&<Button type="primary" onClick={this.handleBack}>
+                  立即备份</Button>}
+                
               </Col>
             </Row>
           </Card>

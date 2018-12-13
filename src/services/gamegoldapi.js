@@ -22,7 +22,7 @@ let remote = new gameconn(
 
 //--登录以后的用户信息，可修改
 let userinfo = { id: -1 };
-const salt="038292cfb50d8361a0feb0e3697461c9";
+const salt = "038292cfb50d8361a0feb0e3697461c9";
 
 
 
@@ -68,7 +68,7 @@ export async function accountLogin(params) {
     //加密
     const crypto = require('crypto');
     var sha1 = crypto.createHash("sha1");//定义加密方式:md5不可逆,此处的md5可以换成任意hash加密的方法名称；
-    sha1.update(params.password+salt);
+    sha1.update(params.password + salt);
     let password = sha1.digest("hex");  //加密后的值d
     console.log(password);
 
@@ -84,9 +84,13 @@ export async function accountLogin(params) {
       });
       //判断返回值是否正确--增加一个返回值项 userinfo:{id:5} ;其中id为实际的userid
       console.log(ret);
-      userinfo = ret.userinfo;
-      localStorage.userinfo = JSON.stringify(userinfo);//每次提交给服务端的数据
-      localStorage.username = params.userName;//页面显示用的数据
+      if (ret.status == "ok") {
+        //服务端返回正确结果，例如：{ status: "ok", type: "account", currentAuthority: "admin", userinfo:{ id: 1 } }
+        userinfo = ret.userinfo;
+        localStorage.userinfo = JSON.stringify(userinfo);//每次提交给服务端的数据
+        localStorage.username = params.userName;//页面显示用的数据
+        localStorage.currentAuthority=ret.currentAuthority;
+      }
       return ret;
     }
     console.log("登录结果：" + JSON.stringify(ret));
@@ -107,7 +111,7 @@ export async function addOperator(params) {
     //加密
     const crypto = require('crypto');
     var sha1 = crypto.createHash("sha1");//定义加密方式:md5不可逆,此处的md5可以换成任意hash加密的方法名称；
-    sha1.update(params.password+salt);
+    sha1.update(params.password + salt);
     let password = sha1.digest("hex");  //加密后的值d
     // 调用保存记录的方法
     if (remote.isSuccess(msg)) {
