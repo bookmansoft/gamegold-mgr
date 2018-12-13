@@ -59,11 +59,11 @@ class WalletMgr extends PureComponent {
     },
     {
       title: '描述',
-      dataIndex: 'desc',
+      dataIndex: 'label',
     },
     {
-      title: '备注',
-      dataIndex: 'remark',
+      title: '分类',
+      dataIndex: 'category',
     },
     {
       title: '金额(GDD)',
