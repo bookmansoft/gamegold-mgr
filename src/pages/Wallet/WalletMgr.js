@@ -62,7 +62,7 @@ class WalletMgr extends PureComponent {
       dataIndex: 'label',
     },
     {
-      title: '分类',
+      title: '类型',
       dataIndex: 'category',
     },
     {

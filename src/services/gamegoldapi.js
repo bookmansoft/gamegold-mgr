@@ -325,7 +325,7 @@ export async function queryWalletLog(params) {
     let ret = { code: -200, data: null, message: "react service层无返回值。方法名：queryWalletLog" };
     if (remote.isSuccess(msg)) {
       console.log("获取钱包收支流水:" + JSON.stringify(params));
-      ret = await remote.fetching({ func: "tx.List", userinfo: JSON.parse(localStorage.userinfo), items: [] });
+      ret = await remote.fetching({ func: "tx.List", userinfo: JSON.parse(localStorage.userinfo), items: [],daterange:params.date });
     }
     console.log("获取钱包收支流水结果：" + JSON.stringify(ret));
     let theResult = { list: ret.data, pagination: { current: 1, pageSize: 10 } };

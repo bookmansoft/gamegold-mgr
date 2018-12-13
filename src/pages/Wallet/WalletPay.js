@@ -51,6 +51,12 @@ class WalletPay extends PureComponent {
     });
   };
 
+  //转出
+  handleCancel = () => {
+    history.back();
+    // router.push('/wallet/walletpay');
+  };
+
   render() {
     const { submitting } = this.props;
     const {
@@ -130,7 +136,7 @@ class WalletPay extends PureComponent {
               <Button type="primary" htmlType="submit" loading={submitting}>
                 确认发送
               </Button>
-              <Button style={{ marginLeft: 8 }}  htmlType="reset">
+              <Button style={{ marginLeft: 8 }}  onClick={() => this.handleCancel()}>
                 取消
               </Button>
             </FormItem>

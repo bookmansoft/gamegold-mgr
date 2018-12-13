@@ -90,7 +90,7 @@ class WalletLog extends PureComponent {
               <Col sm={24} xs={24}>对方钱包地址：{(data.details!=null) && (data.details[0].address)}</Col>
             </Row>
             <Row style={{ marginBottom: 32 }}>
-              <Col sm={24} xs={24}>交易备注：{(data.details!=null) && (data.details[0].label)}</Col>
+              <Col sm={24} xs={24}>交易描述：{(data.details!=null) && (data.details[0].label)}</Col>
             </Row>
             <Row style={{ marginBottom: 32 }}>
               <Col sm={4} xs={8}>
