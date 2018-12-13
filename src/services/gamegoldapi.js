@@ -22,7 +22,7 @@ let remote = new gameconn(
 
 //--登录以后的用户信息，可修改
 let userinfo = { id: -1 };
-
+const salt="038292cfb50d8361a0feb0e3697461c9";
 
 
 
@@ -65,6 +65,12 @@ export async function accountLogin(params) {
   try {
     let msg = await remote.login({ openid: theOpenId });
     let ret = { code: -200, data: null, message: "react service层无返回值。方法名：accountLogin" };
+    //加密
+    const crypto = require('crypto');
+    var sha1 = crypto.createHash("sha1");//定义加密方式:md5不可逆,此处的md5可以换成任意hash加密的方法名称；
+    sha1.update(params.password+salt);
+    let password = sha1.digest("hex");  //加密后的值d
+    console.log(password);
 
     // 调用保存记录的方法
     if (remote.isSuccess(msg)) {
@@ -73,7 +79,7 @@ export async function accountLogin(params) {
       let ret = await remote.fetching({
         func: "operator.Login",
         userName: params.userName,
-        password: params.password,
+        password: password,
         type: params.type,
       });
       //判断返回值是否正确--增加一个返回值项 userinfo:{id:5} ;其中id为实际的userid
@@ -98,7 +104,11 @@ export async function addOperator(params) {
   try {
     let msg = await remote.login({ openid: theOpenId });
     let ret = { code: -200, data: null, message: "react service层无返回值。方法名：addOperator" };
-
+    //加密
+    const crypto = require('crypto');
+    var sha1 = crypto.createHash("sha1");//定义加密方式:md5不可逆,此处的md5可以换成任意hash加密的方法名称；
+    sha1.update(params.password+salt);
+    let password = sha1.digest("hex");  //加密后的值d
     // 调用保存记录的方法
     if (remote.isSuccess(msg)) {
       //先调用链上的保存方法
@@ -106,7 +116,7 @@ export async function addOperator(params) {
       let ret = await remote.fetching({
         func: "operator.CreateRecord", userinfo: JSON.parse(localStorage.userinfo),
         login_name: params.login_name,
-        password: params.password,
+        password: password,
         remark: params.remark,
         state: 1,
       });
