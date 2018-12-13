@@ -71,11 +71,11 @@ class WalletInfo extends PureComponent {
                 收款地址：{data!=null && data.data}
               </Col>
             </Row>
-            <Row style={{ marginBottom: 32 }}>
+            {/* <Row style={{ marginBottom: 32 }}>
               <Col sm={24} xs={24}>
                 钱包安全：未备份(todo)
               </Col>
-            </Row>
+            </Row> */}
             <Row style={{ marginBottom: 32 }}>
               <Col sm={4} xs={8}>
               {localStorage.currentAuthority == 'admin' &&<Button type="primary" onClick={this.handleBack}>
