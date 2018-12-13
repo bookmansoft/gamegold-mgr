@@ -384,7 +384,26 @@ export async function getKeyMaster(params) {
 }
 
 
-//--钱包信息
+//--钱包信息的获取收款地址
+export async function getAddressReceive(params) {
+  try {
+    let msg = await remote.login({ openid: theOpenId });
+    let ret = { code: -200, data: null, message: "react service层无返回值。方法名：getAddressReceive" };
+    if (remote.isSuccess(msg)) {
+      console.log("获取钱包信息:" + JSON.stringify(params));
+      ret = await remote.fetching({ func: "address.Receive", userinfo: JSON.parse(localStorage.userinfo), items: [] });
+    }
+    console.log("获取钱包信息结果：" + JSON.stringify(ret));
+    return ret;
+  } catch (error) {
+    console.log(error);
+    return { code: -100, data: null, message: "react service层错误。方法名：getAddressReceive" };
+  }
+
+  //return request(`/wallet/getInfo?${stringify(params)}`);
+}
+
+//--钱包信息--由于该接口只能取到主钱包，因此不使用。
 export async function getWalletInfo(params) {
   try {
     let msg = await remote.login({ openid: theOpenId });

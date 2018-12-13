@@ -68,7 +68,7 @@ class WalletInfo extends PureComponent {
             </Row>
             <Row style={{ marginBottom: 32 }}>
               <Col sm={24} xs={24}>
-                收款地址：{(data.list!=null && data.list.account!=null) && (data.list.account.receiveAddress)}
+                收款地址：{data!=null && data.data}
               </Col>
             </Row>
             <Row style={{ marginBottom: 32 }}>

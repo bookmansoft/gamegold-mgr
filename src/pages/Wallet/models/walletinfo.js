@@ -1,4 +1,4 @@
-import { getWalletInfo } from '@/services/gamegoldapi';
+import { getWalletInfo,getAddressReceive } from '@/services/gamegoldapi';
 
 export default {
   namespace: 'walletinfo',
@@ -10,7 +10,7 @@ export default {
 
   effects: {
     *fetch({ payload }, { call, put }) {
-      const response = yield call(getWalletInfo, payload);
+      const response = yield call(getAddressReceive, payload);
       yield put({
         type: 'save',
         payload: response,
