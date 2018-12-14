@@ -26,7 +26,7 @@ const { TextArea } = Input;
   submitting: loading.effects['operator/operatorpassword'],
 }))
 @Form.create()
-class WalletPay extends PureComponent {
+class OperatorPassword extends PureComponent {
   handleSubmit = e => {
     const { dispatch, form } = this.props;
     e.preventDefault();
@@ -34,19 +34,9 @@ class WalletPay extends PureComponent {
       if (!err) {
         console.log(values);
         dispatch({
-          type: 'operator/change',
+          type: 'operatorpassword/change',
           payload: values,
-        }).then((ret) => {
-          console.log(ret);
-          if (ret==null) {
-            router.push('/wallet/walletpayerror');
-          } else {
-            //此处的id表示交易id
-            let txid=ret.hash;//此处的hash才是交易流水（即交易哈希值）
-            router.push(`/wallet/walletpaysuccess?id=${txid}`);
-          };
-         }
-        );
+        });
       }
     });
   };
@@ -140,4 +130,4 @@ class WalletPay extends PureComponent {
   }
 }
 
-export default WalletPay;
+export default OperatorPassword;

@@ -1,7 +1,7 @@
 import { routerRedux } from 'dva/router';
 import { message } from 'antd';
 import { fakeSubmitForm } from '@/services/api';
-import { addWalletPay } from '@/services/gamegoldapi';
+import { changeOperatorPassword } from '@/services/gamegoldapi';
 
 export default {
   namespace: 'operatorpassword',
@@ -12,6 +12,7 @@ export default {
 
   effects: {
     *change({ payload }, { call }) {
+      console.log("line 15");
       let ret=yield call(changeOperatorPassword, payload);
       message.success('提交成功!');
       if (ret.code==0 && ret.data!=null && ret.data.hash!=null) {
