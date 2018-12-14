@@ -63,6 +63,10 @@ export default class GlobalHeaderRight extends PureComponent {
           <Icon type="close-circle" />
           <FormattedMessage id="menu.account.trigger" defaultMessage="Trigger Error" />
         </Menu.Item> */}
+        <Menu.Item key="changepassword">
+          <Icon type="setting" />
+          更改密码
+        </Menu.Item>
         <Menu.Divider />
         <Menu.Item key="logout">
           <Icon type="logout" />

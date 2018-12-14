@@ -74,6 +74,7 @@ export default {
   'menu.operator': '操作员管理',
   'menu.operator.operatorlist': '操作员列表',
   'menu.operator.operatoradd': '添加操作员',
+  'menu.operator.operatopassword': '修改密码',
   'menu.operator.operatoraddsuccess': '添加操作员成功',
   'menu.operator.operatoradderror': '添加操作员失败',
   'menu.usermgr': '用户管理',

@@ -75,7 +75,7 @@ export async function accountLogin(params) {
     // 调用保存记录的方法
     if (remote.isSuccess(msg)) {
       //先调用链上的保存方法
-      console.log("添加操作员:" + JSON.stringify(params));
+      console.log("操作员登录:" + JSON.stringify(params));
       let ret = await remote.fetching({
         func: "operator.Login",
         userName: params.userName,
@@ -136,6 +136,47 @@ export async function addOperator(params) {
   }
 
 }
+
+//--修改操作员密码
+export async function changeOperatorPassword(params) {
+  try {
+    let msg = await remote.login({ openid: theOpenId });
+    let ret = { code: -200, data: null, message: "react service层无返回值。方法名：addOperator" };
+    if (params.newpassword!=params.newpassword2) {
+      return {code:-10,data:null,message:"两次输入的新密码不一致！"};
+    }
+    //加密旧密码与新密码
+    const crypto = require('crypto');
+    let sha1Old = crypto.createHash("sha1");//定义加密方式:md5不可逆,此处的md5可以换成任意hash加密的方法名称；
+    sha1Old.update(params.oldpassword + salt);
+    let oldpassword = sha1Old.digest("hex");  //加密后的值d
+    let sha1New = crypto.createHash("sha1");//定义加密方式:md5不可逆,此处的md5可以换成任意hash加密的方法名称；
+    sha1New.update(params.newpassword + salt);
+    let newpassword = sha1New.digest("hex");  //加密后的值d
+    // 调用保存记录的方法
+    if (remote.isSuccess(msg)) {
+      //先调用链上的保存方法
+      console.log("添加操作员:" + JSON.stringify(params));
+      let ret = await remote.fetching({
+        func: "operator.ChangePassword", userinfo: JSON.parse(localStorage.userinfo),
+        oldpassword: oldpassword,
+        newpassword: newpassword,
+      });
+      //判断返回值是否正确
+      console.log(ret);
+      return ret;
+    }
+    console.log("添加操作员结果：" + JSON.stringify(ret));
+    return ret;
+  } catch (error) {
+    console.log(error);
+    return { code: -100, data: null, message: "react service层错误。方法名：addOperator" };
+  }
+
+}
+
+
+
 //--操作员列表
 export async function queryOperatorMgr(params) {
   try {

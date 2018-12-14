@@ -36,6 +36,11 @@ export default [
             component: './Operator/OperatorAdd',
           },
           {
+            path: '/operator/operatorpassword',
+            name: 'operatopassword',
+            component: './Operator/OperatorPassword',
+          },
+          {
             path: '/operator/operatoraddsuccess',
             name: 'operatoraddsuccess',
             component: './Operator/OperatorAddSuccess',
