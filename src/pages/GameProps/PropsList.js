@@ -1,6 +1,6 @@
 import React, { Fragment, PureComponent } from 'react';
 import styles from './style.less';
-import { Table, Form, Row, Col, Input, Select, Button, Divider, Modal } from 'antd';
+import { Table, Form, Row, Col, Input, Select, Button, Divider, Modal,Card } from 'antd';
 import { connect } from 'dva';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import { FormattedMessage } from 'umi/locale';
@@ -19,8 +19,8 @@ class PropsList extends PureComponent {
     formValues: {},
     visible: false,
     current: undefined,
-    proposPrice : 0,
-    proposNum : 0,
+    proposPrice: 0,
+    proposNum: 0,
   };
 
   columns = [
@@ -31,7 +31,7 @@ class PropsList extends PureComponent {
     {
       title: '道具名',
       dataIndex: 'props_name',
-     
+
     },
     {
       title: '道具类型',
@@ -55,7 +55,7 @@ class PropsList extends PureComponent {
     {
       title: '操作',
       render: (e, record) => {
-        if(record.status == 1){
+        if (record.status == 1) {
           return (
             <Fragment>
               <Link to={`/gameprops/detail/${record.id}`}>详情</Link>
@@ -64,7 +64,7 @@ class PropsList extends PureComponent {
               <Divider type="vertical" />
             </Fragment>
           );
-        }else if(record.status == 2){
+        } else if (record.status == 2) {
           return (
             <Fragment>
               <Link to={`/gameprops/detail/${record.id}`}>详情</Link>
@@ -78,7 +78,7 @@ class PropsList extends PureComponent {
             </Fragment>
           );
         }
-        
+
       }
     },
   ];
@@ -93,7 +93,7 @@ class PropsList extends PureComponent {
     });
     dispatch({
       type: 'gameprops/propsList',
-      payload: {currentPage:1, pageSize: 10},
+      payload: { currentPage: 1, pageSize: 10 },
     });
   }
   handleEdit = (e, item) => {
@@ -163,7 +163,7 @@ class PropsList extends PureComponent {
     });
     dispatch({
       type: 'gameprops/propsList',
-      payload: {currentPage:1, pageSize: 10},
+      payload: { currentPage: 1, pageSize: 10 },
     });
   };
   handleGamePropsCreate = () => {
@@ -201,9 +201,9 @@ class PropsList extends PureComponent {
   };
   renderSimpleForm() {
     const {
-      gameprops: { gameList},
+      gameprops: { gameList },
       form: { getFieldDecorator },
-      } = this.props;
+    } = this.props;
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
@@ -220,9 +220,9 @@ class PropsList extends PureComponent {
           <Col md={6} sm={24}>
             <FormItem label="所在游戏">
               {getFieldDecorator('game')(
-                  <Select
+                <Select
                   setFieldsValue={0}
-                  style={{width:"200px"}}
+                  style={{ width: "200px" }}
                 >
                   {gameList.map(game => <Option key={game.cp_id}>{game.cp_text}</Option>)}
                 </Select>
@@ -273,7 +273,7 @@ class PropsList extends PureComponent {
         <Form onSubmit={this.handleOnsaleSubmit}>
           <FormItem label="道具名称" {...this.formLayout}>
             {getFieldDecorator('proposName', {})(
-              <Input  style={{ width: "50%" }} />
+              <Input style={{ width: "50%" }} />
             )}
 
           </FormItem>
@@ -282,7 +282,7 @@ class PropsList extends PureComponent {
               rules: [{ required: true, message: '请输入单个售价' }],
               initialValue: 0,
             })(
-              <Input  style={{ width: "50%" }} addonAfter="GGD"/>
+              <Input style={{ width: "50%" }} addonAfter="GGD" />
             )}
           </FormItem>
 
@@ -291,7 +291,7 @@ class PropsList extends PureComponent {
               rules: [{ required: true, message: '请输入上架数量' }],
               initialValue: 0,
             })(
-              <Input  addonAfter="件" style={{ width: "50%" }} />
+              <Input addonAfter="件" style={{ width: "50%" }} />
             )}
           </FormItem>
           <FormItem label="当前库存" {...this.formLayout}>
@@ -301,31 +301,36 @@ class PropsList extends PureComponent {
       );
     };
     return (
-        <PageHeaderWrapper
-          title={<FormattedMessage id="app.gameprops.list" />}
-        >
-        <div className={styles.tableListForm}>{this.renderSimpleForm()}</div>
+      <PageHeaderWrapper
+        title={<FormattedMessage id="app.gameprops.list" />}
+      >
+        <Card bordered={false}>
+          <div className={styles.tableList}>
+            <div className={styles.tableListForm}>{this.renderSimpleForm()}</div>
+            <div className={styles.tableListOperator} />
 
-        <Table
-          loading={loading}
-          rowKey={rowKey || 'id'}
-          dataSource={list}
-          columns={this.columns}
-          pagination={paginationProps}
-          onChange={this.handleStandardTableChange}
-        />
-          <Modal
-            title={`上架出售道具${current.name || ''}`}
-            className={styles.standardListForm}
-            width={640}
-            bodyStyle={{ padding: '28px 0 0' }}
-            destroyOnClose
-            visible={visible}
-            {...modalFooter}
-          >
-            {getModalContent()}
-          </Modal>
-        </PageHeaderWrapper>
+            <Table
+              loading={loading}
+              rowKey={rowKey || 'id'}
+              dataSource={list}
+              columns={this.columns}
+              pagination={paginationProps}
+              onChange={this.handleStandardTableChange}
+            />
+            <Modal
+              title={`上架出售道具${current.name || ''}`}
+              className={styles.standardListForm}
+              width={640}
+              bodyStyle={{ padding: '28px 0 0' }}
+              destroyOnClose
+              visible={visible}
+              {...modalFooter}
+            >
+              {getModalContent()}
+            </Modal>
+          </div>
+        </Card>
+      </PageHeaderWrapper>
     );
   }
 }
