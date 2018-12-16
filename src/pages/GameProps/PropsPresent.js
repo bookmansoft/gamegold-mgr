@@ -30,20 +30,20 @@ class PropsPresent extends PureComponent {
     visible: false,
     selectedRows: [],
     selectedRowKeys: [],
-    stock:0
+    stock: 0
   };
 
   componentDidMount() {
-    const {dispatch } = this.props;
+    const { dispatch } = this.props;
     let id = this.props.match.params.id || '';
     dispatch({
       type: 'gameprops/getAllGameList',
       payload: {}
     });
-    if(id != ''){
+    if (id != '') {
       dispatch({
         type: 'gameprops/propsDetail',
-        payload: {id: id}
+        payload: { id: id }
       });
     }
   }
@@ -51,23 +51,76 @@ class PropsPresent extends PureComponent {
     const { dispatch, form } = this.props;
     e.preventDefault();
     form.validateFieldsAndScroll((err, values) => {
-      console.log(this.state.selectedRows);
-      console.log(values);
-      /*if (!err) {
-        dispatch({
-          type: 'form/submitRegularForm',
-          payload: values,
+
+
+      let addrObject = this.state.selectedRows;
+      let belongProps = values.belongProps;
+      let belongPropsArr = belongProps.split("|");
+      let id = belongPropsArr[0] || '';
+      let stock = belongPropsArr[2] || 0;
+      if (id == '') {
+        Modal.error({
+          title: '错误',
+          content: '道具选择失败，请重试！',
         });
-      }*/
+        return;
+      }
+      if (addrObject.length == 0) {
+        Modal.error({
+          title: '错误',
+          content: '请选择用户！',
+        });
+        return;
+      }
+      if (stock < addrObject.length) {
+        Modal.error({
+          title: '错误',
+          content: '赠送数量超过了道具库存！',
+        });
+        return;
+      }
+      let addr = new Array();
+      let $idx = 0;
+      for (let $value of addrObject) {
+        addr[$idx] = $value.addr;
+        $idx++;
+      }
+      if (id != '' && addr.length > 0) {
+        //调用道具上链
+        dispatch({
+          type: 'gameprops/sendlistremote',
+          payload: { id: id, addr: addr }
+        }).then((ret) => {
+          if (ret.code == 1) {
+            Modal.success({
+              title: '恭喜',
+              content: '赠送成功！',
+            });
+          } else {
+            Modal.error({
+              title: '错误',
+              content: ret.msg || '赠送失败请重试！',
+            });
+          }
+        });
+
+      } else {
+        Modal.error({
+          title: '错误',
+          content: '赠送失败请重试！',
+        });
+        return;
+      }
+
     });
   };
   handleGameChange = (value) => {
-    const {dispatch } = this.props;
+    const { dispatch } = this.props;
     //获取已经创建的本地道具库，未生产
-    if(typeof value != 'undefined' && value != ''){
+    if (typeof value != 'undefined' && value != '') {
       dispatch({
         type: 'gameprops/getAllPropsByParams',
-        payload: {cid:value, status:1}
+        payload: { cid: value, status: 1 }
       });
     }
   };
@@ -102,7 +155,7 @@ class PropsPresent extends PureComponent {
   };
   SetSelectedRowKeys = (val) => {
     this.setState({
-      selectedRowKeys : val
+      selectedRowKeys: val
     });
   };
 
@@ -112,11 +165,11 @@ class PropsPresent extends PureComponent {
     });
   };
   render() {
-    const { submitting, gameprops: { gameList,propByParams,propsDetail },form: { getFieldDecorator }} = this.props;
-    const { visible,selectedRows,selectedRowKeys} = this.state;
+    const { submitting, gameprops: { gameList, propByParams, propsDetail }, form: { getFieldDecorator } } = this.props;
+    const { visible, selectedRows, selectedRowKeys } = this.state;
     let detail = propsDetail.data || [];
     let showDefaultProp = 0;
-    if(detail !='' && propByParams == ''){
+    if (detail != '' && propByParams == '') {
       showDefaultProp = 1;
     }
 
@@ -141,14 +194,14 @@ class PropsPresent extends PureComponent {
 
 
     return (
-      <PageHeaderWrapper title= "道具赠送" >
+      <PageHeaderWrapper title="道具赠送" >
         <Form onSubmit={this.handleSubmit} hideRequiredMark style={{ marginTop: 8 }}>
-          <Card title="选择道具" bordered={false} headStyle={{fontWeight:600}}>
-            <FormItem {...formItemLayout} label= "选择游戏及道具">
-                <Col span={11}>
+          <Card title="选择道具" bordered={false} headStyle={{ fontWeight: 600 }}>
+            <FormItem {...formItemLayout} label="选择游戏及道具">
+              <Col span={11}>
                 <FormItem>
                   {getFieldDecorator('belongGame', {
-                    initialValue:detail.cid,
+                    initialValue: detail.cid,
                     rules: [
                       {
                         required: true,
@@ -159,15 +212,15 @@ class PropsPresent extends PureComponent {
                     <Select
                       onChange={this.handleGameChange}
                     >
-                     {gameList.map(game => <Option  key={game.cp_id} value={game.cp_id}>{game.cp_text}</Option>)}
+                      {gameList.map(game => <Option key={game.cp_id} value={game.cp_id}>{game.cp_text}</Option>)}
                     </Select>
                   )}
                 </FormItem>
               </Col>
               <Col span={11}>
-              <FormItem>
+                <FormItem>
                   {getFieldDecorator('belongProps', {
-                    initialValue: typeof detail.id != 'undefined' && typeof detail.oid != 'undefined' ? detail.id+'|'+detail.oid+'|'+detail.stock : '',
+                    initialValue: typeof detail.id != 'undefined' && typeof detail.oid != 'undefined' ? detail.id + '|' + detail.oid + '|' + detail.stock : '',
                     rules: [
                       {
                         required: true,
@@ -176,45 +229,45 @@ class PropsPresent extends PureComponent {
                     ],
                   })(
                     <Select
-                    onChange={this.onPropsChange}
+                      onChange={this.onPropsChange}
                     >
-                      {showDefaultProp == 1 ? <Option value={detail.id+'|'+detail.oid+'|'+detail.stock}>{detail.props_name}</Option> : propByParams.map(propbyparams => <Option key={propbyparams.id+'|'+propbyparams.oid+'|'+propbyparams.stock} >{propbyparams.props_name}</Option>)}
+                      {showDefaultProp == 1 ? <Option value={detail.id + '|' + detail.oid + '|' + detail.stock}>{detail.props_name}</Option> : propByParams.map(propbyparams => <Option key={propbyparams.id + '|' + propbyparams.oid + '|' + propbyparams.stock} >{propbyparams.props_name}</Option>)}
                     </Select>
                   )}
                 </FormItem>
               </Col>
             </FormItem>
-            <FormItem {...formItemLayout} label= "剩余库存">
-              {getFieldDecorator('stock',{
+            <FormItem {...formItemLayout} label="剩余库存">
+              {getFieldDecorator('stock', {
                 initialValue: showDefaultProp == 1 ? detail.stock : 0,
               })(
                 <Input disabled style={{ width: "100px" }} />
               )}
             </FormItem>
           </Card>
-          <Card title="选择赠送对象" bordered={false} headStyle={{fontWeight:600}}>
-          <FormItem {...formItemLayout} label= "选择赠送对象">
+          <Card title="选择赠送对象" bordered={false} headStyle={{ fontWeight: 600 }}>
+            <FormItem {...formItemLayout} label="选择赠送对象">
 
-            <Button type="primary" onClick={e => {
-              e.preventDefault();
-              this.showPresentModal();
-            }} style={{width: "30%"}}>
-              {`添加接收人`}
-            </Button>
-          </FormItem>
-          <FormItem {...formItemLayout} label= "已添加接收人数量">
-            已添加接收人数量  {selectedRows.length} 人
+              <Button type="primary" onClick={e => {
+                e.preventDefault();
+                this.showPresentModal();
+              }} style={{ width: "30%" }}>
+                {`添加接收人`}
+              </Button>
+            </FormItem>
+            <FormItem {...formItemLayout} label="已添加接收人数量">
+              已添加接收人数量  {selectedRows.length} 人
           </FormItem>
           </Card>
 
-            <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
-              <Button type="primary" htmlType="submit" loading={submitting}>
-                {`确定赠送`}
-              </Button>
-              <Button style={{ marginLeft: 8 }}>
-                <FormattedMessage id="form.cancel" />
-              </Button>
-            </FormItem>
+          <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
+            <Button type="primary" htmlType="submit" loading={submitting}>
+              {`确定赠送`}
+            </Button>
+            <Button style={{ marginLeft: 8 }}>
+              <FormattedMessage id="form.cancel" />
+            </Button>
+          </FormItem>
         </Form>
 
         <PropsSelectUser

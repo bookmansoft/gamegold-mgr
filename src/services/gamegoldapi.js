@@ -709,6 +709,32 @@ export async function getAllPropsByParams(params) {
   return ret;
   //return request(`/api/allgame?${stringify(params)}`);
 }
+/**
+ * 道具赠送
+ * @export
+ * @param {*} params
+ * @returns
+ */
+export async function sendListRemote(params) {
+  let msg = await remote.login({ openid: `${Math.random() * 1000000000 | 0}` });
+  if (remote.isSuccess(msg)) {
+    let res = await remote.fetching({
+      func: "prop.PropSendListRemote", userinfo: JSON.parse(localStorage.userinfo),
+      id: params.id,
+      addr: params.addr
+    });
+    console.log(addr);
+    console.log(111111111);
+    console.log(res);
+    console.log(111111111);
+    if (remote.isSuccess(res)) {
+      return { code: 1 };
+    } else {
+      return { code: 0, msg: res.msg || "生产失败" };
+    }
+  }
+  return { code: 0, msg: "用户登录失败" };
+}
 export async function getUserAll(params) {
   return request(`/api/userall?${stringify(params)}`);
 }

@@ -100,7 +100,6 @@ class PropsProduce extends PureComponent {
       requestData['oid'] = oid;
       requestData['gold'] = values.coinNum;
       requestData['num'] = values.proNum;
-      console.log(requestData);
 
       if(requestData){
             //调用道具上链

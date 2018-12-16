@@ -1,4 +1,5 @@
-import { getGamePropsList, getGamePropsDetail,getPropsOid,getCpPropsDetail, getPropsByGame , getAllGameList , queryUserMgr ,CreatePropLocal,PropCreateListRemote,getAllPropsByParams,getWalletInfo} from '@/services/gamegoldapi';
+import { getGamePropsList, getGamePropsDetail,getPropsOid,getCpPropsDetail, getPropsByGame , getAllGameList , queryUserMgr ,CreatePropLocal,
+  PropCreateListRemote,getAllPropsByParams,getWalletInfo,sendListRemote} from '@/services/gamegoldapi';
 
 export default {
   namespace: 'gameprops',
@@ -80,8 +81,12 @@ export default {
       const res = yield call(PropCreateListRemote, payload);
       return res;
     },
-    *getwalletinfo({ payload }, { call, }) {
+    *getwalletinfo({ payload }, { call}) {
       const res = yield call(getWalletInfo, payload);
+      return res;
+    },
+    *sendlistremote({ payload }, { call }) {
+      const res = yield call(sendListRemote, payload);
       return res;
     },
   },
