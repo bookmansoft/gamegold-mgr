@@ -112,7 +112,7 @@ class OperatorAdd extends PureComponent {
                       message: "请输入密码",
                     },
                   ],
-                })(<Input placeholder="请输入" />)}
+                })(<Input type="password" placeholder="请输入" />)}
               </FormItem>
               <FormItem {...formItemLayout} label="备注">
                 {getFieldDecorator('remark', {
