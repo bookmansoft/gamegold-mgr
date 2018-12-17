@@ -1,5 +1,5 @@
-import { queryOperatorMgr } from '@/services/gamegoldapi';
-
+import { queryOperatorMgr,changeOperatorState } from '@/services/gamegoldapi';
+import { message } from 'antd';
 export default {
   namespace: 'operatorlist',
 
@@ -17,6 +17,18 @@ export default {
         type: 'save',
         payload: response,
       });
+    },
+    *change({ payload }, { call }) {
+      let ret=yield call(changeOperatorState, payload);
+      if (ret.code==0) {
+        message.success('状态修改成功!');
+        return ret;
+      }
+      else {
+        message.error(ret.message);
+        return ret;
+      }
+      
     },
   },
 

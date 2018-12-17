@@ -89,7 +89,7 @@ export async function accountLogin(params) {
         userinfo = ret.userinfo;
         localStorage.userinfo = JSON.stringify(userinfo);//每次提交给服务端的数据
         localStorage.username = params.userName;//页面显示用的数据
-        localStorage.currentAuthority=ret.currentAuthority;
+        localStorage.currentAuthority = ret.currentAuthority;
       }
       return ret;
     }
@@ -137,13 +137,38 @@ export async function addOperator(params) {
 
 }
 
+//--修改操作员状态...todo
+export async function changeOperatorState(params) {
+  try {
+    let msg = await remote.login({ openid: theOpenId });
+    let ret = { code: -200, data: null, message: "react service层无返回值。方法名：addOperator" };
+    // 调用保存记录的方法
+    if (remote.isSuccess(msg)) {
+      //先调用链上的保存方法
+      console.log("修改状态:" + JSON.stringify(params));
+      let ret = await remote.fetching({
+        func: "operator.ChangeState", userinfo: JSON.parse(localStorage.userinfo),
+        id: params.id,
+        state: params.state,
+      });
+      //判断返回值是否正确
+      console.log(ret.code, ret.data, ret.message);
+      return { code: ret.code, data: ret.data, message: ret.message };
+    }
+    console.log("修改状态结果：" + JSON.stringify(ret));
+    return ret;
+  } catch (error) {
+    console.log(error);
+    return { code: -100, data: null, message: "react service层错误。方法名：changeOperatorState" };
+  }
+}
 //--修改操作员密码
 export async function changeOperatorPassword(params) {
   try {
     let msg = await remote.login({ openid: theOpenId });
     let ret = { code: -200, data: null, message: "react service层无返回值。方法名：addOperator" };
-    if (params.newpassword!=params.newpassword2) {
-      return {code:-10,data:null,message:"两次输入的新密码不一致！"};
+    if (params.newpassword != params.newpassword2) {
+      return { code: -10, data: null, message: "两次输入的新密码不一致！" };
     }
     //加密旧密码与新密码
     const crypto = require('crypto');
@@ -163,8 +188,8 @@ export async function changeOperatorPassword(params) {
         newpassword: newpassword,
       });
       //判断返回值是否正确
-      console.log(ret.code,ret.data,ret.message);
-      return {code:ret.code,data:ret.data,message:ret.message};
+      console.log(ret.code, ret.data, ret.message);
+      return { code: ret.code, data: ret.data, message: ret.message };
     }
     console.log("修改密码结果：" + JSON.stringify(ret));
     return ret;
@@ -366,7 +391,7 @@ export async function queryWalletLog(params) {
     let ret = { code: -200, data: null, message: "react service层无返回值。方法名：queryWalletLog" };
     if (remote.isSuccess(msg)) {
       console.log("获取钱包收支流水:" + JSON.stringify(params));
-      ret = await remote.fetching({ func: "tx.List", userinfo: JSON.parse(localStorage.userinfo), items: [],daterange:params.date });
+      ret = await remote.fetching({ func: "tx.List", userinfo: JSON.parse(localStorage.userinfo), items: [], daterange: params.date });
     }
     console.log("获取钱包收支流水结果：" + JSON.stringify(ret));
     let theResult = { list: ret.data, pagination: { current: 1, pageSize: 10 } };

@@ -70,8 +70,8 @@ class OperatorList extends PureComponent {
       render: (text, record) => (
         <Fragment>
           <a onClick={() => this.handleDeal(true, record)}>
-          {(record.state==1) && "禁用"}
-          {(record.state==0) &&"启用"}
+            {(record.state == 1) && "禁用"}
+            {(record.state == 0) && "启用"}
           </a>
         </Fragment>
       ),
@@ -130,16 +130,12 @@ class OperatorList extends PureComponent {
 
     form.validateFields((err, fieldsValue) => {
       if (err) return;
-
       const values = {
         ...fieldsValue,
-        updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
       };
-
       this.setState({
         formValues: values,
       });
-
       dispatch({
         type: 'operatorlist/fetch',
         payload: values,
@@ -147,12 +143,31 @@ class OperatorList extends PureComponent {
     });
   };
 
-  //赠送道具
+  //更改操作员状态
   handleDeal = (flag, record) => {
-    this.setState({
-      updateModalVisible: !!flag,
-      stepFormValues: record || {},
-    });
+    const { dispatch,form } = this.props;
+    dispatch({
+      type: 'operatorlist/change',
+      payload: { id:record.id,state: (record.state == 1 ? 0 : 1) },
+    }).then((ret) => {
+      if (ret.code === 0) {
+        //以重新提交页面的方式实现状态的更新
+        form.validateFields((err, fieldsValue) => {
+          if (err) return;
+          const values = {
+            ...fieldsValue,
+          };
+          this.setState({
+            formValues: values,
+          });
+          dispatch({
+            type: 'operatorlist/fetch',
+            payload: values,
+          });
+        });
+      };
+    }
+    );
   };
 
   renderForm() {
