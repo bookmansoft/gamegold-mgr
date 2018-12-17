@@ -22,7 +22,7 @@ const { Option } = Select;
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
-@connect(({ loading }) => ({ 
+@connect(({ loading }) => ({
   submitting: loading.effects['operator/operatorpassword'],
 }))
 @Form.create()
@@ -36,9 +36,16 @@ class OperatorPassword extends PureComponent {
         dispatch({
           type: 'operatorpassword/change',
           payload: values,
-        });
-      }
-    });
+        }).then((ret) => {
+          console.log(ret);
+          if (ret.code == 0) {
+            router.push('/operator/operatorpasswordsuccess');
+          } else {
+          };
+        }
+        );
+      };
+    })
   };
 
   //转出
@@ -79,9 +86,9 @@ class OperatorPassword extends PureComponent {
       >
         <Card bordered={false}>
           <Form onSubmit={this.handleSubmit} hideRequiredMark={false} style={{ marginTop: 8 }}>
-            <br/>
+            <br />
             <h2><b>修改密码</b></h2>
-            <br/>
+            <br />
             <FormItem {...formItemLayout} label="原密码">
               {getFieldDecorator('oldpassword', {
                 rules: [
@@ -90,7 +97,7 @@ class OperatorPassword extends PureComponent {
                     message: "请输入操作员原密码",
                   },
                 ],
-              })(<Input placeholder="请输入操作员原密码" />)}
+              })(<Input type="password" placeholder="请输入操作员原密码" />)}
             </FormItem>
 
             <FormItem {...formItemLayout} label="新密码">
@@ -101,25 +108,25 @@ class OperatorPassword extends PureComponent {
                     message: "请输入操作员新密码",
                   },
                 ],
-              })(<Input placeholder="请输入操作员新密码" />)}
+              })(<Input type="password" placeholder="请输入操作员新密码" />)}
             </FormItem>
-            <FormItem {...formItemLayout} label="发送说明">
+            <FormItem {...formItemLayout} label="确认新密码">
               {getFieldDecorator('newpassword2', {
                 rules: [
                   {
-                    required: false,
+                    required: true,
                     message: "请再次输入操作员新密码",
                   },
                 ],
-              })(<Input placeholder="请再次输入操作员新密码" />)}
+              })(<Input type="password" placeholder="请再次输入操作员新密码" />)}
             </FormItem>
 
- 
+
             <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
               <Button type="primary" htmlType="submit" loading={submitting}>
                 确认发送
               </Button>
-              <Button style={{ marginLeft: 8 }}  onClick={() => this.handleCancel()}>
+              <Button style={{ marginLeft: 8 }} onClick={() => this.handleCancel()}>
                 取消
               </Button>
             </FormItem>

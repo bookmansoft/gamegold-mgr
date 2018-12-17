@@ -52,6 +52,12 @@ export default [
             component: './Operator/OperatorAddError',
             hideInMenu: true,
           },
+          {
+            path: '/operator/operatorpasswordsuccess',
+            name: 'operatorpasswordsuccess',
+            component: './Operator/OperatorPasswordSuccess',
+            hideInMenu: true,
+          },
         ],
       },
       // usermgr

@@ -156,21 +156,21 @@ export async function changeOperatorPassword(params) {
     // 调用保存记录的方法
     if (remote.isSuccess(msg)) {
       //先调用链上的保存方法
-      console.log("添加操作员:" + JSON.stringify(params));
+      console.log("修改密码:" + JSON.stringify(params));
       let ret = await remote.fetching({
         func: "operator.ChangePassword", userinfo: JSON.parse(localStorage.userinfo),
         oldpassword: oldpassword,
         newpassword: newpassword,
       });
       //判断返回值是否正确
-      console.log(ret);
-      return ret;
+      console.log(ret.code,ret.data,ret.message);
+      return {code:ret.code,data:ret.data,message:ret.message};
     }
-    console.log("添加操作员结果：" + JSON.stringify(ret));
+    console.log("修改密码结果：" + JSON.stringify(ret));
     return ret;
   } catch (error) {
     console.log(error);
-    return { code: -100, data: null, message: "react service层错误。方法名：addOperator" };
+    return { code: -100, data: null, message: "react service层错误。方法名：changeOperatorPassword" };
   }
 
 }

@@ -77,6 +77,7 @@ export default {
   'menu.operator.operatopassword': '修改密码',
   'menu.operator.operatoraddsuccess': '添加操作员成功',
   'menu.operator.operatoradderror': '添加操作员失败',
+  'menu.operator.operatorpasswordsuccess': '修改密码成功',
   'menu.usermgr': '用户管理',
   'menu.usermgr.userlist': '用户列表',
   'menu.gamemgr': '游戏管理',

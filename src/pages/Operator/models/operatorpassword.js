@@ -12,14 +12,14 @@ export default {
 
   effects: {
     *change({ payload }, { call }) {
-      console.log("line 15");
       let ret=yield call(changeOperatorPassword, payload);
-      message.success('提交成功!');
-      if (ret.code==0 && ret.data!=null && ret.data.hash!=null) {
-        return ret.data;
+      if (ret.code==0 && ret.data!=null) {
+        message.success('密码修改成功!');
+        return ret;
       }
       else {
-        return null;
+        message.error(ret.message);
+        return ret;
       }
       
     },
