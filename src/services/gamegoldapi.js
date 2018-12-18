@@ -20,8 +20,6 @@ let remote = new gameconn(
   }
 )
 
-//--登录以后的用户信息，可修改
-let userinfo = { id: -1 };
 const salt = "038292cfb50d8361a0feb0e3697461c9";
 
 
@@ -86,8 +84,7 @@ export async function accountLogin(params) {
       console.log(ret);
       if (ret.status == "ok") {
         //服务端返回正确结果，例如：{ status: "ok", type: "account", currentAuthority: "admin", userinfo:{ id: 1 } }
-        userinfo = ret.userinfo;
-        localStorage.userinfo = JSON.stringify(userinfo);//每次提交给服务端的数据
+        localStorage.userinfo = JSON.stringify(ret.userinfo);//每次提交给服务端的数据
         localStorage.username = params.userName;//页面显示用的数据
         localStorage.currentAuthority = ret.currentAuthority;
       }
@@ -137,11 +134,11 @@ export async function addOperator(params) {
 
 }
 
-//--修改操作员状态...todo
+//--修改操作员状态
 export async function changeOperatorState(params) {
   try {
     let msg = await remote.login({ openid: theOpenId });
-    let ret = { code: -200, data: null, message: "react service层无返回值。方法名：addOperator" };
+    let ret = { code: -200, data: null, message: "react service层无返回值。方法名：changeOperatorState" };
     // 调用保存记录的方法
     if (remote.isSuccess(msg)) {
       //先调用链上的保存方法
@@ -305,13 +302,16 @@ export async function addGameMgr(params) {
         picture_url: params.picture_url,
         cp_state: 1,
         publish_time: params.publish_time,
-        audit_time: params.audit_time,
-        online_time: params.online_time,
-        offline_time: params.offline_time,
+        update_time: params.update_time,
+        update_content:params.update_content,
+
       });
+      console.log("添加新游戏结果：" + JSON.stringify(retSave));
+      return retSave;
     }
-    console.log("添加新游戏结果：" + JSON.stringify(ret));
-    return retSave;
+    else {
+      return ret;
+    }
   } catch (error) {
     console.log(error);
     return { code: -100, data: null, message: "react service层错误。方法名：addGameMgr" };
@@ -327,19 +327,18 @@ export async function getGameFromUrl(params) {
     if (remote.isSuccess(msg)) {
       let data = await remote.fetching({ func: "cp.getGameFromUrl", userinfo: JSON.parse(localStorage.userinfo), cp_url: params.cp_url });
       console.log(data);
+      //patch，更改目录层次结构
+      data=data.game;
       //有数据
       data.wallet_addr = params.wallet_addr;
       data.cp_url = params.cp_url;
-      if (data.picture_url != null) {
-        try {
-          data.icon_url = JSON.parse(data.picture_url).icon_url;
-          data.face_url = JSON.parse(data.picture_url).face_url;
-          data.pic_urls = JSON.parse(data.picture_url).pic_urls;//游戏截图数组
-        }
-        catch (ex) {
-          //忽略
-        }
-      }
+
+      //由于协议差异，补充数据
+      data.cp_text = data.title;
+      data.develop_name = data.provider;
+      data.face_url = data.large_img_url;
+      data.cp_desc = data.desc;
+      data.cp_version = data.version;
       return data;
     }
   } catch (error) {
