@@ -320,7 +320,7 @@ class GameView extends Component {
               当前版本：{data.cp_version}
             </Col>
             <Col sm={8} xs={12}>
-              更新时间：{moment(data.online_time * 1000).format('YYYY-MM-DD HH:mm:ss')}
+              更新时间：{moment(data.update_time * 1000).format('YYYY-MM-DD HH:mm:ss')}
             </Col>
           </Row>
           <Row style={{ marginBottom: 32 }}>

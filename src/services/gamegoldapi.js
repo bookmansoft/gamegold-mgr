@@ -299,7 +299,11 @@ export async function addGameMgr(params) {
         develop_name: params.develop_name,
         cp_desc: params.cp_desc,
         cp_version: params.cp_version,
-        picture_url: params.picture_url,
+        picture_url: {
+          icon_url: params.icon_url,
+          face_url: params.face_url,
+          pic_urls: params.pic_urls,
+        },
         cp_state: 1,
         publish_time: params.publish_time,
         update_time: params.update_time,

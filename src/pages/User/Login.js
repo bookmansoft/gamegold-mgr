@@ -55,7 +55,8 @@ class LoginPage extends Component {
 
   changeAutoLogin = e => {
     this.setState({
-      autoLogin: e.target.checked,
+      // autoLogin: e.target.checked,
+      autoLogin:false,
     });
   };
 
@@ -89,9 +90,9 @@ class LoginPage extends Component {
             />
           </Tab>
           <div>
-            <Checkbox checked={autoLogin} onChange={this.changeAutoLogin}>
+            {/* <Checkbox checked={autoLogin} onChange={this.changeAutoLogin}>
               <FormattedMessage id="app.login.remember-me" />
-            </Checkbox>
+            </Checkbox> */}
           </div>
           <Submit loading={submitting}>
             <FormattedMessage id="app.login.login" />
