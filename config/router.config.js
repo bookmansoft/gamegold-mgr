@@ -18,6 +18,7 @@ export default [
     Routes: ['src/pages/Authorized'],
     authority: ['admin', 'user'],
     routes: [
+      { path: '/', redirect: '/wallet/walletmgr' },
       // operatormgr
       {
         path: '/operator',
@@ -241,7 +242,6 @@ export default [
       //---------------------------------------------------------------------------
 
       // dashboard
-      { path: '/', redirect: '/dashboard/analysis' },
       {
         path: '/dashboard',
         name: 'dashboard',
