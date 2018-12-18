@@ -176,6 +176,10 @@ class WalletMgr extends PureComponent {
     router.push('/wallet/step-form');
   };
 
+  //转入
+  handleReceive = () => {
+    router.push('/wallet/walletinfo');
+  };
   //转出
   handlePay = () => {
     router.push('/wallet/walletpay');
@@ -268,7 +272,7 @@ class WalletMgr extends PureComponent {
               {(info.data != null) && JSON.stringify(info.data.confirmed / 100000000)} GDD
               </Col>
             <Col sm={4} xs={8}>
-              <Button type="primary">
+              <Button type="primary" onClick={() => this.handleReceive()}>
                 转入
                 </Button>
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

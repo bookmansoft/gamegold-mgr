@@ -71,6 +71,16 @@ class WalletInfo extends PureComponent {
                 收款地址：{data!=null && data.data}
               </Col>
             </Row>
+            <Row style={{ marginBottom: 32 }}>
+              <Col sm={24} xs={24}>
+                <b>收款二维码：</b>
+              </Col>
+            </Row>
+            <Row style={{ marginBottom: 32 }}>
+              <Col sm={24} xs={24}>
+                <img src={data!=null && ("http://127.0.0.1:9701/qrcode/"+data.data)} width="300" height="300"/>
+              </Col>
+            </Row>
             {/* <Row style={{ marginBottom: 32 }}>
               <Col sm={24} xs={24}>
                 钱包安全：未备份(todo)
