@@ -675,7 +675,17 @@ export async function getPropsOid(params) {
  * @returns
  */
 export async function getCpPropsDetail(params) {
-  return request(`/api/getcppropsdetail?${stringify(params)}`);
+  let msg = await remote.login({ openid: theOpenId });
+  let ret = [];
+  if (remote.isSuccess(msg)) {
+    ret = await remote.fetching({ func: "prop.getCpPropsDetail", userinfo: JSON.parse(localStorage.userinfo),
+    //pid: params.pid,
+    //cp_url: params.cp_url,
+    pid: '1001',
+    cp_url: 'http://localhost:9101/client/prop/',
+    });
+  }
+  return ret;
 }
 
 
@@ -688,7 +698,16 @@ export async function getCpPropsDetail(params) {
  */
 
 export async function getPropsByGame(params) {
-  return request(`/api/gameprops?${stringify(params)}`);
+  let msg = await remote.login({ openid: theOpenId });
+  let ret = [];
+  if (remote.isSuccess(msg)) {
+    ret = await remote.fetching({ func: "prop.getPropsByGame", userinfo: JSON.parse(localStorage.userinfo),
+    //cp_url: params.cp_url,
+    cp_url: 'http://localhost:9101/client/prop/proplist',
+    });
+  }
+  return ret;
+  //return request(`/api/gameprops?${stringify(params)}`);
 }
 
 
@@ -702,7 +721,7 @@ export async function getAllGameList() {
   let msg = await remote.login({ openid: theOpenId });
   let ret = [];
   if (remote.isSuccess(msg)) {
-    let res = await remote.fetching({ func: "cp.ListAllRecord", userinfo: JSON.parse(localStorage.userinfo) });
+    let res = await remote.fetching({ func: "prop.ListAllCpRecord", userinfo: JSON.parse(localStorage.userinfo) });
     if (remote.isSuccess(res)) {
       for (let i in res['data']) {
         ret.push(res['data'][i]); //属性

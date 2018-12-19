@@ -130,12 +130,6 @@ export default [
             hideInMenu: true,
           },
           {
-            path: '/gameprops/edit/:id',
-            name: 'propsdetail',
-            component: './GameProps/propsEdit',
-            hideInMenu: true,
-          },
-          {
             path: '/gameprops/create',
             name: 'propscreate',
             component: './GameProps/PropsCreate',
