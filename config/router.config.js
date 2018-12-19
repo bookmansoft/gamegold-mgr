@@ -132,7 +132,7 @@ export default [
           {
             path: '/gameprops/edit/:id',
             name: 'propsdetail',
-            component: './GameProps/propsEdit',
+            component: './GameProps/PropsEdit',
             hideInMenu: true,
           },
           {
