@@ -25,143 +25,164 @@ const { Option } = Select;
 @Form.create()
 class PropsProduce extends PureComponent {
   state = {
-    proNum : 0,
-    coinNum : 0,
+    proNum: 0,
+    gold_num: 0,
     allNum: 0,
-    confirmed : 0
+    confirmed: 0,
+    defaultDetail: {},
+    defaultPropList: {},
   };
   componentDidMount() {
-    const {dispatch } = this.props;
+    const { dispatch } = this.props;
     let id = this.props.match.params.id || '';
     dispatch({
       type: 'gameprops/getAllGameList',
       payload: {}
     });
-    if(id != ''){
+    if (id != '') {
       dispatch({
-        type: 'gameprops/propsDetail',
-        payload: {id: id}
+        type: 'gameprops/propsDetailReturn',
+        payload: { id: id }
+      }).then((ret) => {
+        if (ret.code === 0) {
+          this.setState({
+            defaultDetail: ret.data,
+            gold_num: ret.data.gold_num,
+          });
+          dispatch({
+            type: 'gameprops/getAllPropsByParamsReturn',
+            payload: { cid: ret.data.cid }
+          }).then((ret) => {
+            this.setState({
+              defaultPropList: ret,
+            });
+          });
+        }
       });
+
     }
     dispatch({
       type: 'gameprops/getwalletinfo',
       payload: {}
     }).then((ret) => {
-      if (ret.code === 0 ) {
+      if (ret.code === 0) {
         this.setState({
-          confirmed:JSON.stringify(ret.list.state.confirmed),
+          confirmed: JSON.stringify(ret.list.state.confirmed),
         });
-      } 
+      }
     });
-   
+
   }
   handleSubmit = e => {
     const { dispatch, form } = this.props;
     e.preventDefault();
     form.validateFieldsAndScroll((err, values) => {
       let requestData = new Array();
-      let allCoinNum = values.coinNum * values.proNum;
-      if(allCoinNum > this.state.confirmed){
-        Modal.error({
-          title: '错误',
-          content: '生产消耗的游戏金总量不得高于钱包余额',
-        });
-        return;
-      }
-      let belongProps = values.belongProps;
-      let belongPropsArr = belongProps.split("|");
-      let id = belongPropsArr[0] || '';
-      let oid = belongPropsArr[1] || '';
 
-      if(oid == ''){
+      let belongProps = values.belongProps;
+      console.log(belongProps);
+      return;
+      let belongPropsArr = belongProps.split("|");
+      let oid = belongPropsArr[0] || '';
+      let gold_num = belongPropsArr[1] || '';
+      if (oid == '' || gold_num == '') {
         Modal.error({
           title: '错误',
           content: '装备选择失败，请重试！',
         });
         return;
       }
-      if(typeof values.proNum == 'undefined' ||  values.proNum== ''){
+      let allCoinNum = gold_num * values.proNum;
+      if (allCoinNum > this.state.confirmed) {
+        Modal.error({
+          title: '错误',
+          content: '生产消耗的游戏金总量不得高于钱包余额',
+        });
+        return;
+      }
+      if (typeof values.proNum == 'undefined' || values.proNum == '') {
         Modal.error({
           title: '错误',
           content: '请输入生产数量！',
         });
         return;
       }
-      if(typeof values.coinNum == 'undefined' ||  values.coinNum== ''){
-        Modal.error({
-          title: '错误',
-          content: '请输入游戏金含量！',
-        });
-        return;
-      }
+
       requestData['id'] = id;
       //requestData['cid'] = values.belongGame;
       requestData['cid'] = 'e26f7a20-fcef-11e8-af9c-9f3accf37b7f';//TODO 后期根据cp调整删除这个
       requestData['oid'] = oid;
-      requestData['gold'] = values.coinNum;
       requestData['num'] = values.proNum;
+      console.log(requestData);
+      return;
 
-      if(requestData){
-            //调用道具上链
-            dispatch({
-              type: 'gameprops/propcreatelistremote',
-              payload: requestData,
-            }).then((ret) => {
-              if (ret.code == 1) {
-                Modal.success({
-                  title: '恭喜',
-                  content: '道具生产成功！',
-                });
-              } else {
-                Modal.error({
-                  title: '错误',
-                  content: ret.msg || '道具生产失败，请重试！',
-                });
-              }
-            })
+      if (requestData) {
+        //调用道具上链
+        dispatch({
+          type: 'gameprops/propcreatelistremote',
+          payload: requestData,
+        }).then((ret) => {
+          if (ret.code == 1) {
+            Modal.success({
+              title: '恭喜',
+              content: '道具生产成功！',
+            });
+          } else {
+            Modal.error({
+              title: '错误',
+              content: ret.msg || '道具生产失败，请重试！',
+            });
+          }
+        })
       }
-      
+
     });
   };
   handleGameChange = (value) => {
-    const {dispatch } = this.props;
+    const { dispatch } = this.props;
     //获取已经创建的本地道具库，未生产
-    if(typeof value != 'undefined' && value != ''){
+    if (typeof value != 'undefined' && value != '') {
       dispatch({
         type: 'gameprops/getAllPropsByParams',
-        payload: {cid:value, status:1}
+        payload: { cid: value }
       });
     }
+
+  };
+
+  onPropsChange = (value) => {
+    let belongPropsArr = value.split("|");
+    let gold_num = belongPropsArr[1] || '';
+    gold_num = parseInt(gold_num);
+    if(gold_num > 0){
+      this.setState({
+        gold_num: gold_num,
+      });
+    }
+
     
   };
-  
+
   handleProNum = (value) => {
 
     this.setState(
-     {
-      proNum: parseInt(value),
-      allNum: this.state.coinNum * parseInt(value)
-     }
-    );
-  };
-  handleCoinNum = (value) => {
-    this.setState(
       {
-       coinNum: parseInt(value),
-       allNum: this.state.proNum * parseInt(value)
+        proNum: parseInt(value),
+        allNum: this.state.gold_num * parseInt(value)
       }
-     );
-
+    );
   };
 
 
   render() {
-    const { gameprops: { gameList,propByParams,propsDetail },submitting ,form: { getFieldDecorator }} = this.props;
-    let detail = propsDetail.data || [];
+    const { gameprops: { gameList, propByParams }, submitting, form: { getFieldDecorator } } = this.props;
+    let defaultDetail = this.state.defaultDetail;
+    let defaultPropList = this.state.defaultPropList;
     let showDefaultProp = 0;
-    if(detail !='' && propByParams == ''){
+    if (defaultDetail != '' && defaultPropList == '') {
       showDefaultProp = 1;
     }
+    console.log(defaultPropList);
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -181,14 +202,14 @@ class PropsProduce extends PureComponent {
       },
     };
     return (
-      <PageHeaderWrapper title= "" >
+      <PageHeaderWrapper title="" >
         <Form onSubmit={this.handleSubmit} hideRequiredMark style={{ marginTop: 8 }}>
-          <Card title="生产道具" bordered={false} headStyle={{fontWeight:600}}>
-            <FormItem {...formItemLayout} label= "选择游戏及道具">
+          <Card title="生产道具" bordered={false} headStyle={{ fontWeight: 600 }}>
+            <FormItem {...formItemLayout} label="选择游戏及道具">
               <Col span={11}>
                 <FormItem>
                   {getFieldDecorator('belongGame', {
-                    initialValue:detail.cid,
+                    initialValue: typeof defaultDetail.cid != 'undefined' ? defaultDetail.cid : '',
                     rules: [
                       {
                         required: true,
@@ -199,7 +220,7 @@ class PropsProduce extends PureComponent {
                     <Select
                       onSelect={this.handleGameChange}
                     >
-                     {gameList.map(game => <Option  key={game.cp_id} value={game.cp_id}>{game.cp_text}</Option>)}
+                      {gameList.map(game => <Option key={game.cp_id} value={game.cp_id}>{game.cp_text}</Option>)}
                     </Select>
                   )}
                 </FormItem>
@@ -207,7 +228,7 @@ class PropsProduce extends PureComponent {
               <Col span={11}>
                 <FormItem>
                   {getFieldDecorator('belongProps', {
-                    initialValue: typeof detail.id != 'undefined' && typeof detail.oid != 'undefined' ? detail.id+'|'+detail.oid : '',
+                    initialValue: typeof defaultDetail.id != 'undefined' && typeof defaultDetail.gold_num != 'undefined' ? defaultDetail.id + '|' + defaultDetail.gold_num : '',
                     rules: [
                       {
                         required: true,
@@ -215,14 +236,16 @@ class PropsProduce extends PureComponent {
                       },
                     ],
                   })(
-                    <Select>
-                      {showDefaultProp == 1 ? <Option value={detail.id+'|'+detail.oid}>{detail.props_name}</Option> : propByParams.map(propbyparams => <Option key={propbyparams.id+'|'+propbyparams.oid} >{propbyparams.props_name}</Option>)}
+                    <Select
+                      onChange={this.onPropsChange}
+                    >
+                      {showDefaultProp == 1 ? defaultPropList.map(defaultProp => <Option key={defaultProp.id + '|' + defaultProp.gold_num} >{defaultProp.props_name}</Option>) : propByParams.map(propbyparams => <Option key={propbyparams.oid + '|' + propbyparams.gold_num} >{propbyparams.props_name}</Option>)}
                     </Select>
                   )}
                 </FormItem>
               </Col>
             </FormItem>
-            <FormItem {...formItemLayout} label= "生产数量">
+            <FormItem {...formItemLayout} label="生产数量">
               {getFieldDecorator('proNum', {
                 rules: [
                   {
@@ -231,22 +254,13 @@ class PropsProduce extends PureComponent {
                   }
                 ],
               })(
-                <InputNumber placeholder={formatMessage({ id: 'form.weight.placeholder' })+'数量'} onChange = {this.handleProNum} min={1}  style={{ width: "50%" }} />
+                <InputNumber placeholder={formatMessage({ id: 'form.weight.placeholder' }) + '数量'} onChange={this.handleProNum} min={1} style={{ width: "50%" }} />
               )}
             </FormItem>
-          <FormItem {...formItemLayout} label= "单件道具含游戏金量">
-            {getFieldDecorator('coinNum', {
-              rules: [
-                {
-                  required: true,
-                  message: "请输入游戏金量",
-                },
-              ],
-            })(
-              <InputNumber placeholder={formatMessage({ id: 'form.weight.placeholder' })+'单位'} onChange = {this.handleCoinNum}  min={1}  style={{ width: "50%" }}/>
-            )}
+            <FormItem {...formItemLayout} label="单件道具含游戏金量">
+              <InputNumber value={this.state.gold_num} disabled={true} style={{ width: "50%" }} />
             </FormItem>
-            <FormItem {...formItemLayout} label= "本次生产消耗游戏金总量">
+            <FormItem {...formItemLayout} label="本次生产消耗游戏金总量">
               {this.state.allNum} GGD （当前钱包余额 {this.state.confirmed} GDD）
             </FormItem>
             <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
@@ -254,7 +268,7 @@ class PropsProduce extends PureComponent {
                 {`开始生产`}
               </Button>
             </FormItem>
-            </Card>
+          </Card>
         </Form>
 
 

@@ -571,6 +571,7 @@ export async function CreatePropLocal(params) {
   if (remote.isSuccess(msg)) {
     let res = await remote.fetching({
       func: "prop.CreateLocal", userinfo: JSON.parse(localStorage.userinfo),
+      props_id: params.props_id,
       props_name: params.props_name,
       props_type: params.props_type,
       cid: params.cid,
@@ -581,9 +582,7 @@ export async function CreatePropLocal(params) {
       status: params.status,
       stock: params.stock,
       pro_num: params.pro_num,
-      create_res: params.create_res,
-      createdAt: params.createdAt,
-      updatedAt: params.updatedAt
+      gold_num: params.gold_num,
     });
     if (remote.isSuccess(res)) {
       return res;
@@ -744,8 +743,7 @@ export async function getAllPropsByParams(params) {
   if (remote.isSuccess(msg)) {
     let res = await remote.fetching({
       func: "prop.getAllPropsByParams", userinfo: JSON.parse(localStorage.userinfo),
-      cid: typeof (params.cid) == "undefined" ? '' : params.cid,
-      status: typeof (params.status) == "undefined" ? '' : params.status
+      cid: typeof (params.cid) == "undefined" ? '' : params.cid
     });
     if (remote.isSuccess(res)) {
       for (let i in res['data']) {

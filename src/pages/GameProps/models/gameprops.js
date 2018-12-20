@@ -33,6 +33,10 @@ export default {
         detail: response,
       });
     },
+    *propsDetailReturn({ payload }, { call }) {
+      const response = yield call(getGamePropsDetail, payload);
+      return response;
+    },
     *propsOid({ payload }, { call }) {
       const res = yield call(getPropsOid, payload);
       return res;
@@ -62,6 +66,10 @@ export default {
         type: 'propsByParams',
         propByParams: response,
       });
+    },
+    *getAllPropsByParamsReturn({ payload }, { call }) {
+      const response = yield call(getAllPropsByParams, payload);
+      return response;
     },
     *getAllUser({ payload }, { call, put }) {
       const response = yield call(queryUserMgr, payload);
