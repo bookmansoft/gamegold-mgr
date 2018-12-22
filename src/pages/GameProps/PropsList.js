@@ -61,7 +61,6 @@ class PropsList extends PureComponent {
               <Link to={`/gameprops/detail/${record.id}`}>详情</Link>
               <Divider type="vertical" />
               <Link to={`/gameprops/produce/${record.id}`}>生产</Link>
-              <Divider type="vertical" />
             </Fragment>
           );
         } else if (record.status == 2) {
@@ -69,12 +68,14 @@ class PropsList extends PureComponent {
             <Fragment>
               <Link to={`/gameprops/detail/${record.id}`}>详情</Link>
               <Divider type="vertical" />
+              <Link to={`/gameprops/produce/${record.id}`}>生产</Link>
+              <Divider type="vertical" />
               <Link to={`/gameprops/present/${record.id}`}>赠送</Link>
-              {/* <Divider type="vertical" />
+              <Divider type="vertical" />
               <a onClick={e => {
                 e.preventDefault();
                 this.showOnsaleModal(record);
-              }}>上架</a> */}
+              }}>上架</a>
             </Fragment>
           );
         }

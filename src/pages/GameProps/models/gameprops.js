@@ -9,7 +9,6 @@ export default {
       pagination: {},
     },
     propsDetail: [],
-    cpPropsDetail: [],
     gameList: [],
     gamePropsList: [],
     userAllList: {
@@ -34,16 +33,18 @@ export default {
         detail: response,
       });
     },
+    *propsDetailReturn({ payload }, { call }) {
+      const response = yield call(getGamePropsDetail, payload);
+      return response;
+    },
     *propsOid({ payload }, { call }) {
       const res = yield call(getPropsOid, payload);
       return res;
     },
     *cpPropsDetail({ payload }, { call, put }) {
-      const response = yield call(getCpPropsDetail, payload);
-      yield put({
-        type: 'getCpPropsDetail',
-        detail: response,
-      });
+
+      const res = yield call(getCpPropsDetail, payload);
+      return res;
     },
     *getPropsByGame({ payload }, { call, put }) {
       const response = yield call(getPropsByGame, payload);
@@ -65,6 +66,10 @@ export default {
         type: 'propsByParams',
         propByParams: response,
       });
+    },
+    *getAllPropsByParamsReturn({ payload }, { call }) {
+      const response = yield call(getAllPropsByParams, payload);
+      return response;
     },
     *getAllUser({ payload }, { call, put }) {
       const response = yield call(queryUserMgr, payload);
@@ -102,12 +107,6 @@ export default {
       return {
         ...state,
         propsDetail: detail
-      };
-    },
-    getCpPropsDetail(state, { detail }) {
-      return {
-        ...state,
-        cpPropsDetail: detail
       };
     },
     gamePropsByGame(state, { gamePropsList }) {
