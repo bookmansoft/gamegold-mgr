@@ -49,36 +49,23 @@ class PropsList extends PureComponent {
       dataIndex: 'pro_num',
     },
     {
-      title: '库存数量',
+      title: '销售数量',
       dataIndex: 'stock',
+    },
+    {
+      title: '赠送数量',
+      dataIndex: 'gold_num',
     },
     {
       title: '操作',
       render: (e, record) => {
-        if (record.status == 1) {
-          return (
-            <Fragment>
-              <Link to={`/gameprops/detail/${record.id}`}>详情</Link>
-              <Divider type="vertical" />
-              <Link to={`/gameprops/produce/${record.id}`}>生产</Link>
-            </Fragment>
-          );
-        } else if (record.status == 2) {
-          return (
-            <Fragment>
-              <Link to={`/gameprops/detail/${record.id}`}>详情</Link>
-              <Divider type="vertical" />
-              <Link to={`/gameprops/produce/${record.id}`}>生产</Link>
-              <Divider type="vertical" />
-              <Link to={`/gameprops/present/${record.id}`}>赠送</Link>
-              <Divider type="vertical" />
-              <a onClick={e => {
-                e.preventDefault();
-                this.showOnsaleModal(record);
-              }}>上架</a>
-            </Fragment>
-          );
-        }
+        return (
+          <Fragment>
+            <Link to={`/gameprops/detail/${record.id}`}>详情</Link>
+            <Divider type="vertical" />
+            <Link to={`/gameprops/produce/${record.id}`}>批量赠送</Link>
+          </Fragment>
+        );
 
       }
     },

@@ -29,11 +29,7 @@ class PropsDetail extends PureComponent {
   mainButton() {
     return (
       <div>
-        <Link to={`/gameprops/produce/${this.state.id}`} className="ant-btn ant-btn-primary">生产道具</Link>
-        <Divider type="vertical" style={{ background: "none" }} />
-        <Link to={`/gameprops/present/${this.state.id}`} className="ant-btn ant-btn-primary">赠送道具</Link>
-        {/* <Divider type="vertical" style={{background:"none"}} />
-        <Button type="primary" onClick={e => this.propsOnsale(this.state.id)}>上架出售</Button> */}
+        <Link to={`/gameprops/present/${this.state.id}`} className="ant-btn ant-btn-primary">批量赠送</Link>
       </div>
     );
   }
@@ -78,8 +74,15 @@ class PropsDetail extends PureComponent {
             <Description term="道具类型">{detail.props_type}</Description>
             <Description term="所属游戏">{detail.cp_name}</Description>
             <Description term="创建时间">{moment(detail.createdAt).format('YYYY-MM-DD HH:mm')}</Description>
-            <Description term="道具简介">{detail.props_desc}</Description>
-            <Description term="道具图标">
+            <Description term="销售状态">{detail.prop_status}</Description>
+            <Description term="商城标价">{detail.prop_gold}</Description>
+            <Description term="含金等级">{detail.prop_rank}</Description>
+          </DescriptionList>
+          <DescriptionList size="large">
+            <Description term="道具描述">{detail.prop_desc}</Description>
+          </DescriptionList>
+          <DescriptionList size="large" style={{ marginBottom: 32 }}>
+            <Description term="道具图标 " span="24" sm="24" md="24" style={{ marginTop: 32 }}>
               <img width={120} src={detail.icon_url} />
             </Description>
             <Description term="道具说明图">
@@ -95,7 +98,7 @@ class PropsDetail extends PureComponent {
             </Description>
           </DescriptionList>
         </Card>
-      </PageHeaderWrapper>
+      </PageHeaderWrapper >
     );
   }
 }

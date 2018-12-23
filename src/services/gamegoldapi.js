@@ -580,10 +580,13 @@ export async function CreatePropLocal(params) {
       icon_preview: params.icon_preview,
       oid: params.oid,
       status: params.status,
-      stock: params.stock,
-      pro_num: params.pro_num,
-      gold_num: params.gold_num,
+      prop_price: params.prop_price,
+      prop_rank: params.prop_rank,
+      propsAt: params.propsAt,
     });
+    console.log(11111111111);
+    console.log(res);
+    console.log(22222222222);
     if (remote.isSuccess(res)) {
       return res;
     } else {

@@ -47,18 +47,10 @@ class PropsCreate extends PureComponent {
     const { dispatch, form } = this.props;
     e.preventDefault();
     form.validateFieldsAndScroll((err, values) => {
-      if (typeof values.belongGame == 'undefined' || typeof values.belongProps == 'undefined' || typeof values.gold_num == 'undefined') {
+      if (typeof values.belongGame == 'undefined' || typeof values.belongProps == 'undefined') {
         Modal.error({
           title: '错误',
-          content: '请选择游戏以及道具，填写游戏金含量！',
-        });
-        return;
-      }
-      let gold_num = parseInt(values.gold_num);
-      if (gold_num <= 0) {
-        Modal.error({
-          title: '错误',
-          content: '请填写游戏金含量！',
+          content: '请选择游戏以及道具！',
         });
         return;
       }
@@ -80,10 +72,10 @@ class PropsCreate extends PureComponent {
       param.icon_url = cpPropsDetail.icon;
       param.icon_preview = cpPropsDetail.more_icon;
       param.oid = '';
-      param.status = 1;
-      param.stock = 0;
-      param.pro_num = 0;
-      param.gold_num = gold_num;
+      param.status = cpPropsDetail.prop_status;
+      param.prop_price = cpPropsDetail.prop_price;
+      param.prop_rank = cpPropsDetail.prop_rank;
+      param.propsAt = cpPropsDetail.prop_createtime;
       //本地道具创建
       dispatch({
         type: 'gameprops/createproplocal',
@@ -95,13 +87,13 @@ class PropsCreate extends PureComponent {
             content: '道具创建成功，您可以前往道具列表查看！',
             okText: '返回列表',
             okType: 'primary',
-            cancelText: '道具生产',
+            cancelText: '查看详情',
             cancelType: 'primary',
             onOk() {
               router.push('/gameprops/list');
             },
             onCancel() {
-              router.push(`/gameprops/produce/${ret.data.id}`);
+              router.push(`/gameprops/detail/${ret.data.id}`);
             },
           });
         } else {
@@ -252,40 +244,31 @@ class PropsCreate extends PureComponent {
                   )}
                 </FormItem>
               </Col>
-            </FormItem>
-            <FormItem {...formItemLayout} label="游戏金含量">
-              <Col span={12}>
-                <FormItem>
-                  {getFieldDecorator('gold_num', {
-                    rules: [
-                      {
-                        required: true,
-                        message: "请输入数量",
-                      }
-                    ],
-                  })(
-                    <InputNumber placeholder={formatMessage({ id: 'form.weight.placeholder' }) + '数量'} min={1} style={{ width: "50%" }} />
-                  )}
-                </FormItem>
-              </Col>
-              <Col span={8} style={{ marginLeft: 32 }}>
+              <Col span={4} style={{ marginLeft: 32 }}>
                 <FormItem style={{ marginLeft: 32 }}>
                   <Button type="primary" onClick={this.previewProp} > <FormattedMessage id="form.preview" /></Button>
                 </FormItem>
               </Col>
             </FormItem>
+
           </Card>
 
-          <Card bordered={false} headStyle={{ fontWeight: 600 }} title="道具信息">
+          <Card bordered={false} headStyle={{ fontWeight: 600 }} title="道具信息预览">
             <DescriptionList size="large" style={{ marginBottom: 32 }}>
               <Description term="道具ID">{cpPropsDetail.id || ''}</Description>
               <Description term="道具名称">{cpPropsDetail.prop_name || ''}</Description>
               <Description term="道具属性">{cpPropsDetail.prop_type || ''}</Description>
               <Description term="所属游戏">{this.state.cp_text || ''}</Description>
+              <Description term="添加时间">{cpPropsDetail.prop_createtime || ''}</Description>
+              <Description term="销售状态">{cpPropsDetail.prop_status || ''}</Description>
+              <Description term="商城标价">{cpPropsDetail.prop_price || ''}</Description>
+              <Description term="含金等级">{cpPropsDetail.prop_rank || ''}</Description>
+            </DescriptionList>
+            <DescriptionList size="large">
               <Description term="道具描述">{cpPropsDetail.prop_desc || ''}</Description>
             </DescriptionList>
             <DescriptionList size="large" style={{ borderTop: '1px solid #ddd', marginTop: 32 }}>
-              <Description term="道具图标">
+              <Description term="道具图标 " span="24" style={{ marginTop: 32 }}>
                 <img width={120} src={cpPropsDetail.icon || ''} />
               </Description>
               <Description term="道具说明图">
