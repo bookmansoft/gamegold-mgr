@@ -63,33 +63,7 @@ const PublishForm = Form.create()(
   }
 );
 
-
-
-
-
-
 const getWindowWidth = () => window.innerWidth || document.documentElement.clientWidth;
-
-const desc1 = (
-  <div className={classNames(styles.textSecondary, styles.stepDescription)}>
-    todo:用自定义行列定位，可以任意渲染
-  </div>
-);
-const desc2 = (
-  <div className={classNames(styles.textSecondary, styles.stepDescription)}>
-    2017-12-02 09:21:12
-  </div>
-);
-const desc3 = (
-  <div className={classNames(styles.textSecondary, styles.stepDescription)}>
-
-  </div>
-);
-const desc4 = (
-  <div className={classNames(styles.textSecondary, styles.stepDescription)}>
-
-  </div>
-);
 
 const popoverContent = (
   <div style={{ width: 160 }}>
@@ -105,52 +79,6 @@ const customDot = (dot, { status }) =>
   ) : (
       dot
     );
-//--编辑
-function doEdit() {
-  //没干啥
-}
-
-//--下线
-function doOffline() {
-  Modal.confirm({
-    title: '确定要下线该游戏吗？',
-    content: '下线后游戏将不会显示在游戏金客户端',
-    onOk() {
-      return new Promise((resolve, reject) => {
-        setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
-      }).catch(() => console.log('Oops errors!'));
-    },
-    onCancel() { },
-  });
-}
-
-//--删除
-function doDeleteGame() {
-  Modal.confirm({
-    title: '确定要删除该游戏吗？',
-    content: '删除后，该游戏的数据将不会保留',
-    onOk() {
-      return new Promise((resolve, reject) => {
-        setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
-      }).catch(() => console.log('Oops errors!'));
-    },
-    onCancel() { },
-  });
-}
-
-//--状态3已下线时，重新上线的提示框
-function doReOnline() {
-  Modal.confirm({
-    title: '重新上线需要重新审核',
-    content: '审核通过后将自动上线',
-    onOk() {
-      return new Promise((resolve, reject) => {
-        setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
-      }).catch(() => console.log('Oops errors!'));
-    },
-    onCancel() { },
-  });
-}
 
 
 @connect(({ gameview, loading }) => ({
@@ -259,42 +187,9 @@ class GameView extends Component {
         extraContent={null}
         tabList={null}
       >
-
-        {/* <Card title="流程状态（审核中）" style={{ marginBottom: 24 }} bordered={false}>
-          <Row style={{ marginBottom: 32 }}>
-            <Col sm={24} xs={24}>
-              <div align="right">
-                {data.cp_state ==1 &&
-                  <Button type="primary" style={{ marginRight: 24 }}>编辑</Button>
-                }
-                {data.cp_state ==1 &&
-                  <Button type="primary" style={{ marginRight: 24 }} onClick={doDeleteGame}>删除</Button>
-                }
-                {data.cp_state ==2 &&
-                  <Button type="primary"  style={{ marginRight: 24 }}  onClick={doEdit}>编辑</Button>
-                }
-                {data.cp_state ==2 &&
-                  <Button type="primary"  style={{ marginRight: 24 }} onClick={this.showModal} >发布更新</Button>
-                }
-                {data.cp_state ==2 &&
-                  <Button type="primary"  style={{ marginRight: 24 }} onClick={doOffline} >下线</Button>
-                }
-                {data.cp_state ==3 &&
-                  <Button type="primary"  style={{ marginRight: 24 }} onClick={doReOnline}>重新上线</Button>
-                }
-              </div>
-            </Col>
-          </Row>
-          <Steps direction={stepDirection} progressDot={customDot} current={data.cp_state}>
-            <Step title="提交发布" description={desc1} />
-            <Step title="审核中" description={desc2} />
-            <Step title="上线" description={desc3}/>
-            <Step title="下线" description={desc4}/>
-          </Steps>  
-        </Card> */}
         <Card style={null} bordered={false}>
           <Row style={{ marginBottom: 16 }}>
-            <Col sm={24} xs={24}><h3><b>游戏信息</b></h3></Col>
+            <Col sm={24} xs={24}><h3><b>基本信息</b></h3></Col>
           </Row>
           <Row style={{ marginBottom: 32 }}>
             <Col sm={8} xs={12}>
@@ -305,6 +200,20 @@ class GameView extends Component {
             </Col>
             <Col sm={8} xs={12}>
               发布时间：{moment(data.publish_time * 1000).format('YYYY-MM-DD HH:mm:ss')}
+            </Col>
+          </Row>
+          <Row style={{ marginBottom: 32 }}>
+            <Col sm={8} xs={12}>
+              游戏状态：{data.cp_state=='0'?'未上线':'正常运营'}
+            </Col>
+            <Col sm={8} xs={12}>
+              启用邀请奖励：{parseInt(data.invite_share) == 0 ? '否' : '是'}
+            </Col>
+
+            <Col sm={8} xs={12}>
+              {parseInt(data.invite_share) != 0 && (
+                `邀请奖励：${data.invite_share}%`
+              )}
             </Col>
           </Row>
           <Row style={{ marginBottom: 32 }}>

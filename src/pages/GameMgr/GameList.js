@@ -58,9 +58,14 @@ class GameList extends PureComponent {
       dataIndex: 'cp_type',
     },
     {
+      title: '游戏状态',
+      dataIndex: 'cp_state',
+      render: val => <span>{(val=='0') ? '未上线' : '正常运营'}</span>
+    },
+    {
       title: '添加时间',
       dataIndex: 'publish_time',
-       render: val => <span>{moment(val*1000).format('YYYY-MM-DD HH:mm:ss')}</span>,
+      render: val => <span>{moment(val*1000).format('YYYY-MM-DD HH:mm:ss')}</span>,
     },
     {
       title: '操作',
