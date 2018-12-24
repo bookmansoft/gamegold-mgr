@@ -137,7 +137,7 @@ export default {
   'menu.account.logout': '退出登录',
   'menu.gameprops': '道具管理',
   'menu.gameprops.propslist': '道具列表',
-  'menu.gameprops.propscreate': '创建新道具',
+  'menu.gameprops.propscreate': '添加新道具',
   'menu.gameprops.propsdetail': '道具详情页',
   'menu.gameprops.propsproduce': '道具生产',
   'menu.gameprops.propspresent': '道具赠送',

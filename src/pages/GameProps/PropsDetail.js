@@ -1,10 +1,9 @@
 import React, { PureComponent } from 'react';
-import { Card, Button, Divider, List } from 'antd';
+import { Card, Button, List,Modal } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import DescriptionList from '@/components/DescriptionList';
-import router from 'umi/router';
 import Link from 'umi/link';
 
 const { Description } = DescriptionList;
@@ -42,11 +41,44 @@ class PropsDetail extends PureComponent {
     //TODO 获取道具信息并修改
     const { dispatch } = this.props;
     dispatch({
-      type: 'gameprops/propsDetail',
+      type: 'gameprops/cpPropsDetailById',
       payload: { id: id }
-    }).then((ret) => {
-      if (ret != '') {
-        console.log(ret);
+    }).then((cpPropsDetail) => {
+      if (cpPropsDetail != '') {
+        let param = {};
+        param.id = id;
+        param.props_id = cpPropsDetail.id;
+        param.props_name = cpPropsDetail.props_name;
+        param.props_type = cpPropsDetail.props_type;
+        param.props_desc = cpPropsDetail.props_desc;
+        param.icon_url = cpPropsDetail.icon;
+        param.icon_preview = cpPropsDetail.more_icon;
+        param.status = cpPropsDetail.props_status;
+        param.propsAt = cpPropsDetail.props_createtime;
+        //本地道具编辑刷新
+        dispatch({
+          type: 'gameprops/editproplocal',
+          payload: param,
+        }).then((ret) => {
+          if (ret.code == 0) {
+            dispatch({
+              type: 'gameprops/propsDetail',
+              payload: { id: this.state.id }
+            });
+            
+            Modal.success({
+              title: '刷新成功',
+              content: '道具创建成功，您可以前往道具列表查看！',
+            });
+          } else {
+
+            Modal.error({
+              title: '错误',
+              content: ret.msg || '道具刷新失败，请重试！',
+            });
+
+          };
+        });
       }
     });
   };
@@ -61,34 +93,33 @@ class PropsDetail extends PureComponent {
       <PageHeaderWrapper title={detail.name}>
         <Card bordered={false} headStyle={{ fontWeight: 600 }} title="生产信息" extra={this.mainButton()}>
           <DescriptionList size="large" style={{ marginBottom: 32 }}>
-            <Description term="生产总量">{detail.pro_num}</Description>
-            <Description term="已上架出售/赠送">{detail.pro_num - detail.stock}</Description>
-            <Description term="剩余库存">{detail.stock}</Description>
-            <Description term="最后生产时间">{moment(detail.updatedAt).format('YYYY-MM-DD HH:mm')}</Description>
+            <Description term="生产总量">{detail.pro_num || 0}</Description>
+            <Description term="销售数量">{detail.pro_num || 0}</Description>
+            <Description term="赠送数量">{detail.pro_num || 0}</Description>
           </DescriptionList>
         </Card>
         <Card bordered={false} headStyle={{ fontWeight: 600 }} title="道具信息" extra={this.propsButton()}>
           <DescriptionList size="large" style={{ marginBottom: 32 }}>
             <Description term="道具ID">{detail.id}</Description>
-            <Description term="道具名称">{detail.props_name}</Description>
-            <Description term="道具类型">{detail.props_type}</Description>
-            <Description term="所属游戏">{detail.cp_name}</Description>
+            <Description term="道具名称">{detail.props_name || ''}</Description>
+            <Description term="道具类型">{detail.props_type || ''}</Description>
+            <Description term="所属游戏">{detail.cp_name || ''}</Description>
             <Description term="创建时间">{moment(detail.createdAt).format('YYYY-MM-DD HH:mm')}</Description>
-            <Description term="销售状态">{detail.prop_status}</Description>
-            <Description term="商城标价">{detail.prop_gold}</Description>
-            <Description term="含金等级">{detail.prop_rank}</Description>
+            <Description term="销售状态">{detail.props_status || ''}</Description>
+            <Description term="商城标价">{detail.props_price || ''}</Description>
+            <Description term="含金等级">{detail.props_rank || ''}</Description>
           </DescriptionList>
           <DescriptionList size="large">
-            <Description term="道具描述">{detail.prop_desc}</Description>
+            <Description term="道具描述">{detail.props_desc || ''}</Description>
           </DescriptionList>
           <DescriptionList size="large" style={{ marginBottom: 32 }}>
-            <Description term="道具图标 " span="24" sm="24" md="24" style={{ marginTop: 32 }}>
-              <img width={120} src={detail.icon_url} />
+            <Description term="道具图标 " span="24" style={{ marginTop: 32 }}>
+              <img width={120} src={detail.icon_url || ''} />
             </Description>
             <Description term="道具说明图">
               <List
                 grid={{ gutter: 24, lg: 3, md: 2, sm: 1, xs: 1 }}
-                dataSource={iconPreview}
+                dataSource={iconPreview || []}
                 renderItem={item =>
                   <List.Item>
                     <img width={120} src={item} />

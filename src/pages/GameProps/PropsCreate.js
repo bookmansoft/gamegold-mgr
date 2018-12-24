@@ -11,11 +11,9 @@ import {
   List,
   Col,
   Modal,
-  InputNumber,
 } from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import DescriptionList from '@/components/DescriptionList';
-import moment from 'moment';
 import router from 'umi/router';
 const FormItem = Form.Item;
 const { Description } = DescriptionList;
@@ -62,20 +60,19 @@ class PropsCreate extends PureComponent {
         });
         return;
       }
-      //TODO 请求一次CP信息
       let param = {};
       param.props_id = cpPropsDetail.id;
-      param.props_name = cpPropsDetail.prop_name;
-      param.props_type = cpPropsDetail.prop_type;
+      param.props_name = cpPropsDetail.props_name;
+      param.props_type = cpPropsDetail.props_type;
       param.cid = this.state.cid;
-      param.props_desc = cpPropsDetail.prop_desc;
+      param.props_desc = cpPropsDetail.props_desc;
       param.icon_url = cpPropsDetail.icon;
       param.icon_preview = cpPropsDetail.more_icon;
       param.oid = '';
-      param.status = cpPropsDetail.prop_status;
-      param.prop_price = cpPropsDetail.prop_price;
-      param.prop_rank = cpPropsDetail.prop_rank;
-      param.propsAt = cpPropsDetail.prop_createtime;
+      param.status = cpPropsDetail.props_status;
+      param.props_price = cpPropsDetail.props_price;
+      param.props_rank = cpPropsDetail.props_rank;
+      param.propsAt = cpPropsDetail.props_createtime;
       //本地道具创建
       dispatch({
         type: 'gameprops/createproplocal',
@@ -256,16 +253,16 @@ class PropsCreate extends PureComponent {
           <Card bordered={false} headStyle={{ fontWeight: 600 }} title="道具信息预览">
             <DescriptionList size="large" style={{ marginBottom: 32 }}>
               <Description term="道具ID">{cpPropsDetail.id || ''}</Description>
-              <Description term="道具名称">{cpPropsDetail.prop_name || ''}</Description>
-              <Description term="道具属性">{cpPropsDetail.prop_type || ''}</Description>
+              <Description term="道具名称">{cpPropsDetail.props_name || ''}</Description>
+              <Description term="道具属性">{cpPropsDetail.props_type || ''}</Description>
               <Description term="所属游戏">{this.state.cp_text || ''}</Description>
-              <Description term="添加时间">{cpPropsDetail.prop_createtime || ''}</Description>
-              <Description term="销售状态">{cpPropsDetail.prop_status || ''}</Description>
-              <Description term="商城标价">{cpPropsDetail.prop_price || ''}</Description>
-              <Description term="含金等级">{cpPropsDetail.prop_rank || ''}</Description>
+              <Description term="添加时间">{cpPropsDetail.props_createtime || ''}</Description>
+              <Description term="销售状态">{cpPropsDetail.props_status || ''}</Description>
+              <Description term="商城标价">{cpPropsDetail.props_price || ''}</Description>
+              <Description term="含金等级">{cpPropsDetail.props_rank || ''}</Description>
             </DescriptionList>
             <DescriptionList size="large">
-              <Description term="道具描述">{cpPropsDetail.prop_desc || ''}</Description>
+              <Description term="道具描述">{cpPropsDetail.props_desc || ''}</Description>
             </DescriptionList>
             <DescriptionList size="large" style={{ borderTop: '1px solid #ddd', marginTop: 32 }}>
               <Description term="道具图标 " span="24" style={{ marginTop: 32 }}>

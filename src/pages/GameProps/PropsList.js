@@ -6,7 +6,6 @@ import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import { FormattedMessage } from 'umi/locale';
 import Link from 'umi/link';
 import router from 'umi/router';
-import moment from 'moment';
 const { Option } = Select;
 const FormItem = Form.Item;
 @connect(({ gameprops, loading }) => ({

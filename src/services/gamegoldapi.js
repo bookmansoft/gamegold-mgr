@@ -307,7 +307,7 @@ export async function addGameMgr(params) {
         cp_state: 1,
         publish_time: params.publish_time,
         update_time: params.update_time,
-        update_content:params.update_content,
+        update_content: params.update_content,
 
       });
       console.log("添加新游戏结果：" + JSON.stringify(retSave));
@@ -332,7 +332,7 @@ export async function getGameFromUrl(params) {
       let data = await remote.fetching({ func: "cp.getGameFromUrl", userinfo: JSON.parse(localStorage.userinfo), cp_url: params.cp_url });
       console.log(data);
       //patch，更改目录层次结构
-      data=data.game;
+      data = data.game;
       //有数据
       data.wallet_addr = params.wallet_addr;
       data.cp_url = params.cp_url;
@@ -580,20 +580,48 @@ export async function CreatePropLocal(params) {
       icon_preview: params.icon_preview,
       oid: params.oid,
       status: params.status,
-      prop_price: params.prop_price,
-      prop_rank: params.prop_rank,
+      props_price: params.props_price,
+      props_rank: params.props_rank,
       propsAt: params.propsAt,
     });
-    console.log(11111111111);
-    console.log(res);
-    console.log(22222222222);
     if (remote.isSuccess(res)) {
       return res;
     } else {
-      return {};
+      return {code:1};
     }
   }
   return {};
+  //return request(`/api/gamepropsdetail?${stringify(params)}`);
+}
+/**
+ *
+ * 本地游戏道具刷新更新
+ * @export
+ * @param {*} params
+ * @returns
+ */
+export async function EditPropLocal(params) {
+  let msg = await remote.login({ openid: `${Math.random() * 1000000000 | 0}` });
+  if (remote.isSuccess(msg)) {
+    let res = await remote.fetching({
+      func: "prop.EditProp", userinfo: JSON.parse(localStorage.userinfo),
+      id: params.id,
+      props_id: params.props_id,
+      status: params.status,
+      props_name: params.props_name,
+      props_type: params.props_type,
+      props_desc: params.props_desc,
+      icon_url: params.icon_url,
+      icon_preview: params.icon_preview,
+      propsAt: params.propsAt,
+    });
+    if (remote.isSuccess(res)) {
+      return {code: 0};
+    } else {
+      return  {code: 1};
+    }
+  }
+  return  {code: 1};
   //return request(`/api/gamepropsdetail?${stringify(params)}`);
 }
 
@@ -680,12 +708,40 @@ export async function getCpPropsDetail(params) {
   let msg = await remote.login({ openid: theOpenId });
   let ret = [];
   if (remote.isSuccess(msg)) {
-    ret = await remote.fetching({ func: "prop.getCpPropsDetail", userinfo: JSON.parse(localStorage.userinfo),
-    //pid: params.pid,
-    //cp_url: params.cp_url,
-    pid: '1001',
-    cp_url: 'http://localhost:9101/client/prop/',
+    ret = await remote.fetching({
+      func: "prop.getCpPropsDetail", userinfo: JSON.parse(localStorage.userinfo),
+      pid: params.pid,
+      //cp_url: params.cp_url,
+      cp_url: 'http://localhost:9101/client/prop/',
     });
+  }
+  return ret;
+}
+
+/**
+ * 根据道具id 从游戏接口获取道具详情
+ * @export
+ * @param {*} params
+ * @returns
+ */
+export async function getGamePropsDetailById(params) {
+  let msg = await remote.login({ openid: theOpenId });
+  let ret = [];
+  if (remote.isSuccess(msg)) {
+
+    ret = await remote.fetching({
+      func: "prop.LocalDetail", userinfo: JSON.parse(localStorage.userinfo),
+      id: params.id,
+    });
+    if(ret.code == 0){
+      ret = await remote.fetching({
+        func: "prop.getCpPropsDetail", userinfo: JSON.parse(localStorage.userinfo),
+        //cp_url: ret.data.cp_url,
+        pid: ret.data.props_id,
+        cp_url: 'http://localhost:9101/client/prop/',
+      });
+      return ret;
+    }
   }
   return ret;
 }
@@ -703,9 +759,10 @@ export async function getPropsByGame(params) {
   let msg = await remote.login({ openid: theOpenId });
   let ret = [];
   if (remote.isSuccess(msg)) {
-    ret = await remote.fetching({ func: "prop.getPropsByGame", userinfo: JSON.parse(localStorage.userinfo),
-    //cp_url: params.cp_url,
-    cp_url: 'http://localhost:9101/client/prop/proplist',
+    ret = await remote.fetching({
+      func: "prop.getPropsByGame", userinfo: JSON.parse(localStorage.userinfo),
+      //cp_url: params.cp_url,
+      cp_url: 'http://localhost:9101/client/prop/proplist',
     });
   }
   return ret;

@@ -30,22 +30,38 @@ class PropsPresent extends PureComponent {
     visible: false,
     selectedRows: [],
     selectedRowKeys: [],
-    stock: 0
+    stock: 0,
+    confirmed: 0,
   };
 
   componentDidMount() {
     const { dispatch } = this.props;
-    let id = this.props.match.params.id || '';
+    let address = this.props.match.params.address || '';
+    console.log('address is');
+    console.log(address);
+    console.log('address is end');
     dispatch({
       type: 'gameprops/getAllGameList',
       payload: {}
     });
-    if (id != '') {
+    /* if (id != '') {
       dispatch({
         type: 'gameprops/propsDetail',
         payload: { id: id }
       });
-    }
+    } */
+
+    dispatch({
+      type: 'gameprops/getwalletinfo',
+      payload: {}
+    }).then((ret) => {
+      if (ret.code === 0) {
+        this.setState({
+          confirmed: JSON.stringify(ret.list.state.confirmed/1000000),
+        });
+      }
+    });
+
   }
   handleSubmit = e => {
     const { dispatch, form } = this.props;
@@ -134,36 +150,6 @@ class PropsPresent extends PureComponent {
       stock: stock || 0,
     });
   };
-  showPresentModal = () => {
-    this.setState({
-      visible: true,
-    });
-  };
-  handlePresentCancel = () => {
-    this.setState({
-      visible: false,
-    });
-  };
-  handlePresentSubmit = (e) => {
-    //获取到选择的用户信息
-    //console.log(this.state.selectedRows);
-    //关闭选择弹窗
-    this.setState({
-      visible: false,
-    });
-
-  };
-  SetSelectedRowKeys = (val) => {
-    this.setState({
-      selectedRowKeys: val
-    });
-  };
-
-  handleSelectRows = rows => {
-    this.setState({
-      selectedRows: rows,
-    });
-  };
   render() {
     const { submitting, gameprops: { gameList, propByParams, propsDetail }, form: { getFieldDecorator } } = this.props;
     const { visible, selectedRows, selectedRowKeys } = this.state;
@@ -176,7 +162,7 @@ class PropsPresent extends PureComponent {
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 7 },
+        sm: { span: 2 },
       },
       wrapperCol: {
         xs: { span: 24 },
@@ -196,6 +182,13 @@ class PropsPresent extends PureComponent {
     return (
       <PageHeaderWrapper title="道具赠送" >
         <Form onSubmit={this.handleSubmit} hideRequiredMark style={{ marginTop: 8 }}>
+
+          <Card title="已选择赠送对象" bordered={false} headStyle={{ fontWeight: 600 }}>
+            <FormItem {...formItemLayout} label="已添加接收人数量">
+              {selectedRows.length} 人
+          </FormItem>
+          </Card>
+
           <Card title="选择道具" bordered={false} headStyle={{ fontWeight: 600 }}>
             <FormItem {...formItemLayout} label="选择游戏及道具">
               <Col span={11}>
@@ -237,28 +230,23 @@ class PropsPresent extends PureComponent {
                 </FormItem>
               </Col>
             </FormItem>
-            <FormItem {...formItemLayout} label="剩余库存">
-              {getFieldDecorator('stock', {
-                initialValue: showDefaultProp == 1 ? detail.stock : 0,
-              })(
-                <Input disabled style={{ width: "100px" }} />
-              )}
-            </FormItem>
           </Card>
-          <Card title="选择赠送对象" bordered={false} headStyle={{ fontWeight: 600 }}>
-            <FormItem {...formItemLayout} label="选择赠送对象">
 
-              <Button type="primary" onClick={e => {
-                e.preventDefault();
-                this.showPresentModal();
-              }} style={{ width: "30%" }}>
-                {`添加接收人`}
-              </Button>
+          <Card title="结算" bordered={false} headStyle={{ fontWeight: 600 }}>
+            <FormItem {...formItemLayout} label="道具商城标价">
+              100 吨/件
             </FormItem>
-            <FormItem {...formItemLayout} label="已添加接收人数量">
-              已添加接收人数量  {selectedRows.length} 人
-          </FormItem>
+            <FormItem {...formItemLayout} label="道具含金等级">
+              橙
+            </FormItem>
+            <FormItem {...formItemLayout} label="本次赠送将消耗">
+              10000 吨
+            </FormItem>
+            <FormItem {...formItemLayout} label="账户备用金余额">
+            this.state.confirmed}吨
+            </FormItem>
           </Card>
+
 
           <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
             <Button type="primary" htmlType="submit" loading={submitting}>
@@ -269,17 +257,6 @@ class PropsPresent extends PureComponent {
             </Button>
           </FormItem>
         </Form>
-
-        <PropsSelectUser
-          visible={visible}
-          selectedRows={selectedRows}
-          selectedRowKeys={selectedRowKeys}
-          SetSelectedRowKeys={this.SetSelectedRowKeys}
-          handleSelectRows={this.handleSelectRows}
-          handlePresentCancel={this.handlePresentCancel}
-          handlePresentSubmit={this.handlePresentSubmit}
-        />
-
       </PageHeaderWrapper>
     );
   }

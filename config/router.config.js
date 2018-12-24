@@ -130,29 +130,12 @@ export default [
             hideInMenu: true,
           },
           {
-            path: '/gameprops/edit/:id',
-            name: 'propsdetail',
-            component: './GameProps/PropsEdit',
-            hideInMenu: true,
-          },
-          {
             path: '/gameprops/create',
             name: 'propscreate',
             component: './GameProps/PropsCreate',
           },
           {
-            path: '/gameprops/produce',
-            name: 'propsproduce',
-            component: './GameProps/PropsProduce',
-          },
-          {
-            path: '/gameprops/produce/:id',
-            name: 'propsproduce',
-            component: './GameProps/PropsProduce',
-            hideInMenu: true,
-          },
-          {
-            path: '/gameprops/present/:id',
+            path: '/gameprops/present/:address',
             name: 'propspresent',
             component: './GameProps/PropsPresent',
             hideInMenu: true,

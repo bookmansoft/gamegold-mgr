@@ -78,10 +78,7 @@ class PropsProduce extends PureComponent {
     e.preventDefault();
     form.validateFieldsAndScroll((err, values) => {
       let requestData = new Array();
-
       let belongProps = values.belongProps;
-      console.log(belongProps);
-      return;
       let belongPropsArr = belongProps.split("|");
       let oid = belongPropsArr[0] || '';
       let gold_num = belongPropsArr[1] || '';
