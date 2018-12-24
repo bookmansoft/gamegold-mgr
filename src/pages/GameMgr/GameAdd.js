@@ -52,7 +52,7 @@ class GameAdd extends PureComponent {
       if (ret.code === 0) {
         router.push('/gamemgr/gameaddsuccess');
       } else {
-        router.push('/gamemgr/gameadderror');        
+        router.push('/gamemgr/gameadderror');
       };
     }
     );
@@ -95,8 +95,18 @@ class GameAdd extends PureComponent {
       },
       wrapperCol: {
         xs: { span: 24 },
+        sm: { span: 15 },
+      },
+    };
+
+    const formItemLayout2 = {
+      labelCol: {
+        xs: { span: 12 },
+        sm: { span: 8 },
+      },
+      wrapperCol: {
+        xs: { span: 12 },
         sm: { span: 16 },
-        md: { span: 12 },
       },
     };
 
@@ -119,7 +129,7 @@ class GameAdd extends PureComponent {
               <h2><b>发布游戏</b></h2>
               <br />
             </Row>
-            <Row style={{ marginBottom: 32 }}>
+            <Row>
               <FormItem {...formItemLayout} label="游戏URL链接">
                 {getFieldDecorator('cp_url', {
                   rules: [
@@ -140,9 +150,63 @@ class GameAdd extends PureComponent {
                   ],
                 })(<Input placeholder="请输入" />)}
               </FormItem>
-              <Button type="primary" htmlType="submit" loading={submitting}>
-                验证
+            </Row>
+            <Row>
+              <Col span={8}>
+                <FormItem {...formItemLayout2} label="使用邀请奖励">
+                  {getFieldDecorator('use_invite_share', {
+                    initialValue: '1',
+                    rules: [
+                      {
+                        required: true,
+                      },
+                    ],
+                  })(
+                  <Select placeholder="请选择" style={{ width: '60px',display:'block', }}>
+                    <Option value="1">是</Option>
+                    <Option value="0">否</Option>
+                  </Select>
+                  )}
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem {...formItemLayout2} label="邀请奖励比例">
+                  {getFieldDecorator('invite_share', {
+                    initialValue: '15',
+                  })
+                    (
+                    <Select
+                      placeholder='邀请奖励比例'
+                      style={{
+                        margin: '8px 0',
+                        width: '100px',
+                        display: getFieldValue('use_invite_share') === '1' ? 'block' : 'none',
+                      }}
+                    >
+                      <Option value="1">1%</Option>
+                      <Option value="2">2%</Option>
+                      <Option value="3">3%</Option>
+                      <Option value="4">4%</Option>
+                      <Option value="5">5%</Option>
+                      <Option value="6">6%</Option>
+                      <Option value="7">7%</Option>
+                      <Option value="8">8%</Option>
+                      <Option value="9">9%</Option>
+                      <Option value="10">10%</Option>
+                      <Option value="11">11%</Option>
+                      <Option value="12">12%</Option>
+                      <Option value="13">13%</Option>
+                      <Option value="14">14%</Option>
+                      <Option value="15">15%</Option>
+                    </Select>
+                    )}
+                </FormItem>
+              </Col>
+              <Col md={4}>
+                <Button type="primary" htmlType="submit" loading={submitting}>
+                  验证
               </Button>
+              </Col>
             </Row>
             <br />
             <h2><b>基本信息预览</b></h2>
