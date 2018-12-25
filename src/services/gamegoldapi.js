@@ -828,10 +828,6 @@ export async function sendListRemote(params) {
       id: params.id,
       addr: params.addr
     });
-    console.log(addr);
-    console.log(111111111);
-    console.log(res);
-    console.log(111111111);
     if (remote.isSuccess(res)) {
       return { code: 1 };
     } else {

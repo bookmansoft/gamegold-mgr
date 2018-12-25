@@ -33,6 +33,10 @@ export default {
         detail: response,
       });
     },
+    *propsDetailReturn({ payload }, { call }) {
+      const response = yield call(getGamePropsDetail, payload);
+      return response;
+    },
     *propsOid({ payload }, { call }) {
       const res = yield call(getPropsOid, payload);
       return res;

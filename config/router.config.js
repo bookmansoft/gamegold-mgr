@@ -135,7 +135,7 @@ export default [
             component: './GameProps/PropsCreate',
           },
           {
-            path: '/gameprops/present/:address',
+            path: '/gameprops/present/:addr',
             name: 'propspresent',
             component: './GameProps/PropsPresent',
             hideInMenu: true,
@@ -144,6 +144,7 @@ export default [
             path: '/gameprops/present',
             name: 'propspresent',
             component: './GameProps/PropsPresent',
+            hideInMenu: true,
           }
         ],
       },

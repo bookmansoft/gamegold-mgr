@@ -68,13 +68,13 @@ class PropsDetail extends PureComponent {
             
             Modal.success({
               title: '刷新成功',
-              content: '道具创建成功，您可以前往道具列表查看！',
+              content: '道具基本信息更新成功！',
             });
           } else {
 
             Modal.error({
               title: '错误',
-              content: ret.msg || '道具刷新失败，请重试！',
+              content: ret.msg || '道具更新失败，请重试！',
             });
 
           };
@@ -105,8 +105,8 @@ class PropsDetail extends PureComponent {
             <Description term="道具类型">{detail.props_type || ''}</Description>
             <Description term="所属游戏">{detail.cp_name || ''}</Description>
             <Description term="创建时间">{moment(detail.createdAt).format('YYYY-MM-DD HH:mm')}</Description>
-            <Description term="销售状态">{detail.props_status || ''}</Description>
-            <Description term="商城标价">{detail.props_price || ''}</Description>
+            <Description term="销售状态">{detail.status == 1 ? '在售' : '下架'}</Description>
+            <Description term="商城标价">{detail.props_price/1000000 || ''}吨</Description>
             <Description term="含金等级">{detail.props_rank || ''}</Description>
           </DescriptionList>
           <DescriptionList size="large">

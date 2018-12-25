@@ -1,17 +1,16 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { formatMessage, FormattedMessage } from 'umi/locale';
+import { FormattedMessage } from 'umi/locale';
 import {
   Form,
   Select,
   Button,
-  Input,
-  Card, Modal, Col, Row
+  Card, Modal, Col
 } from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-import styles from './style.less';
-import PropsSelectUser from '@/components/PropsSelectUser';
+import router from 'umi/router';
 const FormItem = Form.Item;
+const confirm = Modal.confirm;
 const { Option } = Select;
 
 
@@ -28,36 +27,36 @@ const { Option } = Select;
 class PropsPresent extends PureComponent {
   state = {
     visible: false,
-    selectedRows: [],
+    currentAddr: [],
     selectedRowKeys: [],
     stock: 0,
     confirmed: 0,
+    currentPropDetail: {},
+    totalPrice: 0
   };
 
   componentDidMount() {
     const { dispatch } = this.props;
-    let address = this.props.match.params.address || '';
-    console.log('address is');
-    console.log(address);
-    console.log('address is end');
+    let addr = this.props.match.params.addr || '';
+    if (addr != '') {
+      addr = JSON.parse(addr);
+      this.setState({
+        currentAddr: addr
+      })
+
+    }
+
     dispatch({
       type: 'gameprops/getAllGameList',
       payload: {}
     });
-    /* if (id != '') {
-      dispatch({
-        type: 'gameprops/propsDetail',
-        payload: { id: id }
-      });
-    } */
-
     dispatch({
       type: 'gameprops/getwalletinfo',
       payload: {}
     }).then((ret) => {
       if (ret.code === 0) {
         this.setState({
-          confirmed: JSON.stringify(ret.list.state.confirmed/1000000),
+          confirmed: JSON.stringify(ret.list.state.confirmed / 1000000),
         });
       }
     });
@@ -67,13 +66,8 @@ class PropsPresent extends PureComponent {
     const { dispatch, form } = this.props;
     e.preventDefault();
     form.validateFieldsAndScroll((err, values) => {
-
-
-      let addrObject = this.state.selectedRows;
-      let belongProps = values.belongProps;
-      let belongPropsArr = belongProps.split("|");
-      let id = belongPropsArr[0] || '';
-      let stock = belongPropsArr[2] || 0;
+      let addr = this.state.currentAddr;
+      let id = values.belongProps;
       if (id == '') {
         Modal.error({
           title: '错误',
@@ -81,25 +75,12 @@ class PropsPresent extends PureComponent {
         });
         return;
       }
-      if (addrObject.length == 0) {
+      if (addr.length == 0) {
         Modal.error({
           title: '错误',
           content: '请选择用户！',
         });
         return;
-      }
-      if (stock < addrObject.length) {
-        Modal.error({
-          title: '错误',
-          content: '赠送数量超过了道具库存！',
-        });
-        return;
-      }
-      let addr = new Array();
-      let $idx = 0;
-      for (let $value of addrObject) {
-        addr[$idx] = $value.addr;
-        $idx++;
       }
       if (id != '' && addr.length > 0) {
         //调用道具上链
@@ -108,15 +89,27 @@ class PropsPresent extends PureComponent {
           payload: { id: id, addr: addr }
         }).then((ret) => {
           if (ret.code == 1) {
-            Modal.success({
-              title: '恭喜',
-              content: '赠送成功！',
+            confirm({
+              title: '赠送成功',
+              content: '道具赠送成功！',
+              okText: '返回道具列表',
+              okType: 'primary',
+              cancelText: '赠送道具',
+              cancelType: 'primary',
+              onOk() {
+                router.push('/gameprops/list');
+              },
+              onCancel() {
+                router.push('/usermgr/userlist');
+              },
             });
+            return;
           } else {
             Modal.error({
               title: '错误',
               content: ret.msg || '赠送失败请重试！',
             });
+            return;
           }
         });
 
@@ -131,33 +124,45 @@ class PropsPresent extends PureComponent {
     });
   };
   handleGameChange = (value) => {
-    const { dispatch } = this.props;
-    //获取已经创建的本地道具库，未生产
+    const { form,dispatch } = this.props;
+    //清空当前道具选项
+    form.setFieldsValue({
+      belongProps: '',
+    });
+    //获取已经创建的本地道具库
     if (typeof value != 'undefined' && value != '') {
       dispatch({
         type: 'gameprops/getAllPropsByParams',
-        payload: { cid: value, status: 1 }
+        payload: { cid: value }
       });
     }
   };
   onPropsChange = (value) => {
-    const { form } = this.props;
-    let propsArr = value.split("|");
-    let id = propsArr[0] || '';
-    let oid = propsArr[1] || '';
-    let stock = propsArr[2] || '';
-    form.setFieldsValue({
-      stock: stock || 0,
-    });
+    const { dispatch } = this.props;
+    let id = value;
+    if (!!id) {
+      dispatch({
+        type: 'gameprops/propsDetailReturn',
+        payload: { id: id }
+      }).then((ret) => {
+        if (ret.code === 0) {
+          let addr = this.state.currentAddr;
+          let detail = ret.data;
+          let totalPrice = addr.length * detail.props_price;
+          totalPrice = Math.round(totalPrice / 1000000 * 100) / 100;
+          console.log(totalPrice);
+          this.setState({
+            currentPropDetail: detail,
+            totalPrice: totalPrice
+          });
+        }
+      });
+
+    }
   };
   render() {
-    const { submitting, gameprops: { gameList, propByParams, propsDetail }, form: { getFieldDecorator } } = this.props;
-    const { visible, selectedRows, selectedRowKeys } = this.state;
-    let detail = propsDetail.data || [];
-    let showDefaultProp = 0;
-    if (detail != '' && propByParams == '') {
-      showDefaultProp = 1;
-    }
+    const { submitting, gameprops: { gameList, propByParams }, form: { getFieldDecorator } } = this.props;
+    const { currentAddr, currentPropDetail, totalPrice, confirmed } = this.state;
 
     const formItemLayout = {
       labelCol: {
@@ -185,7 +190,7 @@ class PropsPresent extends PureComponent {
 
           <Card title="已选择赠送对象" bordered={false} headStyle={{ fontWeight: 600 }}>
             <FormItem {...formItemLayout} label="已添加接收人数量">
-              {selectedRows.length} 人
+              {currentAddr.length} 人
           </FormItem>
           </Card>
 
@@ -194,7 +199,6 @@ class PropsPresent extends PureComponent {
               <Col span={11}>
                 <FormItem>
                   {getFieldDecorator('belongGame', {
-                    initialValue: detail.cid,
                     rules: [
                       {
                         required: true,
@@ -213,7 +217,6 @@ class PropsPresent extends PureComponent {
               <Col span={11}>
                 <FormItem>
                   {getFieldDecorator('belongProps', {
-                    initialValue: typeof detail.id != 'undefined' && typeof detail.oid != 'undefined' ? detail.id + '|' + detail.oid + '|' + detail.stock : '',
                     rules: [
                       {
                         required: true,
@@ -224,7 +227,7 @@ class PropsPresent extends PureComponent {
                     <Select
                       onChange={this.onPropsChange}
                     >
-                      {showDefaultProp == 1 ? <Option value={detail.id + '|' + detail.oid + '|' + detail.stock}>{detail.props_name}</Option> : propByParams.map(propbyparams => <Option key={propbyparams.id + '|' + propbyparams.oid + '|' + propbyparams.stock} >{propbyparams.props_name}</Option>)}
+                      {propByParams.map(propbyparams => <Option key={propbyparams.id} >{propbyparams.props_name}</Option>)}
                     </Select>
                   )}
                 </FormItem>
@@ -234,16 +237,16 @@ class PropsPresent extends PureComponent {
 
           <Card title="结算" bordered={false} headStyle={{ fontWeight: 600 }}>
             <FormItem {...formItemLayout} label="道具商城标价">
-              100 吨/件
+              {currentPropDetail.props_price / 1000000 || ''} 吨/件
             </FormItem>
             <FormItem {...formItemLayout} label="道具含金等级">
-              橙
+              {currentPropDetail.props_rank || ''}橙
             </FormItem>
             <FormItem {...formItemLayout} label="本次赠送将消耗">
-              10000 吨
+              {totalPrice} 吨
             </FormItem>
             <FormItem {...formItemLayout} label="账户备用金余额">
-            this.state.confirmed}吨
+              {Math.round(confirmed / 1000000 * 100) / 100}吨
             </FormItem>
           </Card>
 

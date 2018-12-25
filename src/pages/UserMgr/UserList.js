@@ -21,9 +21,9 @@ import {
   Steps,
   Radio,
 } from 'antd';
-import SimpleTable from '@/components/SimpleTable';
+import UserListStandardTable from '@/components/UserListStandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-
+import router from 'umi/router';
 import styles from './UserList.less';
 
 const FormItem = Form.Item;
@@ -58,17 +58,31 @@ class UserList extends PureComponent {
       dataIndex: 'addr',
     },
     {
-      title: '累计支付游戏金',
-      dataIndex: 'sum',
-      render: val => <span>{val/100000000}</span>,
+      title: '玩过的游戏类型',
+      dataIndex: 'game',
+      render(val) {
+        if (!!val) {
+          return val;
+        } else {
+          return 0;
+        }
+      },
     },
     {
-      title: '操作',
-      render: (text, record) => (
-        <Fragment>
-          <a onClick={() => this.handleDeal(true, record)}>赠送</a>
-        </Fragment>
-      ),
+      title: '消费金额(吨)',
+      dataIndex: 'sum',
+      render: val => <span>{val / 100000000}</span>,
+    },
+    {
+      title: '最后消费时间',
+      dataIndex: 'lastBuy',
+      render(val) {
+        if (!!val) {
+          return val;
+        } else {
+          return '-';
+        }
+      },
     },
   ];
 
@@ -78,6 +92,11 @@ class UserList extends PureComponent {
       type: 'userlist/fetch',
     });
   }
+  handleSelectRows = rows => {
+    this.setState({
+      selectedRows: rows,
+    });
+  };
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
     const { dispatch } = this.props;
@@ -103,6 +122,28 @@ class UserList extends PureComponent {
       type: 'userlist/fetch',
       payload: params,
     });
+  };
+
+  handlePropsSend = () => {
+    const { dispatch } = this.props;
+    let allRows = this.state.selectedRows;
+    if(allRows.length > 0){
+      let addr = new Array();
+      let $idx = 0;
+      for (let $value of allRows) {
+        addr[$idx] = $value.addr;
+        $idx++;
+      }
+      addr = JSON.stringify(addr);
+      router.push('/gameprops/present/'+addr);
+
+    }else{
+      Modal.error({
+        title: '错误',
+        content: '请选择用户！',
+      });
+      return;
+    }
   };
 
   handleFormReset = () => {
@@ -143,7 +184,7 @@ class UserList extends PureComponent {
   //赠送道具
   handleDeal = (flag, record) => {
     console.log(record.addr);
-    this.props.history.push("../gameprops/present?address="+record.addr);
+    this.props.history.push("../gameprops/present?address=" + record.addr);
   };
 
   renderForm() {
@@ -206,13 +247,15 @@ class UserList extends PureComponent {
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderForm()}</div>
             <div className={styles.tableListOperator} />
-            <SimpleTable
+            <UserListStandardTable
               selectedRows={selectedRows}
+              rowKey={'rank'}
               loading={loading}
               data={data}
               columns={this.columns}
-              onSelectRow={null}
+              onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}
+              handlePropsSend={this.handlePropsSend}
             />
           </div>
         </Card>

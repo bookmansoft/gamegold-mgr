@@ -42,18 +42,42 @@ class PropsList extends PureComponent {
     {
       title: '所属游戏',
       dataIndex: 'cp_name',
+      render(val) {
+        return val;
+      },
     },
     {
       title: '制作总量',
       dataIndex: 'pro_num',
+      render(val) {
+        if(!!val){
+          return val;
+        }else{
+          return 0;
+        }
+      },
     },
     {
       title: '销售数量',
-      dataIndex: 'stock',
+      dataIndex: 'sale_num',
+      render(val) {
+        if(!!val){
+          return val;
+        }else{
+          return 0;
+        }
+      },
     },
     {
       title: '赠送数量',
-      dataIndex: 'gold_num',
+      dataIndex: 'send_num',
+      render(val) {
+        if(!!val){
+          return val;
+        }else{
+          return 0;
+        }
+      },
     },
     {
       title: '操作',
@@ -62,7 +86,7 @@ class PropsList extends PureComponent {
           <Fragment>
             <Link to={`/gameprops/detail/${record.id}`}>详情</Link>
             <Divider type="vertical" />
-            <Link to={`/gameprops/produce/${record.id}`}>批量赠送</Link>
+            <Link to={`/usermgr/userlist`}>批量赠送</Link>
           </Fragment>
         );
 
