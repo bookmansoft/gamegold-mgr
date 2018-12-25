@@ -280,7 +280,10 @@ export async function addGameMgr(params) {
     if (remote.isSuccess(msg)) {
       //先调用链上的保存方法
       console.log("添加新游戏:" + JSON.stringify(params));
-      ret = await remote.fetching({ func: "cp.Create", userinfo: JSON.parse(localStorage.userinfo), items: [params.cp_name, params.cp_url, params.wallet_addr, params.cp_type] });
+      ret = await remote.fetching({
+        func: "cp.Create", userinfo: JSON.parse(localStorage.userinfo),
+        items: [params.cp_name, params.cp_url, params.wallet_addr, params.cp_type, params.invite_share]
+      });
       //判断返回值是否正确
       console.log(ret);
       if (ret.code != 0 || ret.data == null) {
@@ -308,7 +311,7 @@ export async function addGameMgr(params) {
         publish_time: params.publish_time,
         update_time: params.update_time,
         update_content: params.update_content,
-
+        invite_share: params.invite_share,
       });
       console.log("添加新游戏结果：" + JSON.stringify(retSave));
       return retSave;
@@ -336,9 +339,10 @@ export async function getGameFromUrl(params) {
       //有数据
       data.wallet_addr = params.wallet_addr;
       data.cp_url = params.cp_url;
+      data.invite_share = parseInt(params.use_invite_share) == 1 ? parseInt(params.invite_share) : 0;
 
       //由于协议差异，补充数据
-      data.cp_text = data.title;
+      data.cp_text = data.game_title;
       data.develop_name = data.provider;
       data.face_url = data.large_img_url;
       data.cp_desc = data.desc;
@@ -587,7 +591,7 @@ export async function CreatePropLocal(params) {
     if (remote.isSuccess(res)) {
       return res;
     } else {
-      return {code:1};
+      return { code: 1 };
     }
   }
   return {};
@@ -616,12 +620,12 @@ export async function EditPropLocal(params) {
       propsAt: params.propsAt,
     });
     if (remote.isSuccess(res)) {
-      return {code: 0};
+      return { code: 0 };
     } else {
-      return  {code: 1};
+      return { code: 1 };
     }
   }
-  return  {code: 1};
+  return { code: 1 };
   //return request(`/api/gamepropsdetail?${stringify(params)}`);
 }
 
@@ -733,7 +737,7 @@ export async function getGamePropsDetailById(params) {
       func: "prop.LocalDetail", userinfo: JSON.parse(localStorage.userinfo),
       id: params.id,
     });
-    if(ret.code == 0){
+    if (ret.code == 0) {
       ret = await remote.fetching({
         func: "prop.getCpPropsDetail", userinfo: JSON.parse(localStorage.userinfo),
         //cp_url: ret.data.cp_url,

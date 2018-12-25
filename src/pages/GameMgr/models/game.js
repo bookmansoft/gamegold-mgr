@@ -1,6 +1,5 @@
 import { routerRedux } from 'dva/router';
 import { message } from 'antd';
-import { fakeSubmitForm } from '@/services/api';
 import { addGameMgr,getGameFromUrl } from '@/services/gamegoldapi';
 
 //此名称域为新增使用（已经不存在编辑的可能性了）

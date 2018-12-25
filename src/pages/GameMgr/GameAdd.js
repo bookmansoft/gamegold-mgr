@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import { formatMessage, FormattedMessage } from 'umi/locale';
 import router from 'umi/router';
+import moment from 'moment';
 import {
   Form,
   Input,
@@ -178,10 +179,10 @@ class GameAdd extends PureComponent {
                     <Select
                       placeholder='邀请奖励比例'
                       style={{
-                        margin: '8px 0',
                         width: '100px',
-                        display: getFieldValue('use_invite_share') === '1' ? 'block' : 'none',
+                        // display: getFieldValue('use_invite_share') === '1' ? 'block' : 'none',
                       }}
+                      disabled={getFieldValue('use_invite_share') === '0'}
                     >
                       <Option value="1">1%</Option>
                       <Option value="2">2%</Option>
@@ -223,7 +224,7 @@ class GameAdd extends PureComponent {
                 开发者：{data.develop_name}
               </Col>
               <Col sm={8} xs={12}>
-                发布时间：{data.publish_time}
+                发布时间：{!!data.publish_time && moment(data.publish_time * 1000).format('YYYY-MM-DD HH:mm:ss')}
               </Col>
             </Row>
             <Row style={{ marginBottom: 32 }}>
