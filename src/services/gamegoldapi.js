@@ -280,7 +280,10 @@ export async function addGameMgr(params) {
     if (remote.isSuccess(msg)) {
       //先调用链上的保存方法
       console.log("添加新游戏:" + JSON.stringify(params));
-      ret = await remote.fetching({ func: "cp.Create", userinfo: JSON.parse(localStorage.userinfo), items: [params.cp_name, params.cp_url, params.wallet_addr, params.cp_type] });
+      ret = await remote.fetching({
+        func: "cp.Create", userinfo: JSON.parse(localStorage.userinfo),
+        items: [params.cp_name, params.cp_url, params.wallet_addr, params.cp_type, params.invite_share]
+      });
       //判断返回值是否正确
       console.log(ret);
       if (ret.code != 0 || ret.data == null) {
