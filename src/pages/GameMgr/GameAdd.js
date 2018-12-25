@@ -178,10 +178,10 @@ class GameAdd extends PureComponent {
                     <Select
                       placeholder='邀请奖励比例'
                       style={{
-                        margin: '8px 0',
                         width: '100px',
-                        display: getFieldValue('use_invite_share') === '1' ? 'block' : 'none',
+                        // display: getFieldValue('use_invite_share') === '1' ? 'block' : 'none',
                       }}
+                      disabled={getFieldValue('use_invite_share') === '0'}
                     >
                       <Option value="1">1%</Option>
                       <Option value="2">2%</Option>
