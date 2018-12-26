@@ -199,6 +199,21 @@ class GameAdd extends PureComponent {
                       <Option value="13">13%</Option>
                       <Option value="14">14%</Option>
                       <Option value="15">15%</Option>
+                      <Option value="16">16%</Option>
+                      <Option value="17">17%</Option>
+                      <Option value="18">18%</Option>
+                      <Option value="19">19%</Option>
+                      <Option value="20">20%</Option>
+                      <Option value="21">21%</Option>
+                      <Option value="22">22%</Option>
+                      <Option value="23">23%</Option>
+                      <Option value="24">24%</Option>
+                      <Option value="25">25%</Option>
+                      <Option value="26">26%</Option>
+                      <Option value="27">27%</Option>
+                      <Option value="28">28%</Option>
+                      <Option value="29">29%</Option>
+                      <Option value="30">30%</Option>
                     </Select>
                     )}
                 </FormItem>
