@@ -265,13 +265,13 @@ class WalletMgr extends PureComponent {
           </Row>
           <Divider style={{ marginBottom: 16 }} />
           <Row>
-            <Col sm={24} xs={24}>可用余额</Col>
+            <Col sm={24} xs={24}>已确认交易余额:&nbsp;{(info.data != null) && JSON.stringify(info.data.confirmed / 1000)} Kg</Col>
           </Row>
           <Row>
-            <Col sm={4} xs={8}>
-              {(info.data != null) && JSON.stringify(info.data.confirmed / 100000000)} GDD
-              </Col>
-            <Col sm={4} xs={8}>
+            <Col sm={8} xs={8}>
+              未确认交易余额:&nbsp;{(info.data != null) && JSON.stringify(info.data.unconfirmed / 1000)} Kg
+            </Col>
+            <Col sm={8} xs={8}>
               <Button type="primary" onClick={() => this.handleReceive()}>
                 转入
                 </Button>
