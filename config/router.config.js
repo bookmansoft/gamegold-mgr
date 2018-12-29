@@ -19,6 +19,20 @@ export default [
     authority: ['admin', 'user'],
     routes: [
       { path: '/', redirect: '/wallet/walletmgr' },
+      // chart 统计图表
+      {
+        path: '/chart',
+        name: 'chart',
+        icon: 'table',
+        authority: ['user','admin'],
+        routes: [
+          {
+            path: '/chart/kline',
+            name: 'kline',
+            component: './Chart/Kline',
+          },
+        ],
+      },
       // operatormgr
       {
         path: '/operator',
