@@ -71,6 +71,8 @@ export default {
   'component.noticeIcon.cleared': '清空了',
   'component.noticeIcon.empty': '暂无数据',
   'menu': '首页',
+  'menu.chart': '图表',
+  'menu.chart.kline': 'K线图',
   'menu.operator': '操作员管理',
   'menu.operator.operatorlist': '操作员列表',
   'menu.operator.operatoradd': '添加操作员',
