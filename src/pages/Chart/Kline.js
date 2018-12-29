@@ -4,5 +4,5 @@ import { formatMessage } from "umi/locale";
 import Exception from '@/components/Exception';
 
 export default () => (
-  <iframe src="http://localhost:9101/client/echart/kline/k1.html" width="100%" height="100%" />
+  <iframe src="http://localhost:9101/client/echart/kline/k1.html" frameborder="0" width="100%" height="600px" scrolling = "no"/>
 );
