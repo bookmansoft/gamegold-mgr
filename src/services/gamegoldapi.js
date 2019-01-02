@@ -485,7 +485,12 @@ export async function getAddressReceive(params) {
     let ret = { code: -200, data: null, message: "react service层无返回值。方法名：getAddressReceive" };
     if (remote.isSuccess(msg)) {
       console.log("获取钱包信息:" + JSON.stringify(params));
-      ret = await remote.fetching({ func: "address.Receive", userinfo: JSON.parse(localStorage.userinfo), items: [] });
+      if (localStorage.currentAuthority == 'admin') {
+        ret = await remote.fetching({ func: "address.Receive", userinfo: JSON.parse(localStorage.userinfo), items: ['default'] });
+      }
+      else {
+        ret = await remote.fetching({ func: "address.Receive", userinfo: JSON.parse(localStorage.userinfo), items: [] });
+      }
     }
     console.log("获取钱包信息结果：" + JSON.stringify(ret));
     return ret;
@@ -523,7 +528,13 @@ export async function getBalanceAll(params) {
     let ret = { code: -200, data: null, message: "react service层无返回值。方法名：getBalanceAll" };
     if (remote.isSuccess(msg)) {
       console.log("获取余额参数:" + JSON.stringify(params));
-      ret = await remote.fetching({ func: "account.BalanceAll", userinfo: JSON.parse(localStorage.userinfo), items: [] });
+      console.log(localStorage.currentAuthority);
+      if (localStorage.currentAuthority == 'admin') {
+        ret = await remote.fetching({ func: "account.BalanceAll", userinfo: JSON.parse(localStorage.userinfo), items: ['default'] });
+      }
+      else {
+        ret = await remote.fetching({ func: "account.BalanceAll", userinfo: JSON.parse(localStorage.userinfo), items: [] });
+      }
     }
     console.log("获取余额结果：" + JSON.stringify(ret));
     return ret;
@@ -541,7 +552,12 @@ export async function addWalletPay(params) {
     let ret = { code: -200, data: null, message: "react service层无返回值。方法名：addWalletPay" };
     if (remote.isSuccess(msg)) {
       console.log("钱包转出:");
-      ret = await remote.fetching({ func: "tx.Send", userinfo: JSON.parse(localStorage.userinfo), items: [params.address, params.value * 100000000] });
+      if (localStorage.currentAuthority == 'admin') {
+        ret = await remote.fetching({ func: "tx.Send", userinfo: JSON.parse(localStorage.userinfo), items: [params.address, params.value * 100000000, 'default'] });
+      }
+      else {
+        ret = await remote.fetching({ func: "tx.Send", userinfo: JSON.parse(localStorage.userinfo), items: [params.address, params.value * 100000000] });
+      }
     }
     return ret;
   } catch (error) {
