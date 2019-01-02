@@ -757,8 +757,8 @@ export async function getCpPropsDetail(params) {
     ret = await remote.fetching({
       func: "prop.getCpPropsDetail", userinfo: JSON.parse(localStorage.userinfo),
       pid: params.pid,
-      //cp_url: params.cp_url,
-      cp_url: 'http://localhost:9101/client/prop/',
+      cp_url: params.cp_url,
+      //cp_url: 'http://localhost:9701/mock/cp122907',
     });
   }
   return ret;
@@ -782,9 +782,9 @@ export async function getGamePropsDetailById(params) {
     if (ret.code == 0) {
       ret = await remote.fetching({
         func: "prop.getCpPropsDetail", userinfo: JSON.parse(localStorage.userinfo),
-        //cp_url: ret.data.cp_url,
+        cp_url: ret.data.cp_url,
         pid: ret.data.props_id,
-        cp_url: 'http://localhost:9101/client/prop/',
+        //cp_url: 'http://localhost:9701/mock/cp122907',
       });
       return ret;
     }
@@ -807,8 +807,8 @@ export async function getPropsByGame(params) {
   if (remote.isSuccess(msg)) {
     ret = await remote.fetching({
       func: "prop.getPropsByGame", userinfo: JSON.parse(localStorage.userinfo),
-      //cp_url: params.cp_url,
-      cp_url: 'http://localhost:9101/client/prop/proplist',
+      cp_url: params.cp_url,
+      //cp_url: 'http://localhost:9701/mock/cp122907',
     });
   }
   return ret;

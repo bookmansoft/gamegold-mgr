@@ -69,7 +69,7 @@ class PropsCreate extends PureComponent {
       param.icon_url = cpPropsDetail.icon;
       param.icon_preview = cpPropsDetail.more_icon;
       param.oid = '';
-      param.status = cpPropsDetail.props_status;
+      param.status = cpPropsDetail.props_status || 1;
       param.props_price = cpPropsDetail.props_price;
       param.props_rank = cpPropsDetail.props_rank;
       param.propsAt = cpPropsDetail.props_createtime;
@@ -236,7 +236,7 @@ class PropsCreate extends PureComponent {
                       setFieldsValue={0}
                       onChange={this.onPropsChange}
                     >
-                      {gamePropsList.map(props => <Option key={props.id}>{props.prop_name}</Option>)}
+                      {gamePropsList.map(props => <Option key={props.id}>{props.props_name}</Option>)}
                     </Select>
                   )}
                 </FormItem>
