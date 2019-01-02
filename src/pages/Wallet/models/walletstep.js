@@ -1,6 +1,6 @@
 import { routerRedux } from 'dva/router';
 import { message } from 'antd';
-import { fakeSubmitForm } from '@/services/api';
+// import { fakeSubmitForm } from '@/services/api';
 import { getKeyMaster} from '@/services/gamegoldapi';
 
 export default {
@@ -13,19 +13,19 @@ export default {
   },
 
   effects: {
-    *submitRegularForm({ payload }, { call }) {
-      let ret=yield call(fakeSubmitForm, payload);
-      message.success('提交成功');
-      return ret;
-    },
-    *submitStepForm({ payload }, { call, put }) {
-      yield call(fakeSubmitForm, payload);
-      yield put({
-        type: 'saveStepFormData',
-        payload,
-      });
-      yield put(routerRedux.push('/wallet/step-form/result'));
-    },
+    // *submitRegularForm({ payload }, { call }) {
+    //   let ret=yield call(fakeSubmitForm, payload);
+    //   message.success('提交成功');
+    //   return ret;
+    // },
+    // *submitStepForm({ payload }, { call, put }) {
+    //   yield call(fakeSubmitForm, payload);
+    //   yield put({
+    //     type: 'saveStepFormData',
+    //     payload,
+    //   });
+    //   yield put(routerRedux.push('/wallet/step-form/result'));
+    // },
     *submitAdvancedForm({ payload }, { call }) {
       let ret=yield call(fakeSubmitForm, payload);
       message.success('提交成功');
