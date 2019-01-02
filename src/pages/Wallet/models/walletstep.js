@@ -7,7 +7,7 @@ export default {
   namespace: 'walletstep',
 
   state: {
-      remenberWord: '东南西北中发梅兰竹菊葱蒜',
+      remenberWord: '',
       checkRemenberWord:'',
       data: {},
   },
@@ -42,8 +42,8 @@ export default {
         if (response.list!=null && response.list.mnemonic!=null) {
           //符合条件时才传递
           let orignRemenberWord=response.list.mnemonic.phrase;
-          console.log("43:初始化文本");
-          console.log(orignRemenberWord);
+          // console.log("43:初始化文本");
+          // console.log(orignRemenberWord);
           //转化为去掉空格的格式
           let remenberWordArray=orignRemenberWord.split(" ");
           let remenberWord=remenberWordArray[0]+remenberWordArray[1]+remenberWordArray[2]
