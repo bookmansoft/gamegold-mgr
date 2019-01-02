@@ -80,7 +80,7 @@ class WalletLog extends PureComponent {
                 交易类型：{(data.details!=null) && (data.details[0].category)}
               </Col>
               <Col sm={8} xs={12}>
-                交易GCD数量：{(data.details!=null) && (data.details[0].amount)}
+                交易游戏金数量：{(data.details!=null) && (data.details[0].amount.toFixed(6) * 1000 + 'Kg')}
               </Col>
               <Col sm={8} xs={12}>
                 交易时间：{moment(data.time*1000).format('YYYY-MM-DD HH:mm:ss')}

@@ -66,8 +66,9 @@ class WalletMgr extends PureComponent {
       dataIndex: 'category',
     },
     {
-      title: '金额(GDD)',
+      title: '金额(Kg)',
       dataIndex: 'amount',
+      render: val => <span>{parseInt(val * 1000000 + 0.5)/1000}</span>
     },
     {
       title: '操作',

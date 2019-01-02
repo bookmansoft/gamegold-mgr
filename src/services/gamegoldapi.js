@@ -558,10 +558,10 @@ export async function addWalletPay(params) {
     if (remote.isSuccess(msg)) {
       console.log("钱包转出:");
       if (localStorage.currentAuthority == 'admin') {
-        ret = await remote.fetching({ func: "tx.Send", userinfo: JSON.parse(localStorage.userinfo), items: [params.address, params.value * 100000000, 'default'] });
+        ret = await remote.fetching({ func: "tx.Send", userinfo: JSON.parse(localStorage.userinfo), items: [params.address, params.value * 100000, 'default'] });
       }
       else {
-        ret = await remote.fetching({ func: "tx.Send", userinfo: JSON.parse(localStorage.userinfo), items: [params.address, params.value * 100000000] });
+        ret = await remote.fetching({ func: "tx.Send", userinfo: JSON.parse(localStorage.userinfo), items: [params.address, params.value * 100000] });
       }
     }
     return ret;

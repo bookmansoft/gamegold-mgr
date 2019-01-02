@@ -97,21 +97,21 @@ class WalletPay extends PureComponent {
                 rules: [
                   {
                     required: true,
-                    message: "请输入接收人GCD地址",
+                    message: "请输入接收人游戏金地址",
                   },
                 ],
-              })(<Input placeholder="请输入接收人GCD地址" />)}
+              })(<Input placeholder="请输入接收人游戏金地址" />)}
             </FormItem>
 
-            <FormItem {...formItemLayout} label="发送金额">
+            <FormItem {...formItemLayout} label="发送金额Kg:">
               {getFieldDecorator('value', {
                 rules: [
                   {
                     required: true,
-                    message: "请输入发送金额",
+                    message: "请输入发送金额(单位Kg)",
                   },
                 ],
-              })(<Input placeholder="请输入" />)}
+              })(<Input placeholder="请输入发送金额(单位Kg)" />)}
             </FormItem>
             <FormItem {...formItemLayout} label="发送说明">
               {getFieldDecorator('gameDesc', {
