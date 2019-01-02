@@ -60,12 +60,12 @@ class GameList extends PureComponent {
     {
       title: '游戏状态',
       dataIndex: 'cp_state',
-      render: val => <span>{(val=='0') ? '未上线' : '正常运营'}</span>
+      render: val => <span>{(val == '0') ? '未上线' : '正常运营'}</span>
     },
     {
       title: '添加时间',
       dataIndex: 'publish_time',
-      render: val => <span>{moment(val*1000).format('YYYY-MM-DD HH:mm:ss')}</span>,
+      render: val => <span>{moment(val * 1000).format('YYYY-MM-DD HH:mm:ss')}</span>,
     },
     {
       title: '操作',
@@ -81,6 +81,9 @@ class GameList extends PureComponent {
     const { dispatch } = this.props;
     dispatch({
       type: 'gamelist/fetch',
+    });
+    dispatch({
+      type: 'gamelist/fetchCpType'
     });
   }
 
@@ -147,10 +150,10 @@ class GameList extends PureComponent {
   };
 
   //查看页面
-  handleView= (flag, record) => {
+  handleView = (flag, record) => {
     console.log(record);
     // this.props.history.push("./gameview?id="+record.cp_id);
-    this.props.history.push("./gameview?id="+record.id);
+    this.props.history.push("./gameview?id=" + record.id);
   };
 
   //赠送道具
@@ -159,6 +162,19 @@ class GameList extends PureComponent {
       updateModalVisible: !!flag,
       stepFormValues: record || {},
     });
+  };
+
+  //显示下拉框
+  renderOptions = () => {
+    // console.log(this.props.gamelist.data);
+    if (this.props.gamelist.cp_type_list != null) {
+      return this.props.gamelist.cp_type_list.map(element =>
+        <Option key={element.id} value={element.cp_type_id}> {element.cp_type_id}</Option>);
+    }
+    else {
+      return "";
+    }
+
   };
 
   renderForm() {
@@ -183,9 +199,7 @@ class GameList extends PureComponent {
               {getFieldDecorator('cp_type')(
                 <Select placeholder="请选择" style={{ width: '100%' }}>
                   <Option value="">全部</Option>
-                  <Option value="1">休闲益智</Option>
-                  <Option value="2">角色扮演</Option>
-                  <Option value="3">战争策略</Option>
+                  {this.renderOptions()}
                 </Select>
               )}
             </FormItem>

@@ -231,6 +231,27 @@ export async function queryOperatorMgr(params) {
 
 }
 
+
+//--CpType，实际上没有参数，但必须保证params与前面的代码兼容
+export async function ListCpType(params) {
+  try {
+    let msg = await remote.login({ openid: theOpenId });
+    let ret = { code: -200, data: null, message: "react service层无返回值。方法名：ListCpType" };
+    if (remote.isSuccess(msg)) {
+      console.log("从数据库查询游戏列表cp.ListCpType");
+      ret = await remote.fetching({
+        func: "cp.ListCpType", userinfo: JSON.parse(localStorage.userinfo),
+      });
+    }
+    console.log("游戏类型结果列表：" + JSON.stringify(ret));
+    return ret;
+  } catch (error) {
+    console.log(error);
+    return { code: -100, data: null, message: "react service层错误。方法名：ListCpType" };
+  }
+}
+
+
 //--游戏管理
 export async function queryGameMgr(params) {
   try {
