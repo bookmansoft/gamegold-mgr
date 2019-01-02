@@ -91,6 +91,9 @@ class UserList extends PureComponent {
     dispatch({
       type: 'userlist/fetch',
     });
+    dispatch({
+      type: 'userlist/fetchCpType'
+    });
   }
   handleSelectRows = rows => {
     this.setState({
@@ -186,7 +189,17 @@ class UserList extends PureComponent {
     console.log(record.addr);
     this.props.history.push("../gameprops/present?address=" + record.addr);
   };
+  //显示下拉框
+  renderOptions = () => {
+    if (this.props.userlist.cp_type_list != null) {
+      return this.props.userlist.cp_type_list.map(element =>
+        <Option key={element.id} value={element.cp_type_id}> {element.cp_type_id}</Option>);
+    }
+    else {
+      return "";
+    }
 
+  };
   renderForm() {
     const {
       form: { getFieldDecorator },
@@ -200,9 +213,7 @@ class UserList extends PureComponent {
               {getFieldDecorator('cp_type')(
                 <Select placeholder="请选择" style={{ width: '100%' }}>
                   <Option value="">全部</Option>
-                  <Option value="LNG">休闲益智</Option>
-                  <Option value="RPG">角色扮演</Option>
-                  <Option value="WAR">战争策略</Option>
+                  {this.renderOptions()}
                 </Select>
               )}
             </FormItem>
