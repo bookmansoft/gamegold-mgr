@@ -1,4 +1,5 @@
-import { query as queryUsers, queryCurrent } from '@/services/user';
+import { query as queryUsers } from '@/services/user';
+import { queryCurrentUser } from '@/services/gamegoldapi';
 
 export default {
   namespace: 'user',
@@ -17,7 +18,7 @@ export default {
       });
     },
     *fetchCurrent(_, { call, put }) {
-      const response = yield call(queryCurrent);
+      const response = yield call(queryCurrentUser);
       yield put({
         type: 'saveCurrentUser',
         payload: response,
