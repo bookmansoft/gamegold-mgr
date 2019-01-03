@@ -53,7 +53,7 @@
     "react-document-title": "^2.0.3",
     "react-dom": "^16.5.1",
     "react-fittext": "^1.0.0",
-    "react-router": "^4.4.0-beta.1",
+    "react-router": "4.4.0-beta.1",
     "react-router-dom": "^4.3.1",
     "redbox-react": "^1.6.0",
     "rollup": "^1.0.0"
