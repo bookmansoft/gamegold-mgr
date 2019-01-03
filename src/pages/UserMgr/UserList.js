@@ -220,7 +220,7 @@ class UserList extends PureComponent {
           </Col>
           <Col md={8} sm={24} />
           <Col md={16} sm={24}>
-            <FormItem label="最小游戏金：">
+            <FormItem label="&nbsp;&nbsp;&nbsp;最小游戏金：">
               {getFieldDecorator('amount')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
