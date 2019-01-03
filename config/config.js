@@ -5,6 +5,7 @@ import webpackPlugin from './plugin.config';
 import defaultSettings from '../src/defaultSettings';
 
 export default {
+  history: 'hash',
   // 指定插件
   plugins: [
     [
