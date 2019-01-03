@@ -1,6 +1,6 @@
 import { stringify } from 'qs';
 import request from '@/utils/request';
-import { gameconn } from 'gamegoldtoolkit';
+import { gameconn } from '@/utils/bundle';
 
 const theOpenId = "18681223392";
 //创建连接器对象
