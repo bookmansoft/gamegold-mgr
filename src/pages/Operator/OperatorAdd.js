@@ -129,7 +129,7 @@ class OperatorAdd extends PureComponent {
             <br />
             <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
               <Button type="primary" htmlType="submit" loading={submitting}>
-                验证
+                提交
               </Button>
             </FormItem>
           </Card>
