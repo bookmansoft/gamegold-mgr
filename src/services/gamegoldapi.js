@@ -60,7 +60,7 @@ export async function queryUserMgr(params) {
 export async function queryCurrentUser(params) {
   return {
     name: 'Serati Ma',
-    avatar: '/static/headicon.png',
+    avatar: 'http://114.115.167.168:9701/static/headicon.png',
     userid: '00000001',
     email: 'antdesign@alipay.com',
     signature: '海纳百川，有容乃大',
