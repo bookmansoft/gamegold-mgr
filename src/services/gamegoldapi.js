@@ -1,11 +1,11 @@
 import { stringify } from 'qs';
 import request from '@/utils/request';
-import { gameconn } from '@/utils/bundle';
+require('../utils/bundle');
 
 const theOpenId = "18681223392";
 //创建连接器对象
-let remote = new gameconn(
-  gameconn.CommMode.get,              //使用短连接 get / post
+let remote = new toolkit.gameconn(
+  toolkit.gameconn.CommMode.get,              //使用短连接 get / post
   {
     "UrlHead": "http",              //协议选择: http/https
     "webserver": {
