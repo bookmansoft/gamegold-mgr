@@ -9,7 +9,7 @@ let remote = new toolkit.gameconn(
   {
     "UrlHead": "http",              //协议选择: http/https
     "webserver": {
-      "host": "114.115.167.168",        //远程主机地址 127.0.0.1
+      "host": "127.0.0.1",        //开发使用本地ip：127.0.0.1 打包使用远程主机地址 114.115.167.168
       "port": 9901                //远程主机端口
     },
     "auth": {
