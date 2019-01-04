@@ -9,7 +9,7 @@ let remote = new toolkit.gameconn(
   {
     "UrlHead": "http",              //协议选择: http/https
     "webserver": {
-      "host": "127.0.0.1",        //开发使用本地ip：127.0.0.1 打包使用远程主机地址 114.115.167.168
+      "host": location.hostname,        //开发使用本地ip：127.0.0.1 打包使用远程主机地址 114.115.167.168
       "port": 9901                //远程主机端口
     },
     "auth": {
@@ -19,6 +19,8 @@ let remote = new toolkit.gameconn(
     }
   }
 )
+console.log('gamegoldapi 22:',location.hostname);
+
 
 const salt = "038292cfb50d8361a0feb0e3697461c9";
 
