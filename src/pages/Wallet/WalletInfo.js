@@ -44,6 +44,7 @@ class WalletInfo extends PureComponent {
 
   componentDidMount() {
     const { dispatch } = this.props;
+    console.log(location.protocol+'//'+location.host+'/qrcode/');
     dispatch({
       type: 'walletinfo/fetch',
     });
@@ -78,7 +79,7 @@ class WalletInfo extends PureComponent {
             </Row>
             <Row style={{ marginBottom: 32 }}>
               <Col sm={24} xs={24}>
-                <img src={data!=null && ("http://127.0.0.1:9701/qrcode/"+data.data)} width="300" height="300"/>
+                <img src={data!=null && (location.protocol+'//'+location.hostname+':9701/qrcode/'+data.data)} width="300" height="300"/>
               </Col>
             </Row>
             {/* <Row style={{ marginBottom: 32 }}>
