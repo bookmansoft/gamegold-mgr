@@ -81,10 +81,25 @@ class LoginPage extends Component {
               login.type === 'account' &&
               !submitting &&
               this.renderMessage(formatMessage({ id: 'app.login.message-invalid-credentials' }))}
-            <UserName name="userName" placeholder="username: admin or user" />
+            <UserName
+              name="userName"
+              placeholder={`${formatMessage({ id: 'app.login.userName' })}: admin or user`}
+              rules={[
+                {
+                  required: true,
+                  message: formatMessage({ id: 'validation.userName.required' }),
+                },
+              ]}
+            />
             <Password
               name="password"
-              placeholder="password: ant.design"
+              placeholder={`${formatMessage({ id: 'app.login.password' })}: ant.design`}
+              rules={[
+                {
+                  required: true,
+                  message: formatMessage({ id: 'validation.password.required' }),
+                },
+              ]}
               onPressEnter={() => this.loginForm.validateFields(this.handleSubmit)}
             />
           </Tab>
@@ -95,8 +110,34 @@ class LoginPage extends Component {
               this.renderMessage(
                 formatMessage({ id: 'app.login.message-invalid-verification-code' })
               )}
-            <Mobile name="mobile" />
-            <Captcha name="captcha" countDown={120} onGetCaptcha={this.onGetCaptcha} />
+            <Mobile
+              name="mobile"
+              placeholder={formatMessage({ id: 'form.phone-number.placeholder' })}
+              rules={[
+                {
+                  required: true,
+                  message: formatMessage({ id: 'validation.phone-number.required' }),
+                },
+                {
+                  pattern: /^1\d{10}$/,
+                  message: formatMessage({ id: 'validation.phone-number.wrong-format' }),
+                },
+              ]}
+            />
+            <Captcha
+              name="captcha"
+              placeholder={formatMessage({ id: 'form.verification-code.placeholder' })}
+              countDown={120}
+              onGetCaptcha={this.onGetCaptcha}
+              getCaptchaButtonText={formatMessage({ id: 'form.get-captcha' })}
+              getCaptchaSecondText={formatMessage({ id: 'form.captcha.second' })}
+              rules={[
+                {
+                  required: true,
+                  message: formatMessage({ id: 'validation.verification-code.required' }),
+                },
+              ]}
+            />
           </Tab>
           <div>
             <Checkbox checked={autoLogin} onChange={this.changeAutoLogin}>
@@ -114,7 +155,7 @@ class LoginPage extends Component {
             <Icon type="alipay-circle" className={styles.icon} theme="outlined" />
             <Icon type="taobao-circle" className={styles.icon} theme="outlined" />
             <Icon type="weibo-circle" className={styles.icon} theme="outlined" />
-            <Link className={styles.register} to="/User/Register">
+            <Link className={styles.register} to="/user/register">
               <FormattedMessage id="app.login.signup" />
             </Link>
           </div>
