@@ -927,10 +927,11 @@ export async function sendListRemote(params) {
       id: params.id,
       addr: params.addr
     });
+    console.log(res);
     if (remote.isSuccess(res)) {
       return { code: 1 };
     } else {
-      return { code: 0, msg: res.msg || "生产失败" };
+      return { code: 0, msg: res.msg || "道具赠送失败" };
     }
   }
   return { code: 0, msg: "用户登录失败" };

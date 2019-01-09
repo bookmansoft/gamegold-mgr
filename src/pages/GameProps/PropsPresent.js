@@ -56,7 +56,7 @@ class PropsPresent extends PureComponent {
     }).then((ret) => {
       if (ret.code === 0) {
         this.setState({
-          confirmed: JSON.stringify(ret.list.state.confirmed / 1000000),
+          confirmed: JSON.stringify(ret.list.state.confirmed / 100000),
         });
       }
     });
@@ -82,6 +82,13 @@ class PropsPresent extends PureComponent {
         });
         return;
       }
+      /* if (this.state.totalPrice > this.state.confirmed) {
+        Modal.error({
+          title: '错误',
+          content: '可用备用金不足',
+        });
+        return;
+      } */
       if (id != '' && addr.length > 0) {
         //调用道具上链
         dispatch({
@@ -124,7 +131,7 @@ class PropsPresent extends PureComponent {
     });
   };
   handleGameChange = (value) => {
-    const { form,dispatch } = this.props;
+    const { form, dispatch } = this.props;
     //清空当前道具选项
     form.setFieldsValue({
       belongProps: '',
@@ -148,9 +155,23 @@ class PropsPresent extends PureComponent {
         if (ret.code === 0) {
           let addr = this.state.currentAddr;
           let detail = ret.data;
-          let totalPrice = addr.length * detail.props_price;
-          totalPrice = Math.round(totalPrice / 1000000 * 100) / 100;
-          console.log(totalPrice);
+          //"props_rank": "{props_rank}", //白绿蓝紫橙,对应于1-5%,2-10%,3-20%,4-50%,5-80%
+          let rank = parseInt(detail.props_rank);
+          if (rank == 1) {
+            rank = 0.05;
+          } else if (rank == 2) {
+            rank = 0.1;
+          } else if (rank == 3) {
+            rank = 0.2;
+          } else if (rank == 4) {
+            rank = 0.5;
+          } else if (rank == 5) {
+            rank = 0.8;
+          } else {
+            rank = 0.05;
+          }
+          let totalPrice = addr.length * detail.props_price * rank;
+          totalPrice = totalPrice / 100000;
           this.setState({
             currentPropDetail: detail,
             totalPrice: totalPrice
@@ -159,6 +180,31 @@ class PropsPresent extends PureComponent {
       });
 
     }
+  };
+  //"props_rank": "{props_rank}", //白绿蓝紫橙,对应于1-5%,2-10%,3-20%,4-50%,5-80%
+  getRankNote(rank) {
+    let rankNote = '';
+    switch (parseInt(rank)) {
+      case 1:
+        rankNote = '5%(白)';
+        break;
+      case 2:
+        rankNote = '10%(绿)';
+        break;
+      case 3:
+        rankNote = '20%(蓝)';
+        break;
+      case 4:
+        rankNote = '50%(紫)';
+        break;
+      case 5:
+        rankNote = '80%(橙)';
+        break;
+      default:
+        rankNote = '5%(白)';
+        break;
+    }
+    return rankNote;
   };
   render() {
     const { submitting, gameprops: { gameList, propByParams }, form: { getFieldDecorator } } = this.props;
@@ -237,16 +283,16 @@ class PropsPresent extends PureComponent {
 
           <Card title="结算" bordered={false} headStyle={{ fontWeight: 600 }}>
             <FormItem {...formItemLayout} label="道具商城标价">
-              {currentPropDetail.props_price / 1000000 || ''} 吨/件
+              {currentPropDetail.props_price / 100000 || ''} 千克/件
             </FormItem>
             <FormItem {...formItemLayout} label="道具含金等级">
-              {currentPropDetail.props_rank || ''}橙
+              {this.getRankNote(currentPropDetail.props_rank)}
             </FormItem>
             <FormItem {...formItemLayout} label="本次赠送将消耗">
-              {totalPrice} 吨
+              {totalPrice} 千克
             </FormItem>
             <FormItem {...formItemLayout} label="账户备用金余额">
-              {Math.round(confirmed / 1000000 * 100) / 100}吨
+              {confirmed / 100000}千克
             </FormItem>
           </Card>
 

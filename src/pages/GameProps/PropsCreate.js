@@ -60,6 +60,15 @@ class PropsCreate extends PureComponent {
         });
         return;
       }
+      //含金量进行一次判断
+      let rank = parseInt(cpPropsDetail.props_rank);
+      if(rank != 1 && rank != 2 && rank != 3 && rank != 4 && rank != 5){
+        Modal.error({
+          title: '错误',
+          content: '道具含金量数值错误！',
+        });
+        return;
+      }
       let param = {};
       param.props_id = cpPropsDetail.id;
       param.props_name = cpPropsDetail.props_name;
@@ -165,7 +174,31 @@ class PropsCreate extends PureComponent {
       });
     }
   }
-
+  //"props_rank": "{props_rank}", //白绿蓝紫橙,对应于1-5%,2-10%,3-20%,4-50%,5-80%
+  getRankNote(rank) {
+    let rankNote = '';
+    switch (parseInt(rank)) {
+      case 1:
+        rankNote = '5%(白)';
+        break;
+      case 2:
+        rankNote = '10%(绿)';
+        break;
+      case 3:
+        rankNote = '20%(蓝)';
+        break;
+      case 4:
+        rankNote = '50%(紫)';
+        break;
+      case 5:
+        rankNote = '80%(橙)';
+        break;
+      default:
+        rankNote = '5%(白)';
+        break;
+    }
+    return rankNote;
+  }
 
   render() {
     const { gameprops: { gameList, gamePropsList }, submitting } = this.props;
@@ -259,7 +292,7 @@ class PropsCreate extends PureComponent {
               <Description term="添加时间">{cpPropsDetail.props_createtime || ''}</Description>
               <Description term="销售状态">{cpPropsDetail.props_status || ''}</Description>
               <Description term="商城标价">{cpPropsDetail.props_price || ''}</Description>
-              <Description term="含金等级">{cpPropsDetail.props_rank || ''}</Description>
+              <Description term="含金等级">{this.getRankNote(cpPropsDetail.props_rank)}</Description>
             </DescriptionList>
             <DescriptionList size="large">
               <Description term="道具描述">{cpPropsDetail.props_desc || ''}</Description>

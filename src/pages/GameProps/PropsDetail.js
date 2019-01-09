@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Card, Button, List,Modal } from 'antd';
+import { Card, Button, List, Modal } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
@@ -28,7 +28,7 @@ class PropsDetail extends PureComponent {
   mainButton() {
     return (
       <div>
-        <Link to={`/gameprops/present/${this.state.id}`} className="ant-btn ant-btn-primary">批量赠送</Link>
+        <Link to={`/usermgr/userlist`} className="ant-btn ant-btn-primary">批量赠送</Link>
       </div>
     );
   }
@@ -65,7 +65,7 @@ class PropsDetail extends PureComponent {
               type: 'gameprops/propsDetail',
               payload: { id: this.state.id }
             });
-            
+
             Modal.success({
               title: '刷新成功',
               content: '道具基本信息更新成功！',
@@ -82,6 +82,31 @@ class PropsDetail extends PureComponent {
       }
     });
   };
+  //"props_rank": "{props_rank}", //白绿蓝紫橙,对应于1-5%,2-10%,3-20%,4-50%,5-80%
+  getRankNote(rank) {
+    let rankNote = '';
+    switch (parseInt(rank)) {
+      case 1:
+        rankNote = '5%(白)';
+        break;
+      case 2:
+        rankNote = '10%(绿)';
+        break;
+      case 3:
+        rankNote = '20%(蓝)';
+        break;
+      case 4:
+        rankNote = '50%(紫)';
+        break;
+      case 5:
+        rankNote = '80%(橙)';
+        break;
+      default:
+        rankNote = '5%(白)';
+        break;
+    }
+    return rankNote;
+  }
 
   render() {
     const {
@@ -91,7 +116,7 @@ class PropsDetail extends PureComponent {
     let iconPreview = eval('(' + detail.icon_preview + ')');
     return (
       <PageHeaderWrapper title={detail.name}>
-        <Card bordered={false} headStyle={{ fontWeight: 600 }} title="生产信息" extra={this.mainButton()}>
+        <Card bordered={false} headStyle={{ fontWeight: 600 }} title="生产信息" /* extra={this.mainButton()} */>
           <DescriptionList size="large" style={{ marginBottom: 32 }}>
             <Description term="生产总量">{detail.pro_num || 0}</Description>
             <Description term="销售数量">{detail.pro_num || 0}</Description>
@@ -106,8 +131,8 @@ class PropsDetail extends PureComponent {
             <Description term="所属游戏">{detail.cp_name || ''}</Description>
             <Description term="创建时间">{moment(detail.createdAt).format('YYYY-MM-DD HH:mm')}</Description>
             <Description term="销售状态">{detail.status == 1 ? '在售' : '下架'}</Description>
-            <Description term="商城标价">{detail.props_price/1000000 || ''}吨</Description>
-            <Description term="含金等级">{detail.props_rank || ''}</Description>
+            <Description term="商城标价">{detail.props_price / 100000 || ''}千克</Description>
+            <Description term="含金等级">{this.getRankNote(detail.props_rank)}</Description>
           </DescriptionList>
           <DescriptionList size="large">
             <Description term="道具描述">{detail.props_desc || ''}</Description>

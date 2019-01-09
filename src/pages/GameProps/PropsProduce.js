@@ -151,13 +151,13 @@ class PropsProduce extends PureComponent {
     let belongPropsArr = value.split("|");
     let gold_num = belongPropsArr[1] || '';
     gold_num = parseInt(gold_num);
-    if(gold_num > 0){
+    if (gold_num > 0) {
       this.setState({
         gold_num: gold_num,
       });
     }
 
-    
+
   };
 
   handleProNum = (value) => {
