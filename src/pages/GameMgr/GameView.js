@@ -91,7 +91,7 @@ class GameView extends Component {
   renderImg = (text) => {
     if (text && text.length) {
       const imgs = text.map((item, index) =>
-        <img width={120} src={item} key={index} />
+        <div><img width={300} src={item} key={index} /><br/></div>
       )
       return imgs;
     }
@@ -247,7 +247,7 @@ class GameView extends Component {
           </Row>
           <Row style={{ marginBottom: 32 }}>
             <Col sm={24} xs={24}>
-              封面图片：<img width={120} src={data.face_url} />
+              封面图片：<img width={300} src={data.face_url} />
             </Col>
           </Row>
           <Row style={{ marginBottom: 32 }}>

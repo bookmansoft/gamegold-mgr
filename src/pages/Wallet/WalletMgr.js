@@ -270,7 +270,7 @@ class WalletMgr extends PureComponent {
           </Row>
           <Row>
             <Col sm={8} xs={8}>
-              未确认交易余额:&nbsp;{(info.data != null) && JSON.stringify(info.data.unconfirmed / 1000)} Kg
+              未确认交易余额:&nbsp;{(info.data != null) && JSON.stringify((info.data.unconfirmed-info.data.confirmed) / 1000)} Kg
             </Col>
             <Col sm={8} xs={8}>
               <Button type="primary" onClick={() => this.handleReceive()}>
