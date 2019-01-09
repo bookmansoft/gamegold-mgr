@@ -266,11 +266,11 @@ class WalletMgr extends PureComponent {
           </Row>
           <Divider style={{ marginBottom: 16 }} />
           <Row>
-            <Col sm={24} xs={24}>已确认交易余额:&nbsp;{(info.data != null) && JSON.stringify(info.data.confirmed / 1000)} Kg</Col>
+            <Col sm={24} xs={24}>已确认交易余额:&nbsp;{(info.data != null) && JSON.stringify(info.data.confirmed / 100000)} Kg</Col>
           </Row>
           <Row>
             <Col sm={8} xs={8}>
-              未确认交易余额:&nbsp;{(info.data != null) && JSON.stringify((info.data.unconfirmed-info.data.confirmed) / 1000)} Kg
+              未确认交易余额:&nbsp;{(info.data != null) && JSON.stringify((info.data.unconfirmed-info.data.confirmed) / 100000)} Kg
             </Col>
             <Col sm={8} xs={8}>
               <Button type="primary" onClick={() => this.handleReceive()}>
