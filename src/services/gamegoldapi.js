@@ -19,7 +19,7 @@ let remote = new toolkit.gameconn(
     }
   }
 )
-console.log('gamegoldapi 22:',location.hostname);
+console.log('gamegoldapi 22:', location.hostname);
 
 
 const salt = "038292cfb50d8361a0feb0e3697461c9";
@@ -473,10 +473,16 @@ export async function queryWalletLog(params) {
     if (remote.isSuccess(msg)) {
       console.log("获取钱包收支流水:" + JSON.stringify(params));
       if (localStorage.currentAuthority == 'admin') {
-        ret = await remote.fetching({ func: "tx.List", userinfo: JSON.parse(localStorage.userinfo), items: ['default'], daterange: params.date });
+        ret = await remote.fetching({
+          func: "tx.List", userinfo: JSON.parse(localStorage.userinfo), items: ['default', 1000],
+          currentPage: params.currentPage, pageSize: params.pageSize, daterange: params.date
+        });
       }
       else {
-        ret = await remote.fetching({ func: "tx.List", userinfo: JSON.parse(localStorage.userinfo), items: [], daterange: params.date });
+        ret = await remote.fetching({
+          func: "tx.List", userinfo: JSON.parse(localStorage.userinfo), items: [null, 1000],
+          currentPage: params.currentPage, pageSize: params.pageSize, daterange: params.date
+        });
       }
     }
     console.log("获取钱包收支流水结果：" + JSON.stringify(ret));
