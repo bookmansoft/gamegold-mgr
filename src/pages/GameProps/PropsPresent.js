@@ -82,13 +82,13 @@ class PropsPresent extends PureComponent {
         });
         return;
       }
-      if (this.state.totalPrice > this.state.confirmed) {
+     /*  if (this.state.totalPrice > this.state.confirmed) {
         Modal.error({
           title: '错误',
           content: '可用备用金不足',
         });
         return;
-      }
+      } */
       if (id != '' && addr.length > 0) {
         //调用道具上链
         dispatch({
@@ -201,7 +201,7 @@ class PropsPresent extends PureComponent {
         rankNote = '80%(橙)';
         break;
       default:
-        rankNote = '5%(白)';
+        rankNote = '';
         break;
     }
     return rankNote;
@@ -283,7 +283,7 @@ class PropsPresent extends PureComponent {
 
           <Card title="结算" bordered={false} headStyle={{ fontWeight: 600 }}>
             <FormItem {...formItemLayout} label="道具商城标价">
-            { Math.round(currentPropDetail.props_price / 100000 * 100000)/100000}千克/件
+            { currentPropDetail.props_price ? Math.round(currentPropDetail.props_price / 100000 * 100000)/100000 : ''}千克/件
             </FormItem>
             <FormItem {...formItemLayout} label="道具含金等级">
               {this.getRankNote(currentPropDetail.props_rank)}

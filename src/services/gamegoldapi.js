@@ -691,11 +691,14 @@ export async function CreatePropLocal(params) {
     });
     if (remote.isSuccess(res)) {
       return res;
-    } else {
-      return { code: 1 };
+    } else if(res.code == 3){
+      return { code: 3,msg: '道具已经存在' };
+    }
+    else {
+      return { code: 1,msg: res.msg ? res.msg : '创建失败' };
     }
   }
-  return {};
+  return { code: 1,msg: '登陆验证失败' };
   //return request(`/api/gamepropsdetail?${stringify(params)}`);
 }
 /**
@@ -778,28 +781,6 @@ export async function getGamePropsDetail(params) {
     }
   }
   return [];
-  //return request(`/api/gamepropsdetail?${stringify(params)}`);
-}
-/**
- *
- * 本地库获取游戏道具的Oid
- * @export
- * @param {*} params
- * @returns
- */
-
-export async function getPropsOid(params) {
-  //本地库直接读取详情
-  let msg = await remote.login({ openid: `${Math.random() * 1000000000 | 0}` });
-  if (remote.isSuccess(msg)) {
-    let res = await remote.fetching({ func: "prop.LocalDetail", userinfo: JSON.parse(localStorage.userinfo), id: params.id });
-    if (remote.isSuccess(res)) {
-      return res.data.oid || '';
-    } else {
-      return '';
-    }
-  }
-  return '';
   //return request(`/api/gamepropsdetail?${stringify(params)}`);
 }
 

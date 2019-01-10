@@ -77,7 +77,6 @@ class PropsCreate extends PureComponent {
       param.props_desc = cpPropsDetail.props_desc;
       param.icon_url = cpPropsDetail.icon;
       param.icon_preview = cpPropsDetail.more_icon;
-      param.oid = '';
       param.status = cpPropsDetail.props_status || 1;
       param.props_price = cpPropsDetail.props_price;
       param.props_rank = cpPropsDetail.props_rank;
@@ -194,7 +193,7 @@ class PropsCreate extends PureComponent {
         rankNote = '80%(橙)';
         break;
       default:
-        rankNote = '5%(白)';
+        rankNote = '';
         break;
     }
     return rankNote;

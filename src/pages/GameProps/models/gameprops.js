@@ -1,4 +1,4 @@
-import { getGamePropsList, getGamePropsDetail,getPropsOid,getCpPropsDetail,getGamePropsDetailById, getPropsByGame , getAllGameList , queryUserMgr ,CreatePropLocal,EditPropLocal,
+import { getGamePropsList, getGamePropsDetail,getCpPropsDetail,getGamePropsDetailById, getPropsByGame , getAllGameList , queryUserMgr ,CreatePropLocal,EditPropLocal,
   PropCreateListRemote,getAllPropsByParams,getBalanceAll,sendListRemote} from '@/services/gamegoldapi';
 
 export default {
@@ -36,10 +36,6 @@ export default {
     *propsDetailReturn({ payload }, { call }) {
       const response = yield call(getGamePropsDetail, payload);
       return response;
-    },
-    *propsOid({ payload }, { call }) {
-      const res = yield call(getPropsOid, payload);
-      return res;
     },
     *cpPropsDetail({ payload }, { call, put }) {
 
