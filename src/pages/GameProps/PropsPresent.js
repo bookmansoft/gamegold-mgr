@@ -170,8 +170,8 @@ class PropsPresent extends PureComponent {
           } else {
             rank = 0.05;
           }
-          let totalPrice = addr.length * detail.props_price * rank;
-          totalPrice = totalPrice / 100000;
+          let totalPrice = addr.length * Math.round(detail.props_price * rank);
+          totalPrice = Math.round(totalPrice / 100000 * 100) / 100;
           this.setState({
             currentPropDetail: detail,
             totalPrice: totalPrice
