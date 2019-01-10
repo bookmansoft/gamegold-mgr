@@ -51,12 +51,12 @@ class PropsPresent extends PureComponent {
       payload: {}
     });
     dispatch({
-      type: 'gameprops/getwalletinfo',
+      type: 'gameprops/getBalanceAll',
       payload: {}
     }).then((ret) => {
       if (ret.code === 0) {
         this.setState({
-          confirmed: JSON.stringify(ret.list.state.confirmed),
+          confirmed: JSON.stringify(ret.data.confirmed),
         });
       }
     });
