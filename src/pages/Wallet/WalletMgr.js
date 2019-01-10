@@ -205,10 +205,10 @@ class WalletMgr extends PureComponent {
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 16, lg: 24, xl: 48 }}>
-          <Col md={11} sm={9}>
+          <Col md={20} sm={20}>
             <label>收支流水</label>
           </Col>
-          <Col md={11} sm={15}>
+          {/* <Col md={11} sm={15}>
             <FormItem {...formItemLayout} label='选择日期'>
               {getFieldDecorator('date', {
                 rules: [
@@ -227,8 +227,8 @@ class WalletMgr extends PureComponent {
                 />
               )}
             </FormItem>
-          </Col>
-          <Col md={2} sm={4}>
+          </Col> */}
+          <Col md={4} sm={4}>
             <span className={styles.submitButtons}>
               <Button type="primary" htmlType="submit">
                 搜索
@@ -290,7 +290,7 @@ class WalletMgr extends PureComponent {
             <SimpleTable
               selectedRows={selectedRows}
               loading={loading}
-              data={data}
+              data={data.list}
               columns={this.columns}
               onSelectRow={null}
               onChange={this.handleStandardTableChange}
