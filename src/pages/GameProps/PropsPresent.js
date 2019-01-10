@@ -56,7 +56,7 @@ class PropsPresent extends PureComponent {
     }).then((ret) => {
       if (ret.code === 0) {
         this.setState({
-          confirmed: JSON.stringify(ret.list.state.confirmed / 100000),
+          confirmed: JSON.stringify(ret.list.state.confirmed),
         });
       }
     });
@@ -82,13 +82,13 @@ class PropsPresent extends PureComponent {
         });
         return;
       }
-      /* if (this.state.totalPrice > this.state.confirmed) {
+      if (this.state.totalPrice > this.state.confirmed) {
         Modal.error({
           title: '错误',
           content: '可用备用金不足',
         });
         return;
-      } */
+      }
       if (id != '' && addr.length > 0) {
         //调用道具上链
         dispatch({
@@ -170,8 +170,8 @@ class PropsPresent extends PureComponent {
           } else {
             rank = 0.05;
           }
-          let totalPrice = addr.length * Math.round(detail.props_price * rank);
-          totalPrice = Math.round(totalPrice / 100000 * 100) / 100;
+          let totalPrice = addr.length * detail.props_price * rank;
+          totalPrice = Math.round(totalPrice / 100000 * 100000) / 100000;
           this.setState({
             currentPropDetail: detail,
             totalPrice: totalPrice
@@ -283,7 +283,7 @@ class PropsPresent extends PureComponent {
 
           <Card title="结算" bordered={false} headStyle={{ fontWeight: 600 }}>
             <FormItem {...formItemLayout} label="道具商城标价">
-              {currentPropDetail.props_price / 100000 || ''} 千克/件
+            { Math.round(currentPropDetail.props_price / 100000 * 100000)/100000}千克/件
             </FormItem>
             <FormItem {...formItemLayout} label="道具含金等级">
               {this.getRankNote(currentPropDetail.props_rank)}
@@ -292,7 +292,7 @@ class PropsPresent extends PureComponent {
               {totalPrice} 千克
             </FormItem>
             <FormItem {...formItemLayout} label="账户备用金余额">
-              {confirmed / 100000}千克
+              { Math.round(confirmed / 100000 * 100000)/100000}千克
             </FormItem>
           </Card>
 
