@@ -473,10 +473,10 @@ export async function queryWalletLog(params) {
     if (remote.isSuccess(msg)) {
       console.log("获取钱包收支流水:" + JSON.stringify(params));
       if (localStorage.currentAuthority == 'admin') {
-        ret = await remote.fetching({ func: "tx.List", userinfo: JSON.parse(localStorage.userinfo), items: ['default'], daterange: params.date });
+        ret = await remote.fetching({ func: "tx.List", userinfo: JSON.parse(localStorage.userinfo), items: ['default',1000], daterange: params.date });
       }
       else {
-        ret = await remote.fetching({ func: "tx.List", userinfo: JSON.parse(localStorage.userinfo), items: [], daterange: params.date });
+        ret = await remote.fetching({ func: "tx.List", userinfo: JSON.parse(localStorage.userinfo), items: [null,1000], daterange: params.date });
       }
     }
     console.log("获取钱包收支流水结果：" + JSON.stringify(ret));

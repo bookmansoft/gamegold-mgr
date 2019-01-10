@@ -106,7 +106,6 @@ class WalletMgr extends PureComponent {
       pageSize: pagination.pageSize,
       ...formValues,
       ...filters,
-      address: { adress },
     };
     if (sorter.field) {
       params.sorter = `${sorter.field}_${sorter.order}`;
