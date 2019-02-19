@@ -39,9 +39,9 @@ export default {
         console.log('walletstep fetch');
         const response = yield call(getKeyMaster, payload);
         console.log(response);
-        if (response.list!=null && response.list.mnemonic!=null) {
+        if (response.data!=null && response.data.mnemonic!=null) {
           //符合条件时才传递
-          let orignRemenberWord=response.list.mnemonic.phrase;
+          let orignRemenberWord=response.data.mnemonic.phrase;
           // console.log("43:初始化文本");
           // console.log(orignRemenberWord);
           //转化为去掉空格的格式
