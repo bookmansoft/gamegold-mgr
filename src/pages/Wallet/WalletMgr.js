@@ -68,7 +68,7 @@ class WalletMgr extends PureComponent {
     {
       title: '金额(Kg)',
       dataIndex: 'amount',
-      render: val => <span>{parseInt(val * 1000000 + 0.5)/1000}</span>
+      render: val => <span>{parseInt(val * 1000000 + 0.5) / 1000}</span>
     },
     {
       title: '操作',
@@ -208,26 +208,6 @@ class WalletMgr extends PureComponent {
           <Col md={20} sm={20}>
             <label>收支流水</label>
           </Col>
-          {/* <Col md={11} sm={15}>
-            <FormItem {...formItemLayout} label='选择日期'>
-              {getFieldDecorator('date', {
-                rules: [
-                  {
-                    required: true,
-                    message: formatMessage({ id: 'validation.date.required' }),
-                  },
-                ],
-              })(
-                <RangePicker
-                  style={{ width: '100%' }}
-                  placeholder={[
-                    formatMessage({ id: 'form.date.placeholder.start' }),
-                    formatMessage({ id: 'form.date.placeholder.end' }),
-                  ]}
-                />
-              )}
-            </FormItem>
-          </Col> */}
           <Col md={4} sm={4}>
             <span className={styles.submitButtons}>
               <Button type="primary" htmlType="submit">
@@ -269,7 +249,7 @@ class WalletMgr extends PureComponent {
           </Row>
           <Row>
             <Col sm={8} xs={8}>
-              未确认交易余额:&nbsp;{(info.data != null) && JSON.stringify((info.data.unconfirmed-info.data.confirmed) / 100000)} Kg
+              未确认交易余额:&nbsp;{(info.data != null) && JSON.stringify((info.data.unconfirmed - info.data.confirmed) / 100000)} Kg
             </Col>
             <Col sm={8} xs={8}>
               <Button type="primary" onClick={() => this.handleReceive()}>
@@ -282,21 +262,21 @@ class WalletMgr extends PureComponent {
             </Col>
           </Row>
         </Card>
-
-        <Card bordered={false} style={{ marginTop: 24 }}>
-          <div className={styles.tableList}>
-            <div className={styles.tableListForm}>{this.renderForm()}</div>
-            <div className={styles.tableListOperator} />
-            <SimpleTable
-              selectedRows={selectedRows}
-              loading={loading}
-              data={data.list}
-              columns={this.columns}
-              onSelectRow={null}
-              onChange={this.handleStandardTableChange}
-            />
-          </div>
-        </Card>
+        {data != null && data.list != null &&
+          <Card bordered={false} style={{ marginTop: 24 }}>
+            <div className={styles.tableList}>
+              <div className={styles.tableListForm}>{this.renderForm()}</div>
+              <div className={styles.tableListOperator} />
+              <SimpleTable
+                selectedRows={selectedRows}
+                loading={loading}
+                data={data.list}
+                columns={this.columns}
+                onSelectRow={null}
+                onChange={this.handleStandardTableChange}
+              />
+            </div>
+          </Card>}
 
       </PageHeaderWrapper>
     );
