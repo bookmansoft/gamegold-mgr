@@ -33,6 +33,37 @@ export default [
           },
         ],
       },
+      // redpacket
+      {
+        path: '/redpacket',
+        name: 'redpacket',
+        icon: 'table',
+        authority: ['admin'],
+        routes: [
+          {
+            path: '/redpacket/redpacketlist',
+            name: 'redpacketlist',
+            component: './Redpacket/RedpacketList',
+          },
+          {
+            path: '/redpacket/redpacketadd',
+            name: 'redpacketadd',
+            component: './Redpacket/RedpacketAdd',
+          },
+          {
+            path: '/redpacket/redpacketaddsuccess',
+            name: 'redpacketaddsuccess',
+            component: './Redpacket/RedpacketAddSuccess',
+            hideInMenu: true,
+          },
+          {
+            path: '/redpacket/redpacketadderror',
+            name: 'redpacketadderror',
+            component: './Redpacket/RedpacketAddError',
+            hideInMenu: true,
+          },
+        ],
+      },
       // operatormgr
       {
         path: '/operator',
