@@ -927,3 +927,127 @@ export async function getUserAll(params) {
   return request(`/api/userall?${stringify(params)}`);
 }
 
+//-------------------------------------------------------
+
+//--新增红包活动
+export async function addRedpacket(params) {
+  try {
+    let msg = await remote.login({ openid: theOpenId });
+    let ret = { code: -200, data: null, message: "react service层无返回值。方法名：addRedpacket" };
+    // 调用保存记录的方法
+    if (remote.isSuccess(msg)) {
+      //先调用链上的保存方法
+      console.log("添加操作员:" + JSON.stringify(params));
+      let ret = await remote.fetching({
+        func: "redpacket.CreateRecord", userinfo: JSON.parse(localStorage.userinfo),
+        act_name: params.act_name,
+        act_sequence: params.act_sequence,
+        total_gamegold: params.total_gamegold,
+        each_gamegold: params.each_gamegold,
+        total_num: params.total_num,
+        each_num: params.each_num,
+        act_desc: params.act_desc,
+        act_start_at: params.act_start_at,
+        act_end_at: params.act_end_at,
+      });
+      //判断返回值是否正确
+      console.log(ret);
+      return ret;
+    }
+    console.log("新增红包活动结果：" + JSON.stringify(ret));
+    return ret;
+  } catch (error) {
+    console.log(error);
+    return { code: -100, data: null, message: "react service层错误。方法名：addOperator" };
+  }
+
+}
+
+//--修改红包活动
+export async function changeRedpacket(params) {
+  try {
+    let msg = await remote.login({ openid: theOpenId });
+    let ret = { code: -200, data: null, message: "react service层无返回值。方法名：changeRedpacket" };
+    // 调用保存记录的方法
+    if (remote.isSuccess(msg)) {
+      //先调用链上的保存方法
+      console.log("修改红包活动:" + JSON.stringify(params));
+      let ret = await remote.fetching({
+        func: "redpacket.UpdateRecord", userinfo: JSON.parse(localStorage.userinfo),
+        act_name: params.act_name,
+        act_sequence: params.act_sequence,
+        total_gamegold: params.total_gamegold,
+        each_gamegold: params.each_gamegold,
+        total_num: params.total_num,
+        each_num: params.each_num,
+        act_desc: params.act_desc,
+        act_start_at: params.act_start_at,
+        act_end_at: params.act_end_at,
+      });
+      //判断返回值是否正确
+      console.log(ret.code, ret.data, ret.message);
+      return { code: ret.code, data: ret.data, message: ret.message };
+    }
+    console.log("修改状态结果：" + JSON.stringify(ret));
+    return ret;
+  } catch (error) {
+    console.log(error);
+    return { code: -100, data: null, message: "react service层错误。方法名：changeOperatorState" };
+  }
+}
+//-- 红包活动详情
+export async function getRedpacket(params) {
+  try {
+    let msg = await remote.login({ openid: theOpenId });
+    let ret = { code: -200, data: null, message: "react service层无返回值。方法名：getWalletLog" };
+    if (remote.isSuccess(msg)) {
+      console.log("获取钱包收支详情:" + JSON.stringify(params));
+      ret = await remote.fetching({ func: "redpacket.Retrieve", userinfo: JSON.parse(localStorage.userinfo),
+       id: params.id,
+      });
+    }
+    console.log("获取钱包收支详情结果：" + JSON.stringify(ret));
+    if (ret.data != null) {
+      return ret.data;
+    }
+    else {
+      return ret;
+    }
+  } catch (error) {
+    console.log(error);
+    return { code: -100, data: null, message: "react service层错误。方法名：getRedpacket" };
+  }
+
+}
+
+//--红包活动列表
+export async function queryRedpacket(params) {
+  try {
+    let msg = await remote.login({ openid: theOpenId });
+    let ret = { code: -200, data: null, message: "react service层无返回值。方法名：queryRedpacket" };
+    if (remote.isSuccess(msg)) {
+      console.log("从数据库查询操作员列表redpacket.ListRecord:" + stringify(params));
+      if (params == null) {
+        params = {
+          currentPage: 1,
+          pageSize: 10,
+          login_name: '',
+          state: '',
+        };
+      };
+      ret = await remote.fetching({
+        func: "redpacket.ListRecord", userinfo: JSON.parse(localStorage.userinfo),
+        currentPage: params.currentPage,
+        pageSize: params.pageSize,
+        login_name: typeof (params.login_name) == "undefined" ? '' : params.login_name,
+        state: typeof (params.state) == "undefined" ? '' : params.state,
+      });
+    }
+    console.log("操作员管理结果列表：" + JSON.stringify(ret));
+    return ret;
+  } catch (error) {
+    console.log(error);
+    return { code: -100, data: null, message: "react service层错误。方法名：queryRedpacket" };
+  }
+
+}
