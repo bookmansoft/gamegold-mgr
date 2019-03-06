@@ -1,4 +1,4 @@
-import { queryOperatorMgr,changeOperatorState } from '@/services/gamegoldapi';
+import { queryRedpacket,changeRedpacket } from '@/services/gamegoldapi';
 import { message } from 'antd';
 export default {
   namespace: 'redpacketlist',
@@ -12,16 +12,16 @@ export default {
 
   effects: {
     *fetch({ payload }, { call, put }) {
-      const response = yield call(queryOperatorMgr, payload);
+      const response = yield call(queryRedpacket, payload);
       yield put({
         type: 'save',
         payload: response,
       });
     },
     *change({ payload }, { call }) {
-      let ret=yield call(changeOperatorState, payload);
+      let ret=yield call(changeRedpacket, payload);
       if (ret.code==0) {
-        message.success('状态修改成功!');
+        message.success('修改成功!');
         return ret;
       }
       else {

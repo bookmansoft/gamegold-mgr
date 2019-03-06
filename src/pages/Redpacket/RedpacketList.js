@@ -54,17 +54,43 @@ class RedpacketList extends PureComponent {
 
   columns = [
     {
-      title: '登录名',
-      dataIndex: 'login_name',
+      title: 'ID',
+      dataIndex: 'id',
     },
     {
-      title: 'CID',
-      dataIndex: 'cid',
+      title: '活动名称',
+      dataIndex: 'act_name',
     },
     {
-      title: '备注',
-      dataIndex: 'remark',
+      title: '活动详情',
+      dataIndex: 'act_desc',
     },
+    {
+      title: '活动序号',
+      dataIndex: 'act_sequence',
+    },
+    {
+      title: '总共支出游戏金',
+      dataIndex: 'total_gamegold',
+    },
+    {
+      title: '每个红包抽中游戏金',
+      dataIndex: 'each_gamegold',
+    },
+    {
+      title: '红包总数量',
+      dataIndex: 'total_num',
+    },
+    {
+      title: '每个用户红包数量',
+      dataIndex: 'each_num',
+    },
+    {
+      title: '活动开始时间',
+      dataIndex: 'act_start_at',
+    },
+
+
     {
       title: '操作',
       render: (text, record) => (
@@ -216,7 +242,7 @@ class RedpacketList extends PureComponent {
     const { selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;
 
     return (
-      <PageHeaderWrapper title="操作员列表">
+      <PageHeaderWrapper title="积分抽奖活动">
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderForm()}</div>
