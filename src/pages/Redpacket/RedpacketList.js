@@ -1,6 +1,6 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
-import moment from 'moment';
+import router from 'umi/router';
 import {
   Row,
   Col,
@@ -96,9 +96,9 @@ class RedpacketList extends PureComponent {
       render: (text, record) => (
         <Fragment>
           <a onClick={() => this.handleDeal(true, record)}>
-            {(record.state == 1) && "禁用"}
-            {(record.state == 0) && "启用"}
+            编辑
           </a>
+          <a onClick={() => router.push('/redpacket/redpacketadd')}>详情</a>
         </Fragment>
       ),
     },
