@@ -6,12 +6,12 @@ import Result from '@/components/Result';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
 const onPrev = () => {
-  router.push('/redpacket/redpacketadd');
+  router.push('/redpacket/redpacketlist');
 };
 const actions = (
   <Fragment>
     <Button type="primary" onClick={onPrev}>
-      返回重新提交
+      返回列表
     </Button>
   </Fragment>
 );
@@ -20,9 +20,9 @@ export default () => (
   <PageHeaderWrapper>
     <Card bordered={false}>
       <Result
-        type="error"
-        title="提交失败"
-        description="错误信息：您提交的红包活动信息不符合规范，请核实后重新提交！"
+        type="success"
+        title="提交成功"
+        description="红包活动已更改。"
         extra=""
         actions={actions}
         style={{ marginTop: 48, marginBottom: 16 }}

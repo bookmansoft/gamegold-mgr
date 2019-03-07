@@ -6,7 +6,7 @@ import Result from '@/components/Result';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
 const onPrev = () => {
-  router.push('/redpacket/redpacketadd');
+  router.push('/redpacket/redpacketchange');
 };
 const actions = (
   <Fragment>

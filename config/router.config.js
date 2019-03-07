@@ -62,6 +62,23 @@ export default [
             component: './Redpacket/RedpacketAddError',
             hideInMenu: true,
           },
+          {
+            path: '/redpacket/redpacketchange',
+            name: 'redpacketchange',
+            component: './Redpacket/RedpacketChange',
+          },
+          {
+            path: '/redpacket/redpacketchangesuccess',
+            name: 'redpacketchangesuccess',
+            component: './Redpacket/RedpacketChangeSuccess',
+            hideInMenu: true,
+          },
+          {
+            path: '/redpacket/redpacketchangeerror',
+            name: 'redpacketchangeerror',
+            component: './Redpacket/RedpacketChangeError',
+            hideInMenu: true,
+          },
         ],
       },
       // operatormgr
