@@ -49,12 +49,31 @@ class RedpacketAdd extends Component {
   };
 
   componentDidMount() {
-    const { dispatch } = this.props;
-
+    const { dispatch,form } = this.props;
     dispatch({
-      type: 'redpacketchange/change',
+      type: 'redpacketchange/fetch',
       payload: { id: this.props.location.query.id },//这里
+    }).then((ret)=> {
+      console.log("刷新完成"+JSON.stringify(ret));
+      console.log(moment(ret.act_start_at * 1000).format('YYYY-MM-DD'));
+      form.setFieldsValue({
+        "act_name":ret.act_name,
+        "act_sequence":ret.act_sequence,
+        "total_gamegold":ret.total_gamegold,
+        "each_gamegold":ret.each_gamegold,
+        "total_num":ret.total_num,
+        "each_num":ret.each_num,
+        "act_desc":ret.act_desc,
+         "act_start_at":moment(moment(ret.act_start_at * 1000).format('YYYY-MM-DD'),'YYYY-MM-DD'),
+         "act_end_at": moment(moment(ret.act_end_at * 1000).format('YYYY-MM-DD'),'YYYY-MM-DD'),
+      });
+      //
+
     });
+    
+    
+    ;
+    
   }
 
   handleSubmit = e => {
@@ -84,6 +103,7 @@ class RedpacketAdd extends Component {
       form: { getFieldDecorator, getFieldValue },
       loading
     } = this.props;
+
 
 
     return (

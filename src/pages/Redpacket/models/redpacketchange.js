@@ -1,6 +1,6 @@
 import { routerRedux } from 'dva/router';
 import { message } from 'antd';
-import {changeRedpacket } from '@/services/gamegoldapi';
+import {changeRedpacket,getRedpacket } from '@/services/gamegoldapi';
 
 export default {
   namespace: 'redpacketchange',
@@ -11,6 +11,16 @@ export default {
   },
 
   effects: {
+    *fetch({ payload }, { call, put }) {
+      console.log("redpacketchange model："+payload.id);
+      const response = yield call(getRedpacket, payload);
+      yield put({
+        type: 'save',
+        payload: response,
+      });
+      return response;
+    },
+
     //保存整个表单的内容（到数据库及全节点）
     *change({ payload }, { call }) {
       try {
