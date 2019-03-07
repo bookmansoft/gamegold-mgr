@@ -88,7 +88,7 @@ class RedpacketAdd extends Component {
   renderImg = (text) => {
     if (text && text.length) {
       const imgs = text.map((item, index) =>
-        <div><img width={300} src={item} key={index} /><br/></div>
+        <div><img width={300} src={item} key={index} /><br /></div>
       )
       return imgs;
     }
@@ -191,32 +191,30 @@ class RedpacketAdd extends Component {
           </Row>
           <Row style={{ marginBottom: 32 }}>
             <Col sm={2} xs={2}>
-              <div align="right">活动ID：</div>
+              <div align="right" style={{marginTop:5}}>活动ID：</div>
             </Col>
-            <Col sm={6} xs={6}>
-            {getFieldDecorator('act_id', {
-                  rules: [
-                    {
-                      required: true,
-                      message: "请输入活动ID",
-                    },
-                  ],
-                })(<Input placeholder="请输入" />)}
+            <Col sm={5} xs={5}>
+              {getFieldDecorator('act_id', {
+                rules: [
+                  {
+                    required: true,
+                    message: "请输入活动ID",
+                  },
+                ],
+              })(<Input placeholder="请输入" />)}
             </Col>
+            <Col sm={1} xs={1}></Col>
             <Col sm={2} xs={2}>
-              <div align="right">添加人：</div>
+              <div align="right" style={{marginTop:5}}>活动名称：</div>
             </Col>
             <Col sm={6} xs={6}>
-              <div align="left"></div>
-            </Col>
-            <Col sm={8} xs={12}>
-              活动名称：积分抽奖
+              <div align="left" style={{marginTop:5}}>积分抽奖</div>
             </Col>
           </Row>
           <Row style={{ marginBottom: 32 }}>
-            <Col sm={2} xs={2}>活动描述：</Col>
+            <Col sm={2} xs={2}><div align="right" style={{marginTop:5}}>活动描述：</div></Col>
             <Col sm={22} xs={22}>
-            <FormItem label="">
+              <FormItem label="">
                 {getFieldDecorator('act_desc', {
                   rules: [
                     {
