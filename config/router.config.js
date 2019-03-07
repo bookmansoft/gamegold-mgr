@@ -66,6 +66,7 @@ export default [
             path: '/redpacket/redpacketchange',
             name: 'redpacketchange',
             component: './Redpacket/RedpacketChange',
+            hideInMenu: true,
           },
           {
             path: '/redpacket/redpacketchangesuccess',

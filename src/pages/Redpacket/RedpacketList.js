@@ -97,7 +97,7 @@ class RedpacketList extends PureComponent {
       title: '操作',
       render: (text, record) => (
         <Fragment>
-          <a onClick={() => this.handleDeal(true, record)}>
+          <a onClick={() => router.push(`/redpacket/redpacketchange?id=${record.id}`)}>
             编辑
           </a>&nbsp;
           <a onClick={() => router.push('/redpacket/redpacketadd')}>详情</a>
@@ -151,52 +151,52 @@ class RedpacketList extends PureComponent {
     });
   };
 
-  handleSearch = e => {
-    e.preventDefault();
+  // handleSearch = e => {
+  //   e.preventDefault();
 
-    const { dispatch, form } = this.props;
+  //   const { dispatch, form } = this.props;
 
-    form.validateFields((err, fieldsValue) => {
-      if (err) return;
-      const values = {
-        ...fieldsValue,
-      };
-      this.setState({
-        formValues: values,
-      });
-      dispatch({
-        type: 'redpacketlist/fetch',
-        payload: values,
-      });
-    });
-  };
+  //   form.validateFields((err, fieldsValue) => {
+  //     if (err) return;
+  //     const values = {
+  //       ...fieldsValue,
+  //     };
+  //     this.setState({
+  //       formValues: values,
+  //     });
+  //     dispatch({
+  //       type: 'redpacketlist/fetch',
+  //       payload: values,
+  //     });
+  //   });
+  // };
 
-  //更改操作员状态
-  handleDeal = (flag, record) => {
-    const { dispatch,form } = this.props;
-    dispatch({
-      type: 'redpacketlist/change',
-      payload: { id:record.id,state: (record.state == 1 ? 0 : 1) },
-    }).then((ret) => {
-      if (ret.code === 0) {
-        //以重新提交页面的方式实现状态的更新
-        form.validateFields((err, fieldsValue) => {
-          if (err) return;
-          const values = {
-            ...fieldsValue,
-          };
-          this.setState({
-            formValues: values,
-          });
-          dispatch({
-            type: 'redpacketlist/fetch',
-            payload: values,
-          });
-        });
-      };
-    }
-    );
-  };
+  // //更改操作员状态
+  // handleDeal = (flag, record) => {
+  //   const { dispatch,form } = this.props;
+  //   dispatch({
+  //     type: 'redpacketlist/change',
+  //     payload: { id:record.id,state: (record.state == 1 ? 0 : 1) },
+  //   }).then((ret) => {
+  //     if (ret.code === 0) {
+  //       //以重新提交页面的方式实现状态的更新
+  //       form.validateFields((err, fieldsValue) => {
+  //         if (err) return;
+  //         const values = {
+  //           ...fieldsValue,
+  //         };
+  //         this.setState({
+  //           formValues: values,
+  //         });
+  //         dispatch({
+  //           type: 'redpacketlist/fetch',
+  //           payload: values,
+  //         });
+  //       });
+  //     };
+  //   }
+  //   );
+  // };
 
   renderForm() {
     const {
