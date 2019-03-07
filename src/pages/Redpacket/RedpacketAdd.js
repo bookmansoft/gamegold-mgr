@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
 import Debounce from 'lodash-decorators/debounce';
 import Bind from 'lodash-decorators/bind';
+import locale from 'antd/lib/date-picker/locale/zh_CN';
 import moment from 'moment';
 
 import {
@@ -18,7 +19,8 @@ import {
   Modal,
   Form,
   Input,
-
+  DatePicker,
+  TimePicker,
 } from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
@@ -191,7 +193,7 @@ class RedpacketAdd extends Component {
           </Row>
           <Row style={{ marginBottom: 32 }}>
             <Col sm={2} xs={2}>
-              <div align="right" style={{marginTop:5}}>活动ID：</div>
+              <div align="right" style={{ marginTop: 5 }}>活动ID：</div>
             </Col>
             <Col sm={5} xs={5}>
               {getFieldDecorator('act_id', {
@@ -205,14 +207,14 @@ class RedpacketAdd extends Component {
             </Col>
             <Col sm={1} xs={1}></Col>
             <Col sm={2} xs={2}>
-              <div align="right" style={{marginTop:5}}>活动名称：</div>
+              <div align="right" style={{ marginTop: 5 }}>活动名称：</div>
             </Col>
             <Col sm={6} xs={6}>
-              <div align="left" style={{marginTop:5}}>积分抽奖</div>
+              <div align="left" style={{ marginTop: 5 }}>积分抽奖</div>
             </Col>
           </Row>
           <Row style={{ marginBottom: 32 }}>
-            <Col sm={2} xs={2}><div align="right" style={{marginTop:5}}>活动描述：</div></Col>
+            <Col sm={2} xs={2}><div align="right" style={{ marginTop: 5 }}>活动描述：</div></Col>
             <Col sm={22} xs={22}>
               <FormItem label="">
                 {getFieldDecorator('act_desc', {
@@ -231,26 +233,99 @@ class RedpacketAdd extends Component {
             <Col sm={24} xs={24}><h3><b>活动内容设置</b></h3></Col>
           </Row>
           <Row style={{ marginBottom: 32 }}>
-            <Col sm={8} xs={12}>
-              红包总数：{data.cp_version}
+            <Col sm={2} xs={2}>
+              <div align="right" style={{ marginTop: 5 }}>红包总数：</div>
             </Col>
-            <Col sm={8} xs={12}>
-              红包平均金额：{data.cp_version}
+            <Col sm={5} xs={5}>
+              {getFieldDecorator('total_num', {
+                rules: [
+                  {
+                    required: true,
+                    message: "请输入红包总数",
+                  },
+                ],
+              })(<Input placeholder="请输入" />)}
             </Col>
-            <Col sm={8} xs={12}>
-              本次活动预算：{moment(data.update_time * 1000).format('YYYY-MM-DD HH:mm:ss')}
+            <Col sm={1} xs={1}></Col>
+
+            <Col sm={2} xs={2}>
+              <div align="right" style={{ marginTop: 5 }}>红包平均金额：</div>
             </Col>
+            <Col sm={5} xs={5}>
+              {getFieldDecorator('each_gamegold', {
+                rules: [
+                  {
+                    required: true,
+                    message: "请输入红包平均金额",
+                  },
+                ],
+              })(<Input placeholder="请输入" />)}
+            </Col>
+            <Col sm={1} xs={1}></Col>
+
+            <Col sm={2} xs={2}>
+              <div align="right" style={{ marginTop: 5 }}>本次活动预算：</div>
+            </Col>
+            <Col sm={5} xs={5}>
+              {getFieldDecorator('total_gamegold', {
+                rules: [
+                  {
+                    required: true,
+                    message: "请输入本次活动预算",
+                  },
+                ],
+              })(<Input placeholder="请输入" />)}
+            </Col>
+            <Col sm={1} xs={1}></Col>
+
           </Row>
           <Row style={{ marginBottom: 32 }}>
-            <Col sm={8} xs={12}>
-              红包金额活动率：{data.cp_version}
+            <Col sm={2} xs={2}>
+              <div align="right" style={{ marginTop: 5 }}>每个用户红包数量：</div>
             </Col>
-            <Col sm={8} xs={12}>
-              设置开始日期：{data.cp_version}
+            <Col sm={5} xs={5}>
+              {getFieldDecorator('each_num', {
+                rules: [
+                  {
+                    required: true,
+                    message: "请输入每个用户红包数量",
+                  },
+                ],
+              })(<Input placeholder="请输入" />)}
             </Col>
-            <Col sm={8} xs={12}>
-              设置开始时间：{moment(data.update_time * 1000).format('YYYY-MM-DD HH:mm:ss')}
+            <Col sm={1} xs={1}></Col>
+
+            <Col sm={2} xs={2}>
+              <div align="right" style={{ marginTop: 5 }}>设置开始日期：</div>
             </Col>
+            <Col sm={5} xs={5}>
+              {getFieldDecorator('act_start_at', {
+                rules: [
+                  {
+                    required: true,
+                    message: "请输入活动开始日期",
+                  },
+                ],
+              })(<DatePicker locale={locale} />)}
+            </Col>
+            <Col sm={1} xs={1}></Col>
+
+            <Col sm={2} xs={2}>
+              <div align="right" style={{ marginTop: 5 }}>设置结束日期：</div>
+            </Col>
+            <Col sm={5} xs={5}>
+              {getFieldDecorator('act_end_at', {
+                rules: [
+                  {
+                    required: true,
+                    message: "请输入活动结束日期",
+                  },
+                ],
+              })(<DatePicker locale={locale} />)}
+            </Col>
+            <Col sm={1} xs={1}></Col>
+
+
           </Row>
           <Row style={{ marginBottom: 32 }}>
             <Col sm={24} xs={24}>说明：请认真核对活动内容设置</Col>
