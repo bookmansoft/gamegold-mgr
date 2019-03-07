@@ -13,9 +13,6 @@ const actions = (
     <Button type="primary" onClick={onPrev}>
       返回列表
     </Button>
-    <Button>
-      查看详情
-    </Button>
   </Fragment>
 );
 
