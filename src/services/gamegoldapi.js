@@ -947,8 +947,8 @@ export async function addRedpacket(params) {
         total_num: params.total_num,
         each_num: params.each_num,
         act_desc: params.act_desc,
-        act_start_at: params.act_start_at,
-        act_end_at: params.act_end_at,
+        act_start_at: new Date(params.act_start_at).getTime() /1000,
+        act_end_at: new Date(params.act_end_at).getTime() /1000,
       });
       //判断返回值是否正确
       console.log(ret);
@@ -981,8 +981,8 @@ export async function changeRedpacket(params) {
         total_num: params.total_num,
         each_num: params.each_num,
         act_desc: params.act_desc,
-        act_start_at: params.act_start_at,
-        act_end_at: params.act_end_at,
+        act_start_at: new Date(params.act_start_at).getTime() /1000,
+        act_end_at: new Date(params.act_end_at).getTime() /1000,
       });
       //判断返回值是否正确
       console.log(ret.code, ret.data, ret.message);

@@ -218,7 +218,7 @@ class RedpacketAdd extends Component {
               <div align="right" style={{ marginTop: 5 }}>活动ID：</div>
             </Col>
             <Col sm={5} xs={5}>
-              {getFieldDecorator('act_id', {
+              {getFieldDecorator('act_sequence', {
                 rules: [
                   {
                     required: true,
@@ -231,8 +231,17 @@ class RedpacketAdd extends Component {
             <Col sm={2} xs={2}>
               <div align="right" style={{ marginTop: 5 }}>活动名称：</div>
             </Col>
-            <Col sm={6} xs={6}>
-              <div align="left" style={{ marginTop: 5 }}>积分抽奖</div>
+            <Col sm={5} xs={5}>
+              {getFieldDecorator('act_name', {
+                initialValue:'积分抽奖',
+                rules: [
+                  {
+                    required: true,
+                    message: "积分抽奖",
+
+                  },
+                ],
+              })(<Input placeholder="积分抽奖1" />)}
             </Col>
           </Row>
           <Row style={{ marginBottom: 32 }}>
