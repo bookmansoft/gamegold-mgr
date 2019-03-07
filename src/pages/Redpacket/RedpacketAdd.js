@@ -135,9 +135,9 @@ class RedpacketAdd extends Component {
 
   componentDidMount() {
     const { dispatch } = this.props;
-    console.log(this.props.location.query.id);
+
     dispatch({
-      type: 'redpacketadd/fetch',
+      type: 'redpacketadd/add',
       payload: { id: this.props.location.query.id },//这里
     });
 
@@ -170,6 +170,27 @@ class RedpacketAdd extends Component {
     }
   }
 
+  handleSubmit = e => {
+    const { dispatch, form } = this.props;
+    e.preventDefault();
+    form.validateFieldsAndScroll((err, values) => {
+      console.log(values);
+      if (!err) {
+        dispatch({
+          type: 'redpacketadd/add',
+          payload: values,
+        }).then((ret) => {
+          console.log("B 执行完成！");
+          if (ret.code === 0) {
+            router.push('/redpacket/redpacketaddsuccess');
+          } else {
+            router.push('/redpacket/redpacketadderror');            
+          };
+        }
+        );
+      };
+    });
+  }
   render() {
     const { stepDirection, operationkey } = this.state;
     const {
@@ -187,6 +208,7 @@ class RedpacketAdd extends Component {
         extraContent={null}
         tabList={null}
       >
+        <Form onSubmit={this.handleSubmit} hideRequiredMark={false} style={{ marginTop: 8 }}>
         <Card style={null} bordered={false}>
           <Row style={{ marginBottom: 16 }}>
             <Col sm={24} xs={24}><h3><b>活动信息</b></h3></Col>
@@ -333,9 +355,18 @@ class RedpacketAdd extends Component {
 
 
           <Row style={{ marginBottom: 32 }}>
-            <Col sm={4} xs={8}>
+
+            <Col sm={4} xs={4}>
+              <FormItem style={{ marginTop: 32 }}>
+                <Button type="primary" htmlType="submit">
+                  提交
+              </Button>
+              </FormItem>
+
+            </Col>
+            <Col sm={4} xs={4}>
               <Button type="primary" onClick={this.handleBack}>
-                返回红包活动列表
+                取消
                 </Button>
             </Col>
           </Row>
@@ -346,6 +377,7 @@ class RedpacketAdd extends Component {
           onCancel={this.handleCancel}
           onCreate={this.handleCreate}
         />
+        </Form>
       </PageHeaderWrapper>
     );
   }

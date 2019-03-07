@@ -937,7 +937,7 @@ export async function addRedpacket(params) {
     // 调用保存记录的方法
     if (remote.isSuccess(msg)) {
       //先调用链上的保存方法
-      console.log("添加操作员:" + JSON.stringify(params));
+      console.log("添加红包:" + JSON.stringify(params));
       let ret = await remote.fetching({
         func: "redpacket.CreateRecord", userinfo: JSON.parse(localStorage.userinfo),
         act_name: params.act_name,

@@ -1,6 +1,6 @@
 import { routerRedux } from 'dva/router';
 import { message } from 'antd';
-import {addOperator } from '@/services/gamegoldapi';
+import {addRedpacket } from '@/services/gamegoldapi';
 
 export default {
   namespace: 'redpacketadd',
@@ -15,7 +15,7 @@ export default {
     *add({ payload }, { call }) {
       try {
         console.log(payload);
-        let ret=yield call(addOperator, payload);
+        let ret=yield call(addRedpacket, payload);
         // console.log(ret);
         return ret;
       }
