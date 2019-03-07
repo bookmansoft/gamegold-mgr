@@ -44,37 +44,6 @@ class RedpacketAdd extends Component {
     }
   }
 
-  // state = {
-  //   visible: false, //发布更新表单可见性
-  //   operationkey: 'tab1',
-  //   stepDirection: 'horizontal',
-  // };
-  // //显示发布更新表单
-  // showModal = () => {
-  //   this.setState({ visible: true });
-  // }
-  // //隐藏发布更新表单
-  // handleCancel = () => {
-  //   this.setState({ visible: false });
-  // }
-  // //提交发布更新表单
-  // handleCreate = () => {
-  //   const form = this.formRef.props.form;
-  //   form.validateFields((err, values) => {
-  //     if (err) {
-  //       return;
-  //     }
-
-  //     console.log('此处收到表单数据: ', values);
-  //     form.resetFields();
-  //     this.setState({ visible: false });
-  //   });
-  // }
-  // //传递引用
-  // saveFormRef = (formRef) => {
-  //   this.formRef = formRef;
-  // }
-
   handleBack = () => {
     history.back();
   };
@@ -86,35 +55,7 @@ class RedpacketAdd extends Component {
       type: 'redpacketadd/add',
       payload: { id: this.props.location.query.id },//这里
     });
-
-    // this.setStepDirection();
-    // window.addEventListener('resize', this.setStepDirection, { passive: true });
   }
-
-  // componentWillUnmount() {
-  //   window.removeEventListener('resize', this.setStepDirection);
-  //   // this.setStepDirection.cancel();
-  // }
-
-  // onOperationTabChange = key => {
-  //   this.setState({ operationkey: key });
-  // };
-
-  // @Bind()
-  // @Debounce(200)
-  // setStepDirection() {
-  //   const { stepDirection } = this.state;
-  //   const w = getWindowWidth();
-  //   if (stepDirection !== 'vertical' && w <= 576) {
-  //     this.setState({
-  //       stepDirection: 'vertical',
-  //     });
-  //   } else if (stepDirection !== 'horizontal' && w > 576) {
-  //     this.setState({
-  //       stepDirection: 'horizontal',
-  //     });
-  //   }
-  // }
 
   handleSubmit = e => {
     const { dispatch, form } = this.props;
@@ -138,7 +79,6 @@ class RedpacketAdd extends Component {
     });
   }
   render() {
-    // const { stepDirection, operationkey } = this.state;
     const {
       redpacketadd: { data },
       form: { getFieldDecorator, getFieldValue },
