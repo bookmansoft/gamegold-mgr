@@ -974,6 +974,7 @@ export async function changeRedpacket(params) {
       console.log("修改红包活动:" + JSON.stringify(params));
       let ret = await remote.fetching({
         func: "redpacket.UpdateRecord", userinfo: JSON.parse(localStorage.userinfo),
+        id : params.id,
         act_name: params.act_name,
         act_sequence: params.act_sequence,
         total_gamegold: params.total_gamegold,

@@ -57,6 +57,7 @@ class RedpacketAdd extends Component {
       console.log("刷新完成"+JSON.stringify(ret));
       console.log(moment(ret.act_start_at * 1000).format('YYYY-MM-DD'));
       form.setFieldsValue({
+        "id":this.props.location.query.id,
         "act_name":ret.act_name,
         "act_sequence":ret.act_sequence,
         "total_gamegold":ret.total_gamegold,
@@ -117,7 +118,12 @@ class RedpacketAdd extends Component {
         <Form onSubmit={this.handleSubmit} hideRequiredMark={false} style={{ marginTop: 8 }}>
           <Card style={null} bordered={false}>
             <Row style={{ marginBottom: 16 }}>
-              <Col sm={24} xs={24}><h3><b>活动信息</b></h3></Col>
+              <Col sm={24} xs={24}>
+                <h3><b>活动信息</b></h3>
+                {getFieldDecorator('id', {
+                  initialValue:this.props.location.query.id,
+                })(<Input placeholder="ID" type="hidden" />)}
+              </Col>
             </Row>
             <Row style={{ marginBottom: 32 }}>
               <Col sm={2} xs={2}>
