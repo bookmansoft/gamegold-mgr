@@ -1,5 +1,6 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
+import moment from 'moment';
 import router from 'umi/router';
 import {
   Row,
@@ -88,6 +89,7 @@ class RedpacketList extends PureComponent {
     {
       title: '活动开始时间',
       dataIndex: 'act_start_at',
+      render: val => <span>{moment(val * 1000).format('YYYY-MM-DD HH:mm:ss')}</span>,
     },
 
 
@@ -97,7 +99,7 @@ class RedpacketList extends PureComponent {
         <Fragment>
           <a onClick={() => this.handleDeal(true, record)}>
             编辑
-          </a>
+          </a>&nbsp;
           <a onClick={() => router.push('/redpacket/redpacketadd')}>详情</a>
         </Fragment>
       ),
