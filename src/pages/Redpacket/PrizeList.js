@@ -46,7 +46,7 @@ const getValue = obj =>
   loading: loading.models.prizelist,
 }))
 @Form.create()
-class RedpacketList extends PureComponent {
+class PrizeList extends PureComponent {
   state = {
     modalVisible: false,
     updateModalVisible: false,
@@ -261,4 +261,4 @@ class RedpacketList extends PureComponent {
   }
 }
 
-export default RedpacketList;
+export default PrizeList;
