@@ -26,7 +26,7 @@ import {
 import SimpleTable from '@/components/SimpleTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
-import styles from './RedpacketList.less';
+import styles from './PrizeList.less';
 
 const FormItem = Form.Item;
 const { Step } = Steps;
