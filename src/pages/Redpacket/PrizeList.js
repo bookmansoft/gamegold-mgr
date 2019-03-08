@@ -94,20 +94,6 @@ class RedpacketList extends PureComponent {
       console.log("刷新完成" + JSON.stringify(ret));
       console.log(moment(ret.act_start_at * 1000).format('YYYY-MM-DD'));
       this.prize={...ret};//设置到全局对象中
-
-      // form.setFieldsValue({
-      //   "id": this.props.location.query.id,
-      //   "act_name": ret2.act_name,
-      //   "act_sequence": ret2.act_sequence,
-      //   "total_gamegold": ret2.total_gamegold,
-      //   "each_gamegold": ret2.each_gamegold,
-      //   "total_num": ret2.total_num,
-      //   "each_num": ret2.each_num,
-      //   "act_desc": ret2.act_desc,
-      //   "act_start_at": moment(moment(ret2.act_start_at * 1000).format('YYYY-MM-DD'), 'YYYY-MM-DD'),
-      //   "act_end_at": moment(moment(ret2.act_end_at * 1000).format('YYYY-MM-DD'), 'YYYY-MM-DD'),
-      // });
-      console.log("ok 109");
     });
     //这行必须放在后面才会有数据
     dispatch({
@@ -178,32 +164,24 @@ class RedpacketList extends PureComponent {
           </Row>
           <Row style={{ marginBottom: 32 }}>
             <Col sm={2} xs={2}>
-              <div align="right" style={{ marginTop: 5 }}>活动ID：</div>
+              <div align="right" >活动ID：</div>
             </Col>
             <Col sm={5} xs={5}>
               {this.props.location.query.id}
             </Col>
             <Col sm={1} xs={1}></Col>
             <Col sm={2} xs={2}>
-              <div align="right" style={{ marginTop: 5 }}>活动名称：</div>
+              <div align="right" >活动名称：</div>
             </Col>
             <Col sm={5} xs={5}>
-              {JSON.stringify(prize)}
+              {prize.act_name}
             </Col>
           </Row>
           <Row style={{ marginBottom: 32 }}>
-            <Col sm={2} xs={2}><div align="right" style={{ marginTop: 5 }}>活动描述：</div></Col>
+            <Col sm={2} xs={2}><div align="right" >活动描述：</div></Col>
             <Col sm={22} xs={22}>
-              <FormItem label="">
-                {getFieldDecorator('act_desc', {
-                  rules: [
-                    {
-                      required: true,
-                      message: "请输入活动描述",
-                    },
-                  ],
-                })(<Input placeholder="请输入" />)}
-              </FormItem></Col>
+                {prize.act_desc}
+            </Col>
           </Row>
 
           <Divider style={{ margin: '20px 0' }} />
@@ -212,123 +190,61 @@ class RedpacketList extends PureComponent {
           </Row>
           <Row style={{ marginBottom: 32 }}>
             <Col sm={2} xs={2}>
-              <div align="right" style={{ marginTop: 5 }}>红包总数：</div>
+              <div align="right" >红包总数：</div>
             </Col>
             <Col sm={5} xs={5}>
-              {getFieldDecorator('total_num', {
-                rules: [
-                  {
-                    required: true,
-                    message: "请输入红包总数",
-                  },
-                ],
-              })(<Input placeholder="请输入" />)}
+              {prize.total_num}
             </Col>
             <Col sm={1} xs={1}></Col>
 
             <Col sm={2} xs={2}>
-              <div align="right" style={{ marginTop: 5 }}>红包平均金额：</div>
+              <div align="right" >红包平均金额：</div>
             </Col>
             <Col sm={5} xs={5}>
-              {getFieldDecorator('each_gamegold', {
-                rules: [
-                  {
-                    required: true,
-                    message: "请输入红包平均金额",
-                  },
-                ],
-              })(<Input placeholder="请输入" />)}
+              {prize.each_gamegold}
             </Col>
             <Col sm={1} xs={1}></Col>
 
             <Col sm={2} xs={2}>
-              <div align="right" style={{ marginTop: 5 }}>本次活动预算：</div>
+              <div align="right" >本次活动预算：</div>
             </Col>
             <Col sm={5} xs={5}>
-              {getFieldDecorator('total_gamegold', {
-                rules: [
-                  {
-                    required: true,
-                    message: "请输入本次活动预算",
-                  },
-                ],
-              })(<Input placeholder="请输入" />)}
+              {prize.total_gamegold}
             </Col>
             <Col sm={1} xs={1}></Col>
 
           </Row>
           <Row style={{ marginBottom: 32 }}>
             <Col sm={2} xs={2}>
-              <div align="right" style={{ marginTop: 5 }}>每个用户红包数量：</div>
+              <div align="right" >每个用户红包数量：</div>
             </Col>
             <Col sm={5} xs={5}>
-              {getFieldDecorator('each_num', {
-                rules: [
-                  {
-                    required: true,
-                    message: "请输入每个用户红包数量",
-                  },
-                ],
-              })(<Input placeholder="请输入" />)}
+              {prize.each_num}
             </Col>
             <Col sm={1} xs={1}></Col>
 
             <Col sm={2} xs={2}>
-              <div align="right" style={{ marginTop: 5 }}>设置开始日期：</div>
+              <div align="right" >设置开始日期：</div>
             </Col>
             <Col sm={5} xs={5}>
-              {getFieldDecorator('act_start_at', {
-                rules: [
-                  {
-                    required: true,
-                    message: "请输入活动开始日期",
-                  },
-                ],
-              })(<DatePicker locale={locale} />)}
+              {moment(prize.act_start_at * 1000).format('YYYY-MM-DD')}
             </Col>
             <Col sm={1} xs={1}></Col>
 
             <Col sm={2} xs={2}>
-              <div align="right" style={{ marginTop: 5 }}>设置结束日期：</div>
+              <div align="right" >设置结束日期：</div>
             </Col>
             <Col sm={5} xs={5}>
-              {getFieldDecorator('act_end_at', {
-                rules: [
-                  {
-                    required: true,
-                    message: "请输入活动结束日期",
-                  },
-                ],
-              })(<DatePicker locale={locale} />)}
+                {moment(prize.act_end_at * 1000).format('YYYY-MM-DD')}
             </Col>
             <Col sm={1} xs={1}></Col>
 
 
-          </Row>
-          <Row style={{ marginBottom: 32 }}>
-            <Col sm={24} xs={24}>说明：请认真核对活动内容设置</Col>
-          </Row>
-
-
-          <Row style={{ marginBottom: 32 }}>
-            <Col sm={8} xs={8}>
-            </Col>
-            <Col sm={4} xs={4}>
-              <Button type="primary" htmlType="submit">
-                提交
-                </Button>
-            </Col>
-            <Col sm={4} xs={4}>
-              <Button type="primary" onClick={this.handleBack}>
-                取消
-                </Button>
-            </Col>
           </Row>
         </Card>
 
         <Card bordered={false}>
           <div className={styles.tableList}>
-            {/* <div className={styles.tableListForm}>{this.renderForm()}</div> */}
             <div className={styles.tableListOperator} />
             <SimpleTable
               selectedRows={selectedRows}
