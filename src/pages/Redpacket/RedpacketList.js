@@ -100,7 +100,7 @@ class RedpacketList extends PureComponent {
           <a onClick={() => router.push(`/redpacket/redpacketchange?id=${record.id}`)}>
             编辑
           </a>&nbsp;
-          <a onClick={() => router.push('/redpacket/redpacketadd')}>详情</a>
+          <a onClick={() => router.push(`/redpacket/prizelist?id=${record.id}`)}>详情</a>
         </Fragment>
       ),
     },

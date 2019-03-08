@@ -38,6 +38,8 @@ const getValue = obj =>
     .map(key => obj[key])
     .join(',');
 
+let ret2;//全局返回参数使用
+
 /* eslint react/no-multi-comp:0 */
 @connect(({ prizelist, loading }) => ({
   prizelist,
@@ -45,6 +47,7 @@ const getValue = obj =>
 }))
 @Form.create()
 class RedpacketList extends PureComponent {
+
   state = {
     modalVisible: false,
     updateModalVisible: false,
@@ -84,24 +87,26 @@ class RedpacketList extends PureComponent {
   ];
 
   componentDidMount() {
-    const { dispatch,form } = this.props;
+    const { dispatch, form } = this.props;
     dispatch({
       type: 'prizelist/get',
       payload: { id: this.props.location.query.id },//这里
-    }).then((ret)=> {
-      console.log("刷新完成"+JSON.stringify(ret));
+    }).then((ret) => {
+      console.log("刷新完成" + JSON.stringify(ret));
       console.log(moment(ret.act_start_at * 1000).format('YYYY-MM-DD'));
+      ret2=ret;//设置到全局对象中
+
       form.setFieldsValue({
-        "id":this.props.location.query.id,
-        "act_name":ret.act_name,
-        "act_sequence":ret.act_sequence,
-        "total_gamegold":ret.total_gamegold,
-        "each_gamegold":ret.each_gamegold,
-        "total_num":ret.total_num,
-        "each_num":ret.each_num,
-        "act_desc":ret.act_desc,
-         "act_start_at":moment(moment(ret.act_start_at * 1000).format('YYYY-MM-DD'),'YYYY-MM-DD'),
-         "act_end_at": moment(moment(ret.act_end_at * 1000).format('YYYY-MM-DD'),'YYYY-MM-DD'),
+        "id": this.props.location.query.id,
+        "act_name": ret2.act_name,
+        "act_sequence": ret2.act_sequence,
+        "total_gamegold": ret2.total_gamegold,
+        "each_gamegold": ret2.each_gamegold,
+        "total_num": ret2.total_num,
+        "each_num": ret2.each_num,
+        "act_desc": ret2.act_desc,
+        "act_start_at": moment(moment(ret2.act_start_at * 1000).format('YYYY-MM-DD'), 'YYYY-MM-DD'),
+        "act_end_at": moment(moment(ret2.act_end_at * 1000).format('YYYY-MM-DD'), 'YYYY-MM-DD'),
       });
       console.log("ok 109");
     });

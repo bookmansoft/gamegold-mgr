@@ -84,6 +84,7 @@ export default [
             path: '/redpacket/prizelist',
             name: 'prizelist',
             component: './Redpacket/PrizeList',
+            hideInMenu: true,
           },
         ],
       },
