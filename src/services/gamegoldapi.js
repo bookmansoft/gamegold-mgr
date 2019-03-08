@@ -1052,3 +1052,33 @@ export async function queryRedpacket(params) {
   }
 
 }
+
+//--获奖奖品列表
+export async function queryPrize(params) {
+  try {
+    let msg = await remote.login({ openid: theOpenId });
+    let ret = { code: -200, data: null, message: "react service层无返回值。方法名：queryPrize" };
+    if (remote.isSuccess(msg)) {
+      console.log("从数据库查询操作员列表 prize.ListRecord:" + stringify(params));
+      if (params == null) {
+        params = {
+          currentPage: 1,
+          pageSize: 10,
+          login_name: '',
+          state: '',
+        };
+      };
+      ret = await remote.fetching({
+        func: "prize.ListRecord", userinfo: JSON.parse(localStorage.userinfo),
+        currentPage: params.currentPage,
+        pageSize: params.pageSize,
+      });
+    }
+    console.log("操作员管理结果列表：" + JSON.stringify(ret));
+    return ret;
+  } catch (error) {
+    console.log(error);
+    return { code: -100, data: null, message: "react service层错误。方法名：queryPrize" };
+  }
+
+}

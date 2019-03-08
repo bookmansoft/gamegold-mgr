@@ -80,6 +80,11 @@ export default [
             component: './Redpacket/RedpacketChangeError',
             hideInMenu: true,
           },
+          {
+            path: '/redpacket/prizelist',
+            name: 'prizelist',
+            component: './Redpacket/PrizeList',
+          },
         ],
       },
       // operatormgr
