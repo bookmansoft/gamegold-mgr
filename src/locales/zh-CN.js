@@ -81,6 +81,7 @@ export default {
   'menu.redpacket.redpacketadderror': '添加红包活动失败',
   'menu.redpacket.redpacketchangesuccess': '更改红包活动成功',
   'menu.redpacket.redpacketchangeerror': '更改红包活动失败',
+  'menu.redpacket.prizelist': '活动详情',
   'menu.operator': '操作员管理',
   'menu.operator.operatorlist': '操作员列表',
   'menu.operator.operatoradd': '添加操作员',
