@@ -38,7 +38,7 @@ const getValue = obj =>
     .map(key => obj[key])
     .join(',');
 
-let ret2;//全局返回参数使用
+// let ret2;//全局返回参数使用
 
 /* eslint react/no-multi-comp:0 */
 @connect(({ prizelist, loading }) => ({
@@ -47,7 +47,6 @@ let ret2;//全局返回参数使用
 }))
 @Form.create()
 class RedpacketList extends PureComponent {
-
   state = {
     modalVisible: false,
     updateModalVisible: false,
@@ -94,20 +93,20 @@ class RedpacketList extends PureComponent {
     }).then((ret) => {
       console.log("刷新完成" + JSON.stringify(ret));
       console.log(moment(ret.act_start_at * 1000).format('YYYY-MM-DD'));
-      ret2=ret;//设置到全局对象中
+      this.prize={...ret};//设置到全局对象中
 
-      form.setFieldsValue({
-        "id": this.props.location.query.id,
-        "act_name": ret2.act_name,
-        "act_sequence": ret2.act_sequence,
-        "total_gamegold": ret2.total_gamegold,
-        "each_gamegold": ret2.each_gamegold,
-        "total_num": ret2.total_num,
-        "each_num": ret2.each_num,
-        "act_desc": ret2.act_desc,
-        "act_start_at": moment(moment(ret2.act_start_at * 1000).format('YYYY-MM-DD'), 'YYYY-MM-DD'),
-        "act_end_at": moment(moment(ret2.act_end_at * 1000).format('YYYY-MM-DD'), 'YYYY-MM-DD'),
-      });
+      // form.setFieldsValue({
+      //   "id": this.props.location.query.id,
+      //   "act_name": ret2.act_name,
+      //   "act_sequence": ret2.act_sequence,
+      //   "total_gamegold": ret2.total_gamegold,
+      //   "each_gamegold": ret2.each_gamegold,
+      //   "total_num": ret2.total_num,
+      //   "each_num": ret2.each_num,
+      //   "act_desc": ret2.act_desc,
+      //   "act_start_at": moment(moment(ret2.act_start_at * 1000).format('YYYY-MM-DD'), 'YYYY-MM-DD'),
+      //   "act_end_at": moment(moment(ret2.act_end_at * 1000).format('YYYY-MM-DD'), 'YYYY-MM-DD'),
+      // });
       console.log("ok 109");
     });
     //这行必须放在后面才会有数据
@@ -160,7 +159,7 @@ class RedpacketList extends PureComponent {
 
   render() {
     const {
-      prizelist: { data },
+      prizelist: { data,prize },
       form: { getFieldDecorator, getFieldValue },
       loading,
     } = this.props;
@@ -182,30 +181,14 @@ class RedpacketList extends PureComponent {
               <div align="right" style={{ marginTop: 5 }}>活动ID：</div>
             </Col>
             <Col sm={5} xs={5}>
-              {getFieldDecorator('act_sequence', {
-                rules: [
-                  {
-                    required: true,
-                    message: "请输入活动ID",
-                  },
-                ],
-              })(<Input placeholder="请输入" />)}
+              {this.props.location.query.id}
             </Col>
             <Col sm={1} xs={1}></Col>
             <Col sm={2} xs={2}>
               <div align="right" style={{ marginTop: 5 }}>活动名称：</div>
             </Col>
             <Col sm={5} xs={5}>
-              {getFieldDecorator('act_name', {
-                initialValue: '积分抽奖',
-                rules: [
-                  {
-                    required: true,
-                    message: "积分抽奖",
-
-                  },
-                ],
-              })(<Input placeholder="积分抽奖1" />)}
+              {JSON.stringify(prize)}
             </Col>
           </Row>
           <Row style={{ marginBottom: 32 }}>

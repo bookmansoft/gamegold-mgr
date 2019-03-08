@@ -8,6 +8,9 @@ export default {
       list: [],
       pagination: {},
     },
+    prize: {
+      
+    }
   },
 
   effects: {
@@ -22,7 +25,7 @@ export default {
       console.log("redpacketchange model："+payload.id);
       const response = yield call(getRedpacket, payload);
       yield put({
-        type: 'save',
+        type: 'savePrize',
         payload: response,
       });
       return response;
@@ -35,6 +38,13 @@ export default {
       return {
         ...state,
         data: action.payload,
+      };
+    },
+
+    savePrize(state, action) {
+      return {
+        ...state,
+        prize: action.payload,
       };
     },
   },
