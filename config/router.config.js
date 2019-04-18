@@ -329,6 +329,11 @@ export default [
             name: 'fundingauditlist',
             component: './Funding/FundingAuditList',
           },
+          {
+            path: '/funding/fundingauditview',
+            name: 'fundingauditview',
+            component: './Funding/FundingAuditView',
+          },
         ],
       },
 
