@@ -15,7 +15,7 @@ import {
 import SimpleTable from '@/components/SimpleTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
-import styles from './GameList.less';
+import styles from './FundingList.less';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -25,12 +25,12 @@ const getValue = obj =>
     .join(',');
 
 /* eslint react/no-multi-comp:0 */
-@connect(({ gamelist, loading }) => ({
-  gamelist,
-  loading: loading.models.gamelist,
+@connect(({ fundingauditlist, loading }) => ({
+  fundingauditlist,
+  loading: loading.models.fundingauditlist,
 }))
 @Form.create()
-class GameList extends PureComponent {
+class FundingList extends PureComponent {
   state = {
     modalVisible: false,
     updateModalVisible: false,
@@ -80,10 +80,10 @@ class GameList extends PureComponent {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'gamelist/fetch',
+      type: 'fundingauditlist/fetch',
     });
     dispatch({
-      type: 'gamelist/fetchCpType'
+      type: 'fundingauditlist/fetchCpType'
     });
   }
 
@@ -108,7 +108,7 @@ class GameList extends PureComponent {
     }
 
     dispatch({
-      type: 'gamelist/fetch',
+      type: 'fundingauditlist/fetch',
       payload: params,
     });
   };
@@ -120,7 +120,7 @@ class GameList extends PureComponent {
       formValues: {},
     });
     dispatch({
-      type: 'gamelist/fetch',
+      type: 'fundingauditlist/fetch',
       payload: {},
     });
   };
@@ -143,7 +143,7 @@ class GameList extends PureComponent {
       });
 
       dispatch({
-        type: 'gamelist/fetch',
+        type: 'fundingauditlist/fetch',
         payload: values,
       });
     });
@@ -152,8 +152,8 @@ class GameList extends PureComponent {
   //查看页面
   handleView = (flag, record) => {
     console.log(record);
-    // this.props.history.push("./gameview?id="+record.cp_id);
-    this.props.history.push("./gameview?id=" + record.id);
+    // this.props.history.push("./fundingview?id="+record.cp_id);
+    this.props.history.push("./fundingauditview?id=" + record.id);
   };
 
   //赠送道具
@@ -166,9 +166,8 @@ class GameList extends PureComponent {
 
   //显示下拉框
   renderOptions = () => {
-    // console.log(this.props.gamelist.data);
-    if (this.props.gamelist.cp_type_list != null) {
-      return this.props.gamelist.cp_type_list.map(element =>
+    if (this.props.fundingauditlist.cp_type_list != null) {
+      return this.props.fundingauditlist.cp_type_list.map(element =>
         <Option key={element.id} value={element.cp_type_id}> {element.cp_type_id}</Option>);
     }
     else {
@@ -232,7 +231,7 @@ class GameList extends PureComponent {
 
   render() {
     const {
-      gamelist: { data },
+      fundingauditlist: { data },
       loading,
     } = this.props;
     const { selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;
@@ -258,4 +257,4 @@ class GameList extends PureComponent {
   }
 }
 
-export default GameList;
+export default FundingList;

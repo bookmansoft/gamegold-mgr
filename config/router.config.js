@@ -290,7 +290,47 @@ export default [
           },
         ],
       },
-
+      // funding
+      {
+        path: '/funding',
+        name: 'funding',
+        icon: 'table',
+        authority: ['user','admin'],
+        routes: [
+          {
+            path: '/funding/fundingapply',
+            name: 'fundingapply',
+            component: './Funding/FundingApply',
+          },
+          {
+            path: '/funding/fundinglist',
+            name: 'fundinglist',
+            component: './Funding/FundingList',
+          },
+          {
+            path: '/funding/fundingview',
+            name: 'fundingview',
+            component: './Funding/FundingView',
+          },
+          {
+            path: '/funding/fundingapplysuccess',
+            name: 'fundingapplysuccess',
+            component: './Funding/FundingApplySuccess',
+            hideInMenu: true,
+          },
+          {
+            path: '/funding/fundingapplyerror',
+            name: 'fundingapplyerror',
+            component: './Funding/FundingApplyError',
+            hideInMenu: true,
+          },
+          {
+            path: '/funding/fundingauditlist',
+            name: 'fundingauditlist',
+            component: './Funding/FundingAuditList',
+          },
+        ],
+      },
 
       //---------------------------------------------------------------------------
 
