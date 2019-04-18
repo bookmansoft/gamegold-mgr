@@ -336,7 +336,46 @@ export default [
           },
         ],
       },
+      // market
+      {
+        path: '/market',
+        name: 'market',
+        icon: 'table',
+        authority: ['user','admin'],
+        routes: [
+          {
+            path: '/market/marketlist',
+            name: 'marketlist',
+            component: './Market/MarketList',
+          },
+          {
+            path: '/market/marketview',
+            name: 'marketview',
+            component: './Market/MarketView',
+          },
 
+        ],
+      },
+      // stock
+      {
+        path: '/stock',
+        name: 'stock',
+        icon: 'table',
+        authority: ['user','admin'],
+        routes: [
+          {
+            path: '/stock/stocklist',
+            name: 'stocklist',
+            component: './Stock/StockList',
+          },
+          {
+            path: '/stock/stockview',
+            name: 'stockview',
+            component: './Stock/StockView',
+          },
+
+        ],
+      },
       //---------------------------------------------------------------------------
 
       // dashboard
