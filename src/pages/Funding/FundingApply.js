@@ -78,34 +78,33 @@ class FundingApply extends PureComponent {
       };
     });
   }
+
+  handleCpidChange = e => {
+    this.setState({infoCpid: e.target.value});
+  }
+  handleStockNumChange = e => {
+    const { dispatch, form } = this.props;
+    form.validateFieldsAndScroll((err, values) => {
+      console.log(values);
+      if (!err) {
+        dispatch({
+          type: 'fundingapply/save',
+          payload: values,
+        });
+      };
+    });
+  }
+  handleStockAmountChange = e => {
+    this.setState({infoStockAmount: e.target.value});
+  }
+
   render() {
     const { submitting } = this.props;
     const {
-      fundingapply: { data },
+      fundingapply: { data,infoStockNum },
       form: { getFieldDecorator, getFieldValue },
     } = this.props;
 
-    const formItemLayout = {
-      labelCol: {
-        xs: { span: 24 },
-        sm: { span: 3 },
-      },
-      wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 15 },
-      },
-    };
-
-    const formItemLayout2 = {
-      labelCol: {
-        xs: { span: 12 },
-        sm: { span: 8 },
-      },
-      wrapperCol: {
-        xs: { span: 12 },
-        sm: { span: 16 },
-      },
-    };
 
     const submitFormLayout = {
       wrapperCol: {
@@ -121,167 +120,86 @@ class FundingApply extends PureComponent {
       >
         <Form onSubmit={this.handleSubmit} hideRequiredMark={false} style={{ marginTop: 8 }}>
           <Card bordered={false}>
-            <Row style={{ marginBottom: 32 }}>
+            <Row>
               <br />
-              <h2><b>众筹申请</b></h2>
+              <h3><b>众筹目标</b></h3>
               <br />
             </Row>
-            <Row>
-              <FormItem {...formItemLayout} label="游戏URL链接">
-                {getFieldDecorator('cp_url', {
-                  rules: [
-                    {
-                      required: true,
-                      message: "请输入游戏URL链接",
-                    },
-                  ],
-                })(<Input placeholder="请输入" />)}
-              </FormItem>
-              <FormItem {...formItemLayout} label="结算钱包地址">
-                {getFieldDecorator('wallet_addr', {
-                  rules: [
-                    {
-                      required: true,
-                      message: "请输入结算钱包地址",
-                    },
-                  ],
-                })(<Input placeholder="请输入" />)}
-              </FormItem>
-            </Row>
-            <Row>
-              <Col span={8}>
-                <FormItem {...formItemLayout2} label="使用邀请奖励">
-                  {getFieldDecorator('use_invite_share', {
-                    initialValue: '1',
+            <Row gutter={16} style={{ marginBottom: 16 }}>
+              <Col span={3}>
+                <div align="right" style={{ fontWeight: 'bold', marginTop: 5 }}>选择发行游戏:</div>
+              </Col>
+              <Col span={5}>
+                <FormItem >
+                  {getFieldDecorator('cpid', {
                     rules: [
                       {
                         required: true,
                       },
                     ],
                   })(
-                  <Select placeholder="请选择" style={{ width: '60px',display:'block', }}>
-                    <Option value="1">是</Option>
-                    <Option value="0">否</Option>
-                  </Select>
+                    <Select placeholder="请选择" style={{ width: '100%', display: 'block', }}>
+                      <Option value="1">游戏1</Option>
+                      <Option value="2">游戏2</Option>
+                    </Select>
                   )}
                 </FormItem>
               </Col>
-              <Col span={8}>
-                <FormItem {...formItemLayout2} label="邀请奖励比例">
-                  {getFieldDecorator('invite_share', {
-                    initialValue: '15',
-                  })
-                    (
-                    <Select
-                      placeholder='邀请奖励比例'
-                      style={{
-                        width: '100px',
-                        // display: getFieldValue('use_invite_share') === '1' ? 'block' : 'none',
-                      }}
-                      disabled={getFieldValue('use_invite_share') === '0'}
-                    >
-                      <Option value="1">1%</Option>
-                      <Option value="2">2%</Option>
-                      <Option value="3">3%</Option>
-                      <Option value="4">4%</Option>
-                      <Option value="5">5%</Option>
-                      <Option value="6">6%</Option>
-                      <Option value="7">7%</Option>
-                      <Option value="8">8%</Option>
-                      <Option value="9">9%</Option>
-                      <Option value="10">10%</Option>
-                      <Option value="11">11%</Option>
-                      <Option value="12">12%</Option>
-                      <Option value="13">13%</Option>
-                      <Option value="14">14%</Option>
-                      <Option value="15">15%</Option>
-                      <Option value="16">16%</Option>
-                      <Option value="17">17%</Option>
-                      <Option value="18">18%</Option>
-                      <Option value="19">19%</Option>
-                      <Option value="20">20%</Option>
-                      <Option value="21">21%</Option>
-                      <Option value="22">22%</Option>
-                      <Option value="23">23%</Option>
-                      <Option value="24">24%</Option>
-                      <Option value="25">25%</Option>
-                      <Option value="26">26%</Option>
-                      <Option value="27">27%</Option>
-                      <Option value="28">28%</Option>
-                      <Option value="29">29%</Option>
-                      <Option value="30">30%</Option>
-                    </Select>
-                    )}
+            </Row>
+            <Row gutter={16} style={{ marginBottom: 16 }}>
+              <Col span={3}>
+                <div align="right" style={{ fontWeight: 'bold', marginTop: 5 }}>发行凭证数量:</div>
+              </Col>
+              <Col span={5}>
+                <FormItem >
+                  {getFieldDecorator('stock_num', {
+                    rules: [
+                      {
+                        required: true,
+                        message: "请输入发行凭证数量",
+                      },
+                    ],
+                  })(<Input placeholder="请输入" style={{ width: '100%' }} onChange={this.handleStockNumChange} />)}
                 </FormItem>
               </Col>
-              <Col md={4}>
-                <Button type="primary" htmlType="submit" loading={submitting}>
-                  验证
-              </Button>
+              <Col span={8}>
+                <div align="left" style={{ fontWeight: 'bold', marginTop: 5 }}>份（单次发行数量不得高于100万份）</div>
+              </Col>
+            </Row>
+            <Row gutter={16} style={{ marginBottom: 16 }}>
+              <Col span={3}>
+                <div align="right" style={{ fontWeight: 'bold', marginTop: 5 }}>发行价(游戏金):</div>
+              </Col>
+              <Col span={5}>
+                <FormItem >
+                  {getFieldDecorator('stock_amount', {
+                    rules: [
+                      {
+                        required: true,
+                        message: "请输入发行价(游戏金)",
+                      },
+                    ],
+                  })(<Input placeholder="请输入" style={{ width: '100%' }} />)}
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <div align="left" style={{ fontWeight: 'bold', marginTop: 5 }}>千克/份（首次发行单价不得高于50千克）</div>
               </Col>
             </Row>
             <br />
             <h2><b>基本信息预览</b></h2>
             <br />
-            <Row style={{ marginBottom: 32 }}>
-              <Col sm={8} xs={12}>游戏名称：{data.cp_text}</Col>
-              <Col sm={8} xs={12}>游戏简称：{data.cp_name}</Col>
+            <Row  gutter={16} style={{ marginBottom: 16 }}>
+              <Col span={8}><div style={{fontWeight:'bold'}}>游戏名称：{data.cp_text}</div></Col>
+              <Col span={8}><div style={{fontWeight:'bold'}}>游戏类型：{data.cp_type}</div></Col>
+              <Col span={8}><div style={{fontWeight:'bold'}}>开发者：{data.develop_name}</div></Col>
             </Row>
-            <Row style={{ marginBottom: 32 }}>
-              <Col sm={8} xs={12}>
-                游戏类型：{data.cp_type}
-              </Col>
-              <Col sm={8} xs={12}>
-                开发者：{data.develop_name}
-              </Col>
-              <Col sm={8} xs={12}>
-                发布时间：{!!data.publish_time && moment(data.publish_time * 1000).format('YYYY-MM-DD HH:mm:ss')}
-              </Col>
-            </Row>
-            <Row style={{ marginBottom: 32 }}>
-              <Col sm={24} xs={24}>URL地址：{data.cp_url}</Col>
+            <Row  gutter={16} style={{ marginBottom: 16 }}>
+            <Col span={8}><div style={{fontWeight:'bold'}}>发行凭证总数(份)：{data.infoStockNum}</div></Col>
+              <Col span={8}><div style={{fontWeight:'bold'}}>发行价(千克/份)：{data.infoStockAmount}</div></Col>
+              <Col span={8}><div style={{fontWeight:'bold'}}>众筹总金额：{data.infoStockAmount*data.infoStockNum}</div></Col>
             </Row>
 
-            <Divider style={{ margin: '20px 0' }} />
-            <Row style={{ marginBottom: 16 }}>
-              <Col sm={24} xs={24}><h3><b>版本信息</b></h3></Col>
-            </Row>
-            <Row style={{ marginBottom: 32 }}>
-              <Col sm={8} xs={12}>
-                当前版本：{data.cp_version}
-              </Col>
-              <Col sm={8} xs={12}>
-                更新时间：{data.publish_time}
-              </Col>
-            </Row>
-            <Row style={{ marginBottom: 32 }}>
-              <Col sm={24} xs={24}>更新内容：{data.cp_desc}</Col>
-            </Row>
-
-            <Divider style={{ margin: '20px 0' }} />
-            <Row style={{ marginBottom: 16 }}>
-              <Col sm={24} xs={24}><h3><b>素材信息</b></h3></Col>
-            </Row>
-            <Row style={{ marginBottom: 32 }}>
-              <Col sm={24} xs={24}>
-                游戏图标：<img width={120} src={data.icon_url} />
-              </Col>
-            </Row>
-            <Row style={{ marginBottom: 32 }}>
-              <Col sm={24} xs={24}>
-                封面图片：<img width={120} src={data.face_url} />
-              </Col>
-            </Row>
-            <Row style={{ marginBottom: 32 }}>
-              <Col sm={24} xs={24}>
-                游戏截图：{this.renderImg(data.pic_urls)}
-              </Col>
-            </Row>
-            <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
-              <Button type="primary" onClick={() => this.handleCreate(this.props.fundingapply.data)}>
-                提交
-              </Button>
-            </FormItem>
           </Card>
         </Form>
 

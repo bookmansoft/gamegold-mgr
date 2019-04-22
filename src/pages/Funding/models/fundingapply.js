@@ -11,6 +11,7 @@ export default {
     },
     data: {
     },
+    infoStockNum:-1,
   },
 
   effects: {
