@@ -164,17 +164,7 @@ class FundingList extends PureComponent {
     });
   };
 
-  //显示下拉框
-  renderOptions = () => {
-    if (this.props.fundingauditlist.cp_type_list != null) {
-      return this.props.fundingauditlist.cp_type_list.map(element =>
-        <Option key={element.id} value={element.cp_type_id}> {element.cp_type_id}</Option>);
-    }
-    else {
-      return "";
-    }
 
-  };
 
   renderForm() {
     const {
@@ -183,38 +173,33 @@ class FundingList extends PureComponent {
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 16, lg: 24, xl: 48 }}>
-          <Col md={6} sm={9}>
+          <Col span={6}>
             <FormItem label="游戏全名：">
               {getFieldDecorator('cp_text')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
-          <Col md={6} sm={9}>
-            <FormItem label="游戏ID：">
-              {getFieldDecorator('cp_id')(<Input placeholder="请输入" />)}
-            </FormItem>
-          </Col>
-          <Col md={6} sm={9}>
-            <FormItem label="游戏类型：">
-              {getFieldDecorator('cp_type')(
+          <Col span={6}>
+            <FormItem label="审核状态：">
+              {getFieldDecorator('audit_state_id')(
                 <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="">全部</Option>
+                  <Option value="1">待审核</Option>
+                  <Option value="2">已上架</Option>
+                  <Option value="3">审核不通过</Option>
                   {this.renderOptions()}
                 </Select>
               )}
             </FormItem>
           </Col>
-          {/* <Col md={6} sm={9}>
+          {/* <Col span={6}>
             <FormItem label="状态：">
               {getFieldDecorator('cp_state')(
                 <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="1">待审核</Option>
-                  <Option value="2">已上架</Option>
-                  <Option value="3">审核不通过</Option>
+
                 </Select>
               )}
             </FormItem>
           </Col> */}
-          <Col md={6} sm={9}>
+          <Col span={6}>
             <span className={styles.submitButtons}>
               <Button type="primary" htmlType="submit">
                 搜索

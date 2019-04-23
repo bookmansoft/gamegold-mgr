@@ -183,18 +183,13 @@ class FundingList extends PureComponent {
     } = this.props;
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
-        <Row gutter={{ md: 16, lg: 24, xl: 48 }}>
-          <Col md={6} sm={9}>
+        <Row gutter={16}>
+          <Col span={6}>
             <FormItem label="游戏全名：">
               {getFieldDecorator('cp_text')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
-          <Col md={6} sm={9}>
-            <FormItem label="游戏ID：">
-              {getFieldDecorator('cp_id')(<Input placeholder="请输入" />)}
-            </FormItem>
-          </Col>
-          <Col md={6} sm={9}>
+          <Col span={6}>
             <FormItem label="游戏类型：">
               {getFieldDecorator('cp_type')(
                 <Select placeholder="请选择" style={{ width: '100%' }}>
@@ -204,7 +199,7 @@ class FundingList extends PureComponent {
               )}
             </FormItem>
           </Col>
-          {/* <Col md={6} sm={9}>
+          {/* <Col span={6}>
             <FormItem label="状态：">
               {getFieldDecorator('cp_state')(
                 <Select placeholder="请选择" style={{ width: '100%' }}>
@@ -215,7 +210,7 @@ class FundingList extends PureComponent {
               )}
             </FormItem>
           </Col> */}
-          <Col md={6} sm={9}>
+          <Col span={6}>
             <span className={styles.submitButtons}>
               <Button type="primary" htmlType="submit">
                 搜索
