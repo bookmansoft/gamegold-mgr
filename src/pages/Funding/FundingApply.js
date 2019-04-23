@@ -80,28 +80,30 @@ class FundingApply extends PureComponent {
   }
 
   handleCpidChange = e => {
-    this.setState({infoCpid: e.target.value});
+    this.props.dispatch({
+      type: 'fundingapply/updateInfo_cpid',
+      payload: { cpid: e.target.value },
+    });
   }
   handleStockNumChange = e => {
-    const { dispatch, form } = this.props;
-    form.validateFieldsAndScroll((err, values) => {
-      console.log(values);
-      if (!err) {
-        dispatch({
-          type: 'fundingapply/save',
-          payload: values,
-        });
-      };
+    console.log({ stock_num: e.target.value });
+    this.props.dispatch({
+      type: 'fundingapply/updateInfo_stock_num',
+      payload:  e.target.value ,
     });
   }
   handleStockAmountChange = e => {
-    this.setState({infoStockAmount: e.target.value});
+    console.log({ stock_amount: e.target.value });
+    this.props.dispatch({
+      type: 'fundingapply/updateInfo_stock_amount',
+      payload:  e.target.value,
+    });
   }
 
   render() {
     const { submitting } = this.props;
     const {
-      fundingapply: { data,infoStockNum },
+      fundingapply: { data, stock_amount,stock_num },
       form: { getFieldDecorator, getFieldValue },
     } = this.props;
 
@@ -179,7 +181,7 @@ class FundingApply extends PureComponent {
                         message: "请输入发行价(游戏金)",
                       },
                     ],
-                  })(<Input placeholder="请输入" style={{ width: '100%' }} />)}
+                  })(<Input placeholder="请输入" style={{ width: '100%' }} onChange={this.handleStockAmountChange} />)}
                 </FormItem>
               </Col>
               <Col span={8}>
@@ -189,15 +191,15 @@ class FundingApply extends PureComponent {
             <br />
             <h2><b>基本信息预览</b></h2>
             <br />
-            <Row  gutter={16} style={{ marginBottom: 16 }}>
-              <Col span={8}><div style={{fontWeight:'bold'}}>游戏名称：{data.cp_text}</div></Col>
-              <Col span={8}><div style={{fontWeight:'bold'}}>游戏类型：{data.cp_type}</div></Col>
-              <Col span={8}><div style={{fontWeight:'bold'}}>开发者：{data.develop_name}</div></Col>
+            <Row gutter={16} style={{ marginBottom: 16 }}>
+              <Col span={8}><div style={{ fontWeight: 'bold' }}>游戏名称：{data.cp_text}</div></Col>
+              <Col span={8}><div style={{ fontWeight: 'bold' }}>游戏类型：{data.cp_type}</div></Col>
+              <Col span={8}><div style={{ fontWeight: 'bold' }}>开发者：{data.develop_name}</div></Col>
             </Row>
-            <Row  gutter={16} style={{ marginBottom: 16 }}>
-            <Col span={8}><div style={{fontWeight:'bold'}}>发行凭证总数(份)：{data.infoStockNum}</div></Col>
-              <Col span={8}><div style={{fontWeight:'bold'}}>发行价(千克/份)：{data.infoStockAmount}</div></Col>
-              <Col span={8}><div style={{fontWeight:'bold'}}>众筹总金额：{data.infoStockAmount*data.infoStockNum}</div></Col>
+            <Row gutter={16} style={{ marginBottom: 16 }}>
+              <Col span={8}><div style={{ fontWeight: 'bold' }}>发行凭证总数(份)：{stock_num}</div></Col>
+              <Col span={8}><div style={{ fontWeight: 'bold' }}>发行价(千克/份)：{stock_amount}</div></Col>
+              <Col span={8}><div style={{ fontWeight: 'bold' }}>众筹总金额：{parseInt(stock_amount) * parseInt(stock_num)}</div></Col>
             </Row>
 
           </Card>
