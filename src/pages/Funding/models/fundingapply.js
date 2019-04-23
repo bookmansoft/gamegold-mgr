@@ -13,6 +13,7 @@ export default {
     },
     stock_num:1,
     stock_amount:1,
+    cplist: [],
   },
 
   effects: {

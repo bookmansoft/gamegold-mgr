@@ -65,19 +65,13 @@ class FundingApply extends PureComponent {
   }
 
   //获取cp内容的操作
-  handleSubmit = e => {
+  handleCpidChange = value => {
+    console.log("69",value);
     const { dispatch, form } = this.props;
       dispatch({
         type: 'fundingapply/fetch',
-        payload: e.target.value,
+        payload: value,
       });
-  }
-
-  handleCpidChange = e => {
-    this.props.dispatch({
-      type: 'fundingapply/updateInfo_cpid',
-      payload: { cpid: e.target.value },
-    });
   }
   handleStockNumChange = e => {
     console.log({ stock_num: e.target.value });
@@ -93,6 +87,11 @@ class FundingApply extends PureComponent {
       payload: e.target.value,
     });
   }
+
+  renderOptions= () => {
+    return (this.props.cplist || []).map(element =>
+      <Option key={element.id} value={element.id}> {element.address}</Option>);
+  };
 
   render() {
     const { submitting } = this.props;
@@ -134,9 +133,10 @@ class FundingApply extends PureComponent {
                       },
                     ],
                   })(
-                    <Select placeholder="请选择" style={{ width: '100%', display: 'block', }} onChange={this.handleSubmit}>
+                    <Select placeholder="请选择" style={{ width: '100%', display: 'block', }} onChange={this.handleCpidChange}>
                       <Option value="1">游戏1</Option>
                       <Option value="2">游戏2</Option>
+                      {this.renderOptions()}
                     </Select>
                   )}
                 </FormItem>
@@ -195,7 +195,11 @@ class FundingApply extends PureComponent {
               <Col span={8}><div style={{ fontWeight: 'bold' }}>发行价(千克/份)：{stock_amount}</div></Col>
               <Col span={8}><div style={{ fontWeight: 'bold' }}>众筹总金额：{parseInt(stock_amount) * parseInt(stock_num)}</div></Col>
             </Row>
-
+            <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
+              <Button type="primary" onClick={() => this.handleCreate(this.props.game.data)}>
+                提交
+              </Button>
+            </FormItem>
           </Card>
         </Form>
 
