@@ -64,19 +64,13 @@ class FundingApply extends PureComponent {
     }
   }
 
-  //获取URL内容的操作
+  //获取cp内容的操作
   handleSubmit = e => {
     const { dispatch, form } = this.props;
-    e.preventDefault();
-    form.validateFieldsAndScroll((err, values) => {
-      console.log(values);
-      if (!err) {
-        dispatch({
-          type: 'fundingapply/fetch',
-          payload: values,
-        });
-      };
-    });
+      dispatch({
+        type: 'fundingapply/fetch',
+        payload: e.target.value,
+      });
   }
 
   handleCpidChange = e => {
@@ -89,21 +83,21 @@ class FundingApply extends PureComponent {
     console.log({ stock_num: e.target.value });
     this.props.dispatch({
       type: 'fundingapply/updateInfo_stock_num',
-      payload:  e.target.value ,
+      payload: e.target.value,
     });
   }
   handleStockAmountChange = e => {
     console.log({ stock_amount: e.target.value });
     this.props.dispatch({
       type: 'fundingapply/updateInfo_stock_amount',
-      payload:  e.target.value,
+      payload: e.target.value,
     });
   }
 
   render() {
     const { submitting } = this.props;
     const {
-      fundingapply: { data, stock_amount,stock_num },
+      fundingapply: { data, stock_amount, stock_num },
       form: { getFieldDecorator, getFieldValue },
     } = this.props;
 
@@ -140,7 +134,7 @@ class FundingApply extends PureComponent {
                       },
                     ],
                   })(
-                    <Select placeholder="请选择" style={{ width: '100%', display: 'block', }}>
+                    <Select placeholder="请选择" style={{ width: '100%', display: 'block', }} onChange={this.handleSubmit}>
                       <Option value="1">游戏1</Option>
                       <Option value="2">游戏2</Option>
                     </Select>

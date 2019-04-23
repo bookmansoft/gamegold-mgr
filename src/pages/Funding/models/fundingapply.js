@@ -30,28 +30,6 @@ export default {
       return ret;
     },
 
-    // updateInfo_cpid(state,action) {
-    //   return {
-    //     ...state,
-    //     info: action.payload,
-    //   };
-    // },
-    // *updateInfo_stock_num({ payload }, { call, put }) {
-    //   try {
-    //     console.log(payload);
-    //     console.log(this.state.info);
-    //     state.info.stock_num = payload;
-    //     console.log(state.info);
-    //     yield put({
-    //       type: 'saveInfo',
-    //       payload: state.info,
-    //     });
-    //   }
-    //   catch (ex) {
-    //     console.log(ex);
-    //   }
-    // },
-
   },
 
   reducers: {
@@ -59,12 +37,6 @@ export default {
       return {
         ...state,
         data: action.payload,
-      };
-    },
-    saveInfo(state, action) {
-      return {
-        ...state,
-        info: action.payload,
       };
     },
     updateInfo_stock_amount(state,action) {
