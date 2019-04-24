@@ -51,6 +51,10 @@ class FundingAuditList extends PureComponent {
       dataIndex: 'cp_text',
     },
     {
+      title: '游戏类型',
+      dataIndex: 'cp_type',
+    },
+    {
       title: '提交时间',
       dataIndex: 'modify_date',
       render: val => <span>{moment(val * 1000).format('YYYY-MM-DD HH:mm:ss')}</span>,
@@ -60,17 +64,17 @@ class FundingAuditList extends PureComponent {
       dataIndex: 'stock_num',
     },
     {
-      title: '单价(千克)',
-      dataIndex: 'stock_amount',
+      title: '筹款目标金额',
+      dataIndex: 'total_amount',
     },
-    {
-      title: '出售时限',
-      dataIndex: 'sell_limit',  //此字段需计算获得
-    },
-    {
-      title: '审核状态',
-      dataIndex: 'audit_state_id',
-    },
+    // {
+    //   title: '出售时限',
+    //   dataIndex: 'sell_limit',  //此字段需计算获得
+    // },
+    // {
+    //   title: '审核状态',
+    //   dataIndex: 'audit_state_id',
+    // },
     {
       title: '操作',
       render: (text, record) => (

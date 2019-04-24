@@ -42,36 +42,44 @@ class MarketList extends PureComponent {
 
   columns = [
     {
-      title: '流水号',
+      title: '序号',
       dataIndex: 'id',
-    },
-    {
-      title: '游戏ID',
-      dataIndex: 'cp_id',
     },
     {
       title: '游戏全名',
       dataIndex: 'cp_text',
     },
+    // {
+    //   title: '提交时间',
+    //   dataIndex: 'modify_date',
+    //   render: val => <span>{moment(val * 1000).format('YYYY-MM-DD HH:mm:ss')}</span>,
+    // },
     {
-      title: '游戏类型',
-      dataIndex: 'cp_type',
+      title: '发行凭证总量',
+      dataIndex: 'stock_num',
     },
     {
-      title: '游戏状态',
-      dataIndex: 'cp_state',
-      render: val => <span>{(val == '0') ? '未上线' : '正常运营'}</span>
+      title: '现金单价(元)',
+      dataIndex: 'stock_rmb',
     },
     {
-      title: '添加时间',
-      dataIndex: 'publish_time',
-      render: val => <span>{moment(val * 1000).format('YYYY-MM-DD HH:mm:ss')}</span>,
+      title: '游戏金单价(千克)',
+      dataIndex: 'stock_amount',
+    },
+    {
+      title: '出售时限',
+      dataIndex: 'sell_limit',  //此字段需计算获得
+    },
+    {
+      title: '众筹状态',
+      dataIndex: 'audit_state_id',
     },
     {
       title: '操作',
       render: (text, record) => (
         <Fragment>
           <a onClick={() => this.handleView(true, record)}>详情</a>&nbsp;
+          {/*由于详情页有屏蔽功能，此处考虑去掉 <a onClick={() => this.handleView(true, record)}>屏蔽</a>&nbsp; */}
         </Fragment>
       ),
     },
@@ -183,39 +191,25 @@ class MarketList extends PureComponent {
     } = this.props;
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
-        <Row gutter={{ md: 16, lg: 24, xl: 48 }}>
-          <Col md={6} sm={9}>
+        <Row gutter={16}>
+          <Col span={6}>
             <FormItem label="游戏全名：">
               {getFieldDecorator('cp_text')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
-          <Col md={6} sm={9}>
-            <FormItem label="游戏ID：">
-              {getFieldDecorator('cp_id')(<Input placeholder="请输入" />)}
-            </FormItem>
-          </Col>
-          <Col md={6} sm={9}>
-            <FormItem label="游戏类型：">
-              {getFieldDecorator('cp_type')(
+          <Col span={6}>
+            <FormItem label="众筹状态：">
+              {getFieldDecorator('audit_state_id')(
                 <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="">全部</Option>
-                  {this.renderOptions()}
+                  <Option value="-1">全部</Option>
+                  <Option value="2">销售中</Option>
+                  <Option value="4">已屏蔽</Option>
+                  <Option value="5">已结束</Option>
                 </Select>
               )}
             </FormItem>
           </Col>
-          {/* <Col md={6} sm={9}>
-            <FormItem label="状态：">
-              {getFieldDecorator('cp_state')(
-                <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="1">待审核</Option>
-                  <Option value="2">已上架</Option>
-                  <Option value="3">审核不通过</Option>
-                </Select>
-              )}
-            </FormItem>
-          </Col> */}
-          <Col md={6} sm={9}>
+          <Col span={6}>
             <span className={styles.submitButtons}>
               <Button type="primary" htmlType="submit">
                 搜索
@@ -238,7 +232,7 @@ class MarketList extends PureComponent {
     const { selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;
 
     return (
-      <PageHeaderWrapper title="游戏列表">
+      <PageHeaderWrapper title="众筹管理列表">
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderForm()}</div>
