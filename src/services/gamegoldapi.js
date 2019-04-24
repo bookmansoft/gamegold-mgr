@@ -1080,5 +1080,40 @@ export async function queryPrize(params) {
     console.log(error);
     return { code: -100, data: null, message: "react service层错误。方法名：queryPrize" };
   }
+}
 
+//--众筹查询（各种条件）
+export async function queryFunding(params) {
+  try {
+    let msg = await remote.login({ openid: theOpenId });
+    let ret = { code: -200, data: null, message: "react service层无返回值。方法名：queryFunding" };
+    if (remote.isSuccess(msg)) {
+      console.log("从数据库查询游戏列表cp.ListRecord:" + stringify(params));//currentPage=2&pageSize=10
+      if (params == null) {
+        params = {
+          currentPage: 1,
+          pageSize: 10,
+          cp_id: '',
+          cp_text: '',
+          cp_type: '',
+          cp_state: '',
+        };
+      };
+      ret = await remote.fetching({
+        func: "cpfunding.ListRecord", userinfo: JSON.parse(localStorage.userinfo),
+        currentPage: params.currentPage,
+        pageSize: params.pageSize,
+        cp_id: typeof (params.cp_id) == "undefined" ? '' : params.cp_id,
+        cp_text: typeof (params.cp_text) == "undefined" ? '' : params.cp_text,
+        cp_type: typeof (params.cp_type) == "undefined" ? '' : params.cp_type,
+        cp_state: typeof (params.cp_state) == "undefined" ? '' : params.cp_state,
+      });
+    }
+    console.log("游戏管理结果列表：" + JSON.stringify(ret));
+    return ret;
+  } catch (error) {
+    console.log(error);
+    return { code: -100, data: null, message: "react service层错误。方法名：queryGameMgr" };
+  }
+  //return request(`/gamemgr/query?${stringify(params)}`);
 }

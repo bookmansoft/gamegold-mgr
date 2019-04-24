@@ -42,30 +42,33 @@ class FundingList extends PureComponent {
 
   columns = [
     {
-      title: '流水号',
+      title: '序号',
       dataIndex: 'id',
-    },
-    {
-      title: '游戏ID',
-      dataIndex: 'cp_id',
     },
     {
       title: '游戏全名',
       dataIndex: 'cp_text',
     },
     {
-      title: '游戏类型',
-      dataIndex: 'cp_type',
-    },
-    {
-      title: '游戏状态',
-      dataIndex: 'cp_state',
-      render: val => <span>{(val == '0') ? '未上线' : '正常运营'}</span>
-    },
-    {
-      title: '添加时间',
-      dataIndex: 'publish_time',
+      title: '提交时间',
+      dataIndex: 'modify_date',
       render: val => <span>{moment(val * 1000).format('YYYY-MM-DD HH:mm:ss')}</span>,
+    },
+    {
+      title: '拟发行凭证总量',
+      dataIndex: 'stock_num',
+    },
+    {
+      title: '单价(千克)',
+      dataIndex: 'stock_amount',
+    },
+    {
+      title: '出售时限',
+      dataIndex: 'sell_limit',  //此字段需计算获得
+    },
+    {
+      title: '审核状态',
+      dataIndex: 'audit_state_id',
     },
     {
       title: '操作',
@@ -233,7 +236,7 @@ class FundingList extends PureComponent {
     const { selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;
 
     return (
-      <PageHeaderWrapper title="游戏列表">
+      <PageHeaderWrapper title="我的众筹列表">
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderForm()}</div>
