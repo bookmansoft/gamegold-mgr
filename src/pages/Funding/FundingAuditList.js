@@ -30,7 +30,7 @@ const getValue = obj =>
   loading: loading.models.fundingauditlist,
 }))
 @Form.create()
-class FundingList extends PureComponent {
+class FundingAuditList extends PureComponent {
   state = {
     modalVisible: false,
     updateModalVisible: false,
@@ -38,34 +38,38 @@ class FundingList extends PureComponent {
     selectedRows: [],
     formValues: {},
     stepFormValues: {},
+    aa:5,
   };
 
   columns = [
     {
-      title: '流水号',
+      title: '序号',
       dataIndex: 'id',
-    },
-    {
-      title: '游戏ID',
-      dataIndex: 'cp_id',
     },
     {
       title: '游戏全名',
       dataIndex: 'cp_text',
     },
     {
-      title: '游戏类型',
-      dataIndex: 'cp_type',
-    },
-    {
-      title: '游戏状态',
-      dataIndex: 'cp_state',
-      render: val => <span>{(val == '0') ? '未上线' : '正常运营'}</span>
-    },
-    {
-      title: '添加时间',
-      dataIndex: 'publish_time',
+      title: '提交时间',
+      dataIndex: 'modify_date',
       render: val => <span>{moment(val * 1000).format('YYYY-MM-DD HH:mm:ss')}</span>,
+    },
+    {
+      title: '拟发行凭证总量',
+      dataIndex: 'stock_num',
+    },
+    {
+      title: '单价(千克)',
+      dataIndex: 'stock_amount',
+    },
+    {
+      title: '出售时限',
+      dataIndex: 'sell_limit',  //此字段需计算获得
+    },
+    {
+      title: '审核状态',
+      dataIndex: 'audit_state_id',
     },
     {
       title: '操作',
@@ -114,6 +118,7 @@ class FundingList extends PureComponent {
   };
 
   handleFormReset = () => {
+    this.state.aa=6;
     const { form, dispatch } = this.props;
     form.resetFields();
     this.setState({
@@ -172,7 +177,7 @@ class FundingList extends PureComponent {
     } = this.props;
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
-        <Row gutter={{ md: 16, lg: 24, xl: 48 }}>
+        <Row gutter={16}>
           <Col span={6}>
             <FormItem label="游戏全名：">
               {getFieldDecorator('cp_text')(<Input placeholder="请输入" />)}
@@ -185,24 +190,14 @@ class FundingList extends PureComponent {
                   <Option value="1">待审核</Option>
                   <Option value="2">已上架</Option>
                   <Option value="3">审核不通过</Option>
-                  {this.renderOptions()}
                 </Select>
               )}
             </FormItem>
           </Col>
-          {/* <Col span={6}>
-            <FormItem label="状态：">
-              {getFieldDecorator('cp_state')(
-                <Select placeholder="请选择" style={{ width: '100%' }}>
-
-                </Select>
-              )}
-            </FormItem>
-          </Col> */}
           <Col span={6}>
             <span className={styles.submitButtons}>
               <Button type="primary" htmlType="submit">
-                搜索
+                搜索{this.state.aa}
               </Button>
               <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
                 重置
@@ -222,7 +217,7 @@ class FundingList extends PureComponent {
     const { selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;
 
     return (
-      <PageHeaderWrapper title="申请众筹审核列表">
+      <PageHeaderWrapper title="待审核列表(众筹)">
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderForm()}</div>
@@ -242,4 +237,4 @@ class FundingList extends PureComponent {
   }
 }
 
-export default FundingList;
+export default FundingAuditList;

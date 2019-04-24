@@ -167,18 +167,6 @@ class FundingList extends PureComponent {
     });
   };
 
-  //显示下拉框
-  renderOptions = () => {
-    // console.log(this.props.fundinglist.data);
-    if (this.props.fundinglist.cp_type_list != null) {
-      return this.props.fundinglist.cp_type_list.map(element =>
-        <Option key={element.id} value={element.cp_type_id}> {element.cp_type_id}</Option>);
-    }
-    else {
-      return "";
-    }
-
-  };
 
   renderForm() {
     const {
@@ -193,18 +181,8 @@ class FundingList extends PureComponent {
             </FormItem>
           </Col>
           <Col span={6}>
-            <FormItem label="游戏类型：">
-              {getFieldDecorator('cp_type')(
-                <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="">全部</Option>
-                  {this.renderOptions()}
-                </Select>
-              )}
-            </FormItem>
-          </Col>
-          {/* <Col span={6}>
-            <FormItem label="状态：">
-              {getFieldDecorator('cp_state')(
+            <FormItem label="审核状态：">
+              {getFieldDecorator('audit_state_id')(
                 <Select placeholder="请选择" style={{ width: '100%' }}>
                   <Option value="1">待审核</Option>
                   <Option value="2">已上架</Option>
@@ -212,7 +190,7 @@ class FundingList extends PureComponent {
                 </Select>
               )}
             </FormItem>
-          </Col> */}
+          </Col>
           <Col span={6}>
             <span className={styles.submitButtons}>
               <Button type="primary" htmlType="submit">

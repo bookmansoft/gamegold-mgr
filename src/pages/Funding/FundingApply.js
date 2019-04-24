@@ -33,10 +33,14 @@ const { TextArea } = Input;
 }))
 @Form.create()
 class FundingApply extends PureComponent {
+  state = {
+    stock_num:1,
+    stock_amount:1,
+  };
   componentDidMount() {
     const { dispatch } = this.props;
 
-  }
+  };
   //创建
   handleCreate = (theData) => {
     const { dispatch, form } = this.props;
@@ -74,18 +78,10 @@ class FundingApply extends PureComponent {
       });
   }
   handleStockNumChange = e => {
-    console.log({ stock_num: e.target.value });
-    this.props.dispatch({
-      type: 'fundingapply/updateInfo_stock_num',
-      payload: e.target.value,
-    });
+    this.state.stock_num=e.target.value;
   }
   handleStockAmountChange = e => {
-    console.log({ stock_amount: e.target.value });
-    this.props.dispatch({
-      type: 'fundingapply/updateInfo_stock_amount',
-      payload: e.target.value,
-    });
+    this.state.stock_amount=e.target.value;
   }
 
   //参考复制自FundingAuditList的代码
@@ -203,9 +199,9 @@ class FundingApply extends PureComponent {
               <Col span={8}><div style={{ fontWeight: 'bold' }}>开发者：{data.develop_name}</div></Col>
             </Row>
             <Row gutter={16} style={{ marginBottom: 16 }}>
-              <Col span={8}><div style={{ fontWeight: 'bold' }}>发行凭证总数(份)：{stock_num}</div></Col>
-              <Col span={8}><div style={{ fontWeight: 'bold' }}>发行价(千克/份)：{stock_amount}</div></Col>
-              <Col span={8}><div style={{ fontWeight: 'bold' }}>众筹总金额：{parseInt(stock_amount) * parseInt(stock_num)}</div></Col>
+              <Col span={8}><div style={{ fontWeight: 'bold' }}>发行凭证总数(份)：{this.state.stock_num}</div></Col>
+              <Col span={8}><div style={{ fontWeight: 'bold' }}>发行价(千克/份)：{this.state.stock_amount}</div></Col>
+              <Col span={8}><div style={{ fontWeight: 'bold' }}>众筹总金额：{parseInt(this.state.stock_amount) * parseInt(this.state.stock_num)}</div></Col>
             </Row>
             <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
               <Button type="primary" onClick={() => this.handleCreate(this.props.game.data)}>
