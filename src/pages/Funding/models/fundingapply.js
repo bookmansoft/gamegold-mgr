@@ -1,6 +1,6 @@
 import { routerRedux } from 'dva/router';
 import { message } from 'antd';
-import { addGameMgr, getGameFromUrl,ListCp } from '@/services/gamegoldapi';
+import { addGameMgr, getGameView,ListCp } from '@/services/gamegoldapi';
 
 //此名称域为新增使用（已经不存在编辑的可能性了）
 export default {
@@ -11,15 +11,13 @@ export default {
     },
     data: {
     },
-    stock_num:1,
-    stock_amount:1,
     cp_list: [],
   },
 
   effects: {
     //从url中获取信息
     *fetch({ payload }, { call, put }) {
-      const response = yield call(getGameFromUrl, payload);
+      const response = yield call(getGameView, payload);
       yield put({
         type: 'save',
         payload: response,
