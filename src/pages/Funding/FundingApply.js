@@ -87,7 +87,7 @@ class FundingApply extends PureComponent {
     this.state.stock_num=parseInt(e.target.value);
   }
   handleStockAmountChange = e => {
-    this.state.stock_amount=parseInt(e.target.value);
+    this.state.stock_amount=parseInt(e.target.value)*100000;
   }
   handleDevelopTextChange = e => {
     console.log(e.target.value);
