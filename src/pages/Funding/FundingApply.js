@@ -72,11 +72,11 @@ class FundingApply extends PureComponent {
 
   //获取cp内容的操作
   handleCpidChange = value => {
-    console.log("69",value);
+    // console.log("69",value);
     const { dispatch, form } = this.props;
       dispatch({
         type: 'fundingapply/fetch',
-        payload: value,
+        payload: {id:value},
       });
   }
   handleStockNumChange = e => {
