@@ -44,18 +44,18 @@ class FundingApply extends PureComponent {
     });
   };
   //创建
-  handleCreate = (theData) => {
+  handleCreate = (theData,stock_num,stock_amount) => {
     const { dispatch, form } = this.props;
-    console.log(theData);
+    console.log(theData,stock_num,stock_amount);
     dispatch({
       type: 'fundingapply/add',
-      payload: theData,
+      payload: {data:theData,stock_num:stock_num,stock_amount:stock_amount},
     }).then((ret) => {
       console.log(ret);
       if (ret.code === 0) {
-        router.push('/fundingapply/fundingapplysuccess');
+        router.push('/funding/fundingapplysuccess');
       } else {
-        router.push('/fundingapply/fundingapplyerror');
+        router.push('/funding/fundingapplyerror');
       };
     }
     );
@@ -79,10 +79,10 @@ class FundingApply extends PureComponent {
       });
   }
   handleStockNumChange = e => {
-    this.state.stock_num=e.target.value;
+    this.state.stock_num=parseInt(e.target.value);
   }
   handleStockAmountChange = e => {
-    this.state.stock_amount=e.target.value;
+    this.state.stock_amount=parseInt(e.target.value);
   }
 
   // //参考复制自FundingAuditList的代码
@@ -205,7 +205,7 @@ class FundingApply extends PureComponent {
               <Col span={8}><div style={{ fontWeight: 'bold' }}>众筹总金额：{parseInt(this.state.stock_amount) * parseInt(this.state.stock_num)}</div></Col>
             </Row>
             <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
-              <Button type="primary" onClick={() => this.handleCreate(this.props.game.data)}>
+              <Button type="primary" onClick={() => this.handleCreate(this.props.fundingapply.data,this.state.stock_num,this.state.stock_amount)}>
                 提交
               </Button>
             </FormItem>

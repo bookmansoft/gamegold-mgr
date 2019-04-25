@@ -1,6 +1,6 @@
 import { routerRedux } from 'dva/router';
 import { message } from 'antd';
-import { addGameMgr, getGameView,ListCp } from '@/services/gamegoldapi';
+import { addFunding, getGameView,ListCp } from '@/services/gamegoldapi';
 
 //此名称域为新增使用（已经不存在编辑的可能性了）
 export default {
@@ -34,7 +34,8 @@ export default {
     },
     //保存整个表单的内容（到数据库及全节点）
     *add({ payload }, { call }) {
-      let ret = yield call(addGameMgr, payload);
+      console.log(37,payload);
+      let ret = yield call(addFunding, payload);
       return ret;
     },
 

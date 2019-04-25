@@ -1135,3 +1135,41 @@ export async function ListCp(params) {
     return { code: -100, data: null, message: "react service层错误。方法名：ListCp" };
   }
 }
+//增加众筹信息
+export async function addFunding(params) {
+  try {
+    let msg = await remote.login({ openid: theOpenId });
+    let ret = { code: -200, data: null, message: "react service层无返回值。方法名：addFunding" };
+
+    // 调用保存记录的方法
+    if (remote.isSuccess(msg)) {
+      console.log("调用保存记录的方法:" + JSON.stringify(params));
+      let retSave = await remote.fetching({
+        func: "cpfunding.CreateRecord", userinfo: JSON.parse(localStorage.userinfo),
+        cpid: params.data.id,
+        stock_num: params.stock_num,
+        stock_amount: params.stock_amount,
+        total_amount: params.stock_num*params.stock_amount,
+        stock_rmb: params.stock_amount/100000,//人民币值初始为1000分
+        audit_state_id:1,
+        audit_text:'',
+        modify_date:new Date().getTime()/1000,
+        cp_name: params.data.cp_name,
+        cp_text: params.data.cp_text,
+        cp_type: params.cp_type,
+        cp_url: params.data.cp_url,
+        develop_name: params.data.develop_name,
+        develop_text: params.data.develop_text,
+      });
+      console.log("添加新游戏结果：" + JSON.stringify(retSave));
+      return retSave;
+    }
+    else {
+      return ret;
+    }
+  } catch (error) {
+    console.log(error);
+    return { code: -100, data: null, message: "react service层错误。方法名：addGameMgr" };
+  }
+
+}
