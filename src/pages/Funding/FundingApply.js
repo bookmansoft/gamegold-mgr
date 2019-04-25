@@ -36,6 +36,7 @@ class FundingApply extends PureComponent {
   state = {
     stock_num:1,
     stock_amount:1,
+    develop_text:'',
   };
   componentDidMount() {
     const { dispatch } = this.props;
@@ -44,12 +45,16 @@ class FundingApply extends PureComponent {
     });
   };
   //创建
-  handleCreate = (theData,stock_num,stock_amount) => {
+  handleCreate = (theData,theState) => {
     const { dispatch, form } = this.props;
-    console.log(theData,stock_num,stock_amount);
+    console.log(theData,theState);
     dispatch({
       type: 'fundingapply/add',
-      payload: {data:theData,stock_num:stock_num,stock_amount:stock_amount},
+      payload: {data:theData,state:theState
+        // stock_num:theState.stock_num,
+        // stock_amount:theState.stock_amount,
+        // develop_text:theState.develop_text,
+      },
     }).then((ret) => {
       console.log(ret);
       if (ret.code === 0) {
@@ -84,7 +89,10 @@ class FundingApply extends PureComponent {
   handleStockAmountChange = e => {
     this.state.stock_amount=parseInt(e.target.value);
   }
-
+  handleDevelopTextChange = e => {
+    console.log(e.target.value);
+    this.state.develop_text=e.target.value;
+  }
   // //参考复制自FundingAuditList的代码
   // renderOptions= () => {
   //   return (this.props.cplist || []).map(element =>
@@ -204,8 +212,25 @@ class FundingApply extends PureComponent {
               <Col span={8}><div style={{ fontWeight: 'bold' }}>发行价(千克/份)：{this.state.stock_amount}</div></Col>
               <Col span={8}><div style={{ fontWeight: 'bold' }}>众筹总金额：{parseInt(this.state.stock_amount) * parseInt(this.state.stock_num)}</div></Col>
             </Row>
+            <Row gutter={16} style={{ marginBottom: 16 }}>
+            <Col span={3}>
+                <div align="right" style={{ fontWeight: 'bold', marginTop: 5 }}>开发团队介绍:</div>
+              </Col>
+              <Col span={13}>
+                <FormItem >
+                  {getFieldDecorator('develop_text', {
+                    rules: [
+                      {
+                        required: true,
+                        message: "请输入开发团队介绍",
+                      },
+                    ],
+                  })(<TextArea placeholder="请输入" style={{ width: '100%' }} onChange={this.handleDevelopTextChange} />)}
+                </FormItem>
+              </Col>
+              </Row>
             <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
-              <Button type="primary" onClick={() => this.handleCreate(this.props.fundingapply.data,this.state.stock_num,this.state.stock_amount)}>
+              <Button type="primary" onClick={() => this.handleCreate(this.props.fundingapply.data,this.state)}>
                 提交
               </Button>
             </FormItem>

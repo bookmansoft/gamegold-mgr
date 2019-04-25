@@ -34,7 +34,7 @@ export default {
     },
     //保存整个表单的内容（到数据库及全节点）
     *add({ payload }, { call }) {
-      console.log(37,payload);
+      // console.log(37,payload);
       let ret = yield call(addFunding, payload);
       return ret;
     },

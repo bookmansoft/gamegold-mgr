@@ -1147,10 +1147,10 @@ export async function addFunding(params) {
       let retSave = await remote.fetching({
         func: "cpfunding.CreateRecord", userinfo: JSON.parse(localStorage.userinfo),
         cpid: params.data.id,
-        stock_num: params.stock_num,
-        stock_amount: params.stock_amount,
-        total_amount: params.stock_num*params.stock_amount,
-        stock_rmb: params.stock_amount/100000,//人民币值初始为1000分
+        stock_num: params.state.stock_num,
+        stock_amount: params.state.stock_amount,
+        total_amount: params.state.stock_num*params.state.stock_amount,
+        stock_rmb: params.state.stock_amount/100000,//人民币值初始为1000分
         audit_state_id:1,
         audit_text:'',
         modify_date:new Date().getTime()/1000,
@@ -1159,7 +1159,7 @@ export async function addFunding(params) {
         cp_type: params.data.cp_type,
         cp_url: params.data.cp_url,
         develop_name: params.data.develop_name,
-        develop_text: params.develop_text,
+        develop_text: params.state.develop_text,
       });
       console.log("添加新游戏结果：" + JSON.stringify(retSave));
       return retSave;
