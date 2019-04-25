@@ -145,8 +145,7 @@ class FundingApply extends PureComponent {
                     ],
                   })(
                     <Select placeholder="请选择" style={{ width: '100%', display: 'block', }} onChange={this.handleCpidChange}>
-                      <Option value="1">游戏1</Option>
-                      <Option value="2">游戏2</Option>
+                      <Option value="-1">请选择</Option>
                       {this.renderOptions()}
                     </Select>
                   )}
