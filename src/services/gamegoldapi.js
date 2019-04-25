@@ -1156,10 +1156,10 @@ export async function addFunding(params) {
         modify_date:new Date().getTime()/1000,
         cp_name: params.data.cp_name,
         cp_text: params.data.cp_text,
-        cp_type: params.cp_type,
+        cp_type: params.data.cp_type,
         cp_url: params.data.cp_url,
         develop_name: params.data.develop_name,
-        develop_text: params.data.develop_text,
+        develop_text: params.develop_text,
       });
       console.log("添加新游戏结果：" + JSON.stringify(retSave));
       return retSave;
