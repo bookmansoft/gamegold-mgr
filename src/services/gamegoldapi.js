@@ -1088,25 +1088,18 @@ export async function queryFunding(params) {
     let msg = await remote.login({ openid: theOpenId });
     let ret = { code: -200, data: null, message: "react service层无返回值。方法名：queryFunding" };
     if (remote.isSuccess(msg)) {
-      console.log("从数据库查询游戏列表cp.ListRecord:" + stringify(params));//currentPage=2&pageSize=10
+      console.log("从数据库查询游戏列表funding.ListRecord:" + stringify(params));//currentPage=2&pageSize=10
       if (params == null) {
         params = {
           currentPage: 1,
           pageSize: 10,
-          cp_id: '',
-          cp_text: '',
-          cp_type: '',
-          cp_state: '',
         };
       };
       ret = await remote.fetching({
         func: "cpfunding.ListRecord", userinfo: JSON.parse(localStorage.userinfo),
-        currentPage: params.currentPage,
-        pageSize: params.pageSize,
-        cp_id: typeof (params.cp_id) == "undefined" ? '' : params.cp_id,
-        cp_text: typeof (params.cp_text) == "undefined" ? '' : params.cp_text,
-        cp_type: typeof (params.cp_type) == "undefined" ? '' : params.cp_type,
-        cp_state: typeof (params.cp_state) == "undefined" ? '' : params.cp_state,
+        // currentPage: params.currentPage,最后以...params结尾，应该可以展开全部params参数，无需逐个处理
+        // pageSize: params.pageSize,
+        ...params
       });
     }
     console.log("游戏管理结果列表：" + JSON.stringify(ret));

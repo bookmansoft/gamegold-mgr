@@ -65,14 +65,17 @@ class MarketList extends PureComponent {
     {
       title: '游戏金单价(千克)',
       dataIndex: 'stock_amount',
+      render: val => <span>{parseInt(val/100)/1000}</span>,
     },
     {
       title: '出售时限',
-      dataIndex: 'sell_limit',  //此字段需计算获得
+      dataIndex: 'sell_limit_date',  //此字段需计算获得
+      render: val => <span>{moment(val * 1000).format('YYYY-MM-DD HH:mm:ss')}</span>,
     },
     {
       title: '众筹状态',
       dataIndex: 'audit_state_id',
+      render: val =><span>{this.renderAuditState(val)}</span>
     },
     {
       title: '操作',
@@ -184,7 +187,24 @@ class MarketList extends PureComponent {
     }
 
   };
+  renderAuditState(audit_state_id) {
+    switch (parseInt(audit_state_id)) {
+      case 1:
+        return '未审核';//不该出现
+      case 2:
+        return '销售中';
+      case 3:
+        return '审核不通过';//不该出现
+      case 4:
+        return '已屏蔽';
+      case 5:
+        return '已结束';
 
+
+      
+    }
+
+  }
   renderForm() {
     const {
       form: { getFieldDecorator },
@@ -201,7 +221,7 @@ class MarketList extends PureComponent {
             <FormItem label="众筹状态：">
               {getFieldDecorator('audit_state_id')(
                 <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="-1">全部</Option>
+                  <Option value="">全部</Option>
                   <Option value="2">销售中</Option>
                   <Option value="4">已屏蔽</Option>
                   <Option value="5">已结束</Option>

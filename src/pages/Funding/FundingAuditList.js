@@ -64,17 +64,10 @@ class FundingAuditList extends PureComponent {
       dataIndex: 'stock_num',
     },
     {
-      title: '筹款目标金额',
+      title: '筹款目标金额(千克)',
       dataIndex: 'total_amount',
+      render: val => <span>{parseInt(val/100)/1000}</span>
     },
-    // {
-    //   title: '出售时限',
-    //   dataIndex: 'sell_limit',  //此字段需计算获得
-    // },
-    // {
-    //   title: '审核状态',
-    //   dataIndex: 'audit_state_id',
-    // },
     {
       title: '操作',
       render: (text, record) => (
@@ -191,7 +184,7 @@ class FundingAuditList extends PureComponent {
             <FormItem label="审核状态：">
               {getFieldDecorator('audit_state_id')(
                 <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="1">待审核</Option>
+                  <Option value="1">未审核</Option>
                   <Option value="2">已上架</Option>
                   <Option value="3">审核不通过</Option>
                 </Select>

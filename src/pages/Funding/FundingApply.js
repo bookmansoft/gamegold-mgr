@@ -51,9 +51,6 @@ class FundingApply extends PureComponent {
     dispatch({
       type: 'fundingapply/add',
       payload: {data:theData,state:theState
-        // stock_num:theState.stock_num,
-        // stock_amount:theState.stock_amount,
-        // develop_text:theState.develop_text,
       },
     }).then((ret) => {
       console.log(ret);
