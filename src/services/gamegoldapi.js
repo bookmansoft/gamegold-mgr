@@ -1117,3 +1117,21 @@ export async function queryFunding(params) {
   }
   //return request(`/gamemgr/query?${stringify(params)}`);
 }
+//--众筹页面调用的ListCp方法
+export async function ListCp(params) {
+  try {
+    let msg = await remote.login({ openid: theOpenId });
+    let ret = { code: -200, data: null, message: "react service层无返回值。方法名：ListCp" };
+    if (remote.isSuccess(msg)) {
+      console.log("从数据库查询游戏列表cpfunding.ListCp");
+      ret = await remote.fetching({
+        func: "cpfunding.ListCp", userinfo: JSON.parse(localStorage.userinfo),
+      });
+    }
+    console.log("游戏结果列表：" + JSON.stringify(ret));
+    return ret;
+  } catch (error) {
+    console.log(error);
+    return { code: -100, data: null, message: "react service层错误。方法名：ListCp" };
+  }
+}
