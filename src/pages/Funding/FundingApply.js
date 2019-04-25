@@ -39,7 +39,9 @@ class FundingApply extends PureComponent {
   };
   componentDidMount() {
     const { dispatch } = this.props;
-
+    dispatch({
+      type: 'fundingapply/fetchCp'
+    });
   };
   //创建
   handleCreate = (theData) => {
@@ -84,22 +86,23 @@ class FundingApply extends PureComponent {
     this.state.stock_amount=e.target.value;
   }
 
-  //参考复制自FundingAuditList的代码
-  renderOptions= () => {
-    return (this.props.cplist || []).map(element =>
-      <Option key={element.id} value={element.id}> {element.address}</Option>);
-  };
-
-  // //显示下拉框
-  // renderOptions = () => {
-  //   if (this.props.fundingauditlist.cp_type_list != null) {
-  //     return this.props.fundingauditlist.cp_type_list.map(element =>
-  //       <Option key={element.id} value={element.cp_type_id}> {element.cp_type_id}</Option>);
-  //   }
-  //   else {
-  //     return "";
-  //   }
+  // //参考复制自FundingAuditList的代码
+  // renderOptions= () => {
+  //   return (this.props.cplist || []).map(element =>
+  //     <Option key={element.id} value={element.id}> {element.address}</Option>);
   // };
+
+  //显示下拉框
+  renderOptions = () => {
+    if (this.props.fundingapply.cp_list != null) {
+      return this.props.fundingapply.cp_list.map(element =>
+        <Option key={element.id} value={element.id}> {element.cp_text}</Option>);
+    }
+    else {
+      return "";
+    }
+
+  };
 
   render() {
     const { submitting } = this.props;
