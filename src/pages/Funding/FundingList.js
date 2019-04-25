@@ -61,14 +61,17 @@ class FundingList extends PureComponent {
     {
       title: '单价(千克)',
       dataIndex: 'stock_amount',
+      render: val => <span>{parseInt(val/100)/1000}</span>
     },
     {
       title: '出售时限',
-      dataIndex: 'sell_limit',  //此字段需计算获得
+      dataIndex: 'sell_limit_date',  //此字段需计算获得
+      render: val => <span>{moment(val * 1000).format('YYYY-MM-DD HH:mm:ss')}</span>,
     },
     {
       title: '审核状态',
       dataIndex: 'audit_state_id',
+      render: val =><span>{this.renderAuditState(val)}</span>
     },
     {
       title: '操作',
@@ -167,6 +170,18 @@ class FundingList extends PureComponent {
     });
   };
 
+  renderAuditState(audit_state_id) {
+    switch (parseInt(audit_state_id)) {
+      case 1:
+        return '未审核';
+      case 2:
+        return '审核通过';
+      case 3:
+        return '审核不通过';
+      
+    }
+
+  }
 
   renderForm() {
     const {
