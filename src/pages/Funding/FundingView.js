@@ -31,57 +31,57 @@ import { Pie } from '@/components/Charts';
 const FormItem = Form.Item;
 const { Step } = Steps;
 
-const PublishForm = Form.create()(
-  class extends React.Component {
+// const PublishForm = Form.create()(
+//   class extends React.Component {
 
-    render() {
-      const { visible, onCancel, onCreate, form } = this.props;
-      const { getFieldDecorator } = form;
-      return (
-        <Modal
-          visible={visible}
-          title="发布更新"
-          okText="提交"
-          onCancel={onCancel}
-          onOk={onCreate}
-        >
-          <Form layout="vertical">
-            <FormItem label="更新版本">
-              {getFieldDecorator('title', {
-                rules: [{ required: true, message: '请输入版本号!' }],
-              })(
-                <Input placeholder="请输入版本号!" />
-              )}
-            </FormItem>
-            <FormItem label="更新内容">
-              {getFieldDecorator('description', {
-                rules: [{ required: true, max: 300, message: '请输入更新内容，不超过300字!' }],
-              }
-              )(<Input placeholder="请输入更新内容，不超过300字!" type="textarea" />)}
-            </FormItem>
-          </Form>
-        </Modal>
-      );
-    }
-  }
-);
+//     render() {
+//       const { visible, onCancel, onCreate, form } = this.props;
+//       const { getFieldDecorator } = form;
+//       return (
+//         <Modal
+//           visible={visible}
+//           title="发布更新"
+//           okText="提交"
+//           onCancel={onCancel}
+//           onOk={onCreate}
+//         >
+//           <Form layout="vertical">
+//             <FormItem label="更新版本">
+//               {getFieldDecorator('title', {
+//                 rules: [{ required: true, message: '请输入版本号!' }],
+//               })(
+//                 <Input placeholder="请输入版本号!" />
+//               )}
+//             </FormItem>
+//             <FormItem label="更新内容">
+//               {getFieldDecorator('description', {
+//                 rules: [{ required: true, max: 300, message: '请输入更新内容，不超过300字!' }],
+//               }
+//               )(<Input placeholder="请输入更新内容，不超过300字!" type="textarea" />)}
+//             </FormItem>
+//           </Form>
+//         </Modal>
+//       );
+//     }
+//   }
+// );
 
 const getWindowWidth = () => window.innerWidth || document.documentElement.clientWidth;
 
-const popoverContent = (
-  <div style={{ width: 160 }}>
-    审核细节内容
-  </div>
-);
+// const popoverContent = (
+//   <div style={{ width: 160 }}>
+//     审核细节内容
+//   </div>
+// );
 
-const customDot = (dot, { status }) =>
-  status === 'process' ? (
-    <Popover placement="topLeft" arrowPointAtCenter content={popoverContent}>
-      {dot}
-    </Popover>
-  ) : (
-      dot
-    );
+// const customDot = (dot, { status }) =>
+//   status === 'process' ? (
+//     <Popover placement="topLeft" arrowPointAtCenter content={popoverContent}>
+//       {dot}
+//     </Popover>
+//   ) : (
+//       dot
+//     );
 
 
 @connect(({ fundingview, loading }) => ({
@@ -287,12 +287,12 @@ class FundingView extends Component {
           </Row>
 
         </Card>
-        <PublishForm
+        {/* <PublishForm
           wrappedComponentRef={this.saveFormRef}
           visible={this.state.visible}
           onCancel={this.handleCancel}
           onCreate={this.handleCreate}
-        />
+        /> */}
       </PageHeaderWrapper>
     );
   }
