@@ -24,6 +24,9 @@ import classNames from 'classnames';
 import DescriptionList from '@/components/DescriptionList';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import styles from './FundingView.less';
+import { Pie } from '@/components/Charts';
+
+
 
 const FormItem = Form.Item;
 const { Step } = Steps;
@@ -91,13 +94,28 @@ class FundingView extends Component {
   renderImg = (text) => {
     if (text && text.length) {
       const imgs = text.map((item, index) =>
-        <div><img width={300} src={item} key={index} /><br/></div>
+        <div><img width={300} src={item} key={index} /><br /></div>
       )
       return imgs;
     }
   }
 
-
+  getCurrentStep() {
+    return 1;
+    // const { location } = this.props;
+    // const { pathname } = location;
+    // const pathList = pathname.split('/');
+    // switch (pathList[pathList.length - 1]) {
+    //   case 'info':
+    //     return 0;
+    //   case 'confirm':
+    //     return 1;
+    //   case 'result':
+    //     return 2;
+    //   default:
+    //     return 0;
+    // }
+  }
 
   state = {
     visible: false, //发布更新表单可见性
@@ -187,81 +205,87 @@ class FundingView extends Component {
         extraContent={null}
         tabList={null}
       >
+
+        <Card style={{ marginBottom: 16 }} bordered={false}>
+          <Fragment>
+            <Steps current={this.getCurrentStep()} className={styles.steps}>
+              <Step title="提交申请" />
+              <Step title="等待审核" />
+              <Step title="审核通过" />
+            </Steps>
+          </Fragment>
+        </Card>
+
+        <Card style={{ marginBottom: 16 }} bordered={false}>
+          <Row style={{ marginBottom: 16 }}>
+            <Col span={24}><h3><b>认购情况</b></h3></Col>
+          </Row>
+          <Row style={{ marginBottom: 32 }}>
+            <Col span={4}>
+              <Pie percent={10} subTitle={null} total="10%" height={120} />
+            </Col>
+            <Col span={8} style={{ marginBottom: 16 }}>
+              已认购数量：{data.develop_name}
+            </Col>
+            <Col span={8} style={{ marginBottom: 16 }}>
+              未认购数量：{data.develop_name}
+            </Col>
+            <Col span={8}>
+              剩余时间：{moment(data.publish_time * 1000).format('YYYY-MM-DD HH:mm:ss')}
+            </Col>
+          </Row>
+        </Card>
         <Card style={null} bordered={false}>
           <Row style={{ marginBottom: 16 }}>
-            <Col sm={24} xs={24}><h3><b>基本信息</b></h3></Col>
+            <Col span={24}><h3><b>申请众筹内容</b></h3></Col>
           </Row>
           <Row style={{ marginBottom: 32 }}>
-            <Col sm={8} xs={12}>
+            <Col span={8}>
+              发行凭证总数(份)：{data.cp_type}
+            </Col>
+            <Col span={8}>
+              发行价(千克/份)：{data.develop_name}
+            </Col>
+            <Col span={8}>
+              众筹总金额：
+            </Col>
+          </Row>
+          <Row style={{ marginBottom: 32 }}>
+            <Col span={24}>
+              提交申请时间：{moment(data.update_time * 1000).format('YYYY-MM-DD HH:mm:ss')}
+            </Col>
+          </Row>
+        </Card>
+
+        <Card style={null} bordered={false}>
+          <Row style={{ marginBottom: 16 }}>
+            <Col span={24}><h3><b>基本信息</b></h3></Col>
+          </Row>
+          <Row style={{ marginBottom: 32 }}>
+          <Col span={8}>
+              游戏中文名：{data.cp_text}
+            </Col>
+            <Col span={8}>
               游戏类型：{data.cp_type}
             </Col>
-            <Col sm={8} xs={12}>
+            <Col span={8}>
               开发者：{data.develop_name}
             </Col>
-            <Col sm={8} xs={12}>
-              发布时间：{moment(data.publish_time * 1000).format('YYYY-MM-DD HH:mm:ss')}
-            </Col>
           </Row>
           <Row style={{ marginBottom: 32 }}>
-            <Col sm={8} xs={12}>
-              游戏状态：{data.cp_state=='0'?'未上线':'正常运营'}
-            </Col>
-            <Col sm={8} xs={12}>
-              启用邀请奖励：{parseInt(data.invite_share) == 0 ? '否' : '是'}
-            </Col>
-
-            <Col sm={8} xs={12}>
-              {parseInt(data.invite_share) != 0 && (
-                `邀请奖励：${data.invite_share}%`
-              )}
-            </Col>
-          </Row>
-          <Row style={{ marginBottom: 32 }}>
-            <Col sm={24} xs={24}>URL地址：{data.cp_url}</Col>
+            <Col span={24}>游戏详情页：{data.cp_url}</Col>
           </Row>
 
           <Divider style={{ margin: '20px 0' }} />
           <Row style={{ marginBottom: 16 }}>
-            <Col sm={24} xs={24}><h3><b>版本信息</b></h3></Col>
+            <Col span={24}><h3><b>开发团队介绍</b></h3></Col>
           </Row>
           <Row style={{ marginBottom: 32 }}>
-            <Col sm={8} xs={12}>
-              当前版本：{data.cp_version}
+            <Col span={24}>
+              {data.cp_version}abcd
             </Col>
-            <Col sm={8} xs={12}>
-              更新时间：{moment(data.update_time * 1000).format('YYYY-MM-DD HH:mm:ss')}
-            </Col>
-          </Row>
-          <Row style={{ marginBottom: 32 }}>
-            <Col sm={24} xs={24}>更新内容：{data.cp_desc}</Col>
           </Row>
 
-          <Divider style={{ margin: '20px 0' }} />
-          <Row style={{ marginBottom: 16 }}>
-            <Col sm={24} xs={24}><h3><b>素材信息</b></h3></Col>
-          </Row>
-          <Row style={{ marginBottom: 32 }}>
-            <Col sm={24} xs={24}>
-              游戏图标：<img width={120} src={data.icon_url} />
-            </Col>
-          </Row>
-          <Row style={{ marginBottom: 32 }}>
-            <Col sm={24} xs={24}>
-              封面图片：<img width={300} src={data.face_url} />
-            </Col>
-          </Row>
-          <Row style={{ marginBottom: 32 }}>
-            <Col sm={24} xs={24}>
-              游戏截图：{this.renderImg(data.pic_urls)}
-            </Col>
-          </Row>
-          <Row style={{ marginBottom: 32 }}>
-            <Col sm={4} xs={8}>
-              <Button type="primary" onClick={this.handleBack}>
-                返回游戏列表
-                </Button>
-            </Col>
-          </Row>
         </Card>
         <PublishForm
           wrappedComponentRef={this.saveFormRef}
