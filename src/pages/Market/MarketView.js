@@ -137,49 +137,7 @@ class MarketView extends Component {
         extraContent={null}
         tabList={null}
       >
-
         <Card style={{ marginBottom: 16 }} bordered={false}>
-          <Row style={{ marginBottom: 16 }}>
-            <Col span={24}><h3><b>认购情况</b></h3></Col>
-          </Row>
-          <Row style={{ marginBottom: 32 }}>
-            <Col span={4}>
-              <Pie percent={10} subTitle={null} total="10%" height={120} />
-            </Col>
-            <Col span={8} style={{ marginBottom: 16 }}>
-              已认购数量：
-            </Col>
-            <Col span={8} style={{ marginBottom: 16 }}>
-              未认购数量：
-            </Col>
-            <Col span={8}>
-              截止时间：{moment(data.sell_limit_date * 1000).format('YYYY-MM-DD HH:mm:ss')}
-            </Col>
-          </Row>
-        </Card>
-        <Card style={null} bordered={false}>
-          <Row style={{ marginBottom: 16 }}>
-            <Col span={24}><h3><b>申请众筹内容</b></h3></Col>
-          </Row>
-          <Row style={{ marginBottom: 32 }}>
-            <Col span={8}>
-              发行凭证总数(份)：{data.stock_num}
-            </Col>
-            <Col span={8}>
-              发行价(千克/份)：{data.stock_amount}
-            </Col>
-            <Col span={8}>
-              众筹总金额(千克)：{data.total_amount}
-            </Col>
-          </Row>
-          <Row style={{ marginBottom: 32 }}>
-            <Col span={24}>
-              提交申请时间：{moment(data.modify_date * 1000).format('YYYY-MM-DD HH:mm:ss')}
-            </Col>
-          </Row>
-        </Card>
-
-        <Card style={null} bordered={false}>
           <Row style={{ marginBottom: 16 }}>
             <Col span={24}><h3><b>基本信息</b></h3></Col>
           </Row>
@@ -198,17 +156,28 @@ class MarketView extends Component {
             <Col span={24}>游戏详情页：{data.cp_url}</Col>
           </Row>
 
-          <Divider style={{ margin: '20px 0' }} />
-          <Row style={{ marginBottom: 16 }}>
-            <Col span={24}><h3><b>开发团队介绍</b></h3></Col>
-          </Row>
-          <Row style={{ marginBottom: 32 }}>
-            <Col span={24}>
-              {data.develop_text}
-            </Col>
-          </Row>
 
         </Card>
+        <Card style={{ marginBottom: 16 }} bordered={false}>
+          <Row style={{ marginBottom: 16 }}>
+            <Col span={24}><h3><b>销售状态</b></h3></Col>
+          </Row>
+          <Row style={{ marginBottom: 32 }}>
+            <Col span={4}>
+              <Pie percent={10} subTitle={null} total="10%" height={120} />
+            </Col>
+            <Col span={8} style={{ marginBottom: 16 }}>
+              已认购数量：
+            </Col>
+            <Col span={8} style={{ marginBottom: 16 }}>
+              未认购数量：
+            </Col>
+            <Col span={8}>
+              截止时间：{moment(data.sell_limit_date * 1000).format('YYYY-MM-DD HH:mm:ss')}
+            </Col>
+          </Row>
+        </Card>
+
       </PageHeaderWrapper>
     );
   }
