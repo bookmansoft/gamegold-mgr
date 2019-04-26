@@ -34,9 +34,9 @@ const { TextArea } = Input;
 @Form.create()
 class FundingApply extends PureComponent {
   state = {
-    stock_num:1,
-    stock_amount:1,
-    develop_text:'',
+    stock_num: 1,
+    stock_amount: 1,
+    develop_text: '',
   };
   componentDidMount() {
     const { dispatch } = this.props;
@@ -45,12 +45,13 @@ class FundingApply extends PureComponent {
     });
   };
   //创建
-  handleCreate = (theData,theState) => {
+  handleCreate = (theData, theState) => {
     const { dispatch, form } = this.props;
-    console.log(theData,theState);
+    console.log(theData, theState);
     dispatch({
       type: 'fundingapply/add',
-      payload: {data:theData,state:theState
+      payload: {
+        data: theData, state: theState
       },
     }).then((ret) => {
       console.log(ret);
@@ -75,20 +76,20 @@ class FundingApply extends PureComponent {
   //获取cp内容的操作
   handleCpidChange = value => {
     const { dispatch, form } = this.props;
-      dispatch({
-        type: 'fundingapply/fetch',
-        payload: {id:value},
-      });
+    dispatch({
+      type: 'fundingapply/fetch',
+      payload: { id: value },
+    });
   }
   handleStockNumChange = e => {
-    this.state.stock_num=parseInt(e.target.value);
+    this.state.stock_num = parseInt(e.target.value);
   }
   handleStockAmountChange = e => {
-    this.state.stock_amount=parseInt(e.target.value)*100000;
+    this.state.stock_amount = parseInt(e.target.value) * 100000;
   }
   handleDevelopTextChange = e => {
     console.log(e.target.value);
-    this.state.develop_text=e.target.value;
+    this.state.develop_text = e.target.value;
   }
   // //参考复制自FundingAuditList的代码
   // renderOptions= () => {
@@ -210,7 +211,7 @@ class FundingApply extends PureComponent {
               <Col span={8}><div style={{ fontWeight: 'bold' }}>众筹总金额：{parseInt(this.state.stock_amount) * parseInt(this.state.stock_num)}</div></Col>
             </Row>
             <Row gutter={16} style={{ marginBottom: 16 }}>
-            <Col span={3}>
+              <Col span={3}>
                 <div align="right" style={{ fontWeight: 'bold', marginTop: 5 }}>开发团队介绍:</div>
               </Col>
               <Col span={13}>
@@ -225,9 +226,9 @@ class FundingApply extends PureComponent {
                   })(<TextArea placeholder="请输入" style={{ width: '100%' }} onChange={this.handleDevelopTextChange} />)}
                 </FormItem>
               </Col>
-              </Row>
+            </Row>
             <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
-              <Button type="primary" onClick={() => this.handleCreate(this.props.fundingapply.data,this.state)}>
+              <Button type="primary" onClick={() => this.handleCreate(this.props.fundingapply.data, this.state)}>
                 提交
               </Button>
             </FormItem>

@@ -30,67 +30,25 @@ import { Pie } from '@/components/Charts';
 
 const FormItem = Form.Item;
 const { Step } = Steps;
+const { TextArea } = Input;
 
-// const PublishForm = Form.create()(
-//   class extends React.Component {
 
-//     render() {
-//       const { visible, onCancel, onCreate, form } = this.props;
-//       const { getFieldDecorator } = form;
-//       return (
-//         <Modal
-//           visible={visible}
-//           title="发布更新"
-//           okText="提交"
-//           onCancel={onCancel}
-//           onOk={onCreate}
-//         >
-//           <Form layout="vertical">
-//             <FormItem label="更新版本">
-//               {getFieldDecorator('title', {
-//                 rules: [{ required: true, message: '请输入版本号!' }],
-//               })(
-//                 <Input placeholder="请输入版本号!" />
-//               )}
-//             </FormItem>
-//             <FormItem label="更新内容">
-//               {getFieldDecorator('description', {
-//                 rules: [{ required: true, max: 300, message: '请输入更新内容，不超过300字!' }],
-//               }
-//               )(<Input placeholder="请输入更新内容，不超过300字!" type="textarea" />)}
-//             </FormItem>
-//           </Form>
-//         </Modal>
-//       );
-//     }
-//   }
-// );
 
 const getWindowWidth = () => window.innerWidth || document.documentElement.clientWidth;
 
-// const popoverContent = (
-//   <div style={{ width: 160 }}>
-//     审核细节内容
-//   </div>
-// );
-
-// const customDot = (dot, { status }) =>
-//   status === 'process' ? (
-//     <Popover placement="topLeft" arrowPointAtCenter content={popoverContent}>
-//       {dot}
-//     </Popover>
-//   ) : (
-//       dot
-//     );
 
 
 @connect(({ fundingauditview, loading }) => ({
   fundingauditview,
   loading: loading.models.fundingauditview,
+  submitting: loading.effects['fundingapply/update'],
 }))
-
+@Form.create()
 class FundingAuditView extends Component {
-
+  state = {
+    stock_rmb: 0,
+    audit_text: '',
+  };
   renderImg = (text) => {
     if (text && text.length) {
       const imgs = text.map((item, index) =>
@@ -138,6 +96,15 @@ class FundingAuditView extends Component {
   handleAuditNoPass = () => {
 
   }
+
+  handleStockRmbChange = e => {
+    this.state.stock_rmb = parseInt(e.target.value);
+  }
+  handleAuditTextChange = e => {
+    this.state.audit_text = e.target.value;
+  }
+
+
   //传递引用
   saveFormRef = (formRef) => {
     this.formRef = formRef;
@@ -188,6 +155,7 @@ class FundingAuditView extends Component {
     const { stepDirection, operationkey } = this.state;
     const {
       fundingauditview: { data },
+      form: { getFieldDecorator, getFieldValue },
       loading
     } = this.props;
     const submitFormLayout = {
@@ -286,15 +254,52 @@ class FundingAuditView extends Component {
             </Col>
           </Row>
 
+
+          <Row gutter={16} style={{ marginBottom: 16 }}>
+            <Col span={3}>
+              <div align="right" style={{ fontWeight: 'bold', marginTop: 5 }}>审核意见:</div>
+            </Col>
+            <Col span={13}>
+              <FormItem >
+                {getFieldDecorator('audit_text', {
+                  rules: [
+                    {
+                      required: true,
+                      message: "请输入审核意见",
+                    },
+                  ],
+                })(<TextArea placeholder="请输入" style={{ width: '100%' }} onChange={this.handleAuditTextChange} />)}
+              </FormItem>
+            </Col>
+          </Row>
+
+          <Row gutter={16} style={{ marginBottom: 16 }}>
+            <Col span={3}>
+              <div align="right" style={{ fontWeight: 'bold', marginTop: 5 }}>上架众筹金额:</div>
+            </Col>
+            <Col span={13}>
+              <FormItem >
+                {getFieldDecorator('stock_rmb', {
+                  rules: [
+                    {
+                      required: true,
+                      message: "请输入上架众筹金额",
+                    },
+                  ],
+                })(<Input placeholder="请输入" onChange={this.handleStockRmbChange} />)}
+              </FormItem>
+            </Col>
+          </Row>
+          <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
+            <Button type="primary" onClick={() => this.handleAuditPass()}>
+              通过
+            </Button> &nbsp;&nbsp;&nbsp;
+            <Button type="primary" onClick={() => this.handleAuditNoPass()}>
+              不通过
+            </Button>
+          </FormItem>
         </Card>
-        <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
-          <Button type="primary" onClick={() => this.handleAuditPass()}>
-            通过
-          </Button>
-          <Button type="primary" onClick={() => this.handleAuditNoPass()}>
-            不通过
-          </Button>
-        </FormItem>
+
       </PageHeaderWrapper>
     );
   }
