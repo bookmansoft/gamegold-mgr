@@ -1,4 +1,4 @@
-import { getGameView,getGameFromUrl } from '@/services/gamegoldapi';
+import { getFundingView } from '@/services/gamegoldapi';
 
 export default {
   namespace: 'marketview',
@@ -10,8 +10,8 @@ export default {
 
   effects: {
     *fetch({ payload }, { call, put }) {
-      console.log("gameview model："+payload.id);
-      const response = yield call(getGameView, payload);
+      console.log("getFundingView model："+payload.id);
+      const response = yield call(getFundingView, payload);
       yield put({
         type: 'save',
         payload: response,

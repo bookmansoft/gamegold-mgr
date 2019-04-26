@@ -237,12 +237,6 @@ class FundingView extends Component {
           </Row>
 
         </Card>
-        {/* <PublishForm
-          wrappedComponentRef={this.saveFormRef}
-          visible={this.state.visible}
-          onCancel={this.handleCancel}
-          onCreate={this.handleCreate}
-        /> */}
       </PageHeaderWrapper>
     );
   }
