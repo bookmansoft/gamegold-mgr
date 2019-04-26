@@ -199,7 +199,7 @@ class FundingView extends Component {
 
     return (
       <PageHeaderWrapper
-        title={data.cp_name}
+        title="众筹游戏详情"
         action={null}
         content={null}
         extraContent={null}
@@ -225,13 +225,13 @@ class FundingView extends Component {
               <Pie percent={10} subTitle={null} total="10%" height={120} />
             </Col>
             <Col span={8} style={{ marginBottom: 16 }}>
-              已认购数量：{data.develop_name}
+              已认购数量：
             </Col>
             <Col span={8} style={{ marginBottom: 16 }}>
-              未认购数量：{data.develop_name}
+              未认购数量：
             </Col>
             <Col span={8}>
-              剩余时间：{moment(data.publish_time * 1000).format('YYYY-MM-DD HH:mm:ss')}
+              截止时间：{moment(data.sell_limit_date * 1000).format('YYYY-MM-DD HH:mm:ss')}
             </Col>
           </Row>
         </Card>
@@ -241,18 +241,18 @@ class FundingView extends Component {
           </Row>
           <Row style={{ marginBottom: 32 }}>
             <Col span={8}>
-              发行凭证总数(份)：{data.cp_type}
+              发行凭证总数(份)：{data.stock_num}
             </Col>
             <Col span={8}>
-              发行价(千克/份)：{data.develop_name}
+              发行价(千克/份)：{data.stock_amount}
             </Col>
             <Col span={8}>
-              众筹总金额：
+              众筹总金额(千克)：{data.total_amount}
             </Col>
           </Row>
           <Row style={{ marginBottom: 32 }}>
             <Col span={24}>
-              提交申请时间：{moment(data.update_time * 1000).format('YYYY-MM-DD HH:mm:ss')}
+              提交申请时间：{moment(data.modify_date * 1000).format('YYYY-MM-DD HH:mm:ss')}
             </Col>
           </Row>
         </Card>
@@ -282,7 +282,7 @@ class FundingView extends Component {
           </Row>
           <Row style={{ marginBottom: 32 }}>
             <Col span={24}>
-              {data.cp_version}abcd
+              {data.develop_text}
             </Col>
           </Row>
 

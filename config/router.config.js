@@ -311,6 +311,7 @@ export default [
             path: '/funding/fundingview',
             name: 'fundingview',
             component: './Funding/FundingView',
+            hideInMenu: true,
           },
           {
             path: '/funding/fundingapplysuccess',
