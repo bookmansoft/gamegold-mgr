@@ -24,61 +24,64 @@ import classNames from 'classnames';
 import DescriptionList from '@/components/DescriptionList';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import styles from './FundingAuditView.less';
+import { Pie } from '@/components/Charts';
+
+
 
 const FormItem = Form.Item;
 const { Step } = Steps;
 
-const PublishForm = Form.create()(
-  class extends React.Component {
+// const PublishForm = Form.create()(
+//   class extends React.Component {
 
-    render() {
-      const { visible, onCancel, onCreate, form } = this.props;
-      const { getFieldDecorator } = form;
-      return (
-        <Modal
-          visible={visible}
-          title="发布更新"
-          okText="提交"
-          onCancel={onCancel}
-          onOk={onCreate}
-        >
-          <Form layout="vertical">
-            <FormItem label="更新版本">
-              {getFieldDecorator('title', {
-                rules: [{ required: true, message: '请输入版本号!' }],
-              })(
-                <Input placeholder="请输入版本号!" />
-              )}
-            </FormItem>
-            <FormItem label="更新内容">
-              {getFieldDecorator('description', {
-                rules: [{ required: true, max: 300, message: '请输入更新内容，不超过300字!' }],
-              }
-              )(<Input placeholder="请输入更新内容，不超过300字!" type="textarea" />)}
-            </FormItem>
-          </Form>
-        </Modal>
-      );
-    }
-  }
-);
+//     render() {
+//       const { visible, onCancel, onCreate, form } = this.props;
+//       const { getFieldDecorator } = form;
+//       return (
+//         <Modal
+//           visible={visible}
+//           title="发布更新"
+//           okText="提交"
+//           onCancel={onCancel}
+//           onOk={onCreate}
+//         >
+//           <Form layout="vertical">
+//             <FormItem label="更新版本">
+//               {getFieldDecorator('title', {
+//                 rules: [{ required: true, message: '请输入版本号!' }],
+//               })(
+//                 <Input placeholder="请输入版本号!" />
+//               )}
+//             </FormItem>
+//             <FormItem label="更新内容">
+//               {getFieldDecorator('description', {
+//                 rules: [{ required: true, max: 300, message: '请输入更新内容，不超过300字!' }],
+//               }
+//               )(<Input placeholder="请输入更新内容，不超过300字!" type="textarea" />)}
+//             </FormItem>
+//           </Form>
+//         </Modal>
+//       );
+//     }
+//   }
+// );
 
 const getWindowWidth = () => window.innerWidth || document.documentElement.clientWidth;
 
-const popoverContent = (
-  <div style={{ width: 160 }}>
-    审核细节内容
-  </div>
-);
+// const popoverContent = (
+//   <div style={{ width: 160 }}>
+//     审核细节内容
+//   </div>
+// );
 
-const customDot = (dot, { status }) =>
-  status === 'process' ? (
-    <Popover placement="topLeft" arrowPointAtCenter content={popoverContent}>
-      {dot}
-    </Popover>
-  ) : (
-      dot
-    );
+// const customDot = (dot, { status }) =>
+//   status === 'process' ? (
+//     <Popover placement="topLeft" arrowPointAtCenter content={popoverContent}>
+//       {dot}
+//     </Popover>
+//   ) : (
+//       dot
+//     );
 
 
 @connect(({ fundingauditview, loading }) => ({
@@ -91,13 +94,28 @@ class FundingAuditView extends Component {
   renderImg = (text) => {
     if (text && text.length) {
       const imgs = text.map((item, index) =>
-        <div><img width={300} src={item} key={index} /><br/></div>
+        <div><img width={300} src={item} key={index} /><br /></div>
       )
       return imgs;
     }
   }
 
-
+  getCurrentStep() {
+    return 1;
+    // const { location } = this.props;
+    // const { pathname } = location;
+    // const pathList = pathname.split('/');
+    // switch (pathList[pathList.length - 1]) {
+    //   case 'info':
+    //     return 0;
+    //   case 'confirm':
+    //     return 1;
+    //   case 'result':
+    //     return 2;
+    //   default:
+    //     return 0;
+    // }
+  }
 
   state = {
     visible: false, //发布更新表单可见性
@@ -112,18 +130,13 @@ class FundingAuditView extends Component {
   handleCancel = () => {
     this.setState({ visible: false });
   }
-  //提交发布更新表单
-  handleCreate = () => {
-    const form = this.formRef.props.form;
-    form.validateFields((err, values) => {
-      if (err) {
-        return;
-      }
+  //审核通过
+  handleAuditPass = () => {
 
-      console.log('此处收到表单数据: ', values);
-      form.resetFields();
-      this.setState({ visible: false });
-    });
+  }
+  //审核不通过
+  handleAuditNoPass = () => {
+
   }
   //传递引用
   saveFormRef = (formRef) => {
@@ -177,98 +190,111 @@ class FundingAuditView extends Component {
       fundingauditview: { data },
       loading
     } = this.props;
-
+    const submitFormLayout = {
+      wrapperCol: {
+        xs: { span: 24, offset: 0 },
+        sm: { span: 10, offset: 7 },
+      },
+    };
 
     return (
       <PageHeaderWrapper
-        title={data.cp_name}
+        title="众筹审核详情"
         action={null}
         content={null}
         extraContent={null}
         tabList={null}
       >
-        <Card style={null} bordered={false}>
-          <Row style={{ marginBottom: 16 }}>
-            <Col sm={24} xs={24}><h3><b>基本信息</b></h3></Col>
-          </Row>
-          <Row style={{ marginBottom: 32 }}>
-            <Col sm={8} xs={12}>
-              游戏类型：{data.cp_type}
-            </Col>
-            <Col sm={8} xs={12}>
-              开发者：{data.develop_name}
-            </Col>
-            <Col sm={8} xs={12}>
-              发布时间：{moment(data.publish_time * 1000).format('YYYY-MM-DD HH:mm:ss')}
-            </Col>
-          </Row>
-          <Row style={{ marginBottom: 32 }}>
-            <Col sm={8} xs={12}>
-              游戏状态：{data.cp_state=='0'?'未上线':'正常运营'}
-            </Col>
-            <Col sm={8} xs={12}>
-              启用邀请奖励：{parseInt(data.invite_share) == 0 ? '否' : '是'}
-            </Col>
 
-            <Col sm={8} xs={12}>
-              {parseInt(data.invite_share) != 0 && (
-                `邀请奖励：${data.invite_share}%`
-              )}
-            </Col>
-          </Row>
-          <Row style={{ marginBottom: 32 }}>
-            <Col sm={24} xs={24}>URL地址：{data.cp_url}</Col>
-          </Row>
+        <Card style={{ marginBottom: 16 }} bordered={false}>
+          <Fragment>
+            <Steps current={this.getCurrentStep()} className={styles.steps}>
+              <Step title="提交申请" />
+              <Step title="等待审核" />
+              <Step title="审核通过" />
+            </Steps>
+          </Fragment>
+        </Card>
 
-          <Divider style={{ margin: '20px 0' }} />
+        <Card style={{ marginBottom: 16 }} bordered={false}>
           <Row style={{ marginBottom: 16 }}>
-            <Col sm={24} xs={24}><h3><b>版本信息</b></h3></Col>
+            <Col span={24}><h3><b>认购情况</b></h3></Col>
           </Row>
           <Row style={{ marginBottom: 32 }}>
-            <Col sm={8} xs={12}>
-              当前版本：{data.cp_version}
+            <Col span={4}>
+              <Pie percent={10} subTitle={null} total="10%" height={120} />
             </Col>
-            <Col sm={8} xs={12}>
-              更新时间：{moment(data.update_time * 1000).format('YYYY-MM-DD HH:mm:ss')}
+            <Col span={8} style={{ marginBottom: 16 }}>
+              已认购数量：
             </Col>
-          </Row>
-          <Row style={{ marginBottom: 32 }}>
-            <Col sm={24} xs={24}>更新内容：{data.cp_desc}</Col>
-          </Row>
-
-          <Divider style={{ margin: '20px 0' }} />
-          <Row style={{ marginBottom: 16 }}>
-            <Col sm={24} xs={24}><h3><b>素材信息</b></h3></Col>
-          </Row>
-          <Row style={{ marginBottom: 32 }}>
-            <Col sm={24} xs={24}>
-              游戏图标：<img width={120} src={data.icon_url} />
+            <Col span={8} style={{ marginBottom: 16 }}>
+              未认购数量：
             </Col>
-          </Row>
-          <Row style={{ marginBottom: 32 }}>
-            <Col sm={24} xs={24}>
-              封面图片：<img width={300} src={data.face_url} />
-            </Col>
-          </Row>
-          <Row style={{ marginBottom: 32 }}>
-            <Col sm={24} xs={24}>
-              游戏截图：{this.renderImg(data.pic_urls)}
-            </Col>
-          </Row>
-          <Row style={{ marginBottom: 32 }}>
-            <Col sm={4} xs={8}>
-              <Button type="primary" onClick={this.handleBack}>
-                返回游戏列表
-                </Button>
+            <Col span={8}>
+              截止时间：{moment(data.sell_limit_date * 1000).format('YYYY-MM-DD HH:mm:ss')}
             </Col>
           </Row>
         </Card>
-        <PublishForm
-          wrappedComponentRef={this.saveFormRef}
-          visible={this.state.visible}
-          onCancel={this.handleCancel}
-          onCreate={this.handleCreate}
-        />
+        <Card style={null} bordered={false}>
+          <Row style={{ marginBottom: 16 }}>
+            <Col span={24}><h3><b>申请众筹内容</b></h3></Col>
+          </Row>
+          <Row style={{ marginBottom: 32 }}>
+            <Col span={8}>
+              发行凭证总数(份)：{data.stock_num}
+            </Col>
+            <Col span={8}>
+              发行价(千克/份)：{data.stock_amount}
+            </Col>
+            <Col span={8}>
+              众筹总金额(千克)：{data.total_amount}
+            </Col>
+          </Row>
+          <Row style={{ marginBottom: 32 }}>
+            <Col span={24}>
+              提交申请时间：{moment(data.modify_date * 1000).format('YYYY-MM-DD HH:mm:ss')}
+            </Col>
+          </Row>
+        </Card>
+
+        <Card style={null} bordered={false}>
+          <Row style={{ marginBottom: 16 }}>
+            <Col span={24}><h3><b>基本信息</b></h3></Col>
+          </Row>
+          <Row style={{ marginBottom: 32 }}>
+            <Col span={8}>
+              游戏中文名：{data.cp_text}
+            </Col>
+            <Col span={8}>
+              游戏类型：{data.cp_type}
+            </Col>
+            <Col span={8}>
+              开发者：{data.develop_name}
+            </Col>
+          </Row>
+          <Row style={{ marginBottom: 32 }}>
+            <Col span={24}>游戏详情页：{data.cp_url}</Col>
+          </Row>
+
+          <Divider style={{ margin: '20px 0' }} />
+          <Row style={{ marginBottom: 16 }}>
+            <Col span={24}><h3><b>开发团队介绍</b></h3></Col>
+          </Row>
+          <Row style={{ marginBottom: 32 }}>
+            <Col span={24}>
+              {data.develop_text}
+            </Col>
+          </Row>
+
+        </Card>
+        <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
+          <Button type="primary" onClick={() => this.handleAuditPass()}>
+            通过
+          </Button>
+          <Button type="primary" onClick={() => this.handleAuditNoPass()}>
+            不通过
+          </Button>
+        </FormItem>
       </PageHeaderWrapper>
     );
   }
