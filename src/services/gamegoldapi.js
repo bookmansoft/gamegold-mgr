@@ -1224,13 +1224,19 @@ export async function auditFunding(params) {
         cp_url: data.cp_url,
         develop_name: data.develop_name,
         develop_text: data.develop_text,
-        cid: data.cp_id,
+        cid: data.cid,
       });
       console.log("调用更新记录结果：" + JSON.stringify(retUpdate));
       //调用链，创建凭证；--此代码应该移动到审核。
+      console.log({
+        func: "cpfunding.Create", userinfo: JSON.parse(localStorage.userinfo),
+        cid: data.cid,//系统cid
+        stock_num: data.stock_num,
+        stock_amount: data.stock_amount,
+      });
       let ret = await remote.fetching({
         func: "cpfunding.Create", userinfo: JSON.parse(localStorage.userinfo),
-        id: params.id,//cp表的id
+        cid: data.cid,//系统cid
         stock_num: data.stock_num,
         stock_amount: data.stock_amount,
       });
