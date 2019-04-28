@@ -691,14 +691,14 @@ export async function CreatePropLocal(params) {
     });
     if (remote.isSuccess(res)) {
       return res;
-    } else if(res.code == 3){
-      return { code: 3,msg: '道具已经存在' };
+    } else if (res.code == 3) {
+      return { code: 3, msg: '道具已经存在' };
     }
     else {
-      return { code: 1,msg: res.msg ? res.msg : '创建失败' };
+      return { code: 1, msg: res.msg ? res.msg : '创建失败' };
     }
   }
-  return { code: 1,msg: '登陆验证失败' };
+  return { code: 1, msg: '登陆验证失败' };
   //return request(`/api/gamepropsdetail?${stringify(params)}`);
 }
 /**
@@ -947,8 +947,8 @@ export async function addRedpacket(params) {
         total_num: params.total_num,
         each_num: params.each_num,
         act_desc: params.act_desc,
-        act_start_at: new Date(params.act_start_at).getTime() /1000,
-        act_end_at: new Date(params.act_end_at).getTime() /1000,
+        act_start_at: new Date(params.act_start_at).getTime() / 1000,
+        act_end_at: new Date(params.act_end_at).getTime() / 1000,
       });
       //判断返回值是否正确
       console.log(ret);
@@ -974,7 +974,7 @@ export async function changeRedpacket(params) {
       console.log("修改红包活动:" + JSON.stringify(params));
       let ret = await remote.fetching({
         func: "redpacket.UpdateRecord", userinfo: JSON.parse(localStorage.userinfo),
-        id : params.id,
+        id: params.id,
         act_name: params.act_name,
         act_sequence: params.act_sequence,
         total_gamegold: params.total_gamegold,
@@ -982,8 +982,8 @@ export async function changeRedpacket(params) {
         total_num: params.total_num,
         each_num: params.each_num,
         act_desc: params.act_desc,
-        act_start_at: new Date(params.act_start_at).getTime() /1000,
-        act_end_at: new Date(params.act_end_at).getTime() /1000,
+        act_start_at: new Date(params.act_start_at).getTime() / 1000,
+        act_end_at: new Date(params.act_end_at).getTime() / 1000,
       });
       //判断返回值是否正确
       console.log(ret.code, ret.data, ret.message);
@@ -1003,8 +1003,9 @@ export async function getRedpacket(params) {
     let ret = { code: -200, data: null, message: "react service层无返回值。方法名：getWalletLog" };
     if (remote.isSuccess(msg)) {
       console.log("获取钱包收支详情:" + JSON.stringify(params));
-      ret = await remote.fetching({ func: "redpacket.Retrieve", userinfo: JSON.parse(localStorage.userinfo),
-       id: params.id,
+      ret = await remote.fetching({
+        func: "redpacket.Retrieve", userinfo: JSON.parse(localStorage.userinfo),
+        id: params.id,
       });
     }
     console.log("获取钱包收支详情结果：" + JSON.stringify(ret));
@@ -1141,11 +1142,11 @@ export async function addFunding(params) {
         cpid: params.data.id,
         stock_num: params.state.stock_num,
         stock_amount: params.state.stock_amount,
-        total_amount: params.state.stock_num*params.state.stock_amount,
-        stock_rmb: params.state.stock_amount/100000,//人民币值初始为1000分
-        audit_state_id:1,
-        audit_text:'',
-        modify_date:new Date().getTime()/1000,
+        total_amount: params.state.stock_num * params.state.stock_amount,
+        stock_rmb: params.state.stock_amount / 100000,//人民币值初始为1000分
+        audit_state_id: 1,
+        audit_text: '',
+        modify_date: new Date().getTime() / 1000,
         cp_name: params.data.cp_name,
         cp_text: params.data.cp_text,
         cp_type: params.data.cp_type,
@@ -1154,15 +1155,7 @@ export async function addFunding(params) {
         develop_text: params.state.develop_text,
       });
       console.log("添加新游戏结果：" + JSON.stringify(retSave));
-      //调用链，创建凭证；--此代码应该移动到审核。
-      let ret = await remote.fetching({
-        func: "cpfunding.Create", userinfo: JSON.parse(localStorage.userinfo),
-        id: params.data.id,//cp表的id
-        stock_num: params.state.stock_num,
-        stock_amount: params.state.stock_amount,
-      });
-      console.log("调用链执行结果:",ret);
-      return ret;
+      return retSave;
     }
     else {
       return ret;
@@ -1195,6 +1188,59 @@ export async function getFundingView(params) {
   } catch (error) {
     console.log(error);
     return { code: -100, data: null, message: "react service层错误。方法名：getFundingView" };
+  }
+}
+
+// auditFunding
+// 众筹信息审核
+export async function auditFunding(params) {
+  try {
+    let msg = await remote.login({ openid: theOpenId });
+    let ret = { code: -200, data: null, message: "react service层无返回值。方法名：auditFunding" };
+    // 调用保存记录的方法
+    if (remote.isSuccess(msg)) {
+      console.log("调用更新记录的方法:" + JSON.stringify(params));
+      let retCpfunding=await remote.fetching({
+        func: "cpfunding.Retrieve", userinfo: JSON.parse(localStorage.userinfo),
+        id: params.id});
+      console.log(retCpfunding);
+      let data=retCpfunding.data;
+
+      let retUpdate = await remote.fetching({
+        func: "cpfunding.UpdateRecord", userinfo: JSON.parse(localStorage.userinfo),
+        id: params.id,
+        cpid: data.id,
+        stock_num: data.stock_num,
+        stock_amount: data.stock_amount,
+        total_amount: data.total_amount,
+        stock_rmb: params.stock_rmb,//人民币值初始为1000分
+        audit_state_id: params.audit_state_id,
+        audit_text: params.audit_text,
+        modify_date: new Date().getTime() / 1000,
+        cp_name: data.cp_name,
+        cp_text: data.cp_text,
+        cp_type: data.cp_type,
+        cp_url: data.cp_url,
+        develop_name: data.develop_name,
+        develop_text: data.develop_text,
+      });
+      console.log("调用更新记录结果：" + JSON.stringify(retUpdate));
+      //调用链，创建凭证；--此代码应该移动到审核。
+      let ret = await remote.fetching({
+        func: "cpfunding.Create", userinfo: JSON.parse(localStorage.userinfo),
+        id: params.id,//cp表的id
+        stock_num: data.stock_num,
+        stock_amount: data.stock_amount,
+      });
+      console.log("调用链执行结果:", ret);
+      return ret;
+    }
+    else {
+      return ret;
+    }
+  } catch (error) {
+    console.log(error);
+    return { code: -100, data: null, message: "react service层错误。方法名：addGameMgr" };
   }
 
 }

@@ -1,4 +1,4 @@
-import { getFundingView } from '@/services/gamegoldapi';
+import { getFundingView,auditFunding } from '@/services/gamegoldapi';
 
 export default {
   namespace: 'fundingauditview',
@@ -16,6 +16,12 @@ export default {
         type: 'save',
         payload: response,
       });
+    },
+
+    //审核更新整个表单的内容（到数据库及全节点）
+    *audit({ payload }, { call }) {
+      let ret = yield call(auditFunding, payload.state);
+      return ret;
     },
   },
 

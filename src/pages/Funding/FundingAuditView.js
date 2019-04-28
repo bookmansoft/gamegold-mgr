@@ -46,7 +46,13 @@ const getWindowWidth = () => window.innerWidth || document.documentElement.clien
 @Form.create()
 class FundingAuditView extends Component {
   state = {
-    stock_rmb: 0,
+    visible: false, //发布更新表单可见性
+    operationkey: 'tab1',
+    stepDirection: 'horizontal',
+// 自定义的state
+    id: 0,
+    stock_rmb: 10,
+    audit_state_id:1,//审核状态，按下按钮后改为指定的值。
     audit_text: '',
   };
   renderImg = (text) => {
@@ -57,44 +63,62 @@ class FundingAuditView extends Component {
       return imgs;
     }
   }
-
+  // 本页确定是“2-等待审核”状态
   getCurrentStep() {
     return 1;
-    // const { location } = this.props;
-    // const { pathname } = location;
-    // const pathList = pathname.split('/');
-    // switch (pathList[pathList.length - 1]) {
-    //   case 'info':
-    //     return 0;
-    //   case 'confirm':
-    //     return 1;
-    //   case 'result':
-    //     return 2;
-    //   default:
-    //     return 0;
-    // }
   }
 
-  state = {
-    visible: false, //发布更新表单可见性
-    operationkey: 'tab1',
-    stepDirection: 'horizontal',
-  };
-  //显示发布更新表单
-  showModal = () => {
-    this.setState({ visible: true });
-  }
-  //隐藏发布更新表单
-  handleCancel = () => {
-    this.setState({ visible: false });
-  }
+  // //显示发布更新表单
+  // showModal = () => {
+  //   this.setState({ visible: true });
+  // }
+  // //隐藏发布更新表单
+  // handleCancel = () => {
+  //   this.setState({ visible: false });
+  // }
   //审核通过
-  handleAuditPass = () => {
+  handleAuditPass = (theState) => {
+    this.state.audit_state_id = 2;
+    //以下代码与审核不通过相同
+    const { dispatch, form } = this.props;
+    console.log(theState);
+    dispatch({
+      type: 'fundingauditview/audit',
+      payload: {
+        state: theState
+      },
+    }).then((ret) => {
+      console.log(ret);
+      if (ret.code === 0) {
+        router.push('/funding/fundingauditviewsuccess');
+      } else {
+        router.push('/funding/fundingauditviewerror');
+      };
+    }
+    );
+  };
 
-  }
   //审核不通过
   handleAuditNoPass = () => {
-
+    this.state.audit_state_id = 3;
+    //其他代码copy自审核通过
+    //以下代码与审核不通过相同
+    const { dispatch, form } = this.props;
+    console.log(theState);
+    dispatch({
+      type: 'fundingauditview/audit',
+      payload: {
+        state: theState
+      },
+    }).then((ret) => {
+      console.log(ret);
+      if (ret.code === 0) {
+        router.push('/funding/fundingauditviewsuccess');
+      } else {
+        router.push('/funding/fundingauditviewerror');
+      };
+    }
+    );
   }
 
   handleStockRmbChange = e => {
@@ -116,20 +140,22 @@ class FundingAuditView extends Component {
 
   componentDidMount() {
     const { dispatch } = this.props;
-    console.log(this.props.location.query.id);
+    // console.log(this.props.location.query.id);
+    //设置到本页的state中备用
+    this.state.id=parseInt(this.props.location.query.id);
     dispatch({
       type: 'fundingauditview/fetch',
-      payload: { id: this.props.location.query.id },//这里
+      payload: { id: parseInt(this.props.location.query.id) },//这里
     });
 
     this.setStepDirection();
     window.addEventListener('resize', this.setStepDirection, { passive: true });
-  }
+  };
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.setStepDirection);
     this.setStepDirection.cancel();
-  }
+  };
 
   onOperationTabChange = key => {
     this.setState({ operationkey: key });
@@ -184,25 +210,6 @@ class FundingAuditView extends Component {
           </Fragment>
         </Card>
 
-        <Card style={{ marginBottom: 16 }} bordered={false}>
-          <Row style={{ marginBottom: 16 }}>
-            <Col span={24}><h3><b>认购情况</b></h3></Col>
-          </Row>
-          <Row style={{ marginBottom: 32 }}>
-            <Col span={4}>
-              <Pie percent={10} subTitle={null} total="10%" height={120} />
-            </Col>
-            <Col span={8} style={{ marginBottom: 16 }}>
-              已认购数量：
-            </Col>
-            <Col span={8} style={{ marginBottom: 16 }}>
-              未认购数量：
-            </Col>
-            <Col span={8}>
-              截止时间：{moment(data.sell_limit_date * 1000).format('YYYY-MM-DD HH:mm:ss')}
-            </Col>
-          </Row>
-        </Card>
         <Card style={null} bordered={false}>
           <Row style={{ marginBottom: 16 }}>
             <Col span={24}><h3><b>申请众筹内容</b></h3></Col>
@@ -291,7 +298,7 @@ class FundingAuditView extends Component {
             </Col>
           </Row>
           <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
-            <Button type="primary" onClick={() => this.handleAuditPass()}>
+            <Button type="primary" onClick={() => this.handleAuditPass(this.state)}>
               通过
             </Button> &nbsp;&nbsp;&nbsp;
             <Button type="primary" onClick={() => this.handleAuditNoPass()}>
