@@ -1153,6 +1153,7 @@ export async function addFunding(params) {
         cp_url: params.data.cp_url,
         develop_name: params.data.develop_name,
         develop_text: params.state.develop_text,
+        cid: params.data.cp_id,
       });
       console.log("添加新游戏结果：" + JSON.stringify(retSave));
       return retSave;
@@ -1223,6 +1224,7 @@ export async function auditFunding(params) {
         cp_url: data.cp_url,
         develop_name: data.develop_name,
         develop_text: data.develop_text,
+        cid: data.cp_id,
       });
       console.log("调用更新记录结果：" + JSON.stringify(retUpdate));
       //调用链，创建凭证；--此代码应该移动到审核。

@@ -6,7 +6,7 @@ import Result from '@/components/Result';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
 const onPrev = () => {
-  router.push('/gamemgr/gameadd');
+  router.push('/funding/fundingapply');
 };
 const actions = (
   <Fragment>
