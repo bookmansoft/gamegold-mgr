@@ -1133,7 +1133,6 @@ export async function addFunding(params) {
   try {
     let msg = await remote.login({ openid: theOpenId });
     let ret = { code: -200, data: null, message: "react service层无返回值。方法名：addFunding" };
-
     // 调用保存记录的方法
     if (remote.isSuccess(msg)) {
       console.log("调用保存记录的方法:" + JSON.stringify(params));
@@ -1155,7 +1154,15 @@ export async function addFunding(params) {
         develop_text: params.state.develop_text,
       });
       console.log("添加新游戏结果：" + JSON.stringify(retSave));
-      return retSave;
+      //调用链，创建凭证；--此代码应该移动到审核。
+      let ret = await remote.fetching({
+        func: "cpfunding.Create", userinfo: JSON.parse(localStorage.userinfo),
+        id: params.data.id,//cp表的id
+        stock_num: params.state.stock_num,
+        stock_amount: params.state.stock_amount,
+      });
+      console.log("调用链执行结果:",ret);
+      return ret;
     }
     else {
       return ret;
