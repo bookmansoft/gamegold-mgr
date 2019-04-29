@@ -1,10 +1,14 @@
-import { getFundingView } from '@/services/gamegoldapi';
+import { getFundingView,queryWalletLog } from '@/services/gamegoldapi';
 
 export default {
   namespace: 'marketview',
 
   state: {
     data: {
+    },
+    tableData: {
+      list: [],
+      pagination: {},
     }
   },
 
@@ -17,6 +21,15 @@ export default {
         payload: response,
       });
     },
+
+    *fetchTableData({ payload }, { call, put }) {
+      console.log(payload);
+      const response = yield call(queryWalletLog, payload);
+      yield put({
+        type: 'saveTableData',
+        payload: response,
+      });
+    },
   },
 
   reducers: {
@@ -24,6 +37,12 @@ export default {
       return {
         ...state,
         data: action.payload,
+      };
+    },
+    saveTableData(state, action) {
+      return {
+        ...state,
+        tableData: action.payload,
       };
     },
   },

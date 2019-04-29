@@ -25,7 +25,7 @@ import DescriptionList from '@/components/DescriptionList';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import styles from './MarketView.less';
 import { Pie } from '@/components/Charts';
-
+import SimpleTable from '@/components/SimpleTable';
 
 
 const FormItem = Form.Item;
@@ -38,7 +38,7 @@ const getWindowWidth = () => window.innerWidth || document.documentElement.clien
   marketview,
   loading: loading.models.marketview,
 }))
-
+@Form.create()
 class MarketView extends Component {
 
   renderImg = (text) => {
@@ -53,7 +53,42 @@ class MarketView extends Component {
     visible: false, //发布更新表单可见性
     operationkey: 'tab1',
     stepDirection: 'horizontal',
+    modalVisible: false,
+    updateModalVisible: false,
+    expandForm: false,
+    selectedRows: [],
+    formValues: {},
+    stepFormValues: {},
   };
+
+  columns = [
+    {
+      title: '时间',
+      dataIndex: 'time',
+      render: val => <span>{moment(val * 1000).format('YYYY-MM-DD HH:mm:ss')}</span>,
+    },
+    {
+      title: '描述',
+      dataIndex: 'label',
+    },
+    {
+      title: '类型',
+      dataIndex: 'category',
+    },
+    {
+      title: '金额(Kg)',
+      dataIndex: 'amount',
+      render: val => <span>{parseInt(val * 1000000 + 0.5) / 1000}</span>
+    },
+    {
+      title: '操作',
+      render: (text, record) => (
+        <Fragment>
+          <a onClick={() => this.handleView(record)}>交易详情</a>
+        </Fragment>
+      ),
+    },
+  ];
   //显示发布更新表单
   showModal = () => {
     this.setState({ visible: true });
@@ -91,6 +126,10 @@ class MarketView extends Component {
       type: 'marketview/fetch',
       payload: { id: this.props.location.query.id },//这里
     });
+    dispatch({
+      type: 'marketview/fetchTableData',
+      payload: { address: '' }
+    });
 
     this.setStepDirection();
     window.addEventListener('resize', this.setStepDirection, { passive: true });
@@ -121,13 +160,48 @@ class MarketView extends Component {
     }
   }
 
+  renderForm() {
+    const {
+      form: { getFieldDecorator },
+    } = this.props;
+
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 16 },
+        sm: { span: 4 },
+      },
+      wrapperCol: {
+        xs: { span: 18 },
+        sm: { span: 8 },
+        md: { span: 6 },
+      },
+    };
+
+    return (
+      <Form onSubmit={this.handleSearch} layout="inline">
+        <Row gutter={{ md: 16, lg: 24, xl: 48 }}>
+          <Col md={20} sm={20}>
+            <label>收支流水</label>
+          </Col>
+          <Col md={4} sm={4}>
+            <span className={styles.submitButtons}>
+              <Button type="primary" htmlType="submit">
+                搜索
+              </Button>
+            </span>
+          </Col>
+        </Row>
+      </Form>
+    );
+  }
+
   render() {
     const { stepDirection, operationkey } = this.state;
     const {
-      marketview: { data },
+      marketview: { data,tableData },
       loading
     } = this.props;
-
+    const { selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;
 
     return (
       <PageHeaderWrapper
@@ -178,6 +252,21 @@ class MarketView extends Component {
           </Row>
         </Card>
 
+        {tableData != null && tableData.list != null &&
+          <Card bordered={false} style={{ marginTop: 24 }}>
+            <div className={styles.tableList}>
+              <div className={styles.tableListForm}>{this.renderForm()}</div>
+              <div className={styles.tableListOperator} />
+              <SimpleTable
+                selectedRows={selectedRows}
+                loading={loading}
+                data={tableData.list}
+                columns={this.columns}
+                onSelectRow={null}
+                onChange={this.handleStandardTableChange}
+              />
+            </div>
+          </Card>}
       </PageHeaderWrapper>
     );
   }
