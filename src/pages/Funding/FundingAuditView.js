@@ -3,7 +3,7 @@ import { connect } from 'dva';
 import Debounce from 'lodash-decorators/debounce';
 import Bind from 'lodash-decorators/bind';
 import moment from 'moment';
-
+import router from 'umi/router';
 import {
   Button,
   Menu,
