@@ -51,7 +51,8 @@ class FundingView extends Component {
   }
 
   getCurrentStep() {
-    return 1;
+    console.log(this.props.fundingview.data);
+    return this.props.fundingview.data.audit_state_id;
     // const { location } = this.props;
     // const { pathname } = location;
     // const pathList = pathname.split('/');
