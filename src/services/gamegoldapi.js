@@ -1183,6 +1183,17 @@ export async function getFundingView(params) {
       }
       //有数据
       console.log(ret.data);
+      //调用链，获取剩余数量
+      let retCp = await remote.fetching({ func: "cp.ById", userinfo: JSON.parse(localStorage.userinfo), items: [ret.data.cid] });
+      console.log({ func: "cp.ById", userinfo: JSON.parse(localStorage.userinfo), items: [ret.data.cid] });
+      console.log("cp信息", retCp);
+      if (retCp.data.stock != null) {
+        ret.data.residue_num = retCp.data.stock.sum;
+      }
+      else {
+        ret.data.residue = 0;//暂时设置为0
+      }
+      console.log("最后的结果：", ret.data);
       return ret.data;
 
     }
@@ -1201,11 +1212,12 @@ export async function auditFunding(params) {
     // 调用保存记录的方法
     if (remote.isSuccess(msg)) {
       console.log("调用更新记录的方法:" + JSON.stringify(params));
-      let retCpfunding=await remote.fetching({
+      let retCpfunding = await remote.fetching({
         func: "cpfunding.Retrieve", userinfo: JSON.parse(localStorage.userinfo),
-        id: params.id});
+        id: params.id
+      });
       console.log(retCpfunding);
-      let data=retCpfunding.data;
+      let data = retCpfunding.data;
 
       let retUpdate = await remote.fetching({
         func: "cpfunding.UpdateRecord", userinfo: JSON.parse(localStorage.userinfo),
@@ -1250,5 +1262,31 @@ export async function auditFunding(params) {
     console.log(error);
     return { code: -100, data: null, message: "react service层错误。方法名：addGameMgr" };
   }
+
+}
+
+//-- Stock.List 查询凭证的现金销售记录
+export async function queryStockList(params) {
+  try {
+    let msg = await remote.login({ openid: theOpenId });
+    let ret = { code: -200, data: null, message: "react service层无返回值。方法名：queryStockList" };
+    if (remote.isSuccess(msg)) {
+      console.log("查询凭证的现金销售记录:" + JSON.stringify(params));
+      ret = await remote.fetching({
+        func: "cpfunding.StockList", userinfo: JSON.parse(localStorage.userinfo), cid: params.cid,
+        // currentPage: params.currentPage, pageSize: params.pageSize, daterange: params.date
+      });
+    }
+
+    console.log("查询凭证的现金销售记录：" + JSON.stringify(ret));
+  let theResult = { list: ret.data, pagination: { current: 1, pageSize: 10 } };
+
+  console.log("实际输出格式");
+  console.log(theResult);
+  return theResult;
+} catch (error) {
+  console.log(error);
+  return { code: -100, data: null, message: "react service层错误。方法名：queryStockList" };
+}
 
 }

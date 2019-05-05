@@ -63,30 +63,17 @@ class MarketView extends Component {
 
   columns = [
     {
-      title: '时间',
-      dataIndex: 'time',
-      render: val => <span>{moment(val * 1000).format('YYYY-MM-DD HH:mm:ss')}</span>,
+      title: 'cp编码',
+      dataIndex: 'cid',
     },
     {
-      title: '描述',
-      dataIndex: 'label',
-    },
-    {
-      title: '类型',
-      dataIndex: 'category',
+      title: '地址',
+      dataIndex: 'addr',
     },
     {
       title: '金额(Kg)',
-      dataIndex: 'amount',
+      dataIndex: 'sum',
       render: val => <span>{parseInt(val * 1000000 + 0.5) / 1000}</span>
-    },
-    {
-      title: '操作',
-      render: (text, record) => (
-        <Fragment>
-          <a onClick={() => this.handleView(record)}>交易详情</a>
-        </Fragment>
-      ),
     },
   ];
   //显示发布更新表单
@@ -125,11 +112,14 @@ class MarketView extends Component {
     dispatch({
       type: 'marketview/fetch',
       payload: { id: this.props.location.query.id },//这里
+    }).then((ret)=> {
+      console.log("刷新完成"+JSON.stringify(ret));
+      dispatch({
+        type: 'marketview/fetchTableData',
+        payload: { cid: ret.cid}
+      });
     });
-    dispatch({
-      type: 'marketview/fetchTableData',
-      payload: { address: '' }
-    });
+
 
     this.setStepDirection();
     window.addEventListener('resize', this.setStepDirection, { passive: true });
@@ -181,7 +171,7 @@ class MarketView extends Component {
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 16, lg: 24, xl: 48 }}>
           <Col md={20} sm={20}>
-            <label>收支流水</label>
+            <label>现金销售明细</label>
           </Col>
           <Col md={4} sm={4}>
             <span className={styles.submitButtons}>
@@ -241,10 +231,10 @@ class MarketView extends Component {
               <Pie percent={10} subTitle={null} total="10%" height={120} />
             </Col>
             <Col span={8} style={{ marginBottom: 16 }}>
-              已认购数量：
+              凭证总数量：{data.stock_num}
             </Col>
             <Col span={8} style={{ marginBottom: 16 }}>
-              未认购数量：
+              未认购数量：{data.residue_num}
             </Col>
             <Col span={8}>
               截止时间：{moment(data.sell_limit_date * 1000).format('YYYY-MM-DD HH:mm:ss')}
