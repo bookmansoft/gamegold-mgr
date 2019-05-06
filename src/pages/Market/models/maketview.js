@@ -1,4 +1,4 @@
-import { getFundingView,queryStockList } from '@/services/gamegoldapi';
+import { getFundingView,queryStockRecord } from '@/services/gamegoldapi';
 
 export default {
   namespace: 'marketview',
@@ -25,7 +25,7 @@ export default {
 
     *fetchTableData({ payload }, { call, put }) {
       console.log(payload);
-      const response = yield call(queryStockList, payload);
+      const response = yield call(queryStockRecord, payload);
       yield put({
         type: 'saveTableData',
         payload: response,

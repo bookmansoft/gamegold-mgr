@@ -67,13 +67,26 @@ class MarketView extends Component {
       dataIndex: 'cid',
     },
     {
-      title: '地址',
+      title: '接收地址',
       dataIndex: 'addr',
+    },
+    {
+      title: '区块高度',
+      dataIndex: 'height',
+    },
+    {
+      title: '单价',
+      dataIndex: 'price',
+      render: val => <span>{parseInt(val/100) / 1000}</span>
+    },
+    {
+      title: 'sn',
+      dataIndex: 'sn',
     },
     {
       title: '金额(Kg)',
       dataIndex: 'sum',
-      render: val => <span>{parseInt(val * 1000000 + 0.5) / 1000}</span>
+      render: val => <span>{parseInt(val/100) / 1000}</span>
     },
   ];
   //显示发布更新表单
@@ -116,7 +129,7 @@ class MarketView extends Component {
       console.log("刷新完成"+JSON.stringify(ret));
       dispatch({
         type: 'marketview/fetchTableData',
-        payload: { cid: ret.cid}
+        payload: { cid: ret.cid,type:1}//type应该是3
       });
     });
 

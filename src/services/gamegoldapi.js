@@ -1265,15 +1265,32 @@ export async function auditFunding(params) {
 
 }
 
-//-- Stock.List 查询凭证的现金销售记录
-export async function queryStockList(params) {
+//-- Stock.Record 查询凭证的现金销售记录
+// const $RecordType = {
+//   Offer: 1,           //发行凭证
+//   Purchase: 2,        //购买发行的凭证
+//   Send: 3,            //无偿转让凭证
+//   Bonus: 4,           //凭证分成
+//   Ads: 5,             //媒体分成
+//   Bid: 6,             //有偿转让凭证
+//   Auction: 7,         //购买有偿转让的凭证
+// }
+// #查询节点上存储的凭证交易流水 流水类型 厂商编码: stock.record type (cid height conditions)
+// stock.record 1 e1297470-5d09-11e9-b07a-2d9ee061d761 300 "[['txid','a656db273e4850c6113de4b7fd7c619798db90363d7e25d179183b4720db4292']]"
+
+// #查询钱包上存储的凭证交易流水 流水类型 厂商编码: stock.record.wallet type (cid height conditions)
+// #如果要查询特定用户的流水，可以在 conditions 中添加 addr 查询参数
+// stock.record.wallet 1 e1297470-5d09-11e9-b07a-2d9ee061d761 300 "[['txid','a656db273e4850c6113de4b7fd7c619798db90363d7e25d179183b4720db4292']]"
+export async function queryStockRecord(params) {
   try {
     let msg = await remote.login({ openid: theOpenId });
-    let ret = { code: -200, data: null, message: "react service层无返回值。方法名：queryStockList" };
+    let ret = { code: -200, data: null, message: "react service层无返回值。方法名：queryStockRecord" };
     if (remote.isSuccess(msg)) {
       console.log("查询凭证的现金销售记录:" + JSON.stringify(params));
       ret = await remote.fetching({
-        func: "cpfunding.StockList", userinfo: JSON.parse(localStorage.userinfo), cid: params.cid,
+        func: "cpfunding.StockRecord", userinfo: JSON.parse(localStorage.userinfo),
+        items:[params.type,params.cid,0,""], 
+        //  cid: params.cid,
         // currentPage: params.currentPage, pageSize: params.pageSize, daterange: params.date
       });
     }
