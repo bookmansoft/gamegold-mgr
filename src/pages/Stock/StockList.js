@@ -42,30 +42,36 @@ class StockList extends PureComponent {
 
   columns = [
     {
-      title: '流水号',
-      dataIndex: 'id',
-    },
-    {
       title: '游戏ID',
-      dataIndex: 'cp_id',
+      dataIndex: 'cid',
     },
     {
-      title: '游戏全名',
-      dataIndex: 'cp_text',
+      title: '行情日期',
+      dataIndex: 'stock_day',
     },
     {
-      title: '游戏类型',
-      dataIndex: 'cp_type',
+      title: '开盘价',
+      dataIndex: 'stock_open',
     },
     {
-      title: '游戏状态',
-      dataIndex: 'cp_state',
-      render: val => <span>{(val == '0') ? '未上线' : '正常运营'}</span>
+      title: '收盘价',
+      dataIndex: 'stock_close',
     },
     {
-      title: '添加时间',
-      dataIndex: 'publish_time',
-      render: val => <span>{moment(val * 1000).format('YYYY-MM-DD HH:mm:ss')}</span>,
+      title: '最高价',
+      dataIndex: 'stock_high',
+    },
+    {
+      title: '最低价',
+      dataIndex: 'stock_low',
+    },
+    {
+      title: '当日成交数量',
+      dataIndex: 'total_num',
+    },
+    {
+      title: '当日成交金额',
+      dataIndex: 'total_amount',
     },
     {
       title: '操作',

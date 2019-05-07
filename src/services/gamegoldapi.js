@@ -1103,11 +1103,11 @@ export async function queryFunding(params) {
         ...params
       });
     }
-    console.log("游戏管理结果列表：" + JSON.stringify(ret));
+    console.log("众筹管理结果列表：" + JSON.stringify(ret));
     return ret;
   } catch (error) {
     console.log(error);
-    return { code: -100, data: null, message: "react service层错误。方法名：queryGameMgr" };
+    return { code: -100, data: null, message: "react service层错误。方法名：queryFunding" };
   }
   //return request(`/gamemgr/query?${stringify(params)}`);
 }
@@ -1155,7 +1155,7 @@ export async function addFunding(params) {
         develop_text: params.state.develop_text,
         cid: params.data.cp_id,
       });
-      console.log("添加新游戏结果：" + JSON.stringify(retSave));
+      console.log("增加众筹信息结果：" + JSON.stringify(retSave));
       return retSave;
     }
     else {
@@ -1163,7 +1163,7 @@ export async function addFunding(params) {
     }
   } catch (error) {
     console.log(error);
-    return { code: -100, data: null, message: "react service层错误。方法名：addGameMgr" };
+    return { code: -100, data: null, message: "react service层错误。方法名：addFunding" };
   }
 
 }
@@ -1281,29 +1281,56 @@ export async function auditFunding(params) {
 // #查询钱包上存储的凭证交易流水 流水类型 厂商编码: stock.record.wallet type (cid height conditions)
 // #如果要查询特定用户的流水，可以在 conditions 中添加 addr 查询参数
 // stock.record.wallet 1 e1297470-5d09-11e9-b07a-2d9ee061d761 300 "[['txid','a656db273e4850c6113de4b7fd7c619798db90363d7e25d179183b4720db4292']]"
-export async function queryStockRecord(params) {
+export async function stockRecord(params) {
   try {
     let msg = await remote.login({ openid: theOpenId });
-    let ret = { code: -200, data: null, message: "react service层无返回值。方法名：queryStockRecord" };
+    let ret = { code: -200, data: null, message: "react service层无返回值。方法名：stockRecord" };
     if (remote.isSuccess(msg)) {
       console.log("查询凭证的现金销售记录:" + JSON.stringify(params));
       ret = await remote.fetching({
         func: "cpfunding.StockRecord", userinfo: JSON.parse(localStorage.userinfo),
-        items:[params.type,params.cid,0,""], 
+        items: [params.type, params.cid, 0, ""],
         //  cid: params.cid,
         // currentPage: params.currentPage, pageSize: params.pageSize, daterange: params.date
       });
     }
 
     console.log("查询凭证的现金销售记录：" + JSON.stringify(ret));
-  let theResult = { list: ret.data, pagination: { current: 1, pageSize: 10 } };
+    let theResult = { list: ret.data, pagination: { current: 1, pageSize: 10 } };
 
-  console.log("实际输出格式");
-  console.log(theResult);
-  return theResult;
-} catch (error) {
-  console.log(error);
-  return { code: -100, data: null, message: "react service层错误。方法名：queryStockList" };
+    console.log("实际输出格式");
+    console.log(theResult);
+    return theResult;
+  } catch (error) {
+    console.log(error);
+    return { code: -100, data: null, message: "react service层错误。方法名：stockList" };
+  }
+
 }
 
+//--股票行情查询
+export async function queryStock(params) {
+  try {
+    let msg = await remote.login({ openid: theOpenId });
+    let ret = { code: -200, data: null, message: "react service层无返回值。方法名：queryStock" };
+    if (remote.isSuccess(msg)) {
+      console.log("从数据库查询游戏列表stock.ListRecord:" + stringify(params));//currentPage=2&pageSize=10
+      if (params == null) {
+        params = {
+          currentPage: 1,
+          pageSize: 10,
+        };
+      };
+      ret = await remote.fetching({
+        func: "cpstock.ListRecord", userinfo: JSON.parse(localStorage.userinfo),
+        ...params
+      });
+    }
+    console.log("股票行情查询列表：" + JSON.stringify(ret));
+    return ret;
+  } catch (error) {
+    console.log(error);
+    return { code: -100, data: null, message: "react service层错误。方法名：queryStock" };
+  }
+  //return request(`/gamemgr/query?${stringify(params)}`);
 }
