@@ -42,8 +42,8 @@ class StockList extends PureComponent {
 
   columns = [
     {
-      title: '游戏ID',
-      dataIndex: 'cid',
+      title: '游戏名称',
+      dataIndex: 'cp_text',
     },
     {
       title: '行情日期',
