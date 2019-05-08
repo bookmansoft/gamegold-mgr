@@ -193,7 +193,7 @@ class StockView extends Component {
 
             </Col>
             <Col span={18}>
-              <iframe src="http://localhost:9101/client/echart/kline/index.html" frameborder="0" width="100%" height="600px" scrolling="no" />
+              <iframe src="http://localhost:9701/echart/kline/index.html" frameborder="0" width="100%" height="600px" scrolling="no" />
             </Col>
           </Row>
 
