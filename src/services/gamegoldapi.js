@@ -1334,3 +1334,28 @@ export async function queryStock(params) {
   }
   //return request(`/gamemgr/query?${stringify(params)}`);
 }
+
+
+// 获取股票行情详情
+// params.id 查看的页面参数值。（其中params对应于model中的payload）
+export async function getStockView(params) {
+  try {
+    console.log(params.id);
+    //接下来好好查询并返回这个页面的数据
+    let msg = await remote.login({ openid: theOpenId });
+    if (remote.isSuccess(msg)) {
+      let ret = await remote.fetching({ func: "cpstock.Retrieve", userinfo: JSON.parse(localStorage.userinfo), id: params.id });
+      if (ret.data === null) {
+        return { code: -200, data: null, message: "react service层无返回值。方法名：getGameView" };
+      }
+      //有数据
+      console.log(ret);
+      return ret.data;
+
+    }
+  } catch (error) {
+    console.log(error);
+    return { code: -100, data: null, message: "react service层错误。方法名：getGameView" };
+  }
+
+}

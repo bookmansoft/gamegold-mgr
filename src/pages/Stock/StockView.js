@@ -28,70 +28,19 @@ import styles from './StockView.less';
 const FormItem = Form.Item;
 const { Step } = Steps;
 
-const PublishForm = Form.create()(
-  class extends React.Component {
-
-    render() {
-      const { visible, onCancel, onCreate, form } = this.props;
-      const { getFieldDecorator } = form;
-      return (
-        <Modal
-          visible={visible}
-          title="发布更新"
-          okText="提交"
-          onCancel={onCancel}
-          onOk={onCreate}
-        >
-          <Form layout="vertical">
-            <FormItem label="更新版本">
-              {getFieldDecorator('title', {
-                rules: [{ required: true, message: '请输入版本号!' }],
-              })(
-                <Input placeholder="请输入版本号!" />
-              )}
-            </FormItem>
-            <FormItem label="更新内容">
-              {getFieldDecorator('description', {
-                rules: [{ required: true, max: 300, message: '请输入更新内容，不超过300字!' }],
-              }
-              )(<Input placeholder="请输入更新内容，不超过300字!" type="textarea" />)}
-            </FormItem>
-          </Form>
-        </Modal>
-      );
-    }
-  }
-);
-
 const getWindowWidth = () => window.innerWidth || document.documentElement.clientWidth;
 
-const popoverContent = (
-  <div style={{ width: 160 }}>
-    审核细节内容
-  </div>
-);
-
-const customDot = (dot, { status }) =>
-  status === 'process' ? (
-    <Popover placement="topLeft" arrowPointAtCenter content={popoverContent}>
-      {dot}
-    </Popover>
-  ) : (
-      dot
-    );
-
-
-@connect(({ fundingview, loading }) => ({
-  fundingview,
-  loading: loading.models.fundingview,
+@connect(({ stockview, loading }) => ({
+  stockview,
+  loading: loading.models.stockview,
 }))
 
-class FundingView extends Component {
+class StockView extends Component {
 
   renderImg = (text) => {
     if (text && text.length) {
       const imgs = text.map((item, index) =>
-        <div><img width={300} src={item} key={index} /><br/></div>
+        <div><img width={300} src={item} key={index} /><br /></div>
       )
       return imgs;
     }
@@ -138,7 +87,7 @@ class FundingView extends Component {
     const { dispatch } = this.props;
     console.log(this.props.location.query.id);
     dispatch({
-      type: 'fundingview/fetch',
+      type: 'stockview/fetch',
       payload: { id: this.props.location.query.id },//这里
     });
 
@@ -174,104 +123,129 @@ class FundingView extends Component {
   render() {
     const { stepDirection, operationkey } = this.state;
     const {
-      fundingview: { data },
+      stockview: { data },
       loading
     } = this.props;
 
 
     return (
       <PageHeaderWrapper
-        title={data.cp_name}
+        title="凭证详情页"
         action={null}
         content={null}
         extraContent={null}
         tabList={null}
       >
         <Card style={null} bordered={false}>
+          <Row style={{ marginBottom: 32 }}>
+            <Col span={6}>
+              <Row style={{ marginBottom: 16 }}>
+                <Col span={24}><h3><b>当前交易价</b></h3></Col>
+              </Row>
+              <Row style={{ marginBottom: 16 }}>
+                <Col span={12}>
+                  昨日成交数量
+                </Col>
+                <Col span={12}>
+                  {data.total_num}
+                </Col>
+              </Row>
+              <Row style={{ marginBottom: 16 }}>
+                <Col span={12}>
+                  昨日成交金额
+                </Col>
+                <Col span={12}>
+                  {data.total_amount}
+                </Col>
+              </Row>
+              <Row style={{ marginBottom: 16 }}>
+                <Col span={12}>
+                  昨日开盘价
+                </Col>
+                <Col span={12}>
+                  {data.stock_open}
+                </Col>
+              </Row>
+              <Row style={{ marginBottom: 16 }}>
+                <Col span={12}>
+                  昨日收盘价
+                </Col>
+                <Col span={12}>
+                  {data.stock_close}
+                </Col>
+              </Row>
+              <Row style={{ marginBottom: 16 }}>
+                <Col span={12}>
+                  昨日最高价
+                </Col>
+                <Col span={12}>
+                  {data.stock_high}
+                </Col>
+              </Row>
+              <Row style={{ marginBottom: 16 }}>
+                <Col span={12}>
+                  昨日最低价
+                </Col>
+                <Col span={12}>
+                  {data.stock_low}
+                </Col>
+              </Row>
+
+            </Col>
+            <Col span={18}>
+              <iframe src="http://localhost:9101/client/echart/kline/index.html" frameborder="0" width="100%" height="600px" scrolling="no" />
+            </Col>
+          </Row>
+
+          <Divider style={{ margin: '20px 0' }} />
+
           <Row style={{ marginBottom: 16 }}>
-            <Col sm={24} xs={24}><h3><b>基本信息</b></h3></Col>
+            <Col span={24}><h3><b>游戏信息</b></h3></Col>
           </Row>
           <Row style={{ marginBottom: 32 }}>
-            <Col sm={8} xs={12}>
+            <Col span={8}>
+              游戏名称：{data.cp_text}
+            </Col>
+            <Col span={8}>
               游戏类型：{data.cp_type}
             </Col>
-            <Col sm={8} xs={12}>
+            <Col span={8}>
               开发者：{data.develop_name}
             </Col>
-            <Col sm={8} xs={12}>
-              发布时间：{moment(data.publish_time * 1000).format('YYYY-MM-DD HH:mm:ss')}
+          </Row>
+          <Row style={{ marginBottom: 32 }}>
+            <Col span={8}>
+              流通凭证总数：100000份
+            </Col>
+            <Col span={8}>
+              持续分红时间：120天
+            </Col>
+            <Col span={8}>
+              累计分红：1222千克
             </Col>
           </Row>
           <Row style={{ marginBottom: 32 }}>
-            <Col sm={8} xs={12}>
-              游戏状态：{data.cp_state=='0'?'未上线':'正常运营'}
+            <Col span={8}>
+              当前流通市值(千克)
             </Col>
-            <Col sm={8} xs={12}>
-              启用邀请奖励：{parseInt(data.invite_share) == 0 ? '否' : '是'}
+            <Col span={8}>
+              单份凭证收益
             </Col>
-
-            <Col sm={8} xs={12}>
-              {parseInt(data.invite_share) != 0 && (
-                `邀请奖励：${data.invite_share}%`
-              )}
-            </Col>
-          </Row>
-          <Row style={{ marginBottom: 32 }}>
-            <Col sm={24} xs={24}>URL地址：{data.cp_url}</Col>
-          </Row>
-
-          <Divider style={{ margin: '20px 0' }} />
-          <Row style={{ marginBottom: 16 }}>
-            <Col sm={24} xs={24}><h3><b>版本信息</b></h3></Col>
-          </Row>
-          <Row style={{ marginBottom: 32 }}>
-            <Col sm={8} xs={12}>
-              当前版本：{data.cp_version}
-            </Col>
-            <Col sm={8} xs={12}>
-              更新时间：{moment(data.update_time * 1000).format('YYYY-MM-DD HH:mm:ss')}
-            </Col>
-          </Row>
-          <Row style={{ marginBottom: 32 }}>
-            <Col sm={24} xs={24}>更新内容：{data.cp_desc}</Col>
           </Row>
 
-          <Divider style={{ margin: '20px 0' }} />
-          <Row style={{ marginBottom: 16 }}>
-            <Col sm={24} xs={24}><h3><b>素材信息</b></h3></Col>
-          </Row>
-          <Row style={{ marginBottom: 32 }}>
-            <Col sm={24} xs={24}>
-              游戏图标：<img width={120} src={data.icon_url} />
-            </Col>
-          </Row>
-          <Row style={{ marginBottom: 32 }}>
-            <Col sm={24} xs={24}>
-              封面图片：<img width={300} src={data.face_url} />
-            </Col>
-          </Row>
-          <Row style={{ marginBottom: 32 }}>
-            <Col sm={24} xs={24}>
-              游戏截图：{this.renderImg(data.pic_urls)}
-            </Col>
-          </Row>
           <Row style={{ marginBottom: 32 }}>
             <Col sm={4} xs={8}>
               <Button type="primary" onClick={this.handleBack}>
-                返回游戏列表
+                返回
                 </Button>
             </Col>
           </Row>
+
         </Card>
-        <PublishForm
-          wrappedComponentRef={this.saveFormRef}
-          visible={this.state.visible}
-          onCancel={this.handleCancel}
-          onCreate={this.handleCreate}
-        />
+
       </PageHeaderWrapper>
     );
   }
 }
 
-export default FundingView;
+export default StockView;

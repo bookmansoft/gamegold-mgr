@@ -195,32 +195,7 @@ class StockList extends PureComponent {
               {getFieldDecorator('cp_text')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
-          <Col md={6} sm={9}>
-            <FormItem label="游戏ID：">
-              {getFieldDecorator('cp_id')(<Input placeholder="请输入" />)}
-            </FormItem>
-          </Col>
-          <Col md={6} sm={9}>
-            <FormItem label="游戏类型：">
-              {getFieldDecorator('cp_type')(
-                <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="">全部</Option>
-                  {this.renderOptions()}
-                </Select>
-              )}
-            </FormItem>
-          </Col>
-          {/* <Col md={6} sm={9}>
-            <FormItem label="状态：">
-              {getFieldDecorator('cp_state')(
-                <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="1">待审核</Option>
-                  <Option value="2">已上架</Option>
-                  <Option value="3">审核不通过</Option>
-                </Select>
-              )}
-            </FormItem>
-          </Col> */}
+ 
           <Col md={6} sm={9}>
             <span className={styles.submitButtons}>
               <Button type="primary" htmlType="submit">
@@ -244,7 +219,7 @@ class StockList extends PureComponent {
     const { selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;
 
     return (
-      <PageHeaderWrapper title="游戏列表">
+      <PageHeaderWrapper title="游戏行情列表">
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderForm()}</div>

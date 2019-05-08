@@ -1,4 +1,4 @@
-import { getGameView,getGameFromUrl } from '@/services/gamegoldapi';
+import { getGameView,getStockView } from '@/services/gamegoldapi';
 
 export default {
   namespace: 'stockview',
@@ -10,8 +10,8 @@ export default {
 
   effects: {
     *fetch({ payload }, { call, put }) {
-      console.log("gameview model："+payload.id);
-      const response = yield call(getGameView, payload);
+      console.log("stockview model："+payload.id);
+      const response = yield call(getStockView, payload);
       yield put({
         type: 'save',
         payload: response,
