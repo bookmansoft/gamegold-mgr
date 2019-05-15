@@ -149,7 +149,7 @@ export default [
         path: '/gamemgr',
         name: 'gamemgr',
         icon: 'table',
-        authority: ['user'],
+        authority: ['user','admin'],
         routes: [
           {
             path: '/gamemgr/gamelist',
