@@ -241,7 +241,7 @@ class MarketView extends Component {
           </Row>
           <Row style={{ marginBottom: 32 }}>
             <Col span={4}>
-              <Pie percent={10} subTitle={null} total="10%" height={120} />
+              <Pie percent={parseInt((data.stock_num-data.residue_num)*100/data.stock_num)} subTitle={null} total={parseInt((data.stock_num-data.residue_num)*100/data.stock_num)+'%'} height={120} />
             </Col>
             <Col span={8} style={{ marginBottom: 16 }}>
               凭证总数量：{data.stock_num}
