@@ -46,32 +46,20 @@ class StockList extends PureComponent {
       dataIndex: 'cp_text',
     },
     {
-      title: '行情日期',
-      dataIndex: 'stock_day',
-    },
-    {
-      title: '开盘价',
-      dataIndex: 'stock_open',
-    },
-    {
-      title: '收盘价',
-      dataIndex: 'stock_close',
-    },
-    {
-      title: '最高价',
-      dataIndex: 'stock_high',
-    },
-    {
-      title: '最低价',
-      dataIndex: 'stock_low',
-    },
-    {
-      title: '当日成交数量',
+      title: '流通凭证总数',
       dataIndex: 'total_num',
     },
     {
-      title: '当日成交金额',
-      dataIndex: 'total_amount',
+      title: '当前挂单价格(千克)',
+      dataIndex: 'sell_stock_amount',
+    },
+    {
+      title: '基准价格',
+      dataIndex: 'base_amount',
+    },
+    {
+      title: '当前挂单数量',
+      dataIndex: 'sell_stock_num',
     },
     {
       title: '操作',

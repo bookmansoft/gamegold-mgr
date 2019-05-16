@@ -1,4 +1,4 @@
-import { queryStock, ListCpType } from '@/services/gamegoldapi';
+import { queryStockBase, ListCpType } from '@/services/gamegoldapi';
 
 export default {
   namespace: 'stocklist',
@@ -12,7 +12,7 @@ export default {
 
   effects: {
     *fetch({ payload }, { call, put }) {
-      const response = yield call(queryStock, payload);
+      const response = yield call(queryStockBase, payload);
       yield put({
         type: 'save',
         payload: response,

@@ -1344,7 +1344,7 @@ export async function getStockView(params) {
     //接下来好好查询并返回这个页面的数据
     let msg = await remote.login({ openid: theOpenId });
     if (remote.isSuccess(msg)) {
-      let ret = await remote.fetching({ func: "cpstock.Retrieve", userinfo: JSON.parse(localStorage.userinfo), id: params.id });
+      let ret = await remote.fetching({ func: "cpstockbase.Retrieve", userinfo: JSON.parse(localStorage.userinfo), id: params.id });
       if (ret.data === null) {
         return { code: -200, data: null, message: "react service层无返回值。方法名：getGameView" };
       }
@@ -1358,4 +1358,32 @@ export async function getStockView(params) {
     return { code: -100, data: null, message: "react service层错误。方法名：getGameView" };
   }
 
+}
+
+
+//--股票行情查询
+export async function queryStockBase(params) {
+  try {
+    let msg = await remote.login({ openid: theOpenId });
+    let ret = { code: -200, data: null, message: "react service层无返回值。方法名：queryStockBase" };
+    if (remote.isSuccess(msg)) {
+      console.log("从数据库查询游戏列表stock.ListRecord:" + stringify(params));//currentPage=2&pageSize=10
+      if (params == null) {
+        params = {
+          currentPage: 1,
+          pageSize: 10,
+        };
+      };
+      ret = await remote.fetching({
+        func: "cpstockbase.ListRecord", userinfo: JSON.parse(localStorage.userinfo),
+        ...params
+      });
+    }
+    console.log("股票行情查询列表：" + JSON.stringify(ret));
+    return ret;
+  } catch (error) {
+    console.log(error);
+    return { code: -100, data: null, message: "react service层错误。方法名：queryStockBase" };
+  }
+  //return request(`/gamemgr/query?${stringify(params)}`);
 }
