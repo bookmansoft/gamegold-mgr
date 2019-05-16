@@ -366,6 +366,7 @@ export default [
             path: '/market/marketview',
             name: 'marketview',
             component: './Market/MarketView',
+            hideInMenu: true,
           },
 
         ],
