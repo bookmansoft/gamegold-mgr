@@ -387,6 +387,7 @@ export default [
             path: '/stock/stockview',
             name: 'stockview',
             component: './Stock/StockView',
+            hideInMenu: true,
           },
 
         ],
