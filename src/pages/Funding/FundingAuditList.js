@@ -80,9 +80,9 @@ class FundingAuditList extends PureComponent {
 
   componentDidMount() {
     const { dispatch } = this.props;
-    dispatch({
-      type: 'fundingauditlist/fetch',
-    });
+    // dispatch({
+    //   type: 'fundingauditlist/fetch',
+    // });
     dispatch({
       type: 'fundingauditlist/fetchCpType'
     });
@@ -182,11 +182,9 @@ class FundingAuditList extends PureComponent {
           </Col>
           <Col span={6}>
             <FormItem label="审核状态：">
-              {getFieldDecorator('audit_state_id')(
-                <Select placeholder="请选择" style={{ width: '100%' }}>
+              {getFieldDecorator('audit_state_id',{initialValue:"1"})(
+                <Select placeholder="请选择" style={{ width: '100%' }} defaultValue="1">
                   <Option value="1">未审核</Option>
-                  <Option value="2">已上架</Option>
-                  <Option value="3">审核不通过</Option>
                 </Select>
               )}
             </FormItem>
@@ -194,7 +192,7 @@ class FundingAuditList extends PureComponent {
           <Col span={6}>
             <span className={styles.submitButtons}>
               <Button type="primary" htmlType="submit">
-                搜索{this.state.aa}
+                搜索
               </Button>
               <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
                 重置
