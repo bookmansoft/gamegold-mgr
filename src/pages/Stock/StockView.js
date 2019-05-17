@@ -140,11 +140,14 @@ class StockView extends Component {
           <Row style={{ marginBottom: 32 }}>
             <Col span={6}>
               <Row style={{ marginBottom: 16 }}>
-                <Col span={24}><h3><b>当前交易价</b></h3></Col>
+                <Col span={24}><h3><b>当前挂牌价（游戏金）</b></h3></Col>
+              </Row>
+              <Row style={{ marginBottom: 16 }}>
+                <Col span={24}><h1 style={{color:'red'}}>55.000千克</h1></Col>
               </Row>
               <Row style={{ marginBottom: 16 }}>
                 <Col span={12}>
-                  昨日成交数量
+                  流通凭证总数(份)
                 </Col>
                 <Col span={12}>
                   {data.total_num}
@@ -152,42 +155,42 @@ class StockView extends Component {
               </Row>
               <Row style={{ marginBottom: 16 }}>
                 <Col span={12}>
-                  昨日成交金额
+                  当前流通市值(Kg)
                 </Col>
                 <Col span={12}>
-                  {data.total_amount}
-                </Col>
-              </Row>
-              <Row style={{ marginBottom: 16 }}>
-                <Col span={12}>
-                  昨日开盘价
-                </Col>
-                <Col span={12}>
-                  {data.stock_open}
+                  {parseInt(data.total_num*data.sell_stock_amount/100)/1000}
                 </Col>
               </Row>
               <Row style={{ marginBottom: 16 }}>
                 <Col span={12}>
-                  昨日收盘价
+                  最新挂单价格
                 </Col>
                 <Col span={12}>
-                  {data.stock_close}
-                </Col>
-              </Row>
-              <Row style={{ marginBottom: 16 }}>
-                <Col span={12}>
-                  昨日最高价
-                </Col>
-                <Col span={12}>
-                  {data.stock_high}
+                {parseInt(data.sell_stock_amount/100)/1000}
                 </Col>
               </Row>
               <Row style={{ marginBottom: 16 }}>
                 <Col span={12}>
-                  昨日最低价
+                  挂单数量
                 </Col>
                 <Col span={12}>
-                  {data.stock_low}
+                  {data.sell_stock_num}
+                </Col>
+              </Row>
+              <Row style={{ marginBottom: 16 }}>
+                <Col span={12}>
+                  发行价格
+                </Col>
+                <Col span={12}>
+                  {parseInt(data.base_amount/100)/1000}
+                </Col>
+              </Row>
+              <Row style={{ marginBottom: 16 }}>
+                <Col span={12}>
+                  挂单价/发行价
+                </Col>
+                <Col span={12}>
+                  {(data.sell_stock_amount*100/data.base_amount)+'%'}
                 </Col>
               </Row>
 
