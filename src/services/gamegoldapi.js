@@ -56,7 +56,6 @@ export async function queryUserMgr(params) {
     console.log(error);
     return { code: -100, data: null, message: "react service层错误。方法名：queryUserMgr" };
   }
-  // return request(`/usermgr/query?${stringify(params)}`);
 }
 
 export async function queryCurrentUser(params) {
@@ -110,7 +109,6 @@ export async function queryCurrentUser(params) {
     phone: '0752-268888888',
   }
 }
-
 //--操作员登录鉴权
 export async function accountLogin(params) {
   try {
@@ -250,8 +248,6 @@ export async function changeOperatorPassword(params) {
 
 }
 
-
-
 //--操作员列表
 export async function queryOperatorMgr(params) {
   try {
@@ -330,6 +326,7 @@ export async function queryGameMgr(params) {
         cp_text: typeof (params.cp_text) == "undefined" ? '' : params.cp_text,
         cp_type: typeof (params.cp_type) == "undefined" ? '' : params.cp_type,
         cp_state: typeof (params.cp_state) == "undefined" ? '' : params.cp_state,
+        operator_id: JSON.parse(localStorage.userinfo).id == 1 ? '' : JSON.parse(localStorage.userinfo).id,//用户id为1管理员时不传递此参数
       });
     }
     console.log("游戏管理结果列表：" + JSON.stringify(ret));
@@ -386,6 +383,7 @@ export async function addGameMgr(params) {
         update_time: params.update_time,
         update_content: params.update_content,
         invite_share: params.invite_share,
+        operator_id: JSON.parse(localStorage.userinfo).id,
       });
       console.log("添加新游戏结果：" + JSON.stringify(retSave));
       return retSave;
@@ -1100,6 +1098,7 @@ export async function queryFunding(params) {
         func: "cpfunding.ListRecord", userinfo: JSON.parse(localStorage.userinfo),
         // currentPage: params.currentPage,最后以...params结尾，应该可以展开全部params参数，无需逐个处理
         // pageSize: params.pageSize,
+        operator_id: JSON.parse(localStorage.userinfo).id == 1 ? '' : JSON.parse(localStorage.userinfo).id,//用户id为1管理员时不传递此参数
         ...params
       });
     }
@@ -1154,6 +1153,7 @@ export async function addFunding(params) {
         develop_name: params.data.develop_name,
         develop_text: params.state.develop_text,
         cid: params.data.cp_id,
+        operator_id: JSON.parse(localStorage.userinfo).id,
       });
       console.log("增加众筹信息结果：" + JSON.stringify(retSave));
       return retSave;
@@ -1237,6 +1237,7 @@ export async function auditFunding(params) {
         develop_name: data.develop_name,
         develop_text: data.develop_text,
         cid: data.cid,
+        operator_id: data.operator_id,//用户id为1管理员时不传递此参数
       });
       console.log("调用更新记录结果：" + JSON.stringify(retUpdate));
       //调用链，创建凭证；--此代码应该移动到审核。
@@ -1376,6 +1377,7 @@ export async function queryStockBase(params) {
       };
       ret = await remote.fetching({
         func: "cpstockbase.ListRecord", userinfo: JSON.parse(localStorage.userinfo),
+        operator_id: JSON.parse(localStorage.userinfo).id == 1 ? '' : JSON.parse(localStorage.userinfo).id,//用户id为1管理员时不传递此参数
         ...params
       });
     }
