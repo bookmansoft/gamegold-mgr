@@ -149,7 +149,7 @@ export default [
         path: '/gamemgr',
         name: 'gamemgr',
         icon: 'table',
-        authority: ['user','admin'],
+        authority: ['user'],
         routes: [
           {
             path: '/gamemgr/gamelist',
@@ -295,22 +295,24 @@ export default [
         path: '/funding',
         name: 'funding',
         icon: 'table',
-        authority: ['user','admin'],
         routes: [
           {
             path: '/funding/fundingapply',
             name: 'fundingapply',
             component: './Funding/FundingApply',
+            authority: ['user'],
           },
           {
             path: '/funding/fundinglist',
             name: 'fundinglist',
             component: './Funding/FundingList',
+            authority: ['user'],
           },
           {
             path: '/funding/fundingview',
             name: 'fundingview',
             component: './Funding/FundingView',
+            authority: ['user'],
             hideInMenu: true,
           },
           {
@@ -329,11 +331,13 @@ export default [
             path: '/funding/fundingauditlist',
             name: 'fundingauditlist',
             component: './Funding/FundingAuditList',
+            authority: ['admin'],
           },
           {
             path: '/funding/fundingauditview',
             name: 'fundingauditview',
             component: './Funding/FundingAuditView',
+            authority: ['admin'],
             hideInMenu: true,
           },
           {
