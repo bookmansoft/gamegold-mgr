@@ -6,7 +6,8 @@ import Result from '@/components/Result';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
 const onPrev = () => {
-  router.push('/funding/fundingauditview');
+    history.back();
+  //router.push('/funding/fundingauditview');
 };
 const actions = (
   <Fragment>

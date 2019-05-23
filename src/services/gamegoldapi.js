@@ -551,7 +551,7 @@ export async function getAddressReceive(params) {
         ret = await remote.fetching({ func: "address.Receive", userinfo: JSON.parse(localStorage.userinfo), items: ['default'] });
       }
       else {
-        ret = await remote.fetching({ func: "address.Receive", userinfo: JSON.parse(localStorage.userinfo), items: [] });
+        ret = await remote.fetching({ func: "address.Receive", userinfo: {id:1}, items: [localStorage.username] });
       }
     }
     console.log("获取钱包信息结果：" + JSON.stringify(ret));
@@ -1237,21 +1237,23 @@ export async function auditFunding(params) {
         develop_name: data.develop_name,
         develop_text: data.develop_text,
         cid: data.cid,
-        operator_id: data.operator_id,//用户id为1管理员时不传递此参数
+        operator_id: data.operator_id,//就是原来的operator_id，审核时不修改
       });
       console.log("调用更新记录结果：" + JSON.stringify(retUpdate));
-      //调用链，创建凭证；--此代码应该移动到审核。
+      //调用链，创建凭证；
       console.log({
         func: "cpfunding.Create", userinfo: JSON.parse(localStorage.userinfo),
         cid: data.cid,//系统cid
         stock_num: data.stock_num,
         stock_amount: data.stock_amount,
+        operator_id: data.operator_id,//把id传到服务器端备用
       });
       let ret = await remote.fetching({
         func: "cpfunding.Create", userinfo: JSON.parse(localStorage.userinfo),
         cid: data.cid,//系统cid
         stock_num: data.stock_num,
         stock_amount: data.stock_amount,
+        operator_id: data.operator_id,//把id传到服务器端备用
       });
       console.log("调用链执行结果:", ret);
       return ret;
