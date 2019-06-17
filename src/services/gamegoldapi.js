@@ -1,31 +1,19 @@
 import { stringify } from 'qs';
 import request from '@/utils/request';
-require('../utils/bundle');
+import toolkit from 'gamerpc'
 
 const theOpenId = "18681223392";
 //创建连接器对象
-let remote = new toolkit.gameconn(
-  toolkit.gameconn.CommMode.get,              //使用短连接 get / post
-  {
-    "UrlHead": "http",              //协议选择: http/https
+let remote = new toolkit.gameconn({
+    "UrlHead": "http",            //协议选择: http/https
     "webserver": {
       "host": "127.0.0.1",        //开发使用本地ip：127.0.0.1 打包使用远程主机地址 114.115.167.168
-      "port": 9901                //远程主机端口
-    },
-    "auth": {
-      "openid": theOpenId,        //用户标识
-      "openkey": "18681223392",   //和用户标识关联的用户令牌
-      "domain": "tx.IOS",         //用户所在的域，tx是提供登录验证服务的厂商类别，IOS是该厂商下的服务器组别
+      "port": 9801                //远程主机端口
     }
-  }
-)
+});
 console.log('gamegoldapi 22:', location.hostname);
 
-
 const salt = "038292cfb50d8361a0feb0e3697461c9";
-
-
-
 
 //--用户
 export async function queryUserMgr(params) {
@@ -147,9 +135,7 @@ export async function accountLogin(params) {
     console.log(error);
     return { code: -100, data: null, message: "react service层错误。方法名：accountLogin" };
   }
-
 }
-
 
 //--新增操作员
 export async function addOperator(params) {
@@ -182,7 +168,6 @@ export async function addOperator(params) {
     console.log(error);
     return { code: -100, data: null, message: "react service层错误。方法名：addOperator" };
   }
-
 }
 
 //--修改操作员状态
@@ -245,7 +230,6 @@ export async function changeOperatorPassword(params) {
     console.log(error);
     return { code: -100, data: null, message: "react service层错误。方法名：changeOperatorPassword" };
   }
-
 }
 
 //--操作员列表
@@ -277,9 +261,7 @@ export async function queryOperatorMgr(params) {
     console.log(error);
     return { code: -100, data: null, message: "react service层错误。方法名：addOperator" };
   }
-
 }
-
 
 //--CpType，实际上没有参数，但必须保证params与前面的代码兼容
 export async function ListCpType(params) {
@@ -299,7 +281,6 @@ export async function ListCpType(params) {
     return { code: -100, data: null, message: "react service层错误。方法名：ListCpType" };
   }
 }
-
 
 //--游戏管理
 export async function queryGameMgr(params) {
