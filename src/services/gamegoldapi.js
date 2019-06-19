@@ -30,18 +30,28 @@ export async function accountLogin(params) {
 
     //统一执行登录操作
     //{ status: "ok", type: "account", currentAuthority: "admin", userinfo:{ id: 1 } }
-    let ret = await remote.login({ 
-      domain: 'auth',
+    ret = await remote.login({ 
+      domain: 'authpwd',
       openid: params.userName,
       openkey: password,
       type: params.type,
     });
 
     //判断返回值是否正确--增加一个返回值项 userinfo:{id:5} ;其中id为实际的userid
-    if (ret.code == 0) {
-      localStorage.username = params.userName;//页面显示用的数据
-      localStorage.userinfo = JSON.stringify(ret.userinfo);//每次提交给服务端的数据
-      localStorage.currentAuthority = ret.currentAuthority;
+    if (!!ret) {
+      localStorage.username = remote.userInfo.openid; //页面显示用的数据
+      localStorage.currentAuthority = remote.userInfo.currentAuthority;
+
+      ret = { 
+        status: "ok", 
+        type: "account", 
+        currentAuthority: remote.userInfo.currentAuthority, 
+        userinfo:{ id: remote.userInfo.id } 
+      };
+    } else {
+      ret = { 
+        status: "error", 
+      };
     }
     return ret;
   } catch (error) {
@@ -62,13 +72,11 @@ export async function addOperator(params) {
 
     //先调用链上的保存方法
     console.log("添加操作员:" + JSON.stringify(params));
-    let ret = await remote.fetching({
+    ret = await remote.fetching({
       func: "operator.CreateRecord", 
-      userinfo: JSON.parse(localStorage.userinfo),
-      login_name: params.login_name,
+      login_name: encodeURIComponent(params.login_name),
       password: password,
-      remark: params.remark,
-      state: 1,
+      remark: encodeURIComponent(params.remark),
     });
     console.log(ret);
     return ret;
@@ -94,8 +102,8 @@ export async function changeOperatorPassword(params) {
 
     //先调用链上的保存方法
     console.log("修改密码:" + JSON.stringify(params));
-    let ret = await remote.fetching({
-      func: "operator.ChangePassword", userinfo: JSON.parse(localStorage.userinfo),
+    ret = await remote.fetching({
+      func: "operator.ChangePassword", 
       oldpassword: oldpassword,
       newpassword: newpassword,
     });
@@ -122,10 +130,8 @@ export async function queryUserMgr(params) {
         max_second: null, //90天(3600*24*90)
       };
     };
-    // console.log(45);
-    // console.log(JSON.parse(localStorage.userinfo));
     ret = await remote.fetching({
-      func: "address.Filter", userinfo: JSON.parse(localStorage.userinfo),
+      func: "address.Filter", 
       items: [params.cp_type, params.amount * 100000000, params.max_second * 3600 * 24, params.currentPage, params.pageSize]
     });
     console.log("操作员管理结果列表：" + JSON.stringify(ret));
@@ -194,8 +200,8 @@ export async function changeOperatorState(params) {
     let ret = { code: -200, data: null, message: "react service层无返回值。方法名：changeOperatorState" };
     //先调用链上的保存方法
     console.log("修改状态:" + JSON.stringify(params));
-    let ret = await remote.fetching({
-      func: "operator.ChangeState", userinfo: JSON.parse(localStorage.userinfo),
+    ret = await remote.fetching({
+      func: "operator.ChangeState", 
       id: params.id,
       state: params.state,
     });
@@ -212,7 +218,7 @@ export async function changeOperatorState(params) {
 export async function queryOperatorMgr(params) {
   try {
     let ret = { code: -200, data: null, message: "react service层无返回值。方法名：queryOperatorMgr" };
-    console.log("从数据库查询操作员列表operator.ListRecord:" + stringify(params));
+    console.log("从数据库查询操作员列表 operator.ListRecord:" + stringify(params));
     if (params == null) {
       params = {
         currentPage: 1,
@@ -222,7 +228,7 @@ export async function queryOperatorMgr(params) {
       };
     };
     ret = await remote.fetching({
-      func: "operator.ListRecord", userinfo: JSON.parse(localStorage.userinfo),
+      func: "operator.ListRecord", 
       currentPage: params.currentPage,
       pageSize: params.pageSize,
       login_name: typeof (params.login_name) == "undefined" ? '' : params.login_name,
@@ -242,7 +248,7 @@ export async function ListCpType(params) {
     let ret = { code: -200, data: null, message: "react service层无返回值。方法名：ListCpType" };
     console.log("从数据库查询游戏列表cp.ListCpType");
     ret = await remote.fetching({
-      func: "cp.ListCpType", userinfo: JSON.parse(localStorage.userinfo),
+      func: "cp.ListCpType", 
     });
     console.log("游戏类型结果列表：" + JSON.stringify(ret));
     return ret;
@@ -268,14 +274,13 @@ export async function queryGameMgr(params) {
       };
     };
     ret = await remote.fetching({
-      func: "cp.ListRecord", userinfo: JSON.parse(localStorage.userinfo),
+      func: "cp.ListRecord", 
       currentPage: params.currentPage,
       pageSize: params.pageSize,
       cp_id: typeof (params.cp_id) == "undefined" ? '' : params.cp_id,
       cp_text: typeof (params.cp_text) == "undefined" ? '' : params.cp_text,
       cp_type: typeof (params.cp_type) == "undefined" ? '' : params.cp_type,
       cp_state: typeof (params.cp_state) == "undefined" ? '' : params.cp_state,
-      operator_id: JSON.parse(localStorage.userinfo).id == 1 ? '' : JSON.parse(localStorage.userinfo).id,//用户id为1管理员时不传递此参数
     });
     console.log("游戏管理结果列表：" + JSON.stringify(ret));
     return ret;
@@ -297,7 +302,7 @@ export async function addGameMgr(params) {
     //先调用链上的保存方法
     console.log("添加新游戏:" + JSON.stringify(params));
     ret = await remote.fetching({
-      func: "cp.Create", userinfo: JSON.parse(localStorage.userinfo),
+      func: "cp.Create", 
       items: [params.cp_name, params.cp_url, params.wallet_addr, params.cp_type, params.invite_share]
     });
     //判断返回值是否正确
@@ -308,7 +313,7 @@ export async function addGameMgr(params) {
     let cp_id = ret.data.cid;//返回的cpid值
     console.log("调用保存记录的方法:" + JSON.stringify(params));
     let retSave = await remote.fetching({
-      func: "cp.CreateRecord", userinfo: JSON.parse(localStorage.userinfo),
+      func: "cp.CreateRecord", 
       cp_id: cp_id,
       cp_name: params.cp_name,
       cp_text: params.cp_text,
@@ -328,7 +333,6 @@ export async function addGameMgr(params) {
       update_time: params.update_time,
       update_content: params.update_content,
       invite_share: params.invite_share,
-      operator_id: JSON.parse(localStorage.userinfo).id,
     });
     console.log("添加新游戏结果：" + JSON.stringify(retSave));
     return retSave;
@@ -343,7 +347,10 @@ export async function addGameMgr(params) {
 //params.cp_url 准备保存为cp_url的外部URL字段值
 export async function getGameFromUrl(params) {
   try {
-    let data = await remote.fetching({ func: "cp.getGameFromUrl", userinfo: JSON.parse(localStorage.userinfo), cp_url: params.cp_url });
+    let data = await remote.fetching({ 
+      func: "cp.getGameFromUrl", 
+      cp_url: params.cp_url 
+    });
     console.log(data);
     //patch，更改目录层次结构
     data = data.game;
@@ -372,7 +379,10 @@ export async function getGameFromUrl(params) {
 export async function getGameView(params) {
   try {
     console.log(params.id);
-    let ret = await remote.fetching({ func: "cp.Retrieve", userinfo: JSON.parse(localStorage.userinfo), id: params.id });
+    let ret = await remote.fetching({ 
+      func: "cp.Retrieve", 
+      id: params.id 
+    });
     if (ret.data === null) {
       return { code: -200, data: null, message: "react service层无返回值。方法名：getGameView" };
     }
@@ -403,13 +413,15 @@ export async function queryWalletLog(params) {
     console.log("获取钱包收支流水:" + JSON.stringify(params));
     if (localStorage.currentAuthority == 'admin') {
       ret = await remote.fetching({
-        func: "tx.List", userinfo: JSON.parse(localStorage.userinfo), items: ['default', 1000],
+        func: "tx.List", 
+        items: ['default', 1000],
         currentPage: params.currentPage, pageSize: params.pageSize, daterange: params.date
       });
     }
     else {
       ret = await remote.fetching({
-        func: "tx.List", userinfo: JSON.parse(localStorage.userinfo), items: [null, 1000],
+        func: "tx.List", 
+        items: [null, 1000],
         currentPage: params.currentPage, pageSize: params.pageSize, daterange: params.date
       });
     }
@@ -431,7 +443,10 @@ export async function getWalletLog(params) {
   try {
     let ret = { code: -200, data: null, message: "react service层无返回值。方法名：getWalletLog" };
     console.log("获取钱包收支详情:" + JSON.stringify(params));
-    ret = await remote.fetching({ func: "tx.GetWallet", userinfo: JSON.parse(localStorage.userinfo), items: [params.id] });
+    ret = await remote.fetching({ 
+      func: "tx.GetWallet", 
+      items: [params.id] 
+    });
     console.log("获取钱包收支详情结果：" + JSON.stringify(ret));
     if (ret.data != null) {
       return ret.data;
@@ -450,7 +465,10 @@ export async function getKeyMaster(params) {
   try {
     let ret = { code: -200, data: null, message: "react service层无返回值。方法名：getKeyMaster" };
     console.log("获取钱包助记词信息:" + JSON.stringify(params));
-    ret = await remote.fetching({ func: "wallet.KeyMaster", userinfo: JSON.parse(localStorage.userinfo), items: [] });
+    ret = await remote.fetching({ 
+      func: "wallet.KeyMaster", 
+      items: [] 
+    });
     console.log("获取钱包助记词信息结果：" + JSON.stringify(ret));
     return ret;
   } catch (error) {
@@ -464,12 +482,10 @@ export async function getAddressReceive(params) {
   try {
     let ret = { code: -200, data: null, message: "react service层无返回值。方法名：getAddressReceive" };
     console.log("获取钱包信息:" + JSON.stringify(params));
-    if (localStorage.currentAuthority == 'admin') {
-      ret = await remote.fetching({ func: "address.Receive", userinfo: JSON.parse(localStorage.userinfo), items: ['default'] });
-    }
-    else {
-      ret = await remote.fetching({ func: "address.Receive", userinfo: {id:1}, items: [localStorage.username] });
-    }
+    ret = await remote.fetching({ 
+      func: "address.Receive", 
+      items: ['default'] 
+    });
     console.log("获取钱包信息结果：" + JSON.stringify(ret));
     return ret;
   } catch (error) {
@@ -485,7 +501,10 @@ export async function getWalletInfo(params) {
   try {
     let ret = { code: -200, data: null, message: "react service层无返回值。方法名：getWalletInfo" };
     console.log("获取钱包信息:" + JSON.stringify(params));
-    ret = await remote.fetching({ func: "wallet.Info", userinfo: JSON.parse(localStorage.userinfo), items: [] });
+    ret = await remote.fetching({ 
+      func: "wallet.Info", 
+      items: [] 
+    });
     console.log("获取钱包信息结果：" + JSON.stringify(ret));
     return ret;
   } catch (error) {
@@ -502,12 +521,10 @@ export async function getBalanceAll(params) {
     let ret = { code: -200, data: null, message: "react service层无返回值。方法名：getBalanceAll" };
     console.log("获取余额参数:" + JSON.stringify(params));
     console.log(localStorage.currentAuthority);
-    if (localStorage.currentAuthority == 'admin') {
-      ret = await remote.fetching({ func: "account.BalanceAll", userinfo: JSON.parse(localStorage.userinfo), items: ['default'] });
-    }
-    else {
-      ret = await remote.fetching({ func: "account.BalanceAll", userinfo: JSON.parse(localStorage.userinfo), items: [] });
-    }
+    ret = await remote.fetching({ 
+      func: "account.BalanceAll", 
+      items: ['default'] 
+    });
     console.log("获取余额结果：" + JSON.stringify(ret));
     return ret;
   } catch (error) {
@@ -522,12 +539,10 @@ export async function addWalletPay(params) {
   try {
     let ret = { code: -200, data: null, message: "react service层无返回值。方法名：addWalletPay" };
     console.log("钱包转出:");
-    if (localStorage.currentAuthority == 'admin') {
-      ret = await remote.fetching({ func: "tx.Send", userinfo: JSON.parse(localStorage.userinfo), items: [params.address, parseInt(params.value * 100000), 'default'] });
-    }
-    else {
-      ret = await remote.fetching({ func: "tx.Send", userinfo: JSON.parse(localStorage.userinfo), items: [params.address, parseInt(params.value * 100000)] });
-    }
+    ret = await remote.fetching({ 
+      func: "tx.Send", 
+      items: [params.address, parseInt(params.value * 100000), 'default'] 
+    });
     return ret;
   } catch (error) {
     console.log(error);
@@ -554,7 +569,7 @@ export async function getGamePropsList(params) {
     };
   };
   result = await remote.fetching({
-    func: "prop.LocalList", userinfo: JSON.parse(localStorage.userinfo),
+    func: "prop.LocalList", 
     currentPage: params.currentPage,
     pageSize: params.pageSize,
     id: typeof (params.id) == "undefined" ? '' : params.id,
@@ -574,7 +589,6 @@ export async function getGamePropsList(params) {
 export async function CreatePropLocal(params) {
   let res = await remote.fetching({
     func: "prop.CreateLocal", 
-    userinfo: JSON.parse(localStorage.userinfo),
     props_id: params.props_id,
     props_name: params.props_name,
     props_type: params.props_type,
@@ -607,7 +621,7 @@ export async function CreatePropLocal(params) {
  */
 export async function EditPropLocal(params) {
   let res = await remote.fetching({
-    func: "prop.EditProp", userinfo: JSON.parse(localStorage.userinfo),
+    func: "prop.EditProp", 
     id: params.id,
     props_id: params.props_id,
     status: params.status,
@@ -635,7 +649,7 @@ export async function EditPropLocal(params) {
  */
 export async function PropCreateListRemote(params) {
   let res = await remote.fetching({
-    func: "prop.CreatePropListRemote", userinfo: JSON.parse(localStorage.userinfo),
+    func: "prop.CreatePropListRemote", 
     id: params.id,
     cid: params.cid,
     oid: params.oid,
@@ -660,7 +674,10 @@ export async function PropCreateListRemote(params) {
 
 export async function getGamePropsDetail(params) {
   //本地库直接读取详情
-  let res = await remote.fetching({ func: "prop.LocalDetail", userinfo: JSON.parse(localStorage.userinfo), id: params.id });
+  let res = await remote.fetching({ 
+    func: "prop.LocalDetail", 
+    id: params.id 
+  });
   if (remote.isSuccess(res)) {
     return res;
   } else {
@@ -677,7 +694,7 @@ export async function getGamePropsDetail(params) {
  */
 export async function getCpPropsDetail(params) {
   let ret = await remote.fetching({
-    func: "prop.getCpPropsDetail", userinfo: JSON.parse(localStorage.userinfo),
+    func: "prop.getCpPropsDetail", 
     pid: params.pid,
     cp_url: params.cp_url,
     //cp_url: 'http://localhost:9701/mock/cp122907',
@@ -693,12 +710,12 @@ export async function getCpPropsDetail(params) {
  */
 export async function getGamePropsDetailById(params) {
   let ret = await remote.fetching({
-    func: "prop.LocalDetail", userinfo: JSON.parse(localStorage.userinfo),
+    func: "prop.LocalDetail", 
     id: params.id,
   });
   if (ret.code == 0) {
     ret = await remote.fetching({
-      func: "prop.getCpPropsDetail", userinfo: JSON.parse(localStorage.userinfo),
+      func: "prop.getCpPropsDetail", 
       cp_url: ret.data.cp_url,
       pid: ret.data.props_id,
       //cp_url: 'http://localhost:9701/mock/cp122907',
@@ -717,7 +734,7 @@ export async function getGamePropsDetailById(params) {
  */
 export async function getPropsByGame(params) {
   let ret = await remote.fetching({
-    func: "prop.getPropsByGame", userinfo: JSON.parse(localStorage.userinfo),
+    func: "prop.getPropsByGame", 
     cp_url: params.cp_url,
     //cp_url: 'http://localhost:9701/mock/cp122907',
   });
@@ -734,7 +751,9 @@ export async function getPropsByGame(params) {
  */
 export async function getAllGameList() {
   let ret = [];
-  let res = await remote.fetching({ func: "prop.ListAllCpRecord", userinfo: JSON.parse(localStorage.userinfo) });
+  let res = await remote.fetching({ 
+    func: "prop.ListAllCpRecord", 
+  });
   if (remote.isSuccess(res)) {
     for (let i in res['data']) {
       ret.push(res['data'][i]); //属性
@@ -753,7 +772,7 @@ export async function getAllGameList() {
 export async function getAllPropsByParams(params) {
   let ret = [];
   let res = await remote.fetching({
-    func: "prop.getAllPropsByParams", userinfo: JSON.parse(localStorage.userinfo),
+    func: "prop.getAllPropsByParams", 
     cid: typeof (params.cid) == "undefined" ? '' : params.cid
   });
   if (remote.isSuccess(res)) {
@@ -772,7 +791,7 @@ export async function getAllPropsByParams(params) {
  */
 export async function sendListRemote(params) {
   let res = await remote.fetching({
-    func: "prop.PropSendListRemote", userinfo: JSON.parse(localStorage.userinfo),
+    func: "prop.PropSendListRemote", 
     id: params.id,
     addr: params.addr
   });
@@ -796,8 +815,8 @@ export async function addRedpacket(params) {
 
     //先调用链上的保存方法
     console.log("添加红包:" + JSON.stringify(params));
-    let ret = await remote.fetching({
-      func: "redpacket.CreateRecord", userinfo: JSON.parse(localStorage.userinfo),
+    ret = await remote.fetching({
+      func: "redpacket.CreateRecord", 
       act_name: params.act_name,
       act_sequence: params.act_sequence,
       total_gamegold: params.total_gamegold,
@@ -824,8 +843,8 @@ export async function changeRedpacket(params) {
 
     //先调用链上的保存方法
     console.log("修改红包活动:" + JSON.stringify(params));
-    let ret = await remote.fetching({
-      func: "redpacket.UpdateRecord", userinfo: JSON.parse(localStorage.userinfo),
+    ret = await remote.fetching({
+      func: "redpacket.UpdateRecord", 
       id: params.id,
       act_name: params.act_name,
       act_sequence: params.act_sequence,
@@ -851,7 +870,7 @@ export async function getRedpacket(params) {
     let ret = { code: -200, data: null, message: "react service层无返回值。方法名：getWalletLog" };
     console.log("获取钱包收支详情:" + JSON.stringify(params));
     ret = await remote.fetching({
-      func: "redpacket.Retrieve", userinfo: JSON.parse(localStorage.userinfo),
+      func: "redpacket.Retrieve", 
       id: params.id,
     });
     console.log("获取钱包收支详情结果：" + JSON.stringify(ret));
@@ -882,7 +901,7 @@ export async function queryRedpacket(params) {
       };
     };
     ret = await remote.fetching({
-      func: "redpacket.ListRecord", userinfo: JSON.parse(localStorage.userinfo),
+      func: "redpacket.ListRecord", 
       currentPage: params.currentPage,
       pageSize: params.pageSize,
       login_name: typeof (params.login_name) == "undefined" ? '' : params.login_name,
@@ -911,7 +930,7 @@ export async function queryPrize(params) {
       };
     };
     ret = await remote.fetching({
-      func: "prize.ListRecord", userinfo: JSON.parse(localStorage.userinfo),
+      func: "prize.ListRecord", 
       currentPage: params.currentPage,
       pageSize: params.pageSize,
     });
@@ -935,10 +954,7 @@ export async function queryFunding(params) {
       };
     };
     ret = await remote.fetching({
-      func: "cpfunding.ListRecord", userinfo: JSON.parse(localStorage.userinfo),
-      // currentPage: params.currentPage,最后以...params结尾，应该可以展开全部params参数，无需逐个处理
-      // pageSize: params.pageSize,
-      operator_id: JSON.parse(localStorage.userinfo).id == 1 ? '' : JSON.parse(localStorage.userinfo).id,//用户id为1管理员时不传递此参数
+      func: "cpfunding.ListRecord", 
       ...params
     });
     console.log("众筹管理结果列表：" + JSON.stringify(ret));
@@ -955,7 +971,7 @@ export async function ListCp(params) {
     let ret = { code: -200, data: null, message: "react service层无返回值。方法名：ListCp" };
     console.log("从数据库查询游戏列表cpfunding.ListCp");
     ret = await remote.fetching({
-      func: "cpfunding.ListCp", userinfo: JSON.parse(localStorage.userinfo),
+      func: "cpfunding.ListCp", 
     });
     console.log("游戏结果列表：" + JSON.stringify(ret));
     return ret;
@@ -969,7 +985,7 @@ export async function addFunding(params) {
   try {
     console.log("调用保存记录的方法:" + JSON.stringify(params));
     let retSave = await remote.fetching({
-      func: "cpfunding.CreateRecord", userinfo: JSON.parse(localStorage.userinfo),
+      func: "cpfunding.CreateRecord", 
       cpid: params.data.id,
       stock_num: params.state.stock_num,
       stock_amount: params.state.stock_amount,
@@ -985,7 +1001,6 @@ export async function addFunding(params) {
       develop_name: params.data.develop_name,
       develop_text: params.state.develop_text,
       cid: params.data.cp_id,
-      operator_id: JSON.parse(localStorage.userinfo).id,
     });
     console.log("增加众筹信息结果：" + JSON.stringify(retSave));
     return retSave;
@@ -1001,15 +1016,20 @@ export async function getFundingView(params) {
   try {
     console.log(params.id);
     //接下来好好查询并返回这个页面的数据
-    let ret = await remote.fetching({ func: "cpfunding.Retrieve", userinfo: JSON.parse(localStorage.userinfo), id: params.id });
+    let ret = await remote.fetching({ 
+      func: "cpfunding.Retrieve", 
+      id: params.id 
+    });
     if (ret.data === null) {
       return { code: -200, data: null, message: "react service层无返回值。方法名：getFundingView" };
     }
     //有数据
     console.log(ret.data);
     //调用链，获取剩余数量
-    let retCp = await remote.fetching({ func: "cp.ById", userinfo: JSON.parse(localStorage.userinfo), items: [ret.data.cid] });
-    console.log({ func: "cp.ById", userinfo: JSON.parse(localStorage.userinfo), items: [ret.data.cid] });
+    let retCp = await remote.fetching({ 
+      func: "cp.ById", 
+      items: [ret.data.cid] 
+    });
     console.log("cp信息", retCp);
     if (retCp.data.stock != null) {
       ret.data.residue_num = retCp.data.stock.sum;
@@ -1032,14 +1052,14 @@ export async function auditFunding(params) {
     let ret = { code: -200, data: null, message: "react service层无返回值。方法名：auditFunding" };
     console.log("调用更新记录的方法:" + JSON.stringify(params));
     let retCpfunding = await remote.fetching({
-      func: "cpfunding.Retrieve", userinfo: JSON.parse(localStorage.userinfo),
+      func: "cpfunding.Retrieve", 
       id: params.id
     });
     console.log(retCpfunding);
     let data = retCpfunding.data;
 
     let retUpdate = await remote.fetching({
-      func: "cpfunding.UpdateRecord", userinfo: JSON.parse(localStorage.userinfo),
+      func: "cpfunding.UpdateRecord", 
       id: params.id,
       cpid: data.id,
       stock_num: data.stock_num,
@@ -1056,23 +1076,20 @@ export async function auditFunding(params) {
       develop_name: data.develop_name,
       develop_text: data.develop_text,
       cid: data.cid,
-      operator_id: data.operator_id,//就是原来的operator_id，审核时不修改
     });
     console.log("调用更新记录结果：" + JSON.stringify(retUpdate));
     //调用链，创建凭证；
     console.log({
-      func: "cpfunding.Create", userinfo: JSON.parse(localStorage.userinfo),
+      func: "cpfunding.Create", 
       cid: data.cid,//系统cid
       stock_num: data.stock_num,
       stock_amount: data.stock_amount,
-      operator_id: data.operator_id,//把id传到服务器端备用
     });
-    let ret = await remote.fetching({
-      func: "cpfunding.Create", userinfo: JSON.parse(localStorage.userinfo),
+    ret = await remote.fetching({
+      func: "cpfunding.Create", 
       cid: data.cid,//系统cid
       stock_num: data.stock_num,
       stock_amount: data.stock_amount,
-      operator_id: data.operator_id,//把id传到服务器端备用
     });
     console.log("调用链执行结果:", ret);
     return ret;
@@ -1104,7 +1121,7 @@ export async function stockRecord(params) {
     let ret = { code: -200, data: null, message: "react service层无返回值。方法名：stockRecord" };
     console.log("查询凭证的现金销售记录:" + JSON.stringify(params));
     ret = await remote.fetching({
-      func: "cpfunding.StockRecord", userinfo: JSON.parse(localStorage.userinfo),
+      func: "cpfunding.StockRecord", 
       items: [params.type, params.cid, 0, ""],
       //  cid: params.cid,
       // currentPage: params.currentPage, pageSize: params.pageSize, daterange: params.date
@@ -1135,7 +1152,7 @@ export async function queryStock(params) {
       };
     };
     ret = await remote.fetching({
-      func: "cpstock.ListRecord", userinfo: JSON.parse(localStorage.userinfo),
+      func: "cpstock.ListRecord", 
       ...params
     });
     console.log("股票行情查询列表：" + JSON.stringify(ret));
@@ -1153,7 +1170,10 @@ export async function getStockView(params) {
   try {
     console.log(params.id);
     //接下来好好查询并返回这个页面的数据
-    let ret = await remote.fetching({ func: "cpstockbase.Retrieve", userinfo: JSON.parse(localStorage.userinfo), id: params.id });
+    let ret = await remote.fetching({ 
+      func: "cpstockbase.Retrieve", 
+      id: params.id 
+    });
     if (ret.data === null) {
       return { code: -200, data: null, message: "react service层无返回值。方法名：getGameView" };
     }
@@ -1178,8 +1198,7 @@ export async function queryStockBase(params) {
       };
     };
     ret = await remote.fetching({
-      func: "cpstockbase.ListRecord", userinfo: JSON.parse(localStorage.userinfo),
-      operator_id: JSON.parse(localStorage.userinfo).id == 1 ? '' : JSON.parse(localStorage.userinfo).id,//用户id为1(管理员)时不传递此参数
+      func: "cpstockbase.ListRecord", 
       ...params
     });
     console.log("股票行情查询列表：" + JSON.stringify(ret));
