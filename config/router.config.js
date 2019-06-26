@@ -135,7 +135,7 @@ export default [
         path: '/usermgr',
         name: 'usermgr',
         icon: 'table',
-        authority: ['user'],
+        authority: ['user','admin'],
         routes: [
           {
             path: '/usermgr/userlist',
@@ -149,7 +149,7 @@ export default [
         path: '/gamemgr',
         name: 'gamemgr',
         icon: 'table',
-        authority: ['user'],
+        authority: ['user','admin'],
         routes: [
           {
             path: '/gamemgr/gamelist',
@@ -185,7 +185,7 @@ export default [
         name: 'gameprops',
         icon: 'build',
         path: '/gameprops',
-        authority: ['user'],
+        authority: ['user','admin'],
         routes: [
           {
             path: '/gameprops/list',
@@ -300,19 +300,19 @@ export default [
             path: '/funding/fundingapply',
             name: 'fundingapply',
             component: './Funding/FundingApply',
-            authority: ['user'],
+            authority: ['user','admin'],
           },
           {
             path: '/funding/fundinglist',
             name: 'fundinglist',
             component: './Funding/FundingList',
-            authority: ['user'],
+            authority: ['user','admin'],
           },
           {
             path: '/funding/fundingview',
             name: 'fundingview',
             component: './Funding/FundingView',
-            authority: ['user'],
+            authority: ['user','admin'],
             hideInMenu: true,
           },
           {
