@@ -6,6 +6,7 @@ import defaultSettings from '../src/defaultSettings';
 
 export default {
   history: 'hash',
+  minimizer: 'terserjs',
   // 指定插件
   plugins: [
     [
