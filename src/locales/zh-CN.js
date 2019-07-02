@@ -5,6 +5,7 @@ export default {
   'layout.user.link.terms': '条款',
   'validation.email.required': '请输入邮箱地址！',
   'validation.email.wrong-format': '邮箱地址格式错误！',
+  'validation.userName.required': '请输入用户名!',
   'validation.password.required': '请输入密码！',
   'validation.password.twice': '两次输入的密码不匹配!',
   'validation.password.strength.msg': '请至少输入 6 个字符。请不要使用容易被猜到的密码。',
@@ -19,6 +20,8 @@ export default {
   'validation.date.required': '请选择起止日期',
   'validation.goal.required': '请输入目标描述',
   'validation.standard.required': '请输入衡量标准',
+  'form.get-captcha': '获取验证码',
+  'form.captcha.second': '秒',
   'form.optional': '（选填）',
   'form.submit': '提交',
   'form.save': '保存',
@@ -27,7 +30,7 @@ export default {
   'form.email.placeholder': '邮箱',
   'form.password.placeholder': '至少6位密码，区分大小写',
   'form.confirm-password.placeholder': '确认密码',
-  'form.phone-number.placeholder': '位手机号',
+  'form.phone-number.placeholder': '手机号',
   'form.verification-code.placeholder': '验证码',
   'form.title.label': '标题',
   'form.title.placeholder': '给目标起个名字',
@@ -164,7 +167,8 @@ export default {
   'menu.stock':'凭证管理',
   'menu.stock.stocklist':'凭证列表',
   'menu.stock.stockview':'凭证详情页',
-
+  'app.login.userName': '用户名',
+  'app.login.password': '密码',
   'app.login.message-invalid-credentials': '账户或密码错误（admin/888888）',
   'app.login.message-invalid-verification-code': '验证码错误',
   'app.login.tab-login-credentials': '账户密码登录',
@@ -349,4 +353,7 @@ export default {
   'app.gameprops.create' : '道具创建',
   'app.gameprops.detail' : '道具详情',
   'app.gameprops.present' : '道具赠送',
+  'sys.copyright': '2018~2020 百谷王网络',
+  'sys.product.description': 'Vallnet - 面向游戏文娱行业的CRM',
+  'sys.product.name': 'Vallnet CRM'
 };

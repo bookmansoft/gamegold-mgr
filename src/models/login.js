@@ -1,7 +1,7 @@
 import { routerRedux } from 'dva/router';
 import { stringify } from 'qs';
 import { fakeAccountLogin, getFakeCaptcha } from '@/services/api';
-import { accountLogin } from '@/services/gamegoldapi';
+import { resetPassword, getCaptcha, accountLogin, accountLogout } from '@/services/gamegoldapi';
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
 import { reloadAuthorized } from '@/utils/Authorized';
@@ -43,11 +43,17 @@ export default {
       }
     },
 
+    *resetPassword({ payload }, { call }) {
+      yield call(resetPassword, payload);
+    },
+
     *getCaptcha({ payload }, { call }) {
-      yield call(getFakeCaptcha, payload);
+      yield call(getCaptcha, payload);
     },
 
     *logout(_, { put }) {
+      //清除Cookie，清除连接器状态
+      yield accountLogout();
       yield put({
         type: 'changeLoginStatus',
         payload: {

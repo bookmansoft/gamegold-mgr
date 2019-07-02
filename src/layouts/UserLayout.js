@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { formatMessage } from 'umi/locale';
+import { formatMessage, FormattedMessage } from 'umi/locale';
 import Link from 'umi/link';
 import { Icon } from 'antd';
 import GlobalFooter from '@/components/GlobalFooter';
@@ -13,7 +13,7 @@ const links = [
 
 const copyright = (
   <Fragment>
-    Copyright <Icon type="copyright" /> 2018 百谷王出品
+    Copyright <Icon type="copyright" /> {formatMessage({id: 'sys.copyright'})}
   </Fragment>
 );
 
@@ -42,10 +42,10 @@ class UserLayout extends React.PureComponent {
             <div className={styles.header}>
               <Link to="/">
                 <img alt="logo" className={styles.logo} src={logo} />
-                <span className={styles.title}>Gamegold Manager</span>
+                <span className={styles.title}>{formatMessage({id: 'sys.product.name'})}</span>
               </Link>
             </div>
-            <div className={styles.desc}>Gamegold Manager 是百谷王推出的游戏区块链</div>
+            <div className={styles.desc}>{formatMessage({id: 'sys.product.description'})}</div>
           </div>
           {children}
         </div>

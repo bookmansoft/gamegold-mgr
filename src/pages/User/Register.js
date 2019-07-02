@@ -65,6 +65,9 @@ class Register extends Component {
     clearInterval(this.interval);
   }
 
+  /**
+   * 获取验证码流程
+   */
   onGetCaptcha = () => {
     let count = 59;
     this.setState({ count });
@@ -75,6 +78,20 @@ class Register extends Component {
         clearInterval(this.interval);
       }
     }, 1000);
+
+    const { form, dispatch } = this.props;
+    form.validateFields({ force: false }, (err, values) => {
+      if (!err) {
+        const { prefix } = this.state;
+        dispatch({
+          type: 'register/authcode',
+          payload: {
+            ...values,
+            prefix,
+          },
+        });
+      }
+    });
   };
 
   getPasswordStatus = () => {
@@ -173,6 +190,12 @@ class Register extends Component {
     ) : null;
   };
 
+  changePrefix = value => {
+    this.setState({
+      prefix: value,
+    });
+  };
+
   render() {
     const { form, submitting } = this.props;
     const { getFieldDecorator } = form;
@@ -267,7 +290,7 @@ class Register extends Component {
                     message: formatMessage({ id: 'validation.phone-number.required' }),
                   },
                   {
-                    pattern: /^\d{10}$/,
+                    pattern: /^\d{11}$/,
                     message: formatMessage({ id: 'validation.phone-number.wrong-format' }),
                   },
                 ],
@@ -286,7 +309,7 @@ class Register extends Component {
                 {getFieldDecorator('captcha', {
                   rules: [
                     {
-                      required: true,
+                      required: false,
                       message: formatMessage({ id: 'validation.verification-code.required' }),
                     },
                   ],

@@ -1,6 +1,7 @@
 import { stringify } from 'qs';
 import request from '@/utils/request';
 import toolkit from 'gamerpc'
+import Cookies from 'js-cookie'
 const crypto = require('crypto');
 
 //创建连接器对象
@@ -8,12 +9,69 @@ let remote = new toolkit.gameconn({
     "UrlHead": "http",            //协议选择: http/https
     "webserver": {
       "host": "127.0.0.1",        //开发使用本地ip：127.0.0.1 打包使用远程主机地址 114.115.167.168
-      "port": 9801                //远程主机端口
+      "port": 9901                //远程主机端口
     }
 });
-console.log('gamegoldapi 22:', location.hostname);
 
 const salt = "038292cfb50d8361a0feb0e3697461c9";
+
+/**
+ * 向服务端申请发送手机验证码
+ * @param {Object} params {mail, mobile, password, confirm, prefix}
+ */
+export async function getAuthCode(params) {
+  let password = crypto.createHash("sha1").update(params.password + salt).digest("hex");
+  let ret = await remote.init().login({
+    domain: 'auth2step.CRM',                        //指定验证方式为两阶段认证
+    openid: params.mail,                            //用户名称
+    openkey: password,                              //用户密码，经过了加密转换
+    addrType: 'phone',                              //指定验证方式为手机
+    address: `+${params.prefix}${params.mobile}`,   //作为验证地址的手机号码
+  });
+  
+  //如果返回 ok 则页面将跳转至注册成功页面
+  return { status: "waitingAuthCode" };
+}
+
+export async function resetPassword(params) {
+  let ret = await remote.setUserInfo({domain: 'auth2step.CRM', openid:params.openid}, remote.CommStatus.reqLb).fetching({
+    func: 'authpwd.resetPassword',
+  });
+  
+  return { status: "resetPassword" };
+}
+
+export async function getCaptcha(params) {
+  let ret = await remote.init().login({
+    domain: 'auth2step.CRM',                        //指定验证方式为两阶段认证
+    addrType: 'phone',                              //指定验证方式为手机
+    address: `+${params.prefix}${params.mobile}`,    //作为验证地址的手机号码
+  });
+  
+  return { status: "ok" };
+}
+
+/**
+ * 输入手机验证码，执行两阶段认证中的第二步验证流程
+ * @param {Object} params {captcha, mail, mobile, password, confirm, prefix}
+ */
+export async function login2step(params) {
+  remote.events.emit('authcode', params.captcha);
+  await (async function(time){return new Promise(resolve =>{setTimeout(resolve, time);});})(1000);
+
+  return { status: "ok", currentAuthority: "admin", userinfo:{ id: 1 } };
+}
+
+/**
+ * 用户签退，清除状态缓存
+ */
+export async function accountLogout() {
+  //清除 Cookie
+  Cookies.remove('openid');
+  Cookies.remove('token');
+  //清除连接器状态
+  remote.init();
+}
 
 /**
  * 操作员登录鉴权
@@ -24,35 +82,59 @@ export async function accountLogin(params) {
     console.log("操作员登录:" + JSON.stringify(params));
 
     let ret = { code: -200, data: null, message: "react service层无返回值。方法名：accountLogin" };
-    //加密
-    let password = crypto.createHash("sha1").update(params.password + salt).digest("hex");  //加密后的值d
-    console.log(password);
 
-    //统一执行登录操作
+    //执行登录操作
     //{ status: "ok", type: "account", currentAuthority: "admin", userinfo:{ id: 1 } }
-    ret = await remote.login({ 
-      domain: 'authpwd',
-      openid: params.userName,
-      openkey: password,
-      type: params.type,
-    });
+    switch(params.type) {
+      case 'account' : {
+        //加密
+        let password = crypto.createHash("sha1").update(params.password + salt).digest("hex");  //加密后的值d
+        ret = await remote.login({ 
+          domain: 'authpwd.CRM',
+          openid: params.userName,
+          openkey: password,
+        });
+
+        break;
+      }
+
+      case 'mobile' : {
+        remote.events.emit('authcode', params.captcha);
+        await (async function(time){return new Promise(resolve =>{setTimeout(resolve, time);});})(1000);
+
+        break;
+      }
+
+      case 'cookie' : {
+        remote.setUserInfo({openid: params.openid, token: params.token});
+
+        break;
+      }
+    }
 
     //判断返回值是否正确--增加一个返回值项 userinfo:{id:5} ;其中id为实际的userid
     if (!!ret) {
       localStorage.username = remote.userInfo.openid; //页面显示用的数据
-      localStorage.currentAuthority = remote.userInfo.currentAuthority;
+      localStorage.currentAuthority = remote.userInfo.currentAuthority || 'admin';
+
+      if(!!params.autoLogin) {
+        //设置 Cookie 以便后续自动登录
+        Cookies.set('openid', remote.userInfo.openid, {expires: 7});
+        Cookies.set('token', remote.userInfo.token, {expires: 7});
+      }
 
       ret = { 
         status: "ok", 
         type: "account", 
-        currentAuthority: remote.userInfo.currentAuthority, 
-        userinfo:{ id: remote.userInfo.id } 
+        currentAuthority: remote.userInfo.currentAuthority || 'admin', 
+        userinfo:{ id: remote.userInfo.id || 1 } 
       };
     } else {
       ret = { 
         status: "error", 
       };
     }
+
     return ret;
   } catch (error) {
     console.log(error);

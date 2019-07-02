@@ -5,6 +5,7 @@ export default {
   'layout.user.link.terms': 'Terms',
   'validation.email.required': 'Please enter your email!',
   'validation.email.wrong-format': 'The email address is in the wrong format!',
+  'validation.userName.required': 'Please enter your userName!',
   'validation.password.required': 'Please enter your password!',
   'validation.password.twice': 'The passwords entered twice do not match!',
   'validation.password.strength.msg':
@@ -20,6 +21,8 @@ export default {
   'validation.date.required': 'Please select the start and end date',
   'validation.goal.required': 'Please enter a description of the goal',
   'validation.standard.required': 'Please enter a metric',
+  'form.get-captcha': 'Get Captcha',
+  'form.captcha.second': 'sec',
   'form.optional': ' (optional) ',
   'form.submit': 'Submit',
   'form.save': 'Save',
@@ -106,6 +109,8 @@ export default {
   'menu.account.settings': 'Account Settings',
   'menu.account.trigger': 'Trigger Error',
   'menu.account.logout': 'Logout',
+  'app.login.userName': 'userName',
+  'app.login.password': 'password',
   'app.login.message-invalid-credentials': 'Invalid username or password（admin/888888）',
   'app.login.message-invalid-verification-code': 'Invalid verification code',
   'app.login.tab-login-credentials': 'Credentials',
@@ -290,6 +295,8 @@ export default {
   'app.setting.weakmode': 'Weak Mode',
   'app.setting.copy': 'Copy Setting',
   'app.setting.copyinfo': 'copy success，please replace defaultSettings in src/models/setting.js',
-  'app.setting.production.hint':
-    'Setting panel shows in development environment only, please manually modify',
+  'app.setting.production.hint': 'Setting panel shows in development environment only, please manually modify',
+  'sys.copyright': '2018~2020 Vallnet',
+  'sys.product.description': 'Vallnet - CRM for Content Provider',
+  'sys.product.name': 'Vallnet CRM'
 };

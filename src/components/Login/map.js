@@ -42,7 +42,7 @@ export default {
         message: 'Please enter mobile number!',
       },
       {
-        pattern: /^1\d{10}$/,
+        pattern: /^1\d{11}$/,
         message: 'Wrong mobile number format!',
       },
     ],
