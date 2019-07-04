@@ -1,7 +1,7 @@
 import { routerRedux } from 'dva/router';
 import { stringify } from 'qs';
 import { fakeAccountLogin, getFakeCaptcha } from '@/services/api';
-import { resetPassword, getCaptcha, accountLogin, accountLogout } from '@/services/gamegoldapi';
+import { resetPassword, accountLogin, accountLogout } from '@/services/gamegoldapi';
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
 import { reloadAuthorized } from '@/utils/Authorized';
@@ -16,7 +16,6 @@ export default {
   effects: {
     *login({ payload }, { call, put }) {
       const response = yield call(accountLogin, payload);
-      console.log(response);
       yield put({
         type: 'changeLoginStatus',
         payload: response,
@@ -45,10 +44,6 @@ export default {
 
     *resetPassword({ payload }, { call }) {
       yield call(resetPassword, payload);
-    },
-
-    *getCaptcha({ payload }, { call }) {
-      yield call(getCaptcha, payload);
     },
 
     *logout(_, { put }) {

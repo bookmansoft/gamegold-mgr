@@ -1,3 +1,4 @@
+import { checkPermissions } from '../components/Authorized/CheckPermissions';
 import { stringify } from 'qs';
 import request from '@/utils/request';
 import toolkit from 'gamerpc'
@@ -16,10 +17,10 @@ let remote = new toolkit.gameconn({
 const salt = "038292cfb50d8361a0feb0e3697461c9";
 
 /**
- * 向服务端申请发送手机验证码
+ * 使用两阶段验证模式进行用户注册的第一步：提交用户名/密码/手机号码，向服务端请求下发手机验证码
  * @param {Object} params {mail, mobile, password, confirm, prefix}
  */
-export async function getAuthCode(params) {
+export async function RegisterAuthCode(params) {
   let password = crypto.createHash("sha1").update(params.password + salt).digest("hex");
   let ret = await remote.init().login({
     domain: 'auth2step.CRM',                        //指定验证方式为两阶段认证
@@ -29,37 +30,115 @@ export async function getAuthCode(params) {
     address: `+${params.prefix}${params.mobile}`,   //作为验证地址的手机号码
   });
   
-  //如果返回 ok 则页面将跳转至注册成功页面
-  return { status: "waitingAuthCode" };
-}
-
-export async function resetPassword(params) {
-  let ret = await remote.setUserInfo({domain: 'auth2step.CRM', openid:params.openid}, remote.CommStatus.reqLb).fetching({
-    func: 'authpwd.resetPassword',
-  });
-  
-  return { status: "resetPassword" };
-}
-
-export async function getCaptcha(params) {
-  let ret = await remote.init().login({
-    domain: 'auth2step.CRM',                        //指定验证方式为两阶段认证
-    addrType: 'phone',                              //指定验证方式为手机
-    address: `+${params.prefix}${params.mobile}`,    //作为验证地址的手机号码
-  });
-  
-  return { status: "ok" };
+  return { status: "waitingAuthCode" }; //如果返回 ok 则页面将跳转至注册成功页面
 }
 
 /**
- * 输入手机验证码，执行两阶段认证中的第二步验证流程
+ * 使用两阶段验证模式进行用户注册的第二步：上行验证码、接收服务端注册结果
  * @param {Object} params {captcha, mail, mobile, password, confirm, prefix}
  */
-export async function login2step(params) {
+export async function RegisterSubmit(params) {
+  let ret = new Promise(resolve => {
+    remote.events.once('logined', result => {
+      if(result.code == 0) {
+        resolve({ status: "ok", currentAuthority: result.data.currentAuthority || ['user'] });
+      } else {
+        resolve({ status: "error", currentAuthority: ['guest'] });
+      }
+    });
+  });
   remote.events.emit('authcode', params.captcha);
-  await (async function(time){return new Promise(resolve =>{setTimeout(resolve, time);});})(1000);
+  return ret;
+}
 
-  return { status: "ok", currentAuthority: "admin", userinfo:{ id: 1 } };
+/**
+ * 操作员登录相关操作
+ * @param {*} params 
+ */
+export async function accountLogin(params) {
+  try {
+    switch(params.type) {
+      //使用用户名/密码对方式登录
+      case 'account' : {
+        return afterLogin(await remote.init().login({ 
+          domain: 'authpwd.CRM',
+          openid: params.userName,
+          openkey: crypto.createHash("sha1").update(params.password + salt).digest("hex"), //将密码做加密转换
+        }));
+      }
+
+      //使用两阶段验证模式进行用户登录的第一步：上行手机号码，向服务端请求下发手机验证码
+      case 'captcha' : {
+        //因为还要等待两阶段的第二步才能真正登录, 所以此处不返回 ok
+        await remote.init().login({
+          domain: 'auth2step.CRM',                        //指定验证方式为两阶段认证
+          addrType: 'phone',                              //指定验证方式为手机
+          address: `+${params.prefix}${params.mobile}`,   //作为验证地址的手机号码
+        });
+        return { status: 'waitingResp' };
+      }
+
+      //使用两阶段验证模式进行用户登录的第二步：上行验证码，向服务端请求进行登录
+      case 'mobile' : {
+        let ret = new Promise(resolve => {
+          remote.events.once('logined', result => {
+            if(result.code == 0) {
+              resolve(afterLogin(true));
+            } else {
+              resolve(afterLogin(false));
+            }
+          });
+        });
+        remote.events.emit('authcode', params.captcha);
+
+        return ret;
+      }
+
+      //通过读取 cookie 设置 token 来完成登录设定
+      case 'cookie' : {
+        let result = await remote.init().setUserInfo({domain: 'auth2step.CRM', openid: params.openid}).setLB(true);
+        if(result) {
+          result = await remote.setUserInfo({domain: 'auth2step.CRM', openid: params.openid, token: params.token}).fetching({func:'login.UserLogin'});
+          if(result.code == 0) {
+            return afterLogin(true);
+          } 
+        }
+        return afterLogin(false);
+      }
+    }
+  } catch (error) {
+    console.log(error);
+    return afterLogin(false);
+  }
+}
+
+/**
+ * 收到登录请求的应答后，执行后续操作，返回最终的状态值
+ */
+function afterLogin(result) {
+  if (!!result) {
+    sessionStorage.setItem('username', remote.userInfo.openid); //页面显示用的数据
+    sessionStorage.setItem('token', remote.userInfo.token);
+    sessionStorage.setItem('currentAuthority', JSON.stringify(remote.userInfo.currentAuthority || ['user']));
+
+    if(!!sessionStorage.getItem('autoLogin')) {
+      //设置 Cookie 以便后续自动登录
+      Cookies.set('openid', sessionStorage.getItem('username'), {expires: 1});
+      Cookies.set('token', sessionStorage.getItem('token'), {expires: 1});
+    } else {
+      //清除 Cookie
+      Cookies.remove('openid');
+      Cookies.remove('token');
+    }
+
+    return { 
+      status: "ok", 
+      type: "account", 
+      currentAuthority: JSON.parse(sessionStorage.getItem('currentAuthority')),
+    };
+  } else {
+    return { status: "error" };
+  }
 }
 
 /**
@@ -70,102 +149,7 @@ export async function accountLogout() {
   Cookies.remove('openid');
   Cookies.remove('token');
   //清除连接器状态
-  remote.init();
-}
-
-/**
- * 操作员登录鉴权
- * @param {*} params 
- */
-export async function accountLogin(params) {
-  try {
-    console.log("操作员登录:" + JSON.stringify(params));
-
-    let ret = { code: -200, data: null, message: "react service层无返回值。方法名：accountLogin" };
-
-    //执行登录操作
-    //{ status: "ok", type: "account", currentAuthority: "admin", userinfo:{ id: 1 } }
-    switch(params.type) {
-      case 'account' : {
-        //加密
-        let password = crypto.createHash("sha1").update(params.password + salt).digest("hex");  //加密后的值d
-        ret = await remote.login({ 
-          domain: 'authpwd.CRM',
-          openid: params.userName,
-          openkey: password,
-        });
-
-        break;
-      }
-
-      case 'mobile' : {
-        remote.events.emit('authcode', params.captcha);
-        await (async function(time){return new Promise(resolve =>{setTimeout(resolve, time);});})(1000);
-
-        break;
-      }
-
-      case 'cookie' : {
-        remote.setUserInfo({openid: params.openid, token: params.token});
-
-        break;
-      }
-    }
-
-    //判断返回值是否正确--增加一个返回值项 userinfo:{id:5} ;其中id为实际的userid
-    if (!!ret) {
-      localStorage.username = remote.userInfo.openid; //页面显示用的数据
-      localStorage.currentAuthority = remote.userInfo.currentAuthority || 'admin';
-
-      if(!!params.autoLogin) {
-        //设置 Cookie 以便后续自动登录
-        Cookies.set('openid', remote.userInfo.openid, {expires: 7});
-        Cookies.set('token', remote.userInfo.token, {expires: 7});
-      }
-
-      ret = { 
-        status: "ok", 
-        type: "account", 
-        currentAuthority: remote.userInfo.currentAuthority || 'admin', 
-        userinfo:{ id: remote.userInfo.id || 1 } 
-      };
-    } else {
-      ret = { 
-        status: "error", 
-      };
-    }
-
-    return ret;
-  } catch (error) {
-    console.log(error);
-    return { code: -100, data: null, message: "react service层错误。方法名：accountLogin" };
-  }
-}
-
-/**
- * 新增操作员
- * @param {*} params 
- */
-export async function addOperator(params) {
-  try {
-    let ret = { code: -200, data: null, message: "react service层无返回值。方法名：addOperator" };
-    //加密
-    let password = crypto.createHash("sha1").update(params.password + salt).digest("hex");  //加密后的值d
-
-    //先调用链上的保存方法
-    console.log("添加操作员:" + JSON.stringify(params));
-    ret = await remote.fetching({
-      func: "operator.CreateRecord", 
-      login_name: encodeURIComponent(params.login_name),
-      password: password,
-      remark: encodeURIComponent(params.remark),
-    });
-    console.log(ret);
-    return ret;
-  } catch (error) {
-    console.log(error);
-    return { code: -100, data: null, message: "react service层错误。方法名：addOperator" };
-  }
+  remote.init().setUserInfo({domain: 'auth2step.CRM'}, remote.CommStatus.reqLb);
 }
 
 /**
@@ -174,7 +158,7 @@ export async function addOperator(params) {
  */
 export async function changeOperatorPassword(params) {
   try {
-    let ret = { code: -200, data: null, message: "react service层无返回值。方法名：addOperator" };
+    let ret = { code: -200, data: null };
     if (params.newpassword != params.newpassword2) {
       return { code: -10, data: null, message: "两次输入的新密码不一致！" };
     }
@@ -196,6 +180,18 @@ export async function changeOperatorPassword(params) {
     console.log(error);
     return { code: -100, data: null, message: "react service层错误。方法名：changeOperatorPassword" };
   }
+}
+
+/**
+ * 重置密码，用户选择'忘记密码'时调用
+ * @param {*} params 
+ */
+export async function resetPassword(params) {
+  let ret = await remote.fetching({
+    func: 'authpwd.resetPassword',
+  });
+  
+  return { status: "resetPassword" };
 }
 
 //--用户
@@ -320,7 +316,7 @@ export async function queryOperatorMgr(params) {
     return ret;
   } catch (error) {
     console.log(error);
-    return { code: -100, data: null, message: "react service层错误。方法名：addOperator" };
+    return { code: -100, data: null, message: "react service层错误" };
   }
 }
 
@@ -488,12 +484,15 @@ export async function getGameView(params) {
 
 }
 
-//--（交易）钱包收支清单
+/**
+ * （交易）钱包收支清单
+ * @param {*} params 
+ */
 export async function queryWalletLog(params) {
   try {
     let ret = { code: -200, data: null, message: "react service层无返回值。方法名：queryWalletLog" };
     console.log("获取钱包收支流水:" + JSON.stringify(params));
-    if (localStorage.currentAuthority == 'admin') {
+    if (checkPermissions('admin', sessionStorage.currentAuthority, 'ok', 'error') == 'ok') {
       ret = await remote.fetching({
         func: "tx.List", 
         items: ['default', 1000],
@@ -602,7 +601,6 @@ export async function getBalanceAll(params) {
   try {
     let ret = { code: -200, data: null, message: "react service层无返回值。方法名：getBalanceAll" };
     console.log("获取余额参数:" + JSON.stringify(params));
-    console.log(localStorage.currentAuthority);
     ret = await remote.fetching({ 
       func: "account.BalanceAll", 
       items: ['default'] 
@@ -914,7 +912,7 @@ export async function addRedpacket(params) {
     return ret;
   } catch (error) {
     console.log(error);
-    return { code: -100, data: null, message: "react service层错误。方法名：addOperator" };
+    return { code: -100, data: null, message: "react service层错误" };
   }
 }
 

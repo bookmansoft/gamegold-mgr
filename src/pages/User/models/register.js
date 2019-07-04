@@ -1,7 +1,7 @@
 import { fakeRegister } from '@/services/api';
 import { setAuthority } from '@/utils/authority';
 import { reloadAuthorized } from '@/utils/Authorized';
-import { getAuthCode, login2step } from '@/services/gamegoldapi';
+import { RegisterAuthCode, RegisterSubmit } from '@/services/gamegoldapi';
 
 export default {
   namespace: 'register',
@@ -12,14 +12,14 @@ export default {
 
   effects: {
     *authcode({ payload }, { call, put }) {
-      const response = yield call(getAuthCode, payload);
+      const response = yield call(RegisterAuthCode, payload);
       yield put({
         type: 'authcodeHandle',
         payload: response,
       });
     },
     *submit({ payload }, { call, put }) {
-      const response = yield call(login2step, payload);
+      const response = yield call(RegisterSubmit, payload);
       yield put({
         type: 'registerHandle',
         payload: response,
@@ -35,7 +35,7 @@ export default {
       };
     },
     registerHandle(state, { payload }) {
-      setAuthority('user');
+      setAuthority(payload.currentAuthority);
       reloadAuthorized();
       return {
         ...state,

@@ -19,20 +19,22 @@ const InputGroup = Input.Group;
 class LoginPage extends Component {
   state = {
     type: 'account',
-    autoLogin: true,
     prefix: '86',
     openid: '',
     token: '',
+    autoLogin: true,
   };
 
   componentDidMount() {
     let openid = Cookies.get('openid');
     let token = Cookies.get('token');
-    this.setState({ openid, token });
 
     const { dispatch } = this.props;
   
     if(!!openid && !!token) {
+      sessionStorage.setItem('autoLogin', true);
+      this.setState({autoLogin: true, openid, token});
+
       dispatch({
         type: 'login/login',
         payload: {
@@ -41,6 +43,8 @@ class LoginPage extends Component {
           token,
         },
       });
+    } else {
+      sessionStorage.setItem('autoLogin', false);
     }
   }
 
@@ -57,10 +61,11 @@ class LoginPage extends Component {
           const { dispatch } = this.props;
           const { prefix } = this.state;
           dispatch({
-            type: 'login/getCaptcha',
+            type: 'login/login',
             payload: {
               ...values,
               prefix,
+              type: 'captcha',
             },
           })
             .then(resolve)
@@ -72,21 +77,20 @@ class LoginPage extends Component {
   handleSubmit = (err, values) => {
     if (!err) {
       const { dispatch } = this.props;
-      const { prefix, autoLogin, type } = this.state;
+      const { prefix, type } = this.state;
       dispatch({
         type: 'login/login',
         payload: {
           ...values,
-          prefix, autoLogin, type,
+          prefix, type,
         },
       });
     }
   };
 
   changeAutoLogin = e => {
-    this.setState({
-      autoLogin: e.target.checked,
-    });
+    sessionStorage.setItem('autoLogin', e.target.checked);
+    this.setState({autoLogin: e.target.checked});
   };
 
   renderMessage = content => (

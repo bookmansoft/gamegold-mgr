@@ -1,3 +1,4 @@
+import { checkPermissions } from '../../components/Authorized/CheckPermissions';
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import { formatMessage, FormattedMessage } from 'umi/locale';
@@ -235,7 +236,7 @@ class WalletMgr extends PureComponent {
               钱包管理
               </Col>
             <Col sm={6} xs={12}>
-              {localStorage.currentAuthority == 'admin' && <Button type="primary" onClick={() => this.handleBackupWallet()}>
+              { checkPermissions('admin', sessionStorage.getItem('currentAuthority'), 'ok', 'error') == 'ok' && <Button type="primary" onClick={() => this.handleBackupWallet()}>
                 备份钱包</Button>}
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <Button type="primary" onClick={() => this.handleViewWallet()}>

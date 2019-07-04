@@ -64,8 +64,7 @@ export default class GlobalHeaderRight extends PureComponent {
           <FormattedMessage id="menu.account.trigger" defaultMessage="Trigger Error" />
         </Menu.Item> */}
         <Menu.Item key="changepassword">
-          <Icon type="setting" />
-          更改密码
+          <Icon type="setting" />{formatMessage({id:'menu.operator.operatopassword'})}
         </Menu.Item>
         <Menu.Divider />
         <Menu.Item key="logout">
@@ -152,7 +151,7 @@ export default class GlobalHeaderRight extends PureComponent {
                 src={currentUser.avatar}
                 alt="avatar"
               />
-              <span className={styles.name}>{localStorage.getItem("username")}</span>
+              <span className={styles.name}>{sessionStorage.getItem("username")}</span>
             </span>
           </Dropdown>
         ) : (

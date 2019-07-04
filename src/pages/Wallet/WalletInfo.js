@@ -1,3 +1,4 @@
+import { checkPermissions } from '../../components/Authorized/CheckPermissions';
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import { formatMessage, FormattedMessage } from 'umi/locale';
@@ -82,22 +83,12 @@ class WalletInfo extends PureComponent {
                 <img src={data!=null && (location.protocol+'//'+location.hostname+':9701/qrcode/'+data.data)} width="300" height="300"/>
               </Col>
             </Row>
-            {/* <Row style={{ marginBottom: 32 }}>
-              <Col sm={24} xs={24}>
-                钱包安全：未备份(todo)
-              </Col>
-            </Row> */}
             <Row style={{ marginBottom: 32 }}>
               <Col sm={4} xs={8}>
-              {localStorage.currentAuthority == 'admin' &&<Button type="primary" onClick={this.handleBack}>
-                  立即备份</Button>}
-                
+                { checkPermissions('admin', sessionStorage.getItem('currentAuthority'), 'ok', 'error') == 'ok' && <Button type="primary" onClick={this.handleBack}>立即备份</Button> }
               </Col>
             </Row>
           </Card>
-
-
-
       </PageHeaderWrapper>
     );
   }

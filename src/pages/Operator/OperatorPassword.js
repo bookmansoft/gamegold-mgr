@@ -81,13 +81,13 @@ class OperatorPassword extends PureComponent {
 
     return (
       <PageHeaderWrapper
-        title="修改密码"
+        title = {formatMessage({id:'menu.operator.operatopassword'})}
         content=""
       >
         <Card bordered={false}>
           <Form onSubmit={this.handleSubmit} hideRequiredMark={false} style={{ marginTop: 8 }}>
             <br />
-            <h2><b>修改密码</b></h2>
+            <h2><b>{formatMessage({id:'menu.operator.operatopassword'})}</b></h2>
             <br />
             <FormItem {...formItemLayout} label="原密码">
               {getFieldDecorator('oldpassword', {

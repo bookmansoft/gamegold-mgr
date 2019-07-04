@@ -101,26 +101,9 @@ export default [
             component: './Operator/OperatorList',
           },
           {
-            path: '/operator/operatoradd',
-            name: 'operatoradd',
-            component: './Operator/OperatorAdd',
-          },
-          {
             path: '/operator/operatorpassword',
             name: 'operatopassword',
             component: './Operator/OperatorPassword',
-          },
-          {
-            path: '/operator/operatoraddsuccess',
-            name: 'operatoraddsuccess',
-            component: './Operator/OperatorAddSuccess',
-            hideInMenu: true,
-          },
-          {
-            path: '/operator/operatoradderror',
-            name: 'operatoradderror',
-            component: './Operator/OperatorAddError',
-            hideInMenu: true,
           },
           {
             path: '/operator/operatorpasswordsuccess',
@@ -648,7 +631,6 @@ export default [
           },
         ],
       },
-
 
       {
         component: '404',
