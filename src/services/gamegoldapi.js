@@ -112,6 +112,14 @@ export async function accountLogin(params) {
   }
 }
 
+/***
+ *  页面刷新时对连接器进行重置
+ */
+export async function remoteInit() {
+  await remote.init().setUserInfo({domain: 'auth2step.CRM', openid: sessionStorage.getItem('username')}).setLB(true);
+  remote.setUserInfo({domain: 'auth2step.CRM', openid: sessionStorage.getItem('username'), token: sessionStorage.getItem('token')});
+}
+
 /**
  * 收到登录请求的应答后，执行后续操作，返回最终的状态值
  */
@@ -292,7 +300,10 @@ export async function changeOperatorState(params) {
   }
 }
 
-//--操作员列表
+/**
+ * 操作员列表
+ * @param {*} params 
+ */
 export async function queryOperatorMgr(params) {
   try {
     let ret = { code: -200, data: null, message: "react service层无返回值。方法名：queryOperatorMgr" };
@@ -309,8 +320,8 @@ export async function queryOperatorMgr(params) {
       func: "operator.ListRecord", 
       currentPage: params.currentPage,
       pageSize: params.pageSize,
-      login_name: typeof (params.login_name) == "undefined" ? '' : params.login_name,
-      state: typeof (params.state) == "undefined" ? '' : params.state,
+      login_name: params.login_name || '',
+      state: params.state || '',
     });
     console.log("操作员管理结果列表：" + JSON.stringify(ret));
     return ret;

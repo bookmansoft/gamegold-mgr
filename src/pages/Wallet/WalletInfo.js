@@ -42,7 +42,6 @@ const getValue = obj =>
 }))
 @Form.create()
 class WalletInfo extends PureComponent {
-
   componentDidMount() {
     const { dispatch } = this.props;
     console.log(location.protocol+'//'+location.host+'/qrcode/');
@@ -52,6 +51,12 @@ class WalletInfo extends PureComponent {
   }
   handleBack = () => {
     router.push('/wallet/step-form');
+  };
+  handleRefresh = () => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'walletinfo/fetch',
+    });
   };
 
   render() {
@@ -75,7 +80,7 @@ class WalletInfo extends PureComponent {
             </Row>
             <Row style={{ marginBottom: 32 }}>
               <Col sm={24} xs={24}>
-                <b>收款二维码：</b>
+                <b>收款二维码：</b><Button type="primary" onClick={this.handleRefresh}>刷新</Button>
               </Col>
             </Row>
             <Row style={{ marginBottom: 32 }}>

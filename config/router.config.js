@@ -98,16 +98,19 @@ export default [
           {
             path: '/operator/operatorlist',
             name: 'operatorlist',
+            authority: ['admin'],
             component: './Operator/OperatorList',
           },
           {
             path: '/operator/operatorpassword',
             name: 'operatopassword',
+            authority: ['admin','user'],
             component: './Operator/OperatorPassword',
           },
           {
             path: '/operator/operatorpasswordsuccess',
             name: 'operatorpasswordsuccess',
+            authority: ['admin','user'],
             component: './Operator/OperatorPasswordSuccess',
             hideInMenu: true,
           },

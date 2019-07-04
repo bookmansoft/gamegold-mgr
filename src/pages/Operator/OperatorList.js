@@ -1,4 +1,5 @@
 import React, { PureComponent, Fragment } from 'react';
+import { formatMessage, FormattedMessage } from 'umi/locale';
 import { connect } from 'dva';
 import moment from 'moment';
 import {
@@ -216,7 +217,7 @@ class OperatorList extends PureComponent {
     const { selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;
 
     return (
-      <PageHeaderWrapper title="操作员列表">
+      <PageHeaderWrapper title={formatMessage({id:'menu.operator.operatorlist'})}>
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderForm()}</div>

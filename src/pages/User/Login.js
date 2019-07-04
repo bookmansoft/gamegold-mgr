@@ -12,9 +12,16 @@ const { Tab, UserName, Password, Mobile, Captcha, Submit } = Login;
 
 const InputGroup = Input.Group;
 
-@connect(({ login, loading }) => ({
-  login,
-  submitting: loading.effects['login/login'],
+/**
+ * 组件调用了 dva 所封装的 react-redux 的 @connect 装饰器，用来接收域名为 login 的 model 所对应的 redux store
+ * 注意：装饰器除了 app.state.login 以外还实际接收 app.state.loading 作为参数，其来源是 src/index.js 中调用的 dva-loading 插件，返回的信息包含了 global、model 和 effect 的异步加载完成情况。
+ */
+@connect(({ 
+  login,                                        //mapStateToProps, 将状态绑定到组件的 props 上
+  loading                                       //mapDispatchToProps, 一个将方法绑定到组件的 props 上
+}) => ({
+  login,                                        //将实体 login 中的 state 数据绑定到 props ，注意绑定的是实体list整体，使用时需要 login.[state中的具体变量]
+  submitting: loading.effects['login/login'],   //通过 loading 将 models 的值读取出来，也可以采用 loding.models.login 的形式
 }))
 class LoginPage extends Component {
   state = {
@@ -125,7 +132,10 @@ class LoginPage extends Component {
   };
 
   render() {
-    const { login, submitting } = this.props;
+    const { 
+      login,          //绑定的状态变量：实体login下的state对象
+      submitting      //绑定的方法
+    } = this.props;
     const { type, autoLogin } = this.state;
     return (
       <div className={styles.main}>
