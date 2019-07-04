@@ -41,9 +41,9 @@ export async function RegisterSubmit(params) {
   let ret = new Promise(resolve => {
     remote.events.once('logined', result => {
       if(result.code == 0) {
-        resolve({ status: "ok", currentAuthority: result.data.currentAuthority || ['user'] });
+        resolve(afterLogin(true));
       } else {
-        resolve({ status: "error", currentAuthority: ['guest'] });
+        resolve(afterLogin(false));
       }
     });
   });
