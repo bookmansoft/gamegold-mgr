@@ -16,7 +16,7 @@ export default {
   effects: {
     //从url中获取信息
     *fetch({ payload }, { call, put }) {
-      const response=yield call(getGameFromUrl,payload);
+      const response = yield call(getGameFromUrl, payload);
       yield put({
         type: 'save',
         payload: response,
@@ -27,8 +27,6 @@ export default {
       let ret=yield call(addGameMgr, payload);
       return ret;
     },
-
-
   },
 
   reducers: {

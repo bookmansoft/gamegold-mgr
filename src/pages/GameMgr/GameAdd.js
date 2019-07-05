@@ -68,7 +68,9 @@ class GameAdd extends PureComponent {
     }
   }
 
-  //获取URL内容的操作
+  /**
+   * 通过用户录入的URL地址，集采CP信息填充至页面
+   */
   handleSubmit = e => {
     const { dispatch, form } = this.props;
     e.preventDefault();
@@ -119,10 +121,7 @@ class GameAdd extends PureComponent {
     };
 
     return (
-      <PageHeaderWrapper
-        title="添加新游戏"
-        content=""
-      >
+      <PageHeaderWrapper title="添加新游戏" content="">
         <Form onSubmit={this.handleSubmit} hideRequiredMark={false} style={{ marginTop: 8 }}>
           <Card bordered={false}>
             <Row style={{ marginBottom: 32 }}>
@@ -219,9 +218,7 @@ class GameAdd extends PureComponent {
                 </FormItem>
               </Col>
               <Col md={4}>
-                <Button type="primary" htmlType="submit" loading={submitting}>
-                  验证
-              </Button>
+                <Button type="primary" htmlType="submit" loading={submitting}>验证</Button>
               </Col>
             </Row>
             <br />
@@ -282,9 +279,7 @@ class GameAdd extends PureComponent {
               </Col>
             </Row>
             <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
-              <Button type="primary" onClick={() => this.handleCreate(this.props.game.data)}>
-                提交
-              </Button>
+              <Button type="primary" onClick={() => this.handleCreate(this.props.game.data)}>提交</Button>
             </FormItem>
           </Card>
         </Form>

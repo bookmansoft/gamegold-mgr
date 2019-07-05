@@ -347,7 +347,10 @@ export async function ListCpType(params) {
   }
 }
 
-//--游戏管理
+/**
+ * 游戏管理
+ * @param {*} params 
+ */
 export async function queryGameMgr(params) {
   try {
     let ret = { code: -200, data: null, message: "react service层无返回值。方法名：queryGameMgr" };
@@ -379,11 +382,13 @@ export async function queryGameMgr(params) {
   }
   //return request(`/gamemgr/query?${stringify(params)}`);
 }
-//--添加新游戏
-// 步骤：
-// 首先调用在链上创建的语句
-// 如果成功，则调用数据库的插入方法
-// 实际调试中，可以先验证插入方法的调用
+
+/**
+ * 添加新游戏
+ * 首先调用在链上创建的语句, 如果成功，则调用数据库的插入方法
+ * 实际调试中，可以先验证插入方法的调用
+ * @param {*} params 
+ */
 export async function addGameMgr(params) {
   try {
     let ret = { code: -200, data: null, message: "react service层无返回值。方法名：addGameMgr" };
@@ -429,11 +434,13 @@ export async function addGameMgr(params) {
     console.log(error);
     return { code: -100, data: null, message: "react service层错误。方法名：addGameMgr" };
   }
-
 }
 
-//从指定URL中获取游戏内容（已测试通过）
-//params.cp_url 准备保存为cp_url的外部URL字段值
+/**
+ * 从指定URL中集采游戏信息
+ * @param {*} params 
+ * @param {String} params.cp_url 准备保存为cp_url的外部URL字段值
+ */
 export async function getGameFromUrl(params) {
   try {
     let data = await remote.fetching({ 
