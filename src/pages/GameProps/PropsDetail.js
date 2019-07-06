@@ -113,7 +113,10 @@ class PropsDetail extends PureComponent {
       gameprops: { propsDetail },
     } = this.props;
     let detail = propsDetail.data || [];
-    let iconPreview = eval('(' + detail.icon_preview + ')');
+    let iconPreview = detail.icon_preview;
+    if(!!iconPreview && typeof iconPreview == 'string') {
+      iconPreview = JSON.parse(iconPreview);
+    }
     return (
       <PageHeaderWrapper title={detail.name}>
         <Card bordered={false} headStyle={{ fontWeight: 600 }} title="生产信息" /* extra={this.mainButton()} */>

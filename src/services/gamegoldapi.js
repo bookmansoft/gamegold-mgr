@@ -1,9 +1,9 @@
-import { checkPermissions } from '../components/Authorized/CheckPermissions';
-import { stringify } from 'qs';
-import request from '@/utils/request';
 import toolkit from 'gamerpc'
+import crypto from 'crypto';
+import { checkPermissions } from '../components/Authorized/CheckPermissions';
+import request from '@/utils/request';
 import Cookies from 'js-cookie'
-const crypto = require('crypto');
+import { Select, message, Drawer, List, Switch, Divider, Icon, Button, Alert, Tooltip } from 'antd';
 
 //创建连接器对象
 let remote = new toolkit.gameconn({
@@ -13,6 +13,12 @@ let remote = new toolkit.gameconn({
       "port": 9901                //远程主机端口
     }
 });
+remote.setmode(remote.CommMode.ws);
+
+//test only
+remote.watch(info => {
+  console.log('收到系统下行消息', JSON.stringify(info));
+}, 9999);
 
 const salt = "038292cfb50d8361a0feb0e3697461c9";
 
@@ -75,6 +81,7 @@ export async function accountLogin(params) {
           addrType: 'phone',                              //指定验证方式为手机
           address: `+${params.prefix}${params.mobile}`,   //作为验证地址的手机号码
         });
+        message.success('验证码已发送');
         return { status: 'waitingResp' };
       }
 
@@ -118,12 +125,15 @@ export async function accountLogin(params) {
 export async function remoteInit() {
   try {
     let openid = sessionStorage.getItem('username'), token = sessionStorage.getItem('token');
-    if(!openid || token) {
+    if(!openid || !token) {
       openid = Cookies.get('openid');
       token = Cookies.get('token');
     }
     let ret = await remote.init().setUserInfo({domain: 'auth2step.CRM', openid: openid}).setLB(true);
     if(ret) {
+      if(remote.rpcMode == remote.CommMode.ws) {
+        await remote.createSocket(); //createSocket时会清除token，因此提前创建
+      }
       let result = await remote.setUserInfo({domain: 'auth2step.CRM', openid: openid, token: token}).fetching({func:'login.UserLogin'});
       if(result.code == 0) {
         return afterLogin(true, true); //视为利用缓存重登
@@ -142,6 +152,8 @@ export async function remoteInit() {
  */
 function afterLogin(result, cookie=false) {
   if (!!result) {
+    message.success('您已成功登录');
+
     sessionStorage.setItem('username', remote.userInfo.openid); //页面显示用的数据
     sessionStorage.setItem('token', remote.userInfo.token);
     sessionStorage.setItem('currentAuthority', JSON.stringify(remote.userInfo.currentAuthority || ['user']));
@@ -230,7 +242,6 @@ export async function resetPassword(params) {
 export async function queryUserMgr(params) {
   try {
     let ret = { code: -200, data: null, message: "react service层无返回值。方法名：queryUserMgr" };
-    console.log("从数据库查询用户地址列表address.Filter:" + stringify(params));
     if (params == null) {
       params = {
         currentPage: 1,
@@ -309,7 +320,6 @@ export async function changeOperatorState(params) {
   try {
     let ret = { code: -200, data: null, message: "react service层无返回值。方法名：changeOperatorState" };
     //先调用链上的保存方法
-    console.log("修改状态:" + JSON.stringify(params));
     ret = await remote.fetching({
       func: "operator.ChangeState", 
       id: params.id,
@@ -331,7 +341,6 @@ export async function changeOperatorState(params) {
 export async function queryOperatorMgr(params) {
   try {
     let ret = { code: -200, data: null, message: "react service层无返回值。方法名：queryOperatorMgr" };
-    console.log("从数据库查询操作员列表 operator.ListRecord:" + stringify(params));
     if (params == null) {
       params = {
         currentPage: 1,
@@ -378,7 +387,6 @@ export async function ListCpType(params) {
 export async function queryGameMgr(params) {
   try {
     let ret = { code: -200, data: null, message: "react service层无返回值。方法名：queryGameMgr" };
-    console.log("从数据库查询游戏列表cp.ListRecord:" + stringify(params));//currentPage=2&pageSize=10
     if (params == null) {
       params = {
         currentPage: 1,
@@ -404,7 +412,6 @@ export async function queryGameMgr(params) {
     console.log(error);
     return { code: -100, data: null, message: "react service层错误。方法名：queryGameMgr" };
   }
-  //return request(`/gamemgr/query?${stringify(params)}`);
 }
 
 /**
@@ -418,7 +425,6 @@ export async function addGameMgr(params) {
     let ret = { code: -200, data: null, message: "react service层无返回值。方法名：addGameMgr" };
 
     //先调用链上的保存方法
-    console.log("添加新游戏:" + JSON.stringify(params));
     ret = await remote.fetching({
       func: "cp.Create", 
       items: [params.cp_name, params.cp_url, params.wallet_addr, params.cp_type, params.invite_share]
@@ -615,8 +621,6 @@ export async function getAddressReceive(params) {
     console.log(error);
     return { code: -100, data: null, message: "react service层错误。方法名：getAddressReceive" };
   }
-
-  //return request(`/wallet/getInfo?${stringify(params)}`);
 }
 
 //--钱包信息--由于该接口只能取到主钱包，因此不使用。
@@ -634,26 +638,21 @@ export async function getWalletInfo(params) {
     console.log(error);
     return { code: -100, data: null, message: "react service层错误。方法名：getWalletInfo" };
   }
-
-  //return request(`/wallet/getInfo?${stringify(params)}`);
 }
 
 //--账户余额
 export async function getBalanceAll(params) {
   try {
     let ret = { code: -200, data: null, message: "react service层无返回值。方法名：getBalanceAll" };
-    console.log("获取余额参数:" + JSON.stringify(params));
     ret = await remote.fetching({ 
       func: "account.BalanceAll", 
       items: ['default'] 
     });
-    console.log("获取余额结果：" + JSON.stringify(ret));
     return ret;
   } catch (error) {
     console.log(error);
     return { code: -100, data: null, message: "react service层错误。方法名：getBalanceAll" };
   }
-  //return request(`/wallet/getInfo?${stringify(params)}`);
 }
 
 //--钱包：转出
@@ -699,7 +698,6 @@ export async function getGamePropsList(params) {
     cid: typeof (params.cid) == "undefined" ? '' : params.cid,
   });
   return result;
-  //return request(`/api/gamepropslist?${stringify(params)}`);
 }
 /**
  *
@@ -732,7 +730,6 @@ export async function CreatePropLocal(params) {
   else {
     return { code: 1, msg: res.msg ? res.msg : '创建失败' };
   }
-  //return request(`/api/gamepropsdetail?${stringify(params)}`);
 }
 /**
  *
@@ -759,7 +756,6 @@ export async function EditPropLocal(params) {
   } else {
     return { code: 1 };
   }
-  //return request(`/api/gamepropsdetail?${stringify(params)}`);
 }
 
 /**
@@ -783,7 +779,6 @@ export async function PropCreateListRemote(params) {
   } else {
     return { code: 0, msg: res.msg || "生产失败" };
   }
-  //return request(`/api/gamepropsdetail?${stringify(params)}`);
 }
 
 /**
@@ -805,7 +800,6 @@ export async function getGamePropsDetail(params) {
   } else {
     return [];
   }
-  //return request(`/api/gamepropsdetail?${stringify(params)}`);
 }
 
 /**
@@ -861,7 +855,6 @@ export async function getPropsByGame(params) {
     //cp_url: 'http://localhost:9701/mock/cp122907',
   });
   return ret;
-  //return request(`/api/gameprops?${stringify(params)}`);
 }
 
 
@@ -882,7 +875,6 @@ export async function getAllGameList() {
     }
   }
   return ret;
-  //return request(`/api/allgame?${stringify(params)}`);
 }
 /**
  *
@@ -903,7 +895,6 @@ export async function getAllPropsByParams(params) {
     }
   }
   return ret;
-  //return request(`/api/allgame?${stringify(params)}`);
 }
 /**
  * 道具赠送
@@ -923,9 +914,6 @@ export async function sendListRemote(params) {
   } else {
     return { code: 0, msg: res.msg || "道具赠送失败" };
   }
-}
-export async function getUserAll(params) {
-  return request(`/api/userall?${stringify(params)}`);
 }
 
 //-------------------------------------------------------
@@ -1013,7 +1001,6 @@ export async function getRedpacket(params) {
 export async function queryRedpacket(params) {
   try {
     let ret = { code: -200, data: null, message: "react service层无返回值。方法名：queryRedpacket" };
-    console.log("从数据库查询操作员列表redpacket.ListRecord:" + stringify(params));
     if (params == null) {
       params = {
         currentPage: 1,
@@ -1042,7 +1029,6 @@ export async function queryRedpacket(params) {
 export async function queryPrize(params) {
   try {
     let ret = { code: -200, data: null, message: "react service层无返回值。方法名：queryPrize" };
-    console.log("从数据库查询操作员列表 prize.ListRecord:" + stringify(params));
     if (params == null) {
       params = {
         currentPage: 1,
@@ -1068,7 +1054,6 @@ export async function queryPrize(params) {
 export async function queryFunding(params) {
   try {
     let ret = { code: -200, data: null, message: "react service层无返回值。方法名：queryFunding" };
-    console.log("从数据库查询游戏列表funding.ListRecord:" + stringify(params));//currentPage=2&pageSize=10
     if (params == null) {
       params = {
         currentPage: 1,
@@ -1085,7 +1070,6 @@ export async function queryFunding(params) {
     console.log(error);
     return { code: -100, data: null, message: "react service层错误。方法名：queryFunding" };
   }
-  //return request(`/gamemgr/query?${stringify(params)}`);
 }
 //--众筹页面调用的ListCp方法
 export async function ListCp(params) {
@@ -1266,7 +1250,6 @@ export async function stockRecord(params) {
 export async function queryStock(params) {
   try {
     let ret = { code: -200, data: null, message: "react service层无返回值。方法名：queryStock" };
-    console.log("从数据库查询游戏列表stock.ListRecord:" + stringify(params));//currentPage=2&pageSize=10
     if (params == null) {
       params = {
         currentPage: 1,
@@ -1283,7 +1266,6 @@ export async function queryStock(params) {
     console.log(error);
     return { code: -100, data: null, message: "react service层错误。方法名：queryStock" };
   }
-  //return request(`/gamemgr/query?${stringify(params)}`);
 }
 
 // 获取股票行情详情
@@ -1312,7 +1294,6 @@ export async function getStockView(params) {
 export async function queryStockBase(params) {
   try {
     let ret = { code: -200, data: null, message: "react service层无返回值。方法名：queryStockBase" };
-    console.log("从数据库查询游戏列表stock.ListRecord:" + stringify(params));//currentPage=2&pageSize=10
     if (params == null) {
       params = {
         currentPage: 1,
@@ -1323,11 +1304,9 @@ export async function queryStockBase(params) {
       func: "cpstockbase.ListRecord", 
       ...params
     });
-    console.log("股票行情查询列表：" + JSON.stringify(ret));
     return ret;
   } catch (error) {
     console.log(error);
     return { code: -100, data: null, message: "react service层错误。方法名：queryStockBase" };
   }
-  //return request(`/gamemgr/query?${stringify(params)}`);
 }
