@@ -100,7 +100,7 @@ export async function accountLogin(params) {
         if(result) {
           result = await remote.setUserInfo({domain: 'auth2step.CRM', openid: params.openid, token: params.token}).fetching({func:'login.UserLogin'});
           if(result.code == 0) {
-            return afterLogin(true);
+            return afterLogin(true, true); //视为利用缓存重登
           } 
         }
         return afterLogin(false);
@@ -116,14 +116,31 @@ export async function accountLogin(params) {
  *  页面刷新时对连接器进行重置
  */
 export async function remoteInit() {
-  await remote.init().setUserInfo({domain: 'auth2step.CRM', openid: sessionStorage.getItem('username')}).setLB(true);
-  remote.setUserInfo({domain: 'auth2step.CRM', openid: sessionStorage.getItem('username'), token: sessionStorage.getItem('token')});
+  try {
+    let openid = sessionStorage.getItem('username'), token = sessionStorage.getItem('token');
+    if(!openid || token) {
+      openid = Cookies.get('openid');
+      token = Cookies.get('token');
+    }
+    let ret = await remote.init().setUserInfo({domain: 'auth2step.CRM', openid: openid}).setLB(true);
+    if(ret) {
+      let result = await remote.setUserInfo({domain: 'auth2step.CRM', openid: openid, token: token}).fetching({func:'login.UserLogin'});
+      if(result.code == 0) {
+        return afterLogin(true, true); //视为利用缓存重登
+      } 
+    }
+    return afterLogin(false);
+  } catch(e) {
+    return Promise.reject(e);
+  }
 }
 
 /**
  * 收到登录请求的应答后，执行后续操作，返回最终的状态值
+ * @param {Boolean} result  登录请求是否被批准
+ * @param {Boolean} cookie  是页面刷新/关闭重开后利用缓存进行的重登
  */
-function afterLogin(result) {
+function afterLogin(result, cookie=false) {
   if (!!result) {
     sessionStorage.setItem('username', remote.userInfo.openid); //页面显示用的数据
     sessionStorage.setItem('token', remote.userInfo.token);
@@ -134,9 +151,11 @@ function afterLogin(result) {
       Cookies.set('openid', sessionStorage.getItem('username'), {expires: 1});
       Cookies.set('token', sessionStorage.getItem('token'), {expires: 1});
     } else {
-      //清除 Cookie
-      Cookies.remove('openid');
-      Cookies.remove('token');
+      if(!cookie) {
+        //清除 Cookie
+        Cookies.remove('openid');
+        Cookies.remove('token');
+      }
     }
 
     return { 
@@ -145,6 +164,11 @@ function afterLogin(result) {
       currentAuthority: JSON.parse(sessionStorage.getItem('currentAuthority')),
     };
   } else {
+    sessionStorage.removeItem('username');
+    sessionStorage.removeItem('token');
+    sessionStorage.setItem('currentAuthority', JSON.stringify(['guest']));
+    Cookies.remove('openid');
+    Cookies.remove('token');
     return { status: "error" };
   }
 }
