@@ -44,12 +44,10 @@ class GameAdd extends PureComponent {
   //创建
   handleCreate = (theData) => {
     const { dispatch, form } = this.props;
-    console.log(theData);
     dispatch({
       type: 'game/add',
       payload: theData,
     }).then((ret) => {
-      console.log(ret);
       if (ret.code === 0) {
         router.push('/gamemgr/gameaddsuccess');
       } else {
@@ -75,7 +73,6 @@ class GameAdd extends PureComponent {
     const { dispatch, form } = this.props;
     e.preventDefault();
     form.validateFieldsAndScroll((err, values) => {
-      console.log(values);
       if (!err) {
         dispatch({
           type: 'game/fetch',
@@ -130,22 +127,22 @@ class GameAdd extends PureComponent {
               <br />
             </Row>
             <Row>
-              <FormItem {...formItemLayout} label="游戏URL链接">
+              <FormItem {...formItemLayout} label="游戏名称">
+                {getFieldDecorator('cp_name', {
+                  rules: [
+                    {
+                      required: true,
+                      message: "请输入游戏名称",
+                    },
+                  ],
+                })(<Input placeholder="请输入" />)}
+              </FormItem>
+              <FormItem {...formItemLayout} label="游戏数据接口地址">
                 {getFieldDecorator('cp_url', {
                   rules: [
                     {
                       required: true,
                       message: "请输入游戏URL链接",
-                    },
-                  ],
-                })(<Input placeholder="请输入" />)}
-              </FormItem>
-              <FormItem {...formItemLayout} label="结算钱包地址">
-                {getFieldDecorator('wallet_addr', {
-                  rules: [
-                    {
-                      required: true,
-                      message: "请输入结算钱包地址",
                     },
                   ],
                 })(<Input placeholder="请输入" />)}

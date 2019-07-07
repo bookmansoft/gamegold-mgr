@@ -1,7 +1,7 @@
 {
-  "name": "ant-design-pro",
-  "version": "2.1.1",
-  "description": "An out-of-box UI solution for enterprise applications",
+  "name": "vallnet-crm",
+  "version": "2.2.0",
+  "description": "CRM for Game industry",
   "private": true,
   "scripts": {
     "presite": "node ./scripts/generateMock.js && cd functions && npm install",

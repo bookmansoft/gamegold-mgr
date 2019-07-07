@@ -422,44 +422,16 @@ export async function queryGameMgr(params) {
  */
 export async function addGameMgr(params) {
   try {
-    let ret = { code: -200, data: null, message: "react service层无返回值。方法名：addGameMgr" };
-
-    //先调用链上的保存方法
-    ret = await remote.fetching({
+    //向主网发起CP注册请求
+    let ret = await remote.fetching({
       func: "cp.Create", 
-      items: [params.cp_name, params.cp_url, params.wallet_addr, params.cp_type, params.invite_share]
+      items: [params.cp_name, params.cp_url, null, params.cp_type, params.invite_share]
     });
     //判断返回值是否正确
-    console.log(ret);
     if (ret.code != 0 || ret.data == null) {
       return { code: -1, message: "调用区块链创建游戏失败！" };
     }
-    let cp_id = ret.data.cid;//返回的cpid值
-    console.log("调用保存记录的方法:" + JSON.stringify(params));
-    let retSave = await remote.fetching({
-      func: "cp.CreateRecord", 
-      cp_id: cp_id,
-      cp_name: params.cp_name,
-      cp_text: params.cp_text,
-      cp_url: params.cp_url,
-      wallet_addr: params.wallet_addr,
-      cp_type: params.cp_type,
-      develop_name: params.develop_name,
-      cp_desc: params.cp_desc,
-      cp_version: params.cp_version,
-      picture_url: {
-        icon_url: params.icon_url,
-        face_url: params.face_url,
-        pic_urls: params.pic_urls,
-      },
-      cp_state: 1,
-      publish_time: params.publish_time,
-      update_time: params.update_time,
-      update_content: params.update_content,
-      invite_share: params.invite_share,
-    });
-    console.log("添加新游戏结果：" + JSON.stringify(retSave));
-    return retSave;
+    return { code: 0, message: "请求已提交" };
   } catch (error) {
     console.log(error);
     return { code: -100, data: null, message: "react service层错误。方法名：addGameMgr" };
@@ -475,17 +447,14 @@ export async function getGameFromUrl(params) {
   try {
     let data = await remote.fetching({ 
       func: "cp.getGameFromUrl", 
-      cp_url: params.cp_url 
+      cp_url: `${params.cp_url}/${params.cp_name}` 
     });
-    console.log(data);
-    //patch，更改目录层次结构
+    //patch 更改目录层次结构
     data = data.game;
-    //有数据
-    data.wallet_addr = params.wallet_addr;
+    data.cp_name = params.cp_name;
     data.cp_url = params.cp_url;
     data.invite_share = parseInt(params.use_invite_share) == 1 ? parseInt(params.invite_share) : 0;
-
-    //由于协议差异，补充数据
+    //patch 弥补协议字段差异
     data.cp_text = data.game_title;
     data.develop_name = data.provider;
     data.face_url = data.large_img_url;
@@ -504,7 +473,6 @@ export async function getGameFromUrl(params) {
 // params.id 查看的页面参数值。（其中params对应于model中的payload）
 export async function getGameView(params) {
   try {
-    console.log(params.id);
     let ret = await remote.fetching({ 
       func: "cp.Retrieve", 
       id: params.id 
@@ -512,18 +480,16 @@ export async function getGameView(params) {
     if (ret.data === null) {
       return { code: -200, data: null, message: "react service层无返回值。方法名：getGameView" };
     }
-    //有数据
-    console.log(ret.data);
-    if (ret.data.picture_url != null) {
+
+    if (!!ret.data.picture_url) {
       try {
-        ret.data.icon_url = JSON.parse(ret.data.picture_url).icon_url;
-        ret.data.face_url = JSON.parse(ret.data.picture_url).face_url;
-        ret.data.pic_urls = JSON.parse(ret.data.picture_url).pic_urls;//游戏截图数组
-      }
-      catch (ex) {
-        //忽略
-      }
+        let js = JSON.parse(ret.data.picture_url);
+        ret.data.icon_url = js.icon_url;
+        ret.data.face_url = js.face_url;
+        ret.data.pic_urls = js.pic_urls;//游戏截图数组
+      } catch (ex) { }
     }
+
     return ret.data;
   } catch (error) {
     console.log(error);
