@@ -7,8 +7,8 @@ export default {
   namespace: 'walletstep',
 
   state: {
-      remenberWord: '',
-      checkRemenberWord:'',
+      rememberWord: '',
+      checkRememberWord:'',
       data: {},
   },
 
@@ -41,20 +41,20 @@ export default {
         console.log(response);
         if (response.data!=null && response.data.mnemonic!=null) {
           //符合条件时才传递
-          let orignRemenberWord=response.data.mnemonic.phrase;
+          let orignRememberWord=response.data.mnemonic.phrase;
           // console.log("43:初始化文本");
-          // console.log(orignRemenberWord);
+          // console.log(orignRememberWord);
           //转化为去掉空格的格式
-          let remenberWordArray=orignRemenberWord.split(" ");
-          let remenberWord=remenberWordArray[0]+remenberWordArray[1]+remenberWordArray[2]
-            +remenberWordArray[3]+remenberWordArray[4]+remenberWordArray[5]
-            +remenberWordArray[6]+remenberWordArray[7]+remenberWordArray[8]
-            +remenberWordArray[9]+remenberWordArray[10]+remenberWordArray[11];
+          let rememberWordArray=orignRememberWord.split(" ");
+          let rememberWord=rememberWordArray[0]+rememberWordArray[1]+rememberWordArray[2]
+            +rememberWordArray[3]+rememberWordArray[4]+rememberWordArray[5]
+            +rememberWordArray[6]+rememberWordArray[7]+rememberWordArray[8]
+            +rememberWordArray[9]+rememberWordArray[10]+rememberWordArray[11];
           yield put({
             type: 'save',
             payload: {
-              remenberWord:remenberWord,
-              checkRemenberWord: '',
+              rememberWord:rememberWord,
+              checkRememberWord: '',
             },
           });
         }
@@ -78,7 +78,7 @@ export default {
     appendText(state, { payload }) {
       console.log(payload.theText);
       
-      state.checkRemenberWord=state.checkRemenberWord+payload.theText;
+      state.checkRememberWord=state.checkRememberWord+payload.theText;
       return {
         ...state,
         step: {

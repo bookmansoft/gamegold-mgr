@@ -47,6 +47,7 @@ class WalletInfo extends PureComponent {
     console.log(location.protocol+'//'+location.host+'/qrcode/');
     dispatch({
       type: 'walletinfo/fetch',
+      payload: {},
     });
   }
   handleBack = () => {
@@ -56,6 +57,7 @@ class WalletInfo extends PureComponent {
     const { dispatch } = this.props;
     dispatch({
       type: 'walletinfo/fetch',
+      payload: {},
     });
   };
 

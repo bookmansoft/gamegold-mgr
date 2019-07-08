@@ -39,7 +39,7 @@ class WalletStep2 extends React.PureComponent {
       e.preventDefault();
       validateFields((err, values) => {
         if (!err) {
-          if (data.checkRemenberWord!=data.remenberWord) {
+          if (data.checkRememberWord!=data.rememberWord) {
             console.log("不匹配");
             router.push('/wallet/step-form/info');
             return;
@@ -65,7 +65,7 @@ class WalletStep2 extends React.PureComponent {
         />
             <FormItem>
               {getFieldDecorator('gameName', {
-                initialValue: data.checkRemenberWord,
+                initialValue: data.checkRememberWord,
                 rules: [
                   {
                     required: true,
@@ -80,33 +80,33 @@ class WalletStep2 extends React.PureComponent {
 
 
         <Row>
-          <Col sm={2} xs={2}><Button onClick={()=>this.appendText(data.remenberWord[6])}>{data.remenberWord[6]}</Button></Col>
+          <Col sm={2} xs={2}><Button onClick={()=>this.appendText(data.rememberWord[6])}>{data.rememberWord[6]}</Button></Col>
           <Col sm={1} xs={1}></Col>
-          <Col sm={2} xs={2}><Button onClick={()=>this.appendText(data.remenberWord[7])}>{data.remenberWord[7]}</Button></Col>
+          <Col sm={2} xs={2}><Button onClick={()=>this.appendText(data.rememberWord[7])}>{data.rememberWord[7]}</Button></Col>
           <Col sm={1} xs={1}></Col>
-          <Col sm={2} xs={2}><Button onClick={()=>this.appendText(data.remenberWord[8])}>{data.remenberWord[8]}</Button></Col>
+          <Col sm={2} xs={2}><Button onClick={()=>this.appendText(data.rememberWord[8])}>{data.rememberWord[8]}</Button></Col>
           <Col sm={1} xs={1}></Col>
-          <Col sm={2} xs={2}><Button onClick={()=>this.appendText(data.remenberWord[9])}>{data.remenberWord[9]}</Button></Col>
+          <Col sm={2} xs={2}><Button onClick={()=>this.appendText(data.rememberWord[9])}>{data.rememberWord[9]}</Button></Col>
           <Col sm={1} xs={1}></Col>
-          <Col sm={2} xs={2}><Button onClick={()=>this.appendText(data.remenberWord[10])}>{data.remenberWord[10]}</Button></Col>
+          <Col sm={2} xs={2}><Button onClick={()=>this.appendText(data.rememberWord[10])}>{data.rememberWord[10]}</Button></Col>
           <Col sm={1} xs={1}></Col>
-          <Col sm={2} xs={2}><Button onClick={()=>this.appendText(data.remenberWord[11])}>{data.remenberWord[11]}</Button></Col>
+          <Col sm={2} xs={2}><Button onClick={()=>this.appendText(data.rememberWord[11])}>{data.rememberWord[11]}</Button></Col>
         </Row>
         <Row>
           <Col sm={1} xs={1}>&nbsp;</Col>
         </Row>
         <Row>
-          <Col sm={2} xs={2}><Button onClick={()=>this.appendText(data.remenberWord[0])}>{data.remenberWord[0]}</Button></Col>
+          <Col sm={2} xs={2}><Button onClick={()=>this.appendText(data.rememberWord[0])}>{data.rememberWord[0]}</Button></Col>
           <Col sm={1} xs={1}></Col>
-          <Col sm={2} xs={2}><Button onClick={()=>this.appendText(data.remenberWord[1])}>{data.remenberWord[1]}</Button></Col>
+          <Col sm={2} xs={2}><Button onClick={()=>this.appendText(data.rememberWord[1])}>{data.rememberWord[1]}</Button></Col>
           <Col sm={1} xs={1}></Col>
-          <Col sm={2} xs={2}><Button onClick={()=>this.appendText(data.remenberWord[2])}>{data.remenberWord[2]}</Button></Col>
+          <Col sm={2} xs={2}><Button onClick={()=>this.appendText(data.rememberWord[2])}>{data.rememberWord[2]}</Button></Col>
           <Col sm={1} xs={1}></Col>
-          <Col sm={2} xs={2}><Button onClick={()=>this.appendText(data.remenberWord[3])}>{data.remenberWord[3]}</Button></Col>
+          <Col sm={2} xs={2}><Button onClick={()=>this.appendText(data.rememberWord[3])}>{data.rememberWord[3]}</Button></Col>
           <Col sm={1} xs={1}></Col>
-          <Col sm={2} xs={2}><Button onClick={()=>this.appendText(data.remenberWord[4])}>{data.remenberWord[4]}</Button></Col>
+          <Col sm={2} xs={2}><Button onClick={()=>this.appendText(data.rememberWord[4])}>{data.rememberWord[4]}</Button></Col>
           <Col sm={1} xs={1}></Col>
-          <Col sm={2} xs={2}><Button onClick={()=>this.appendText(data.remenberWord[5])}>{data.remenberWord[5]}</Button></Col>
+          <Col sm={2} xs={2}><Button onClick={()=>this.appendText(data.rememberWord[5])}>{data.rememberWord[5]}</Button></Col>
         </Row>
         <Row>
           <Col sm={1} xs={1}>&nbsp;</Col>

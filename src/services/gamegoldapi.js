@@ -317,7 +317,9 @@ export async function queryCurrentUser(params) {
   }
 }
 
-//--修改操作员状态
+/**
+ * 修改操作员状态
+ */
 export async function changeOperatorState(params) {
   try {
     let ret = { code: -200, data: null, message: "react service层无返回值。方法名：changeOperatorState" };
@@ -574,14 +576,16 @@ export async function getKeyMaster(params) {
   }
 }
 
-//--钱包信息的获取收款地址
+/**
+ * 获取收款地址
+ */
 export async function getAddressReceive(params) {
   try {
     let ret = { code: -200, data: null, message: "react service层无返回值。方法名：getAddressReceive" };
     console.log("获取钱包信息:" + JSON.stringify(params));
     ret = await remote.fetching({ 
       func: "address.Receive", 
-      items: ['default'] 
+      account: params.account, 
     });
     console.log("获取钱包信息结果：" + JSON.stringify(ret));
     return ret;

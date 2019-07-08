@@ -22,7 +22,11 @@ const { Option } = Select;
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
-@connect(({ loading }) => ({ 
+@connect(({ 
+  walletpay,
+  loading 
+}) => ({ 
+  walletpay,
   submitting: loading.effects['walletpay/add'],
 }))
 @Form.create()
@@ -32,7 +36,6 @@ class WalletPay extends PureComponent {
     e.preventDefault();
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        console.log(values);
         dispatch({
           type: 'walletpay/add',
           payload: values,
@@ -54,11 +57,21 @@ class WalletPay extends PureComponent {
   //转出
   handleCancel = () => {
     history.back();
-    // router.push('/wallet/walletpay');
   };
 
+  componentWillMount() {
+    const { walletpay, dispatch } = this.props;
+
+    if(!!this.props.location.query.id) {
+      dispatch({
+        type: 'walletpay/getaddress',
+        payload: {account: this.props.location.query.id}
+      });
+    }
+  }
+
   render() {
-    const { submitting } = this.props;
+    const { walletpay, submitting } = this.props;
     const {
       form: { getFieldDecorator, getFieldValue },
     } = this.props;
@@ -94,6 +107,7 @@ class WalletPay extends PureComponent {
             <br/>
             <FormItem {...formItemLayout} label="接收人地址">
               {getFieldDecorator('address', {
+                initialValue: walletpay.data.address,
                 rules: [
                   {
                     required: true,

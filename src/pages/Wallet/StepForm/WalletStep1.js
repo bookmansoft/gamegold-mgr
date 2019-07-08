@@ -52,7 +52,7 @@ class WalletStep1 extends React.PureComponent {
             message="请按仔细记下这些助记词。"
             style={{ marginBottom: 24 }}
           />
-          <Input style={{fontSize:24,letterSpacing:10,textAlign:"center"}} defaultValue={data.remenberWord} />
+          <Input style={{fontSize:24,letterSpacing:10,textAlign:"center"}} defaultValue={data.rememberWord} />
 
           <br /><br />
           <Form.Item

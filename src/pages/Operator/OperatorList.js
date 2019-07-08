@@ -1,6 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import { formatMessage, FormattedMessage } from 'umi/locale';
 import { connect } from 'dva';
+import router from 'umi/router';
 import moment from 'moment';
 import {
   Row,
@@ -59,8 +60,12 @@ class OperatorList extends PureComponent {
       dataIndex: 'login_name',
     },
     {
-      title: 'CID',
+      title: '终端码',
       dataIndex: 'cid',
+    },
+    {
+      title: '账户余额',
+      dataIndex: 'balance',
     },
     {
       title: '备注',
@@ -73,7 +78,8 @@ class OperatorList extends PureComponent {
           <a onClick={() => this.handleDeal(true, record)}>
             {(record.state == 1) && "禁用"}
             {(record.state == 0) && "启用"}
-          </a>
+          </a> | 
+          <a onClick={() => this.handleTransfer(record)}>转账</a>
         </Fragment>
       ),
     },
@@ -144,7 +150,16 @@ class OperatorList extends PureComponent {
     });
   };
 
-  //更改操作员状态
+  /**
+   * 向操作员转账
+   */
+  handleTransfer = record => {
+    router.push(`/wallet/walletpay?id=${record.cid}`); 
+  };
+
+  /**
+   * 更改操作员状态
+   */
   handleDeal = (flag, record) => {
     const { dispatch,form } = this.props;
     dispatch({
@@ -196,12 +211,8 @@ class OperatorList extends PureComponent {
           </Col>
           <Col md={6} sm={24}>
             <span className={styles.submitButtons}>
-              <Button type="primary" htmlType="submit">
-                搜索
-              </Button>
-              <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
-                重置
-              </Button>
+              <Button type="primary" htmlType="submit">搜索</Button>
+              <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>
             </span>
           </Col>
         </Row>

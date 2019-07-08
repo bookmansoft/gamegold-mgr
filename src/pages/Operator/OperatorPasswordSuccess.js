@@ -5,7 +5,6 @@ import router from 'umi/router';
 import Result from '@/components/Result';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
-
 export default () => (
   <PageHeaderWrapper>
     <Card bordered={false}>
