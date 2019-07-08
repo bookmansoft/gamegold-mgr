@@ -1,9 +1,12 @@
 import toolkit from 'gamerpc'
 import crypto from 'crypto';
+import router from 'umi/router';
 import { checkPermissions } from '../components/Authorized/CheckPermissions';
 import request from '@/utils/request';
 import Cookies from 'js-cookie'
 import { Select, message, Drawer, List, Switch, Divider, Icon, Button, Alert, Tooltip } from 'antd';
+
+const salt = "038292cfb50d8361a0feb0e3697461c9";
 
 //创建连接器对象
 let remote = new toolkit.gameconn({
@@ -20,7 +23,11 @@ remote.watch(info => {
   console.log('收到系统下行消息', JSON.stringify(info));
 }, 9999);
 
-const salt = "038292cfb50d8361a0feb0e3697461c9";
+remote.events.on('comm', msg=>{
+  if(msg.status == 'disconnect' || msg.status == 'error') {
+    router.push('/use/login');
+  }
+});
 
 /**
  * 使用两阶段验证模式进行用户注册的第一步：提交用户名/密码/手机号码，向服务端请求下发手机验证码
@@ -179,8 +186,8 @@ function afterLogin(result, cookie=false) {
     sessionStorage.removeItem('username');
     sessionStorage.removeItem('token');
     sessionStorage.setItem('currentAuthority', JSON.stringify(['guest']));
-    Cookies.remove('openid');
-    Cookies.remove('token');
+    //Cookies.remove('openid');
+    //Cookies.remove('token');
     return { status: "error" };
   }
 }
