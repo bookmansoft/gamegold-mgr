@@ -4,12 +4,12 @@ import { routerRedux } from 'dva/router';
 import { reloadAuthorized } from '@/utils/Authorized';
 import { getAuthority } from '@/utils/authority';
 import RenderAuthorized from '@/components/Authorized';
-import { remoteInit } from '@/services/gamegoldapi';
+import { remoteRelogin } from '@/services/gamegoldapi';
 
 /**
  * 每次页面刷新时，会重新进行授权验证。在此对连接器做必要的重置工作
  */
-remoteInit().then(ret=>{
+remoteRelogin().then(ret=>{
   console.log('刷新重登:', JSON.stringify(ret));
 
   reloadAuthorized();

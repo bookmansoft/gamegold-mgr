@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import Link from 'umi/link';
+import {formatMessage} from 'umi/locale';
 import RightContent from '../GlobalHeader/RightContent';
 import BaseMenu from '../SiderMenu/BaseMenu';
 import styles from './index.less';
@@ -30,7 +31,7 @@ export default class TopNavHeader extends PureComponent {
             <div className={styles.logo} key="logo" id="logo">
               <Link to="/">
                 <img src={logo} alt="logo" />
-                <h1>Gamegold管理 </h1>
+                <h1>{formatMessage({id: 'sys.product.name'})}</h1>
               </Link>
             </div>
             <div

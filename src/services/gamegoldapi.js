@@ -110,14 +110,7 @@ export async function accountLogin(params) {
 
       //通过读取 cookie 设置 token 来完成登录设定
       case 'cookie' : {
-        let result = await remote.init().setUserInfo({domain: 'auth2step.CRM', openid: params.openid}).setLB(true);
-        if(result) {
-          result = await remote.setUserInfo({domain: 'auth2step.CRM', openid: params.openid, token: params.token}).fetching({func:'login.UserLogin'});
-          if(result.code == 0) {
-            return afterLogin(true, true); //视为利用缓存重登
-          } 
-        }
-        return afterLogin(false);
+        return await remoteRelogin();
       }
     }
   } catch (error) {
@@ -129,7 +122,7 @@ export async function accountLogin(params) {
 /***
  *  页面刷新时对连接器进行重置
  */
-export async function remoteInit() {
+export async function remoteRelogin() {
   try {
     let openid = sessionStorage.getItem('username'), token = sessionStorage.getItem('token');
     if(!openid || !token) {
@@ -143,6 +136,7 @@ export async function remoteInit() {
       }
       let result = await remote.setUserInfo({domain: 'auth2step.CRM', openid: openid, token: token}).fetching({func:'login.UserLogin'});
       if(result.code == 0) {
+        remote.setUserInfo({openid: result.data.openid, token: result.data.token, currentAuthority: result.data.currentAuthority});
         return afterLogin(true, true); //视为利用缓存重登
       } 
     }
@@ -159,7 +153,8 @@ export async function remoteInit() {
  */
 function afterLogin(result, cookie=false) {
   if (!!result) {
-    message.success('您已成功登录');
+    console.log(`您已成功登录${JSON.stringify(remote.userInfo)}`);
+    message.success(`您已成功登录`);
 
     sessionStorage.setItem('username', remote.userInfo.openid); //页面显示用的数据
     sessionStorage.setItem('token', remote.userInfo.token);

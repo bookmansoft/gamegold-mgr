@@ -39,7 +39,7 @@ describe('Login', () => {
     await page.click('button[type="submit"]');
     await page.waitForSelector('.ant-layout-sider h1'); // should display error
     const text = await page.evaluate(() => document.body.innerHTML);
-    expect(text).toContain('<h1>Gamegold管理平台</h1>');
+    expect(text).toContain('<h1>Vallnet CRM</h1>');
   });
 
   afterAll(() => browser.close());

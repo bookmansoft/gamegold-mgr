@@ -178,13 +178,13 @@ class BasicLayout extends React.PureComponent {
     const currRouterData = this.matchParamsPath(pathname);
 
     if (!currRouterData) {
-      return 'Gamegold管理平台';
+      return formatMessage({id: 'sys.product.name'});
     }
     const message = formatMessage({
       id: currRouterData.locale || currRouterData.name,
       defaultMessage: currRouterData.name,
     });
-    return `${message} - Gamegold管理平台`;
+    return `${message} - ${formatMessage({id: 'sys.product.name'})}`;
   };
 
   getLayoutStyle = () => {

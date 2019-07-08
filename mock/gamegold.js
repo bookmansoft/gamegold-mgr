@@ -1,5 +1,5 @@
 /**
- * Gamegold 对等网络模拟交互接口，由 remoting 方法发起
+ * 主网交互接口，由 remoting 方法发起
  * @description 代码中会兼容本地 service mock 以及部署站点的静态数据(例如GET方法, 但POST不行)
  * @description 当前版本，必须通过 npm run start:no-mock 命令启动系统，才能禁用mock、完全启用 config.js 中的代理配置(proxy)
  */

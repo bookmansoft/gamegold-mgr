@@ -100,7 +100,7 @@ export default {
   'menu.gamemgr.gameadderror': '添加新游戏失败',
   'menu.gamemgr.gameedit': '编辑游戏',
   'menu.gamemgr.gameview': '游戏详情',
-  'menu.wallet': 'GameGold钱包',
+  'menu.wallet': 'Vallnet Wallet',
   'menu.wallet.walletmgr': '钱包管理',
   'menu.wallet.walletlog': '流水详情',
   'menu.wallet.walletinfo': '钱包信息',

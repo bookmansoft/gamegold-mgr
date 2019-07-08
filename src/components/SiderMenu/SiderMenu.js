@@ -3,6 +3,7 @@ import { Layout } from 'antd';
 import pathToRegexp from 'path-to-regexp';
 import classNames from 'classnames';
 import Link from 'umi/link';
+import {formatMessage} from 'umi/locale';
 import styles from './index.less';
 import BaseMenu, { getMenuMatches } from './BaseMenu';
 import { urlToList } from '../_utils/pathTools';
@@ -110,7 +111,7 @@ export default class SiderMenu extends PureComponent {
         <div className={styles.logo} id="logo">
           <Link to="/">
             <img src={logo} alt="logo" />
-            <h1>Gamegold管理平台</h1>
+            <h1>{formatMessage({id: 'sys.product.name'})}</h1>
           </Link>
         </div>
         <BaseMenu

@@ -12,7 +12,7 @@ describe('Homepage', () => {
     await page.goto('http://localhost:8000', { waitUntil: 'networkidle2' });
     await page.waitForSelector('#logo h1');
     const text = await page.evaluate(() => document.body.innerHTML);
-    expect(text).toContain('<h1>Gamegold管理平台</h1>');
+    expect(text).toContain('<h1>Vallnet CRM</h1>');
     await page.close();
     browser.close();
   });
