@@ -1088,94 +1088,62 @@ export async function addFunding(params) {
   }
 }
 
-// 众筹详情
-// params.id 查看的页面参数值。（其中params对应于model中的payload）
+/**
+ * 查询众筹详情
+ * @param {Number} params.id 查看的众筹项目的编号
+ */
 export async function getFundingView(params) {
   try {
-    console.log(params.id);
     //接下来好好查询并返回这个页面的数据
     let ret = await remote.fetching({ 
       func: "cpfunding.Retrieve", 
       id: params.id 
     });
-    if (ret.data === null) {
+    if (!ret.data) {
       return { code: -200, data: null, message: "react service层无返回值。方法名：getFundingView" };
     }
-    //有数据
-    console.log(ret.data);
+
     //调用链，获取剩余数量
     let retCp = await remote.fetching({ 
       func: "cp.ById", 
       items: [ret.data.cid] 
     });
     console.log("cp信息", retCp);
-    if (retCp.data.stock != null) {
+    if (!!retCp.data.stock) {
       ret.data.residue_num = retCp.data.stock.sum;
     }
     else {
       ret.data.residue = 0;//暂时设置为0
     }
     console.log("最后的结果：", ret.data);
-    return ret.data;
+    return ret;
   } catch (error) {
     console.log(error);
     return { code: -100, data: null, message: "react service层错误。方法名：getFundingView" };
   }
 }
 
-// auditFunding
-// 众筹信息审核
+/**
+ * 众筹信息审核
+ */
 export async function auditFunding(params) {
   try {
-    let ret = { code: -200, data: null, message: "react service层无返回值。方法名：auditFunding" };
     console.log("调用更新记录的方法:" + JSON.stringify(params));
-    let retCpfunding = await remote.fetching({
-      func: "cpfunding.Retrieve", 
-      id: params.id
-    });
-    console.log(retCpfunding);
-    let data = retCpfunding.data;
 
-    let retUpdate = await remote.fetching({
+    let ret = await remote.fetching({
       func: "cpfunding.UpdateRecord", 
+
       id: params.id,
-      cpid: data.id,
-      stock_num: data.stock_num,
-      stock_amount: data.stock_amount,
-      total_amount: data.total_amount,
       stock_rmb: params.stock_rmb,//人民币值初始为1000分
       audit_state_id: params.audit_state_id,
       audit_text: params.audit_text,
-      modify_date: new Date().getTime() / 1000,
-      cp_name: data.cp_name,
-      cp_text: data.cp_text,
-      cp_type: data.cp_type,
-      cp_url: data.cp_url,
-      develop_name: data.develop_name,
-      develop_text: data.develop_text,
-      cid: data.cid,
     });
-    console.log("调用更新记录结果：" + JSON.stringify(retUpdate));
-    //调用链，创建凭证；
-    console.log({
-      func: "cpfunding.Create", 
-      cid: data.cid,//系统cid
-      stock_num: data.stock_num,
-      stock_amount: data.stock_amount,
-    });
-    ret = await remote.fetching({
-      func: "cpfunding.Create", 
-      cid: data.cid,//系统cid
-      stock_num: data.stock_num,
-      stock_amount: data.stock_amount,
-    });
-    console.log("调用链执行结果:", ret);
+
     return ret;
   } catch (error) {
     console.log(error);
     return { code: -100, data: null, message: "react service层错误。方法名：addGameMgr" };
   }
-
 }
 
 //-- Stock.Record 查询凭证的现金销售记录

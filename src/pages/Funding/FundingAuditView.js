@@ -18,7 +18,6 @@ import {
   Modal,
   Form,
   Input,
-
 } from 'antd';
 import classNames from 'classnames';
 import DescriptionList from '@/components/DescriptionList';
@@ -26,17 +25,11 @@ import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import styles from './FundingAuditView.less';
 import { Pie } from '@/components/Charts';
 
-
-
 const FormItem = Form.Item;
 const { Step } = Steps;
 const { TextArea } = Input;
 
-
-
 const getWindowWidth = () => window.innerWidth || document.documentElement.clientWidth;
-
-
 
 @connect(({ fundingauditview, loading }) => ({
   fundingauditview,
@@ -49,7 +42,7 @@ class FundingAuditView extends Component {
     visible: false, //发布更新表单可见性
     operationkey: 'tab1',
     stepDirection: 'horizontal',
-// 自定义的state
+    // 自定义的state
     id: 0,
     stock_rmb: 10,
     audit_state_id:1,//审核状态，按下按钮后改为指定的值。
@@ -104,8 +97,7 @@ class FundingAuditView extends Component {
   handleAuditNoPass =  (theState,theData) => {
     this.state.audit_state_id = 3;
     this.state.cid=theData.cid;
-    //其他代码copy自审核通过
-    //以下代码与审核不通过相同
+    //以下代码与审核通过相同
     const { dispatch, form } = this.props;
     console.log(theState);
     dispatch({
@@ -131,7 +123,6 @@ class FundingAuditView extends Component {
     this.state.audit_text = e.target.value;
   }
 
-
   //传递引用
   saveFormRef = (formRef) => {
     this.formRef = formRef;
@@ -143,12 +134,11 @@ class FundingAuditView extends Component {
 
   componentDidMount() {
     const { dispatch } = this.props;
-    // console.log(this.props.location.query.id);
-    //设置到本页的state中备用
-    this.state.id=parseInt(this.props.location.query.id);
+
+    this.state.id=parseInt(this.props.location.query.id);//设置到本页的state中备用
     dispatch({
       type: 'fundingauditview/fetch',
-      payload: { id: parseInt(this.props.location.query.id) },//这里
+      payload: { id: this.state.id },
     });
 
     this.setStepDirection();
@@ -301,12 +291,9 @@ class FundingAuditView extends Component {
             </Col>
           </Row>
           <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
-            <Button type="primary" onClick={() => this.handleAuditPass(this.state,this.props.fundingauditview.data)}>
-              通过
-            </Button> &nbsp;&nbsp;&nbsp;
-            <Button type="primary" onClick={() => this.handleAuditNoPass(this.state,this.props.fundingauditview.data)}>
-              不通过
-            </Button>
+            <Button type="primary" onClick={() => this.handleAuditPass(this.state, data)}>通过</Button>
+            &nbsp;&nbsp;&nbsp;
+            <Button type="primary" onClick={() => this.handleAuditNoPass(this.state, data)}>不通过</Button>
           </FormItem>
         </Card>
 

@@ -16,11 +16,15 @@ export default {
     *fetch({ payload }, { call, put }) {
       console.log("getFundingView model："+payload.id);
       const response = yield call(getFundingView, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
-      return response;
+      if(response.code == 0) {
+        yield put({
+          type: 'save',
+          payload: response.data,
+        });
+        return response.data;
+      } else {
+        return null;
+      }
     },
 
     *fetchTableData({ payload }, { call, put }) {

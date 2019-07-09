@@ -151,11 +151,16 @@ class FundingAuditList extends PureComponent {
     });
   };
 
-  //查看页面
+  /**
+   * 查看页面
+   */
   handleView = (flag, record) => {
     console.log(record);
-    // this.props.history.push("./fundingview?id="+record.cp_id);
-    this.props.history.push("./fundingauditview?id=" + record.id);
+    if(record.audit_state_id == 2) { //跳转至已审核众筹查看页面
+      this.props.history.push(`./fundingview?id=${record.id}`);
+    } else { //跳转至待审核众筹查看页面
+      this.props.history.push(`./fundingauditview?id=${record.id}`);
+    }
   };
 
   //赠送道具
@@ -183,20 +188,17 @@ class FundingAuditList extends PureComponent {
           <Col span={6}>
             <FormItem label="审核状态：">
               {getFieldDecorator('audit_state_id',{initialValue:"1"})(
-                <Select placeholder="请选择" style={{ width: '100%' }} defaultValue="1">
+                <Select placeholder="请选择" style={{ width: '100%' }}>
                   <Option value="1">未审核</Option>
+                  <Option value="2">已审核</Option>
                 </Select>
               )}
             </FormItem>
           </Col>
           <Col span={6}>
             <span className={styles.submitButtons}>
-              <Button type="primary" htmlType="submit">
-                搜索
-              </Button>
-              <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
-                重置
-              </Button>
+              <Button type="primary" htmlType="submit">搜索</Button>
+              <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>
             </span>
           </Col>
         </Row>

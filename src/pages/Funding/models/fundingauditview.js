@@ -12,10 +12,12 @@ export default {
     *fetch({ payload }, { call, put }) {
       console.log("getFundingView model："+payload.id);
       const response = yield call(getFundingView, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
+      if(response.code == 0) {
+        yield put({
+          type: 'save',
+          payload: response.data,
+        });
+      }
     },
 
     //审核更新整个表单的内容（到数据库及全节点）

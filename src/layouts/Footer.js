@@ -8,15 +8,15 @@ const FooterView = () => (
     <GlobalFooter
       links={[
         {
-          key: '游戏金链 百谷王',
-          title: '游戏金链 官网',
-          href: 'http://www.gamegold.xin',
+          key: 'Vallnet Bookman Gamegold 百谷王 百晓生',
+          title: 'Vallnet CRM',
+          href: 'http://www.vallnet.cn',
           blankTarget: true,
         },
       ]}
       copyright={
         <Fragment>
-          Copyright <Icon type="copyright" /> 2018 百谷王
+          Copyright <Icon type="copyright" /> 2018~2020 百谷王科技
         </Fragment>
       }
     />
