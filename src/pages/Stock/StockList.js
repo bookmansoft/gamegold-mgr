@@ -71,6 +71,9 @@ class StockList extends PureComponent {
     },
   ];
 
+  /**
+   * 载入初始数据
+   */
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
@@ -186,12 +189,8 @@ class StockList extends PureComponent {
  
           <Col md={6} sm={9}>
             <span className={styles.submitButtons}>
-              <Button type="primary" htmlType="submit">
-                搜索
-              </Button>
-              <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
-                重置
-              </Button>
+              <Button type="primary" htmlType="submit">搜索</Button>
+              <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>
             </span>
           </Col>
         </Row>
@@ -207,7 +206,7 @@ class StockList extends PureComponent {
     const { selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;
 
     return (
-      <PageHeaderWrapper title="游戏行情列表">
+      <PageHeaderWrapper title="凭证交易记录">
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderForm()}</div>

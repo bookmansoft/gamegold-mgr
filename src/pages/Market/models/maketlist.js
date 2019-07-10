@@ -1,4 +1,4 @@
-import { queryFunding, ListCpType } from '@/services/gamegoldapi';
+import { queryStockList, stockPurchase, ListCpType } from '@/services/gamegoldapi';
 
 export default {
   namespace: 'marketlist',
@@ -12,11 +12,17 @@ export default {
 
   effects: {
     *fetch({ payload }, { call, put }) {
-      const response = yield call(queryFunding, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
+      const response = yield call(queryStockList, payload);
+      if(!!response && response.code == 0) {
+        yield put({
+          type: 'save',
+          payload: response.data,
+        });
+      }
+    },
+
+    *purchase({ payload }, { call, put }) {
+      return yield call(stockPurchase, payload);
     },
 
     *fetchCpType({ payload }, { call, put }) {

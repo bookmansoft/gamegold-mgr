@@ -16,7 +16,7 @@ let remote = new toolkit.gameconn({
       "port": 9901                //远程主机端口
     }
 });
-remote.setmode(remote.CommMode.ws);
+//remote.setmode(remote.CommMode.ws);
 
 //test only
 remote.watch(info => {
@@ -1022,6 +1022,51 @@ export async function queryPrize(params) {
   }
 }
 
+/**
+ * 查询一级市场待售列表
+ * @param {*} params 
+ */
+export async function queryStockList(params) {
+  try {
+    let ret = { code: -200, data: null, message: "react service层无返回值。方法名 queryStockList" };
+    if (params == null) {
+      params = {
+        currentPage: 1,
+        pageSize: 10,
+      };
+    };
+    ret = await remote.fetching({
+      func: "cpfunding.StockList", 
+      currentPage: params.currentPage,
+      pageSize: params.pageSize,
+    });
+    console.log("一级市场待售列表：" + JSON.stringify(ret));
+    return ret;
+  } catch (error) {
+    console.log(error);
+    return { code: -100, data: null, message: "react service层错误。方法名 queryStockList" };
+  }
+}
+
+/**
+ * 购买凭证
+ * @param {*} params 
+ */
+export async function stockPurchase(params) {
+  try {
+    let ret = await remote.fetching({
+      func: "cpfunding.StockPurchase",
+      cid: params.cid,
+      num: params.num, 
+    });
+    console.log("一级市场待售列表：" + JSON.stringify(ret));
+    return ret;
+  } catch (error) {
+    console.log(error);
+    return { code: -100, data: null, message: "react service层错误。方法名 stockPurchase" };
+  }
+}
+
 //--众筹查询（各种条件）
 export async function queryFunding(params) {
   try {
@@ -1043,6 +1088,7 @@ export async function queryFunding(params) {
     return { code: -100, data: null, message: "react service层错误。方法名：queryFunding" };
   }
 }
+
 //--众筹页面调用的ListCp方法
 export async function ListCp(params) {
   try {
@@ -1110,7 +1156,7 @@ export async function getFundingView(params) {
     });
     console.log("cp信息", retCp);
     if (!!retCp.data.stock) {
-      ret.data.residue_num = retCp.data.stock.sum;
+      ret.data.reside_num = retCp.data.stock.sum;
     }
     else {
       ret.data.residue = 0;//暂时设置为0
@@ -1120,6 +1166,47 @@ export async function getFundingView(params) {
   } catch (error) {
     console.log(error);
     return { code: -100, data: null, message: "react service层错误。方法名：getFundingView" };
+  }
+}
+
+/**
+ * 查询凭证的现金销售记录
+ * 1. 查询节点上存储的凭证交易流水 流水类型 厂商编码: stock.record type (cid height conditions)
+ * eg: stock.record 1 e1297470-5d09-11e9-b07a-2d9ee061d761 300 "[['txid','a656db273e4850c6113de4b7fd7c619798db90363d7e25d179183b4720db4292']]"
+ * 
+ * 2. 查询钱包上存储的凭证交易流水 流水类型 厂商编码: stock.record.wallet type (cid height conditions)
+ *    如果要查询特定用户的流水，可以在 conditions 中添加 addr 查询参数
+ * eg: stock.record.wallet 1 e1297470-5d09-11e9-b07a-2d9ee061d761 300 "[['txid','a656db273e4850c6113de4b7fd7c619798db90363d7e25d179183b4720db4292']]"
+ * 交易记录枚举类型
+   const $RecordType = {
+      Offer: 1,           //发行凭证
+      Purchase: 2,        //购买发行的凭证
+      Send: 3,            //无偿转让凭证
+      Bonus: 4,           //凭证分成
+      Ads: 5,             //媒体分成
+      Bid: 6,             //有偿转让凭证
+      Auction: 7,         //购买有偿转让的凭证
+   }
+ * @param {*} params 
+ */
+export async function stockRecord(params) {
+  try {
+    let ret = { code: -200, data: null, message: "react service层无返回值。方法名：stockRecord" };
+    console.log("查询凭证的现金销售记录:" + JSON.stringify(params));
+    ret = await remote.fetching({
+      func: "cpfunding.StockRecord", 
+      items: [params.type, params.cid, 0, ""],
+    });
+
+    console.log("查询凭证的现金销售记录：" + JSON.stringify(ret));
+    let theResult = { list: ret.data, pagination: { current: 1, pageSize: 10 } };
+
+    console.log("实际输出格式");
+    console.log(theResult);
+    return theResult;
+  } catch (error) {
+    console.log(error);
+    return { code: -100, data: null, message: "react service层错误。方法名：stockList" };
   }
 }
 
@@ -1144,46 +1231,6 @@ export async function auditFunding(params) {
     console.log(error);
     return { code: -100, data: null, message: "react service层错误。方法名：addGameMgr" };
   }
-}
-
-//-- Stock.Record 查询凭证的现金销售记录
-// const $RecordType = {
-//   Offer: 1,           //发行凭证
-//   Purchase: 2,        //购买发行的凭证
-//   Send: 3,            //无偿转让凭证
-//   Bonus: 4,           //凭证分成
-//   Ads: 5,             //媒体分成
-//   Bid: 6,             //有偿转让凭证
-//   Auction: 7,         //购买有偿转让的凭证
-// }
-// #查询节点上存储的凭证交易流水 流水类型 厂商编码: stock.record type (cid height conditions)
-// stock.record 1 e1297470-5d09-11e9-b07a-2d9ee061d761 300 "[['txid','a656db273e4850c6113de4b7fd7c619798db90363d7e25d179183b4720db4292']]"
-
-// #查询钱包上存储的凭证交易流水 流水类型 厂商编码: stock.record.wallet type (cid height conditions)
-// #如果要查询特定用户的流水，可以在 conditions 中添加 addr 查询参数
-// stock.record.wallet 1 e1297470-5d09-11e9-b07a-2d9ee061d761 300 "[['txid','a656db273e4850c6113de4b7fd7c619798db90363d7e25d179183b4720db4292']]"
-export async function stockRecord(params) {
-  try {
-    let ret = { code: -200, data: null, message: "react service层无返回值。方法名：stockRecord" };
-    console.log("查询凭证的现金销售记录:" + JSON.stringify(params));
-    ret = await remote.fetching({
-      func: "cpfunding.StockRecord", 
-      items: [params.type, params.cid, 0, ""],
-      //  cid: params.cid,
-      // currentPage: params.currentPage, pageSize: params.pageSize, daterange: params.date
-    });
-
-    console.log("查询凭证的现金销售记录：" + JSON.stringify(ret));
-    let theResult = { list: ret.data, pagination: { current: 1, pageSize: 10 } };
-
-    console.log("实际输出格式");
-    console.log(theResult);
-    return theResult;
-  } catch (error) {
-    console.log(error);
-    return { code: -100, data: null, message: "react service层错误。方法名：stockList" };
-  }
-
 }
 
 //--股票行情查询
