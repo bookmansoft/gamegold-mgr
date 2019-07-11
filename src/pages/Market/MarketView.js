@@ -27,20 +27,17 @@ import styles from './MarketView.less';
 import { Pie } from '@/components/Charts';
 import SimpleTable from '@/components/SimpleTable';
 
-
 const FormItem = Form.Item;
 const { Step } = Steps;
 
-
 const getWindowWidth = () => window.innerWidth || document.documentElement.clientWidth;
 
-@connect(({ marketview, loading }) => ({
-  marketview,
-  loading: loading.models.marketview,
+@connect(({ marketlist, loading }) => ({
+  marketlist,
+  loading: loading.models.marketlist,
 }))
 @Form.create()
 class MarketView extends Component {
-
   renderImg = (text) => {
     if (text && text.length) {
       const imgs = text.map((item, index) =>
@@ -50,7 +47,8 @@ class MarketView extends Component {
     }
   }
   state = {
-    visible: false, //发布更新表单可见性
+    current: {},                  //当前凭证条目
+    visible: false,               //发布更新表单可见性
     operationkey: 'tab1',
     stepDirection: 'horizontal',
     modalVisible: false,
@@ -77,7 +75,7 @@ class MarketView extends Component {
     {
       title: '单价',
       dataIndex: 'price',
-      render: val => <span>{parseInt(val/100) / 1000}</span>
+      render: val => <span>{parseInt(val)/100 / 1000}</span>
     },
     {
       title: 'sn',
@@ -86,7 +84,7 @@ class MarketView extends Component {
     {
       title: '金额(Kg)',
       dataIndex: 'sum',
-      render: val => <span>{parseInt(val/100) / 1000}</span>
+      render: val => <span>{parseInt(val)/100 / 1000}</span>
     },
   ];
   //显示发布更新表单
@@ -120,19 +118,27 @@ class MarketView extends Component {
   };
 
   componentDidMount() {
-    const { dispatch } = this.props;
-    console.log(this.props.location.query.id);
-    dispatch({
-      type: 'marketview/fetch',
-      payload: { id: this.props.location.query.id },//这里
-    }).then((ret)=> {
-      console.log("刷新完成"+JSON.stringify(ret));
-      dispatch({
-        type: 'marketview/fetchTableData',
-        payload: { cid: ret.cid, type:2},
-      });
-    });
+    const { 
+      dispatch,
+      marketlist: { stockMap },
+    } = this.props;
+    
+    //根据传入的cpid(query.id), 查询并设置当前凭证条目
+    let cpid = this.props.location.query.id;
 
+    if(!stockMap[cpid]) { //如果本地缓存不存在该条目，强行回到列表页
+      this.props.history.push('./marketlist');
+      return;
+    }
+
+    //设置当前页面所需的凭证条目对象
+    this.setState({current: stockMap[cpid]});
+
+    //拉去该凭证条目的流水信息
+    dispatch({
+      type: 'marketlist/fetchTableData',
+      payload: { cid: cpid, type:2},
+    });
 
     this.setStepDirection();
     window.addEventListener('resize', this.setStepDirection, { passive: true });
@@ -184,13 +190,11 @@ class MarketView extends Component {
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 16, lg: 24, xl: 48 }}>
           <Col md={20} sm={20}>
-            <label>现金销售明细</label>
+            <label>凭证交易明细</label>
           </Col>
           <Col md={4} sm={4}>
             <span className={styles.submitButtons}>
-              <Button type="primary" htmlType="submit">
-                搜索
-              </Button>
+              <Button type="primary" htmlType="submit">搜索</Button>
             </span>
           </Col>
         </Row>
@@ -201,10 +205,12 @@ class MarketView extends Component {
   render() {
     const { stepDirection, operationkey } = this.state;
     const {
-      marketview: { data,tableData },
+      marketlist: { data, tableData },
       loading
     } = this.props;
     const { selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;
+
+    console.log('marketview.render', tableData);
 
     return (
       <PageHeaderWrapper
@@ -219,21 +225,19 @@ class MarketView extends Component {
             <Col span={24}><h3><b>基本信息</b></h3></Col>
           </Row>
           <Row style={{ marginBottom: 32 }}>
-          <Col span={8}>
-              游戏中文名：{data.cp_text}
+            <Col span={8}>
+                游戏中文名：{this.state.current.cpname}
+            </Col>
+            {/* <Col span={8}>
+              游戏类型：{0}
             </Col>
             <Col span={8}>
-              游戏类型：{data.cp_type}
-            </Col>
-            <Col span={8}>
-              开发者：{data.develop_name}
-            </Col>
+              开发者：{0}
+            </Col> */}
           </Row>
           <Row style={{ marginBottom: 32 }}>
-            <Col span={24}>游戏详情页：{data.cp_url}</Col>
+            <Col span={24}>游戏详情页：{this.state.current.cpid}</Col>
           </Row>
-
-
         </Card>
         <Card style={{ marginBottom: 16 }} bordered={false}>
           <Row style={{ marginBottom: 16 }}>
@@ -241,35 +245,38 @@ class MarketView extends Component {
           </Row>
           <Row style={{ marginBottom: 32 }}>
             <Col span={4}>
-              <Pie percent={parseInt((data.stock_num-data.reside_num)*100/data.stock_num+0.5)} subTitle={null} total={parseInt((data.stock_num-data.reside_num)*100/data.stock_num)+'%'} height={120} />
+              <Pie 
+                percent = { this.state.current.sum*100 / (this.state.current.hisSum + this.state.current.sum) } 
+                subTitle={null} 
+                total = { this.state.current.sum*100 / (this.state.current.hisSum + this.state.current.sum) + '%' } 
+                height={120} 
+              />
             </Col>
             <Col span={8} style={{ marginBottom: 16 }}>
-              凭证总数量：{data.stock_num}
+              销售总量：{this.state.current.hisSum}
             </Col>
             <Col span={8} style={{ marginBottom: 16 }}>
-              未认购数量：{data.reside_num}
+              库存数量：{this.state.current.sum}
             </Col>
             <Col span={8}>
-              截止时间：{moment(data.sell_limit_date * 1000).format('YYYY-MM-DD HH:mm:ss')}
+              截止时间：{moment(this.state.current.sell_limit_date * 1000).format('YYYY-MM-DD HH:mm:ss')}
             </Col>
           </Row>
         </Card>
 
-        {tableData != null && tableData.list != null &&
-          <Card bordered={false} style={{ marginTop: 24 }}>
+        <Card bordered={false} style={{ marginTop: 24 }}>
             <div className={styles.tableList}>
               <div className={styles.tableListForm}>{this.renderForm()}</div>
               <div className={styles.tableListOperator} />
               <SimpleTable
                 selectedRows={selectedRows}
                 loading={loading}
-                data={tableData.list}
+                data={tableData}
                 columns={this.columns}
                 onSelectRow={null}
-                onChange={this.handleStandardTableChange}
               />
             </div>
-          </Card>}
+        </Card>
       </PageHeaderWrapper>
     );
   }

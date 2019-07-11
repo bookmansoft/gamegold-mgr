@@ -189,7 +189,7 @@ class MarketList extends PureComponent {
 
   //查看页面
   handleView = record => {
-    this.props.history.push("./marketview?id="+record.id);
+    this.props.history.push("./marketview?id=" + record.cpid);
   };
 
   handlePurchase = record => {

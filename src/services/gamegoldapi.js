@@ -1170,7 +1170,7 @@ export async function getFundingView(params) {
 }
 
 /**
- * 查询凭证的现金销售记录
+ * 查询凭证交易明细
  * 1. 查询节点上存储的凭证交易流水 流水类型 厂商编码: stock.record type (cid height conditions)
  * eg: stock.record 1 e1297470-5d09-11e9-b07a-2d9ee061d761 300 "[['txid','a656db273e4850c6113de4b7fd7c619798db90363d7e25d179183b4720db4292']]"
  * 
@@ -1191,19 +1191,13 @@ export async function getFundingView(params) {
  */
 export async function stockRecord(params) {
   try {
-    let ret = { code: -200, data: null, message: "react service层无返回值。方法名：stockRecord" };
-    console.log("查询凭证的现金销售记录:" + JSON.stringify(params));
-    ret = await remote.fetching({
+    console.log("查询凭证交易明细参数:" + JSON.stringify(params));
+    let ret = await remote.fetching({
       func: "cpfunding.StockRecord", 
       items: [params.type, params.cid, 0, ""],
     });
-
-    console.log("查询凭证的现金销售记录：" + JSON.stringify(ret));
-    let theResult = { list: ret.data, pagination: { current: 1, pageSize: 10 } };
-
-    console.log("实际输出格式");
-    console.log(theResult);
-    return theResult;
+    console.log("查询凭证交易明细结果：" + JSON.stringify(ret));
+    return ret;
   } catch (error) {
     console.log(error);
     return { code: -100, data: null, message: "react service层错误。方法名：stockList" };

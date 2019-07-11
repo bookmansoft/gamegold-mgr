@@ -1,13 +1,19 @@
-import { queryStockList, stockPurchase, ListCpType } from '@/services/gamegoldapi';
+import { stockRecord, queryStockList, stockPurchase, ListCpType } from '@/services/gamegoldapi';
 
 export default {
   namespace: 'marketlist',
 
   state: {
+    stockMap: {},
     data: {
       list: [],
       pagination: {},
     },
+
+    tableData: {
+      list: [],
+      pagination: {},
+    }
   },
 
   effects: {
@@ -32,11 +38,24 @@ export default {
         payload: response,
       });
     },
+
+    *fetchTableData({ payload }, { call, put }) {
+      const response = yield call(stockRecord, payload);
+      if(response.code == 0) {
+        yield put({
+          type: 'saveTableData',
+          payload: response.data,
+        });
+      }
+    },
   },
 
   reducers: {
-    //注意这里的data
     save(state, action) {
+      //生成反向索引表，以便详情页面直接引用
+      action.payload.list.map(item => {
+        state.stockMap[item.cpid] = item;
+      });
       return {
         ...state,
         data: action.payload,
@@ -47,6 +66,12 @@ export default {
       return {
         ...state,
         cp_type_list: action.payload,
+      };
+    },
+    saveTableData(state, action) {
+      return {
+        ...state,
+        tableData: action.payload,
       };
     },
   },
