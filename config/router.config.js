@@ -379,7 +379,17 @@ export default [
             component: './Stock/StockView',
             hideInMenu: true,
           },
-
+          {
+            path: '/stock/mystock',
+            name: 'mystock',
+            component: './Stock/MyStock',
+          },
+          {
+            path: '/stock/mystockdetail',
+            name: 'mystockdetail',
+            component: './Stock/MyStockDetail',
+            hideInMenu: true,
+          },
         ],
       },
       //---------------------------------------------------------------------------

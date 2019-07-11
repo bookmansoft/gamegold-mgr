@@ -15,14 +15,12 @@ import {
 import SimpleTable from '@/components/SimpleTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
-import styles from './StockList.less';
+import styles from './MyStock.less';
 
 const FormItem = Form.Item;
 const { Option } = Select;
-const getValue = obj =>
-  Object.keys(obj)
-    .map(key => obj[key])
-    .join(',');
+
+const getValue = obj => Object.keys(obj).map(key => obj[key]).join(',');
 
 /* eslint react/no-multi-comp:0 */
 @connect(({ stocklist, loading }) => ({
@@ -30,7 +28,7 @@ const getValue = obj =>
   loading: loading.models.stocklist,
 }))
 @Form.create()
-class StockList extends PureComponent {
+class MyStock extends PureComponent {
   state = {
     modalVisible: false,
     updateModalVisible: false,
@@ -162,7 +160,6 @@ class StockList extends PureComponent {
 
   //显示下拉框
   renderOptions = () => {
-    // console.log(this.props.stocklist.data);
     if (this.props.stocklist.cp_type_list != null) {
       return this.props.stocklist.cp_type_list.map(element =>
         <Option key={element.id} value={element.cp_type_id}> {element.cp_type_id}</Option>);
@@ -225,4 +222,4 @@ class StockList extends PureComponent {
   }
 }
 
-export default StockList;
+export default MyStock;

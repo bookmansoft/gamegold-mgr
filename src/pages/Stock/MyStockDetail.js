@@ -23,7 +23,7 @@ import {
 import classNames from 'classnames';
 import DescriptionList from '@/components/DescriptionList';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-import styles from './StockView.less';
+import styles from './MyStockDetail.less';
 
 const FormItem = Form.Item;
 const { Step } = Steps;

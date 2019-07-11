@@ -1227,30 +1227,10 @@ export async function auditFunding(params) {
   }
 }
 
-//--股票行情查询
-export async function queryStock(params) {
-  try {
-    let ret = { code: -200, data: null, message: "react service层无返回值。方法名：queryStock" };
-    if (params == null) {
-      params = {
-        currentPage: 1,
-        pageSize: 10,
-      };
-    };
-    ret = await remote.fetching({
-      func: "cpstock.ListRecord", 
-      ...params
-    });
-    console.log("股票行情查询列表：" + JSON.stringify(ret));
-    return ret;
-  } catch (error) {
-    console.log(error);
-    return { code: -100, data: null, message: "react service层错误。方法名：queryStock" };
-  }
-}
-
-// 获取股票行情详情
-// params.id 查看的页面参数值。（其中params对应于model中的payload）
+/**
+ * 获取凭证详情
+ * @param {Object} params 
+ */
 export async function getStockView(params) {
   try {
     console.log(params.id);
@@ -1271,20 +1251,24 @@ export async function getStockView(params) {
   }
 }
 
-//--股票行情查询
+/**
+ * 二级市场查询
+ * @param {*} params 
+ */
 export async function queryStockBase(params) {
   try {
-    let ret = { code: -200, data: null, message: "react service层无返回值。方法名：queryStockBase" };
-    if (params == null) {
+    if (!params) {
       params = {
         currentPage: 1,
         pageSize: 10,
       };
     };
-    ret = await remote.fetching({
+
+    let ret = await remote.fetching({
       func: "cpstockbase.ListRecord", 
       ...params
     });
+
     return ret;
   } catch (error) {
     console.log(error);

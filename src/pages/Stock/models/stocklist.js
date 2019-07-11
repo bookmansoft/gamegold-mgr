@@ -8,9 +8,19 @@ export default {
       list: [],
       pagination: {},
     },
+    detail: {},
   },
 
   effects: {
+    *detail({ payload }, { call, put }) {
+      console.log("stockview model："+payload.id);
+      const response = yield call(getStockView, payload);
+      yield put({
+        type: 'saveDetail',
+        payload: response,
+      });
+    },
+
     *fetch({ payload }, { call, put }) {
       const response = yield call(queryStockBase, payload);
       yield put({
@@ -29,7 +39,6 @@ export default {
   },
 
   reducers: {
-    //注意这里的data
     save(state, action) {
       return {
         ...state,
@@ -41,6 +50,12 @@ export default {
       return {
         ...state,
         cp_type_list: action.payload,
+      };
+    },
+    saveDetail(state, action) {
+      return {
+        ...state,
+        detail: action.payload,
       };
     },
   },
