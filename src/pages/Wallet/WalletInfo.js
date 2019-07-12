@@ -42,6 +42,11 @@ const getValue = obj =>
 }))
 @Form.create()
 class WalletInfo extends PureComponent {
+  state = {
+    formValues: {},
+    account: 'default',
+  }
+
   componentDidMount() {
     const { dispatch } = this.props;
     console.log(location.protocol+'//'+location.host+'/qrcode/');
@@ -50,22 +55,63 @@ class WalletInfo extends PureComponent {
       payload: {},
     });
   }
+
   handleBack = () => {
     router.push('/wallet/step-form');
   };
-  handleRefresh = () => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'walletinfo/fetch',
-      payload: {},
+
+  handleRefresh = e => {
+    e.preventDefault();
+
+    const { dispatch, form } = this.props;
+
+    form.validateFields((err, fieldsValue) => {
+      if (err) return;
+
+      const values = {
+        ...fieldsValue,
+        updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
+      };
+
+      this.setState({
+        formValues: values,
+      });
+
+      dispatch({
+        type: 'walletinfo/fetch',
+        payload: values,
+      });
     });
   };
+
+  renderForm() {
+    const {
+      form: { getFieldDecorator },
+    } = this.props;
+
+    return (
+      <Form onSubmit={this.handleRefresh} layout="inline">
+        <Row gutter={{ md: 16, lg: 24, xl: 48 }}>
+          <Col md={6} sm={9}>
+            <FormItem label="">
+              {getFieldDecorator('account')(<Input placeholder="指定账户名称" />)}
+            </FormItem>
+            <span className={styles.submitButtons}>
+              <Button type="primary" htmlType="submit">刷新</Button>
+            </span>
+          </Col>
+        </Row>
+      </Form>
+    );
+  }
 
   render() {
     const {
       walletinfo: { data },
       loading,
     } = this.props;
+
+    console.log('currentAuthority', checkPermissions('admin', sessionStorage.getItem('currentAuthority'), 'ok', 'error'));
 
     return (
       <PageHeaderWrapper title="钱包信息">
@@ -82,7 +128,8 @@ class WalletInfo extends PureComponent {
             </Row>
             <Row style={{ marginBottom: 32 }}>
               <Col sm={24} xs={24}>
-                <b>收款二维码：</b><Button type="primary" onClick={this.handleRefresh}>刷新</Button>
+                <b>收款二维码：</b>
+                {this.renderForm()}
               </Col>
             </Row>
             <Row style={{ marginBottom: 32 }}>

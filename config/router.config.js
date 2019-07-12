@@ -384,12 +384,6 @@ export default [
             name: 'mystock',
             component: './Stock/MyStock',
           },
-          {
-            path: '/stock/mystockdetail',
-            name: 'mystockdetail',
-            component: './Stock/MyStockDetail',
-            hideInMenu: true,
-          },
         ],
       },
       //---------------------------------------------------------------------------

@@ -1,3 +1,4 @@
+import { formatMessage } from 'umi/locale';
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
@@ -11,6 +12,7 @@ import {
   Button,
   Steps,
   Radio,
+  Modal,
 } from 'antd';
 import SimpleTable from '@/components/SimpleTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
@@ -36,34 +38,44 @@ class MyStock extends PureComponent {
     selectedRows: [],
     formValues: {},
     stepFormValues: {},
+    current: {}, //代表当前选中项目
+    //控制模态框的显示状态
+    purchase: {
+      loading: false,
+      visible: false,
+    }
   };
 
   columns = [
     {
-      title: '游戏名称',
-      dataIndex: 'cp_text',
+      title: '游戏编号',
+      dataIndex: 'cid',
     },
     {
-      title: '流通凭证总数',
-      dataIndex: 'total_num',
+      title: '持有地址',
+      dataIndex: 'addr',
     },
     {
-      title: '当前挂单价格(千克)',
-      dataIndex: 'sell_stock_amount',
+      title: '持有总数',
+      dataIndex: 'sum',
     },
     {
-      title: '基准价格',
-      dataIndex: 'base_amount',
+      title: '持有成本',
+      dataIndex: 'price',
     },
     {
-      title: '当前挂单数量',
-      dataIndex: 'sell_stock_num',
+      title: '挂单数量',
+      dataIndex: 'sell_price',
+    },
+    {
+      title: '挂单价格',
+      dataIndex: 'sell_sum',
     },
     {
       title: '操作',
       render: (text, record) => (
         <Fragment>
-          <a onClick={() => this.handleView(true, record)}>详情</a>&nbsp;
+          <a onClick={() => this.handleSend(true, record)}>赠送</a>&nbsp;
         </Fragment>
       ),
     },
@@ -75,7 +87,7 @@ class MyStock extends PureComponent {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'stocklist/fetch',
+      type: 'stocklist/mystock',
     });
     dispatch({
       type: 'stocklist/fetchCpType'
@@ -103,7 +115,7 @@ class MyStock extends PureComponent {
     }
 
     dispatch({
-      type: 'stocklist/fetch',
+      type: 'stocklist/mystock',
       payload: params,
     });
   };
@@ -115,7 +127,7 @@ class MyStock extends PureComponent {
       formValues: {},
     });
     dispatch({
-      type: 'stocklist/fetch',
+      type: 'stocklist/mystock',
       payload: {},
     });
   };
@@ -138,42 +150,52 @@ class MyStock extends PureComponent {
       });
 
       dispatch({
-        type: 'stocklist/fetch',
+        type: 'stocklist/mystock',
         payload: values,
       });
     });
   };
 
-  //查看页面
-  handleView = (flag, record) => {
-    console.log(record);
-    this.props.history.push("./stockview?id=" + record.id);
+  /**
+   * 向第三方赠送凭证
+   */
+  handleSend = (flag, record) => {
+    this.setState({current: record, purchase: {visible: true}});
   };
 
-  //赠送道具
-  handleDeal = (flag, record) => {
-    this.setState({
-      updateModalVisible: !!flag,
-      stepFormValues: record || {},
+  handleOk(e) {
+    const { dispatch, form } = this.props;
+    e.preventDefault();
+
+    this.setState({purchase: {loading: true, visible: true}});
+    form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+        this.props.dispatch({
+          type: 'stocklist/sendstock',
+          payload: {cid: this.state.current.cid, srcAddr: this.state.current.addr, num: values['stockNum'], address: values['address']},
+        }).then(ret=>{
+          dispatch({
+            type: 'stocklist/mystock',
+          });
+          this.setState({purchase: {visible: false, loading: false}});
+        }).catch(e=>{
+          this.setState({purchase: {visible: false, loading: false}});
+        });
+      } else {
+        this.setState({purchase: {visible: false, loading: false}});
+      }
     });
-  };
+  }
 
-  //显示下拉框
-  renderOptions = () => {
-    if (this.props.stocklist.cp_type_list != null) {
-      return this.props.stocklist.cp_type_list.map(element =>
-        <Option key={element.id} value={element.cp_type_id}> {element.cp_type_id}</Option>);
-    }
-    else {
-      return "";
-    }
-
-  };
+  handleCancel() {
+    this.setState({purchase: {visible: false}});
+  }
 
   renderForm() {
     const {
       form: { getFieldDecorator },
     } = this.props;
+
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 16, lg: 24, xl: 48 }}>
@@ -182,7 +204,7 @@ class MyStock extends PureComponent {
               {getFieldDecorator('cp_text')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
- 
+
           <Col md={6} sm={9}>
             <span className={styles.submitButtons}>
               <Button type="primary" htmlType="submit">搜索</Button>
@@ -196,13 +218,53 @@ class MyStock extends PureComponent {
 
   render() {
     const {
-      stocklist: { data },
+      stocklist: { myStock },
       loading,
+      form: { getFieldDecorator },
     } = this.props;
     const { selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;
 
+    const getModalContent = record => {
+      record = record || {};
+      return (
+        <Form onSubmit={this.handleOk.bind(this)}>
+          <FormItem label="赠送数量" {...this.formLayout}>
+            {getFieldDecorator('stockNum', {
+              rules: [{ required: true, message: '请输入赠送数量' }],
+              initialValue: 0,
+            })(
+              <Input addonAfter="件" style={{ width: "50%" }} />
+            )}
+          </FormItem>
+          <FormItem label="目标地址" {...this.formLayout}>
+            {getFieldDecorator('address', {
+              rules: [{ required: true, message: '请输入目标地址' }],
+              initialValue: '',
+            })(
+              <Input style={{ width: "50%" }} />
+            )}
+          </FormItem>
+          <FormItem label="归属游戏" {...this.formLayout}>{`${record.cid}`}</FormItem>
+          <FormItem label="库存和成本" {...this.formLayout}>{`共 ${record.sum} 件 ${record.price/100/1000} 千克 / 件`}</FormItem>
+        </Form>
+      );
+    };
+
     return (
-      <PageHeaderWrapper title="待售列表">
+      <PageHeaderWrapper title={formatMessage({id:'menu.stock.mystock'})}>
+        <Modal 
+          ref="modal"
+          width={800}
+          destroyOnClose
+          onCancel={this.handleCancel.bind(this)}
+          visible={this.state.purchase.visible}
+          title="购买游戏凭证" 
+          footer={[
+            <button key="back" className="ant-btn ant-btn-primary" onClick={this.handleCancel.bind(this)}>返 回</button>,
+            <button key="submit" className={'ant-btn ant-btn-primary ' + (this.state.purchase.loading?'ant-btn-loading':'')} onClick={this.handleOk.bind(this)}>提 交</button>
+          ]}>
+          {getModalContent(this.state.current)}
+        </Modal>
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderForm()}</div>
@@ -210,7 +272,7 @@ class MyStock extends PureComponent {
             <SimpleTable
               selectedRows={selectedRows}
               loading={loading}
-              data={data}
+              data={myStock}
               columns={this.columns}
               onSelectRow={null}
               onChange={this.handleStandardTableChange}

@@ -581,9 +581,7 @@ export async function getKeyMaster(params) {
  */
 export async function getAddressReceive(params) {
   try {
-    let ret = { code: -200, data: null, message: "react service层无返回值。方法名：getAddressReceive" };
-    console.log("获取钱包信息:" + JSON.stringify(params));
-    ret = await remote.fetching({ 
+    let ret = await remote.fetching({ 
       func: "address.Receive", 
       account: params.account, 
     });
@@ -1248,6 +1246,50 @@ export async function getStockView(params) {
   } catch (error) {
     console.log(error);
     return { code: -100, data: null, message: "react service层错误。方法名：getGameView" };
+  }
+}
+
+/**
+ * 向指定地址发送凭证
+ */
+export async function sendStock(params) {
+  try {
+    await remote.fetching({
+      func: "cpstockbase.sendStock", 
+      params: {
+        address: params.address,
+        num: params.num,
+        cid: params.cid,
+        srcAddr: params.srcAddr,
+      }
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+/**
+ * 查询我持有的凭证
+ */
+export async function queryMyStock(params) {
+  try {
+    if (!params) {
+      params = {
+        currentPage: 1,
+        pageSize: 10,
+      };
+    };
+
+    let ret = await remote.fetching({
+      func: "cpstockbase.MyStock", 
+      currentPage: params.currentPage,
+      pageSize: params.pageSize,
+    });
+
+    return ret;
+  } catch (error) {
+    console.log(error);
+    return { code: -100, data: null, message: "react service层错误。方法名：queryStockBase" };
   }
 }
 

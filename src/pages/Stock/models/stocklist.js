@@ -1,4 +1,4 @@
-import { queryStockBase, ListCpType } from '@/services/gamegoldapi';
+import { sendStock, queryMyStock, queryStockBase, ListCpType } from '@/services/gamegoldapi';
 
 export default {
   namespace: 'stocklist',
@@ -9,16 +9,31 @@ export default {
       pagination: {},
     },
     detail: {},
+    myStock: {},
   },
 
   effects: {
     *detail({ payload }, { call, put }) {
-      console.log("stockview model："+payload.id);
+      console.log("stockview model：" + payload.id);
       const response = yield call(getStockView, payload);
       yield put({
         type: 'saveDetail',
         payload: response,
       });
+    },
+
+    *mystock({ payload }, { call, put }) {
+      const response = yield call(queryMyStock, payload);
+      if(response.code == 0) {
+        yield put({
+          type: 'saveMyStock',
+          payload: response.data,
+        });
+      }
+    },
+
+    *sendstock({ payload }, { call, put }) {
+      yield call(sendStock, payload);
     },
 
     *fetch({ payload }, { call, put }) {
@@ -51,6 +66,12 @@ export default {
         ...state,
         cp_type_list: action.payload,
       };
+    },
+    saveMyStock(state, action) {
+      return {
+        ...state,
+        myStock: action.payload,
+      }
     },
     saveDetail(state, action) {
       return {

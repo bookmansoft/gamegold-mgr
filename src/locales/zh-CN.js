@@ -130,7 +130,6 @@ export default {
   'menu.stock.stocklist':'凭证二级市场',
   'menu.stock.stockview':'凭证详情页',
   'menu.stock.mystock':'我的凭证',
-  'menu.stock.mystockdetail':'凭证详情页',
   'menu.home': '首页',
   'menu.dashboard': 'Dashboard',
   'menu.dashboard.analysis': '分析页',
