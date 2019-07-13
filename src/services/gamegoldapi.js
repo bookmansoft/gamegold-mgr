@@ -1226,30 +1226,6 @@ export async function auditFunding(params) {
 }
 
 /**
- * 获取凭证详情
- * @param {Object} params 
- */
-export async function getStockView(params) {
-  try {
-    console.log(params.id);
-    //接下来好好查询并返回这个页面的数据
-    let ret = await remote.fetching({ 
-      func: "cpstockbase.Retrieve", 
-      id: params.id 
-    });
-    if (ret.data === null) {
-      return { code: -200, data: null, message: "react service层无返回值。方法名：getGameView" };
-    }
-    //有数据
-    console.log(ret);
-    return ret.data;
-  } catch (error) {
-    console.log(error);
-    return { code: -100, data: null, message: "react service层错误。方法名：getGameView" };
-  }
-}
-
-/**
  * 向指定地址发送凭证
  */
 export async function sendStock(params) {
@@ -1261,6 +1237,44 @@ export async function sendStock(params) {
         num: params.num,
         cid: params.cid,
         srcAddr: params.srcAddr,
+      }
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+/**
+ * 拍卖凭证
+ */
+export async function bidStock(params) {
+  try {
+    await remote.fetching({
+      func: "cpstockbase.bidStock", 
+      params: {
+        price: params.price,
+        num: params.num,
+        cid: params.cid,
+        srcAddr: params.srcAddr,
+      }
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+/**
+ * 竞拍凭证
+ */
+export async function auctionStock(params) {
+  try {
+    await remote.fetching({
+      func: "cpstockbase.auctionStock", 
+      params: {
+        cid: params.cid,
+        srcAddr: params.srcAddr,
+        num: params.num,
+        price: params.price,
       }
     });
   } catch (error) {
@@ -1307,13 +1321,38 @@ export async function queryStockBase(params) {
     };
 
     let ret = await remote.fetching({
-      func: "cpstockbase.ListRecord", 
-      ...params
+      func: "cpstockbase.BidList", 
+      currentPage: params.currentPage,
+      pageSize: params.pageSize,
     });
 
     return ret;
   } catch (error) {
     console.log(error);
     return { code: -100, data: null, message: "react service层错误。方法名：queryStockBase" };
+  }
+}
+
+/**
+ * 获取凭证详情
+ * @param {Object} params 
+ */
+export async function getStockView(params) {
+  try {
+    console.log(params.id);
+    //接下来好好查询并返回这个页面的数据
+    let ret = await remote.fetching({ 
+      func: "cpstockbase.Retrieve", 
+      id: params.id 
+    });
+    if (ret.data === null) {
+      return { code: -200, data: null, message: "react service层无返回值。方法名：getGameView" };
+    }
+    //有数据
+    console.log(ret);
+    return ret.data;
+  } catch (error) {
+    console.log(error);
+    return { code: -100, data: null, message: "react service层错误。方法名：getGameView" };
   }
 }

@@ -7,7 +7,7 @@ import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 export default () => (
   <PageHeaderWrapper>
     <Card bordered={false}>
-      <iframe src="http://localhost:9701/echart/kline/index.html" frameborder="0" width="100%" height="600px" scrolling="no" />
+      <iframe src="http://localhost:9701/echart/kline/index.html" frameBorder="0" width="100%" height="600px" scrolling="no" />
     </Card>
   </PageHeaderWrapper>
 );

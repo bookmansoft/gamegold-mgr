@@ -1,4 +1,4 @@
-import { sendStock, queryMyStock, queryStockBase, ListCpType } from '@/services/gamegoldapi';
+import { auctionStock, bidStock, sendStock, queryMyStock, queryStockBase, ListCpType } from '@/services/gamegoldapi';
 
 export default {
   namespace: 'stocklist',
@@ -36,12 +36,22 @@ export default {
       yield call(sendStock, payload);
     },
 
+    *auctionstock({ payload }, { call, put }) {
+      yield call(auctionStock, payload);
+    },
+
+    *bidstock({ payload }, { call, put }) {
+      yield call(bidStock, payload);
+    },
+
     *fetch({ payload }, { call, put }) {
       const response = yield call(queryStockBase, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
+      if(response.code == 0) {
+        yield put({
+          type: 'save',
+          payload: response.data,
+        });
+      }
     },
 
     *fetchCpType({ payload }, { call, put }) {

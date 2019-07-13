@@ -196,7 +196,7 @@ class StockView extends Component {
 
             </Col>
             <Col span={18}>
-              <iframe src={"http://"+location.hostname+":9701/echart/kline/index.html?cid="+detail.cid} frameborder="0" width="100%" height="600px" scrolling="no" />
+              <iframe src={"http://"+location.hostname+":9701/echart/kline/index.html?cid="+detail.cid} frameBorder="0" width="100%" height="600px" scrolling="no" />
             </Col>
           </Row>
 

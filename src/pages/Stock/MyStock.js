@@ -39,11 +39,16 @@ class MyStock extends PureComponent {
     formValues: {},
     stepFormValues: {},
     current: {}, //代表当前选中项目
-    //控制模态框的显示状态
+    //#region 控制模态框的显示状态
     purchase: {
       loading: false,
       visible: false,
+    },
+    bid: {
+      loading: false,
+      visible: false,
     }
+    //#endregion
   };
 
   columns = [
@@ -65,17 +70,18 @@ class MyStock extends PureComponent {
     },
     {
       title: '挂单数量',
-      dataIndex: 'sell_price',
+      dataIndex: 'sell_sum',
     },
     {
       title: '挂单价格',
-      dataIndex: 'sell_sum',
+      dataIndex: 'sell_price',
     },
     {
       title: '操作',
       render: (text, record) => (
         <Fragment>
           <a onClick={() => this.handleSend(true, record)}>赠送</a>&nbsp;
+          <a onClick={() => this.handleBid(true, record)}>拍卖</a>&nbsp;
         </Fragment>
       ),
     },
@@ -163,6 +169,13 @@ class MyStock extends PureComponent {
     this.setState({current: record, purchase: {visible: true}});
   };
 
+  /**
+   * 拍卖凭证
+   */
+  handleBid = (flag, record) => {
+    this.setState({current: record, bid: {visible: true}});
+  };
+
   handleOk(e) {
     const { dispatch, form } = this.props;
     e.preventDefault();
@@ -177,11 +190,14 @@ class MyStock extends PureComponent {
           dispatch({
             type: 'stocklist/mystock',
           });
+          form.resetFields();
           this.setState({purchase: {visible: false, loading: false}});
         }).catch(e=>{
+          form.resetFields();
           this.setState({purchase: {visible: false, loading: false}});
         });
       } else {
+        form.resetFields();
         this.setState({purchase: {visible: false, loading: false}});
       }
     });
@@ -189,6 +205,37 @@ class MyStock extends PureComponent {
 
   handleCancel() {
     this.setState({purchase: {visible: false}});
+  }
+
+  handleOkBid(e) {
+    const { dispatch, form } = this.props;
+    e.preventDefault();
+
+    this.setState({bid: {loading: true, visible: true}});
+    form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+        this.props.dispatch({
+          type: 'stocklist/bidstock',
+          payload: {cid: this.state.current.cid, srcAddr: this.state.current.addr, num: values['stockNum'], price: values['price']},
+        }).then(ret=>{
+          dispatch({
+            type: 'stocklist/mystock',
+          });
+          form.resetFields();
+          this.setState({bid: {visible: false, loading: false}});
+        }).catch(e=>{
+          form.resetFields();
+          this.setState({bid: {visible: false, loading: false}});
+        });
+      } else {
+        form.resetFields();
+        this.setState({bid: {visible: false, loading: false}});
+      }
+    });
+  }
+
+  handleCancelBid() {
+    this.setState({bid: {visible: false}});
   }
 
   renderForm() {
@@ -230,7 +277,7 @@ class MyStock extends PureComponent {
         <Form onSubmit={this.handleOk.bind(this)}>
           <FormItem label="赠送数量" {...this.formLayout}>
             {getFieldDecorator('stockNum', {
-              rules: [{ required: true, message: '请输入赠送数量' }],
+              rules: [{ required: false, message: '请输入赠送数量' }],
               initialValue: 0,
             })(
               <Input addonAfter="件" style={{ width: "50%" }} />
@@ -238,10 +285,36 @@ class MyStock extends PureComponent {
           </FormItem>
           <FormItem label="目标地址" {...this.formLayout}>
             {getFieldDecorator('address', {
-              rules: [{ required: true, message: '请输入目标地址' }],
+              rules: [{ required: false, message: '请输入目标地址' }],
               initialValue: '',
             })(
               <Input style={{ width: "50%" }} />
+            )}
+          </FormItem>
+          <FormItem label="归属游戏" {...this.formLayout}>{`${record.cid}`}</FormItem>
+          <FormItem label="库存和成本" {...this.formLayout}>{`共 ${record.sum} 件 ${record.price/100/1000} 千克 / 件`}</FormItem>
+        </Form>
+      );
+    };
+
+    const getBidContent = record => {
+      record = record || {};
+      return (
+        <Form onSubmit={this.handleOkBid.bind(this)}>
+          <FormItem label="拍卖数量" {...this.formLayout}>
+            {getFieldDecorator('stockNum', {
+              rules: [{ required: false, message: '请输入拍卖数量' }],
+              initialValue: 0,
+            })(
+              <Input addonAfter="件" style={{ width: "50%" }} />
+            )}
+          </FormItem>
+          <FormItem label="拍卖价格" {...this.formLayout}>
+            {getFieldDecorator('price', {
+              rules: [{ required: false, message: '请输入拍卖价格' }],
+              initialValue: '',
+            })(
+              <Input addonAfter="千克" style={{ width: "50%" }} />
             )}
           </FormItem>
           <FormItem label="归属游戏" {...this.formLayout}>{`${record.cid}`}</FormItem>
@@ -258,12 +331,25 @@ class MyStock extends PureComponent {
           destroyOnClose
           onCancel={this.handleCancel.bind(this)}
           visible={this.state.purchase.visible}
-          title="购买游戏凭证" 
+          title="转让游戏凭证" 
           footer={[
             <button key="back" className="ant-btn ant-btn-primary" onClick={this.handleCancel.bind(this)}>返 回</button>,
             <button key="submit" className={'ant-btn ant-btn-primary ' + (this.state.purchase.loading?'ant-btn-loading':'')} onClick={this.handleOk.bind(this)}>提 交</button>
           ]}>
           {getModalContent(this.state.current)}
+        </Modal>
+        <Modal 
+          ref="modal"
+          width={800}
+          destroyOnClose
+          onCancel={this.handleCancelBid.bind(this)}
+          visible={this.state.bid.visible}
+          title="拍卖游戏凭证" 
+          footer={[
+            <button key="back" className="ant-btn ant-btn-primary" onClick={this.handleCancelBid.bind(this)}>返 回</button>,
+            <button key="submit" className={'ant-btn ant-btn-primary ' + (this.state.bid.loading?'ant-btn-loading':'')} onClick={this.handleOkBid.bind(this)}>提 交</button>
+          ]}>
+          {getBidContent(this.state.current)}
         </Modal>
         <Card bordered={false}>
           <div className={styles.tableList}>
