@@ -165,9 +165,10 @@ class GameList extends PureComponent {
 
   //显示下拉框
   renderOptions = () => {
-    // console.log(this.props.gamelist.data);
-    if (this.props.gamelist.cp_type_list != null) {
-      return this.props.gamelist.cp_type_list.map(element =>
+    const {gamelist: { cp_type_list }} = this.props;
+
+    if (cp_type_list != null) {
+      return cp_type_list.map(element =>
         <Option key={element.id} value={element.cp_type_id}> {element.cp_type_id}</Option>);
     }
     else {

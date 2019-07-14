@@ -25,8 +25,11 @@ const { Option } = Select;
 const getValue = obj => Object.keys(obj).map(key => obj[key]).join(',');
 
 /* eslint react/no-multi-comp:0 */
-@connect(({ stocklist, loading }) => ({
-  stocklist,
+@connect(({ 
+  stocklist, gamelist,
+  loading 
+}) => ({
+  stocklist, gamelist,
   loading: loading.models.stocklist,
 }))
 @Form.create()
@@ -96,7 +99,7 @@ class MyStock extends PureComponent {
       type: 'stocklist/mystock',
     });
     dispatch({
-      type: 'stocklist/fetchCpType'
+      type: 'gamelist/fetchCpType'
     });
   }
 

@@ -17,10 +17,10 @@ const InputGroup = Input.Group;
  * 注意：装饰器除了 app.state.login 以外还实际接收 app.state.loading 作为参数，其来源是 src/index.js 中调用的 dva-loading 插件，返回的信息包含了 global、model 和 effect 的异步加载完成情况。
  */
 @connect(({ 
-  login,                                        //mapStateToProps, 将状态绑定到组件的 props 上
+  login,                                        //mapStateToProps, 指定引用命名空间 login，可以同时指定多个命名空间(逗号分隔)
   loading                                       //mapDispatchToProps, 一个将方法绑定到组件的 props 上
 }) => ({
-  login,                                        //将实体 login 中的 state 数据绑定到 props ，注意绑定的是实体list整体，使用时需要 login.[state中的具体变量]
+  login,                                        //将命名空间 login 上的数据仓库绑定到 props ，可以同时绑定多个数据仓库，如果没有绑定，即使前面引用了命名空间，该数据仓库也不可用。注意绑定的是数据仓库整体(state)，使用时需要用点分符按层次指定
   submitting: loading.effects['login/login'],   //通过 loading 将 models 的值读取出来，也可以采用 loding.models.login 的形式
 }))
 class LoginPage extends Component {

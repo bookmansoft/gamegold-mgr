@@ -19,61 +19,6 @@ export default [
     authority: ['admin', 'user'],
     routes: [
       { path: '/', redirect: '/wallet/walletmgr' },
-      // redpacket
-      {
-        path: '/redpacket',
-        name: 'redpacket',
-        icon: 'table',
-        authority: ['admin'],
-        routes: [
-          {
-            path: '/redpacket/redpacketlist',
-            name: 'redpacketlist',
-            component: './Redpacket/RedpacketList',
-          },
-          {
-            path: '/redpacket/redpacketadd',
-            name: 'redpacketadd',
-            component: './Redpacket/RedpacketAdd',
-          },
-          {
-            path: '/redpacket/redpacketaddsuccess',
-            name: 'redpacketaddsuccess',
-            component: './Redpacket/RedpacketAddSuccess',
-            hideInMenu: true,
-          },
-          {
-            path: '/redpacket/redpacketadderror',
-            name: 'redpacketadderror',
-            component: './Redpacket/RedpacketAddError',
-            hideInMenu: true,
-          },
-          {
-            path: '/redpacket/redpacketchange',
-            name: 'redpacketchange',
-            component: './Redpacket/RedpacketChange',
-            hideInMenu: true,
-          },
-          {
-            path: '/redpacket/redpacketchangesuccess',
-            name: 'redpacketchangesuccess',
-            component: './Redpacket/RedpacketChangeSuccess',
-            hideInMenu: true,
-          },
-          {
-            path: '/redpacket/redpacketchangeerror',
-            name: 'redpacketchangeerror',
-            component: './Redpacket/RedpacketChangeError',
-            hideInMenu: true,
-          },
-          {
-            path: '/redpacket/prizelist',
-            name: 'prizelist',
-            component: './Redpacket/PrizeList',
-            hideInMenu: true,
-          },
-        ],
-      },
       // operatormgr
       {
         path: '/operator',
@@ -102,17 +47,39 @@ export default [
           },
         ],
       },
-      // usermgr
+      // stock
       {
-        path: '/usermgr',
-        name: 'usermgr',
+        path: '/stock',
+        name: 'stock',
         icon: 'table',
         authority: ['user','admin'],
         routes: [
           {
-            path: '/usermgr/userlist',
-            name: 'userlist',
-            component: './UserMgr/UserList',
+            path: '/stock/marketlist',
+            name: 'marketlist',
+            component: './Market/MarketList',
+          },
+          {
+            path: '/stock/marketview',
+            name: 'marketview',
+            component: './Market/MarketView',
+            hideInMenu: true,
+          },
+          {
+            path: '/stock/stocklist',
+            name: 'stocklist',
+            component: './Stock/StockList',
+          },
+          {
+            path: '/stock/stockview',
+            name: 'stockview',
+            component: './Stock/StockView',
+            hideInMenu: true,
+          },
+          {
+            path: '/stock/mystock',
+            name: 'mystock',
+            component: './Stock/MyStock',
           },
         ],
       },
@@ -151,42 +118,6 @@ export default [
             component: './GameMgr/GameAddError',
             hideInMenu: true,
           },
-        ],
-      },
-      {
-        name: 'gameprops',
-        icon: 'build',
-        path: '/gameprops',
-        authority: ['user','admin'],
-        routes: [
-          {
-            path: '/gameprops/list',
-            name: 'propslist',
-            component: './GameProps/PropsList',
-          },
-          {
-            path: '/gameprops/detail/:id',
-            name: 'propsdetail',
-            component: './GameProps/PropsDetail',
-            hideInMenu: true,
-          },
-          {
-            path: '/gameprops/create',
-            name: 'propscreate',
-            component: './GameProps/PropsCreate',
-          },
-          {
-            path: '/gameprops/present/:addr',
-            name: 'propspresent',
-            component: './GameProps/PropsPresent',
-            hideInMenu: true,
-          },
-          {
-            path: '/gameprops/present',
-            name: 'propspresent',
-            component: './GameProps/PropsPresent',
-            hideInMenu: true,
-          }
         ],
       },
       // wallet
@@ -326,49 +257,109 @@ export default [
           },
         ],
       },
-      // market
+      // usermgr
       {
-        path: '/market',
-        name: 'market',
+        path: '/usermgr',
+        name: 'usermgr',
         icon: 'table',
         authority: ['user','admin'],
         routes: [
           {
-            path: '/market/marketlist',
-            name: 'marketlist',
-            component: './Market/MarketList',
+            path: '/usermgr/userlist',
+            name: 'userlist',
+            component: './UserMgr/UserList',
           },
-          {
-            path: '/market/marketview',
-            name: 'marketview',
-            component: './Market/MarketView',
-            hideInMenu: true,
-          },
-
         ],
       },
-      // stock
+      // propMgr
       {
-        path: '/stock',
-        name: 'stock',
-        icon: 'table',
+        name: 'gameprops',
+        icon: 'build',
+        path: '/gameprops',
         authority: ['user','admin'],
         routes: [
           {
-            path: '/stock/stocklist',
-            name: 'stocklist',
-            component: './Stock/StockList',
+            path: '/gameprops/list',
+            name: 'propslist',
+            component: './GameProps/PropsList',
           },
           {
-            path: '/stock/stockview',
-            name: 'stockview',
-            component: './Stock/StockView',
+            path: '/gameprops/detail/:id',
+            name: 'propsdetail',
+            component: './GameProps/PropsDetail',
             hideInMenu: true,
           },
           {
-            path: '/stock/mystock',
-            name: 'mystock',
-            component: './Stock/MyStock',
+            path: '/gameprops/create',
+            name: 'propscreate',
+            component: './GameProps/PropsCreate',
+          },
+          {
+            path: '/gameprops/present/:addr',
+            name: 'propspresent',
+            component: './GameProps/PropsPresent',
+            hideInMenu: true,
+          },
+          {
+            path: '/gameprops/present',
+            name: 'propspresent',
+            component: './GameProps/PropsPresent',
+            hideInMenu: true,
+          }
+        ],
+      },
+      // redpacket
+      {
+        path: '/redpacket',
+        name: 'redpacket',
+        icon: 'table',
+        authority: ['admin'],
+        routes: [
+          {
+            path: '/redpacket/redpacketlist',
+            name: 'redpacketlist',
+            component: './Redpacket/RedpacketList',
+          },
+          {
+            path: '/redpacket/redpacketadd',
+            name: 'redpacketadd',
+            component: './Redpacket/RedpacketAdd',
+          },
+          {
+            path: '/redpacket/redpacketaddsuccess',
+            name: 'redpacketaddsuccess',
+            component: './Redpacket/RedpacketAddSuccess',
+            hideInMenu: true,
+          },
+          {
+            path: '/redpacket/redpacketadderror',
+            name: 'redpacketadderror',
+            component: './Redpacket/RedpacketAddError',
+            hideInMenu: true,
+          },
+          {
+            path: '/redpacket/redpacketchange',
+            name: 'redpacketchange',
+            component: './Redpacket/RedpacketChange',
+            hideInMenu: true,
+          },
+          {
+            path: '/redpacket/redpacketchangesuccess',
+            name: 'redpacketchangesuccess',
+            component: './Redpacket/RedpacketChangeSuccess',
+            hideInMenu: true,
+          },
+          {
+            path: '/redpacket/redpacketchangeerror',
+            name: 'redpacketchangeerror',
+            component: './Redpacket/RedpacketChangeError',
+            hideInMenu: true,
+          },
+          {
+            path: '/redpacket/prizelist',
+            name: 'prizelist',
+            component: './Redpacket/PrizeList',
+            hideInMenu: true,
           },
         ],
       },

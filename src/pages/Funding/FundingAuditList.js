@@ -25,8 +25,11 @@ const getValue = obj =>
     .join(',');
 
 /* eslint react/no-multi-comp:0 */
-@connect(({ fundingauditlist, loading }) => ({
-  fundingauditlist,
+@connect(({ 
+  fundingauditlist, gamelist,
+  loading 
+}) => ({
+  fundingauditlist, gamelist,
   loading: loading.models.fundingauditlist,
 }))
 @Form.create()
@@ -80,11 +83,8 @@ class FundingAuditList extends PureComponent {
 
   componentDidMount() {
     const { dispatch } = this.props;
-    // dispatch({
-    //   type: 'fundingauditlist/fetch',
-    // });
     dispatch({
-      type: 'fundingauditlist/fetchCpType'
+      type: 'gamelist/fetchCpType'
     });
   }
 

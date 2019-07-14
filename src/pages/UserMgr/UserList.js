@@ -37,8 +37,11 @@ const getValue = obj =>
     .join(',');
 
 /* eslint react/no-multi-comp:0 */
-@connect(({ userlist, loading }) => ({
-  userlist,
+@connect(({ 
+  userlist, gamelist,
+  loading 
+}) => ({
+  userlist, gamelist,
   loading: loading.models.userlist,
 }))
 @Form.create()
@@ -92,7 +95,7 @@ class UserList extends PureComponent {
       type: 'userlist/fetch',
     });
     dispatch({
-      type: 'userlist/fetchCpType'
+      type: 'gamelist/fetchCpType'
     });
   }
   handleSelectRows = rows => {
@@ -191,8 +194,10 @@ class UserList extends PureComponent {
   };
   //显示下拉框
   renderOptions = () => {
-    if (this.props.userlist.cp_type_list != null) {
-      return this.props.userlist.cp_type_list.map(element =>
+    const {gamelist: { cp_type_list } } = this.props;
+
+    if (!!cp_type_list) {
+      return cp_type_list.map(element =>
         <Option key={element.id} value={element.cp_type_id}> {element.cp_type_id}</Option>);
     }
     else {

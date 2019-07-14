@@ -28,8 +28,11 @@ const getValue = obj =>
     .join(',');
 
 /* eslint react/no-multi-comp:0 */
-@connect(({ stocklist, loading }) => ({
-  stocklist,
+@connect(({ 
+  stocklist, gamelist,
+  loading 
+}) => ({
+  stocklist, gamelist,
   loading: loading.models.stocklist,
 }))
 @Form.create()
@@ -87,7 +90,7 @@ class StockList extends PureComponent {
       type: 'stocklist/getStockOri',
     });
     dispatch({
-      type: 'stocklist/fetchCpType'
+      type: 'gamelist/fetchCpType'
     });
   }
 

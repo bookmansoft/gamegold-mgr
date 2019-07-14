@@ -20,15 +20,15 @@ import styles from './MarketList.less';
 
 const FormItem = Form.Item;
 const { Option } = Select;
-const getValue = obj =>
-  Object.keys(obj)
-    .map(key => obj[key])
-    .join(',');
+const getValue = obj => Object.keys(obj).map(key => obj[key]).join(',');
 
-/* eslint react/no-multi-comp:0 */
-@connect(({ stocklist, loading }) => ({
-  stocklist,
-  loading: loading.models.stocklist,
+/**
+ * 如果链接多个数据仓库，要在 connect 内外两处通知指明
+ */
+@connect(({ stocklist, gamelist, loading }) => ({
+  stocklist, 
+  gamelist,
+  loading: loading.models.stocklist && loading.models.gamelist,
 }))
 @Form.create()
 class MarketList extends PureComponent {
@@ -118,13 +118,21 @@ class MarketList extends PureComponent {
    * 加载初始数据
    */
   componentDidMount() {
-    const { dispatch } = this.props;
+    const { 
+      dispatch,
+      stocklist: { stockMap, },
+      gamelist: { cp_type_list, }
+     } = this.props;
+
     dispatch({
       type: 'stocklist/getStockExchange',
     });
-    dispatch({
-      type: 'stocklist/fetchCpType'
-    });
+
+    if(!cp_type_list) {
+      dispatch({
+        type: 'gamelist/fetchCpType'
+      });
+    }
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
@@ -218,8 +226,12 @@ class MarketList extends PureComponent {
 
   //显示下拉框
   renderOptions = () => {
-    if (this.props.stocklist.cp_type_list != null) {
-      return this.props.stocklist.cp_type_list.map(element =>
+    const { 
+      gamelist: { cp_type_list, }
+     } = this.props;
+
+    if (!!cp_type_list) {
+      return cp_type_list.map(element =>
         <Option key={element.id} value={element.cp_type_id}> {element.cp_type_id}</Option>);
     }
     else {
@@ -274,7 +286,7 @@ class MarketList extends PureComponent {
     };
 
     return (
-      <PageHeaderWrapper title={formatMessage({id:'menu.market.marketlist'})}>
+      <PageHeaderWrapper title={formatMessage({id:'menu.stock.marketlist'})}>
       <Modal 
         ref="modal"
         width={800}

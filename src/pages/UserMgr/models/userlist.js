@@ -1,4 +1,4 @@
-import { queryUserMgr,ListCpType } from '@/services/gamegoldapi';
+import { queryUserMgr } from '@/services/gamegoldapi';
 
 export default {
   namespace: 'userlist',
@@ -18,14 +18,6 @@ export default {
         payload: response,
       });
     },
-    *fetchCpType({ payload }, { call, put }) {
-      const response = yield call(ListCpType, payload);
-      yield put({
-        type: 'saveCpType',
-        payload: response,
-      });
-    },
-
   },
 
   reducers: {
@@ -33,13 +25,6 @@ export default {
       return {
         ...state,
         data: action.payload,
-      };
-    },
-    //修改另外一部分
-    saveCpType(state, action) {
-      return {
-        ...state,
-        cp_type_list: action.payload,
       };
     },
   },

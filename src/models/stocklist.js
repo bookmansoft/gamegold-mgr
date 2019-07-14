@@ -1,4 +1,4 @@
-import { stockRecord, queryStockList, stockPurchase, auctionStock, bidStock, sendStock, queryMyStock, queryStockBase, ListCpType } from '@/services/gamegoldapi';
+import { stockRecord, queryStockList, stockPurchase, auctionStock, bidStock, sendStock, queryMyStock, queryStockBase } from '@/services/gamegoldapi';
 
 export default {
   namespace: 'stocklist',
@@ -34,14 +34,6 @@ export default {
 
     *purchase({ payload }, { call, put }) {
       return yield call(stockPurchase, payload);
-    },
-
-    *fetchCpType({ payload }, { call, put }) {
-      const response = yield call(ListCpType, payload);
-      yield put({
-        type: 'saveCpType',
-        payload: response,
-      });
     },
 
     *fetchTableData({ payload }, { call, put }) {
@@ -95,12 +87,6 @@ export default {
       return {
         ...state,
         stockList: action.payload,
-      };
-    },
-    saveCpType(state, action) {
-      return {
-        ...state,
-        cp_type_list: action.payload,
       };
     },
     saveTableData(state, action) {
