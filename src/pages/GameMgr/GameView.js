@@ -81,9 +81,9 @@ const customDot = (dot, { status }) =>
     );
 
 
-@connect(({ gameview, loading }) => ({
-  gameview,
-  loading: loading.models.gameview,
+@connect(({ gamelist, loading }) => ({
+  gamelist,
+  loading: loading.models.gamelist,
 }))
 
 class GameView extends Component {
@@ -138,7 +138,7 @@ class GameView extends Component {
     const { dispatch } = this.props;
     console.log(this.props.location.query.id);
     dispatch({
-      type: 'gameview/fetch',
+      type: 'gamelist/getGameRecord',
       payload: { id: this.props.location.query.id },//这里
     });
 
@@ -174,14 +174,14 @@ class GameView extends Component {
   render() {
     const { stepDirection, operationkey } = this.state;
     const {
-      gameview: { data },
+      gamelist: { gameRecord },
       loading
     } = this.props;
 
 
     return (
       <PageHeaderWrapper
-        title={data.cp_name}
+        title={gameRecord.cp_name}
         action={null}
         content={null}
         extraContent={null}
@@ -193,31 +193,31 @@ class GameView extends Component {
           </Row>
           <Row style={{ marginBottom: 32 }}>
             <Col sm={8} xs={12}>
-              游戏类型：{data.cp_type}
+              游戏类型：{gameRecord.cp_type}
             </Col>
             <Col sm={8} xs={12}>
-              开发者：{data.develop_name}
+              开发者：{gameRecord.develop_name}
             </Col>
             <Col sm={8} xs={12}>
-              发布时间：{moment(data.publish_time * 1000).format('YYYY-MM-DD HH:mm:ss')}
+              发布时间：{moment(gameRecord.publish_time * 1000).format('YYYY-MM-DD HH:mm:ss')}
             </Col>
           </Row>
           <Row style={{ marginBottom: 32 }}>
             <Col sm={8} xs={12}>
-              游戏状态：{data.cp_state=='0'?'未上线':'正常运营'}
+              游戏状态：{gameRecord.cp_state=='0'?'未上线':'正常运营'}
             </Col>
             <Col sm={8} xs={12}>
-              启用邀请奖励：{parseInt(data.invite_share) == 0 ? '否' : '是'}
+              启用邀请奖励：{parseInt(gameRecord.invite_share) == 0 ? '否' : '是'}
             </Col>
 
             <Col sm={8} xs={12}>
-              {parseInt(data.invite_share) != 0 && (
-                `邀请奖励：${data.invite_share}%`
+              {parseInt(gameRecord.invite_share) != 0 && (
+                `邀请奖励：${gameRecord.invite_share}%`
               )}
             </Col>
           </Row>
           <Row style={{ marginBottom: 32 }}>
-            <Col sm={24} xs={24}>URL地址：{data.cp_url}</Col>
+            <Col sm={24} xs={24}>URL地址：{gameRecord.cp_url}</Col>
           </Row>
 
           <Divider style={{ margin: '20px 0' }} />
@@ -226,14 +226,14 @@ class GameView extends Component {
           </Row>
           <Row style={{ marginBottom: 32 }}>
             <Col sm={8} xs={12}>
-              当前版本：{data.cp_version}
+              当前版本：{gameRecord.cp_version}
             </Col>
             <Col sm={8} xs={12}>
-              更新时间：{moment(data.update_time * 1000).format('YYYY-MM-DD HH:mm:ss')}
+              更新时间：{moment(gameRecord.update_time * 1000).format('YYYY-MM-DD HH:mm:ss')}
             </Col>
           </Row>
           <Row style={{ marginBottom: 32 }}>
-            <Col sm={24} xs={24}>更新内容：{data.cp_desc}</Col>
+            <Col sm={24} xs={24}>更新内容：{gameRecord.cp_desc}</Col>
           </Row>
 
           <Divider style={{ margin: '20px 0' }} />
@@ -242,17 +242,17 @@ class GameView extends Component {
           </Row>
           <Row style={{ marginBottom: 32 }}>
             <Col sm={24} xs={24}>
-              游戏图标：<img width={120} src={data.icon_url} />
+              游戏图标：<img width={120} src={gameRecord.icon_url} />
             </Col>
           </Row>
           <Row style={{ marginBottom: 32 }}>
             <Col sm={24} xs={24}>
-              封面图片：<img width={300} src={data.face_url} />
+              封面图片：<img width={300} src={gameRecord.face_url} />
             </Col>
           </Row>
           <Row style={{ marginBottom: 32 }}>
             <Col sm={24} xs={24}>
-              游戏截图：{this.renderImg(data.pic_urls)}
+              游戏截图：{this.renderImg(gameRecord.pic_urls)}
             </Col>
           </Row>
           <Row style={{ marginBottom: 32 }}>

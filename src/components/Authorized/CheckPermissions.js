@@ -29,6 +29,9 @@ const checkPermissions = (authority, currentAuthority, target, Exception) => {
     if (authority.indexOf(currentAuthority) >= 0) {
       return target;
     }
+    if(typeof currentAuthority == 'string') {
+      currentAuthority = JSON.parse(currentAuthority);
+    }
     if (Array.isArray(currentAuthority)) {
       for (let i = 0; i < currentAuthority.length; i += 1) {
         const element = currentAuthority[i];

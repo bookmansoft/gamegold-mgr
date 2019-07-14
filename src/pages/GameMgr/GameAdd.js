@@ -26,26 +26,22 @@ const { Option } = Select;
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
-@connect(({ game, loading }) => ({
-  game,
-  loading: loading.models.game,
-  submitting: loading.effects['game/add'],
+@connect(({ gamelist, loading }) => ({
+  gamelist,
+  loading: loading.models.gamelist,
+  submitting: loading.effects['gamelist/addGame'],
 }))
 @Form.create()
 class GameAdd extends PureComponent {
   componentDidMount() {
     const { dispatch } = this.props;
-    // dispatch({
-    //   type: 'game/fetch',
-    //   payload: { cp_url: "http://localhost:9101/client/cp1.json" },//这里用于调试时使用
-    // });
-
   }
+
   //创建
   handleCreate = (theData) => {
     const { dispatch, form } = this.props;
     dispatch({
-      type: 'game/add',
+      type: 'gamelist/addGame',
       payload: theData,
     }).then((ret) => {
       if (ret.code === 0) {
@@ -75,7 +71,7 @@ class GameAdd extends PureComponent {
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         dispatch({
-          type: 'game/fetch',
+          type: 'gamelist/fetchGame',
           payload: values,
         });
       };
@@ -84,7 +80,7 @@ class GameAdd extends PureComponent {
   render() {
     const { submitting } = this.props;
     const {
-      game: { data },
+      gamelist: { record },
       form: { getFieldDecorator, getFieldValue },
     } = this.props;
 
@@ -222,22 +218,22 @@ class GameAdd extends PureComponent {
             <h2><b>基本信息预览</b></h2>
             <br />
             <Row style={{ marginBottom: 32 }}>
-              <Col sm={8} xs={12}>游戏名称：{data.cp_text}</Col>
-              <Col sm={8} xs={12}>游戏简称：{data.cp_name}</Col>
+              <Col sm={8} xs={12}>游戏名称：{record.cp_text}</Col>
+              <Col sm={8} xs={12}>游戏简称：{record.cp_name}</Col>
             </Row>
             <Row style={{ marginBottom: 32 }}>
               <Col sm={8} xs={12}>
-                游戏类型：{data.cp_type}
+                游戏类型：{record.cp_type}
               </Col>
               <Col sm={8} xs={12}>
-                开发者：{data.develop_name}
+                开发者：{record.develop_name}
               </Col>
               <Col sm={8} xs={12}>
-                发布时间：{!!data.publish_time && moment(data.publish_time * 1000).format('YYYY-MM-DD HH:mm:ss')}
+                发布时间：{!!record.publish_time && moment(record.publish_time * 1000).format('YYYY-MM-DD HH:mm:ss')}
               </Col>
             </Row>
             <Row style={{ marginBottom: 32 }}>
-              <Col sm={24} xs={24}>URL地址：{data.cp_url}</Col>
+              <Col sm={24} xs={24}>URL地址：{record.cp_url}</Col>
             </Row>
 
             <Divider style={{ margin: '20px 0' }} />
@@ -246,14 +242,14 @@ class GameAdd extends PureComponent {
             </Row>
             <Row style={{ marginBottom: 32 }}>
               <Col sm={8} xs={12}>
-                当前版本：{data.cp_version}
+                当前版本：{record.cp_version}
               </Col>
               <Col sm={8} xs={12}>
-                更新时间：{data.publish_time}
+                更新时间：{record.publish_time}
               </Col>
             </Row>
             <Row style={{ marginBottom: 32 }}>
-              <Col sm={24} xs={24}>更新内容：{data.cp_desc}</Col>
+              <Col sm={24} xs={24}>更新内容：{record.cp_desc}</Col>
             </Row>
 
             <Divider style={{ margin: '20px 0' }} />
@@ -262,21 +258,21 @@ class GameAdd extends PureComponent {
             </Row>
             <Row style={{ marginBottom: 32 }}>
               <Col sm={24} xs={24}>
-                游戏图标：<img width={120} src={data.icon_url} />
+                游戏图标：<img width={120} src={record.icon_url} />
               </Col>
             </Row>
             <Row style={{ marginBottom: 32 }}>
               <Col sm={24} xs={24}>
-                封面图片：<img width={120} src={data.face_url} />
+                封面图片：<img width={120} src={record.face_url} />
               </Col>
             </Row>
             <Row style={{ marginBottom: 32 }}>
               <Col sm={24} xs={24}>
-                游戏截图：{this.renderImg(data.pic_urls)}
+                游戏截图：{this.renderImg(record.pic_urls)}
               </Col>
             </Row>
             <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
-              <Button type="primary" onClick={() => this.handleCreate(this.props.game.data)}>提交</Button>
+              <Button type="primary" onClick={() => this.handleCreate(record)}>提交</Button>
             </FormItem>
           </Card>
         </Form>

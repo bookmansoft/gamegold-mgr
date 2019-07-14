@@ -111,16 +111,9 @@ class WalletInfo extends PureComponent {
       loading,
     } = this.props;
 
-    console.log('currentAuthority', checkPermissions('admin', sessionStorage.getItem('currentAuthority'), 'ok', 'error'));
-
     return (
-      <PageHeaderWrapper title="钱包信息">
+      <PageHeaderWrapper title="收款地址">
           <Card bordered={false}>
-            <Row style={{ marginBottom: 32 }}>
-              <Col sm={24} xs={24}>
-                <b>钱包信息：</b>
-              </Col>
-            </Row>
             <Row style={{ marginBottom: 32 }}>
               <Col sm={24} xs={24}>
                 收款地址：{data!=null && data.data}
@@ -139,7 +132,7 @@ class WalletInfo extends PureComponent {
             </Row>
             <Row style={{ marginBottom: 32 }}>
               <Col sm={4} xs={8}>
-                { checkPermissions('admin', sessionStorage.getItem('currentAuthority'), 'ok', 'error') == 'ok' && <Button type="primary" onClick={this.handleBack}>立即备份</Button> }
+                { checkPermissions('admin', JSON.parse(sessionStorage.getItem('currentAuthority')), 'ok', 'error') == 'ok' && <Button type="primary" onClick={this.handleBack}>立即备份</Button> }
               </Col>
             </Row>
           </Card>

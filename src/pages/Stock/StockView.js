@@ -132,6 +132,8 @@ class StockView extends Component {
 
     let detail = this.state.detail || {};
 
+    console.log('stock record', detail);
+
     return (
       <PageHeaderWrapper
         title="凭证详情页"
@@ -144,7 +146,7 @@ class StockView extends Component {
           <Row style={{ marginBottom: 32 }}>
             <Col span={6}>
               <Row style={{ marginBottom: 16 }}>
-                <Col span={24}><h3><b>当前挂牌价（游戏金）</b></h3></Col>
+                <Col span={24}><h3><b>当前挂牌价</b></h3></Col>
               </Row>
               <Row style={{ marginBottom: 16 }}>
                 <Col span={24}><h1 style={{color:'red'}}>{parseInt(detail.sell_price/100)/1000}千克</h1></Col>

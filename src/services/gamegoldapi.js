@@ -510,7 +510,7 @@ export async function queryWalletLog(params) {
   try {
     let ret = { code: -200, data: null, message: "react service层无返回值。方法名：queryWalletLog" };
     console.log("获取钱包收支流水:" + JSON.stringify(params));
-    if (checkPermissions('admin', sessionStorage.currentAuthority, 'ok', 'error') == 'ok') {
+    if (checkPermissions('admin', JSON.parse(sessionStorage.getItem('currentAuthority')), 'ok', 'error') == 'ok') {
       ret = await remote.fetching({
         func: "tx.List", 
         items: ['default', 1000],

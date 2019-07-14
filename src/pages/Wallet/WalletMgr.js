@@ -167,11 +167,6 @@ class WalletMgr extends PureComponent {
     router.push('/wallet/walletlog?id=' + record.txid);
   };
 
-  //查看钱包信息
-  handleViewWallet = () => {
-    router.push('/wallet/walletinfo');
-  };
-
   //备份钱包信息
   handleBackupWallet = () => {
     router.push('/wallet/step-form');
@@ -229,19 +224,16 @@ class WalletMgr extends PureComponent {
     const { selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;
 
     return (
-      <PageHeaderWrapper title="钱包管理">
+      <PageHeaderWrapper title={formatMessage({id: 'menu.wallet.walletmgr'})}>
         <Card bordered={false}>
           <Row>
-            <Col sm={18} xs={12}>
-              钱包管理
-              </Col>
             <Col sm={6} xs={12}>
-              { checkPermissions('admin', sessionStorage.getItem('currentAuthority'), 'ok', 'error') == 'ok' && <Button type="primary" onClick={() => this.handleBackupWallet()}>
-                备份钱包</Button>}
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <Button type="primary" onClick={() => this.handleViewWallet()}>
-                查看钱包信息
-                </Button>
+              { 
+                checkPermissions('admin', JSON.parse(sessionStorage.getItem('currentAuthority')), 'ok', 'error') == 'ok' 
+                && <Button type="primary" onClick={() => this.handleBackupWallet()}>备份钱包</Button>
+              }&nbsp;&nbsp;
+              <Button type="primary" onClick={() => this.handleReceive()}>转入</Button>&nbsp;&nbsp;
+              <Button type="primary" onClick={() => this.handlePay()}>转出</Button>
             </Col>
           </Row>
           <Divider style={{ marginBottom: 16 }} />
@@ -251,15 +243,6 @@ class WalletMgr extends PureComponent {
           <Row>
             <Col sm={8} xs={8}>
               未确认交易余额:&nbsp;{(info.data != null) && JSON.stringify((info.data.unconfirmed - info.data.confirmed) / 100000)} Kg
-            </Col>
-            <Col sm={8} xs={8}>
-              <Button type="primary" onClick={() => this.handleReceive()}>
-                转入
-                </Button>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <Button onClick={() => this.handlePay()}>
-                转出
-                </Button>
             </Col>
           </Row>
         </Card>

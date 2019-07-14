@@ -97,15 +97,12 @@ class WalletPay extends PureComponent {
 
     return (
       <PageHeaderWrapper
-        title="钱包管理"
+        title={formatMessage({id: 'menu.wallet.walletpay'})}
         content=""
       >
         <Card bordered={false}>
           <Form onSubmit={this.handleSubmit} hideRequiredMark={false} style={{ marginTop: 8 }}>
-            <br/>
-            <h2><b>转出</b></h2>
-            <br/>
-            <FormItem {...formItemLayout} label="接收人地址">
+            <FormItem {...formItemLayout} label="收款地址">
               {getFieldDecorator('address', {
                 initialValue: walletpay.data.address,
                 rules: [
@@ -117,7 +114,7 @@ class WalletPay extends PureComponent {
               })(<Input placeholder="请输入接收人游戏金地址" />)}
             </FormItem>
 
-            <FormItem {...formItemLayout} label="发送金额Kg:">
+            <FormItem {...formItemLayout} label="发送金额">
               {getFieldDecorator('value', {
                 rules: [
                   {

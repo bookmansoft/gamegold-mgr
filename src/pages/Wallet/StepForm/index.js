@@ -1,3 +1,4 @@
+import { formatMessage } from 'umi/locale';
 import React, { PureComponent, Fragment } from 'react';
 import { Card, Steps } from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
@@ -26,7 +27,7 @@ export default class WalletStepForm extends PureComponent {
     const { location, children } = this.props;
     return (
       <PageHeaderWrapper
-        title="备份钱包"
+        title={formatMessage({id:'menu.wallet.walletstep'})}
         tabActiveKey={location.pathname}
         content=""
       >
