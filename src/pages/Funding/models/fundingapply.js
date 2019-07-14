@@ -1,29 +1,17 @@
 import { routerRedux } from 'dva/router';
 import { message } from 'antd';
-import { addFunding, getGameView,ListCp } from '@/services/gamegoldapi';
+import { addFunding, ListCp } from '@/services/gamegoldapi';
 
-//此名称域为新增使用（已经不存在编辑的可能性了）
 export default {
   namespace: 'fundingapply',
 
   state: {
     step: {
     },
-    data: {
-    },
     cp_list: [],
   },
 
   effects: {
-    //从url中获取信息
-    *fetch({ payload }, { call, put }) {
-      const response = yield call(getGameView, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
-    },
-
     *fetchCp({ payload }, { call, put }) {
       console.log(30);
       const response = yield call(ListCp, payload);
@@ -41,12 +29,6 @@ export default {
   },
 
   reducers: {
-    save(state, action) {
-      return {
-        ...state,
-        data: action.payload,
-      };
-    },
     saveCp(state, action) {
       return {
         ...state,

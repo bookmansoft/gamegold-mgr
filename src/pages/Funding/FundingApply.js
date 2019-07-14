@@ -26,8 +26,11 @@ const { Option } = Select;
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
-@connect(({ fundingapply, loading }) => ({
-  fundingapply,
+@connect(({ 
+  fundingapply, gamelist,
+  loading 
+}) => ({
+  fundingapply, gamelist,
   loading: loading.models.fundingapply,
   submitting: loading.effects['fundingapply/add'],
 }))
@@ -38,12 +41,14 @@ class FundingApply extends PureComponent {
     stock_amount: 1,
     develop_text: '',
   };
+
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
       type: 'fundingapply/fetchCp'
     });
   };
+
   //创建
   handleCreate = (theData, theState) => {
     const { dispatch, form } = this.props;
@@ -77,7 +82,7 @@ class FundingApply extends PureComponent {
   handleCpidChange = value => {
     const { dispatch, form } = this.props;
     dispatch({
-      type: 'fundingapply/fetch',
+      type: 'gamelist/getGameRecord',
       payload: { id: value },
     });
   }
@@ -91,16 +96,13 @@ class FundingApply extends PureComponent {
     console.log(e.target.value);
     this.state.develop_text = e.target.value;
   }
-  // //参考复制自FundingAuditList的代码
-  // renderOptions= () => {
-  //   return (this.props.cplist || []).map(element =>
-  //     <Option key={element.id} value={element.id}> {element.address}</Option>);
-  // };
 
   //显示下拉框
   renderOptions = () => {
-    if (this.props.fundingapply.cp_list != null) {
-      return this.props.fundingapply.cp_list.map(element =>
+    const {fundingapply: { cp_list }} = this.props;
+
+    if (cp_list != null) {
+      return cp_list.map(element =>
         <Option key={element.id} value={element.id}> {element.cp_text}</Option>);
     }
     else {
@@ -112,10 +114,10 @@ class FundingApply extends PureComponent {
   render() {
     const { submitting } = this.props;
     const {
-      fundingapply: { data, stock_amount, stock_num },
+      gamelist: { gameRecord },
+      fundingapply: { stock_amount, stock_num },
       form: { getFieldDecorator, getFieldValue },
     } = this.props;
-
 
     const submitFormLayout = {
       wrapperCol: {
@@ -201,9 +203,9 @@ class FundingApply extends PureComponent {
             <h2><b>基本信息预览</b></h2>
             <br />
             <Row gutter={16} style={{ marginBottom: 16 }}>
-              <Col span={8}><div style={{ fontWeight: 'bold' }}>游戏名称：{data.cp_text}</div></Col>
-              <Col span={8}><div style={{ fontWeight: 'bold' }}>游戏类型：{data.cp_type}</div></Col>
-              <Col span={8}><div style={{ fontWeight: 'bold' }}>开发者：{data.develop_name}</div></Col>
+              <Col span={8}><div style={{ fontWeight: 'bold' }}>游戏名称：{gameRecord.cp_text}</div></Col>
+              <Col span={8}><div style={{ fontWeight: 'bold' }}>游戏类型：{gameRecord.cp_type}</div></Col>
+              <Col span={8}><div style={{ fontWeight: 'bold' }}>开发者：{gameRecord.develop_name}</div></Col>
             </Row>
             <Row gutter={16} style={{ marginBottom: 16 }}>
               <Col span={8}><div style={{ fontWeight: 'bold' }}>发行凭证总数(份)：{this.state.stock_num}</div></Col>
@@ -228,7 +230,7 @@ class FundingApply extends PureComponent {
               </Col>
             </Row>
             <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
-              <Button type="primary" onClick={() => this.handleCreate(this.props.fundingapply.data, this.state)}>
+              <Button type="primary" onClick={() => this.handleCreate(gameRecord, this.state)}>
                 提交
               </Button>
             </FormItem>

@@ -1,10 +1,22 @@
 import { stockRecord, queryStockList, stockPurchase, auctionStock, bidStock, sendStock, queryMyStock, queryStockBase } from '@/services/gamegoldapi';
 
-export default {
+/**
+ * 先定义数据仓库再输出，这是为了方便调用本地查询
+ */
+let store = {
   namespace: 'stocklist',
 
   state: {
+    //一级市场凭证条目反向索引
+    records: {},
+    //一级市场凭证条目列表
+    data: {
+      list: [],
+      pagination: {},
+    },
+    //二级市场凭证条目反向索引
     stockMap: {},
+    //二级市场凭证条目列表
     stockList: {
       list: [],
       pagination: {},
@@ -13,15 +25,18 @@ export default {
       list: [],
       pagination: {},
     },
-    data: {
-      list: [],
-      pagination: {},
-    },
-    records: {},
     myStock: {},
   },
 
   effects: {
+    queryDetail({ payload }, {call, put}) {
+      if(payload.type == 1) {
+        return store.state.records[payload.id];
+      } else {
+        return store.state.stockMap[payload.id];
+      }
+    },
+
     *getStockExchange({ payload }, { call, put }) {
       const response = yield call(queryStockList, payload);
       if(!!response && response.code == 0) {
@@ -79,8 +94,23 @@ export default {
   },
 
   reducers: {
+    /**
+     * 获取一级市场凭证条目列表
+     * @param {*} state 
+     * @param {*} action 
+     */
+    saveStockOri(state, action) {
+      //建立反向索引
+      action.payload.list.map(it=>{
+        state.records[it.cid] = it;
+      });
+      return {
+        ...state,
+        data: action.payload,
+      };
+    },
     saveStockExchange(state, action) {
-      //生成反向索引表，以便详情页面直接引用
+      //建立反向索引
       action.payload.list.map(item => {
         state.stockMap[item.cpid] = item;
       });
@@ -95,16 +125,6 @@ export default {
         tableData: action.payload,
       };
     },
-    saveStockOri(state, action) {
-      //建立本地数据集的反向索引
-      action.payload.list.map(it=>{
-        state.records[it.cid] = it;
-      });
-      return {
-        ...state,
-        data: action.payload,
-      };
-    },
     saveMyStock(state, action) {
       return {
         ...state,
@@ -112,4 +132,6 @@ export default {
       }
     },
   },
-};
+}
+
+export default store;

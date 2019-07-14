@@ -31,82 +31,67 @@ const { Step } = Steps;
 
 const getWindowWidth = () => window.innerWidth || document.documentElement.clientWidth;
 
-@connect(({ stocklist, loading }) => ({
-  stocklist,
+@connect(({ 
+  stocklist, gamelist,
+  loading 
+}) => ({
+  stocklist, gamelist,
   loading: loading.models.stocklist,
 }))
 
 class StockView extends Component {
-  renderImg = (text) => {
-    if (text && text.length) {
-      const imgs = text.map((item, index) =>
-        <div><img width={300} src={item} key={index} /><br /></div>
-      )
-      return imgs;
-    }
-  }
-
   state = {
-    visible: false, //发布更新表单可见性
     operationkey: 'tab1',
     stepDirection: 'horizontal',
-    detail: {},
+    recordType: 1,                //1代表一级市场条目，2代表二级市场条目
+    detail: {},                   //代表当前浏览的凭证条目
+    game: {},                     //代表当前凭证条目对应的CP对象
   };
-  //显示发布更新表单
-  showModal = () => {
-    this.setState({ visible: true });
-  }
-  //隐藏发布更新表单
-  handleCancel = () => {
-    this.setState({ visible: false });
-  }
-  //提交发布更新表单
-  handleCreate = () => {
-    const form = this.formRef.props.form;
-    form.validateFields((err, values) => {
-      if (err) {
+
+  /**
+   * 页面启动时，完成数据初始化
+   */
+  componentDidMount() {
+    const {
+      dispatch,
+      stocklist: { records },
+    } = this.props;
+
+    this.setState({recordType: this.props.location.query.type || 1});
+
+    dispatch({
+      type: 'gamelist/getGameRecord',
+      payload: { id: this.props.location.query.id },
+    });
+
+    //@warning 当前封装模式下， reducer 无论带不带星标，返回的都是 Promise
+    dispatch({
+      type: 'stocklist/queryDetail',
+      payload: {
+        id: this.props.location.query.id,
+        type: this.props.location.query.type,
+      }
+    }).then(detail=>{
+      if(!detail) {
+        router.push('/stock/stocklist');
         return;
       }
 
-      console.log('此处收到表单数据: ', values);
-      form.resetFields();
-      this.setState({ visible: false });
+      this.setState({detail: detail});
     });
-  }
-  //传递引用
-  saveFormRef = (formRef) => {
-    this.formRef = formRef;
+
+    this.setStepDirection();
+    window.addEventListener('resize', this.setStepDirection, { passive: true });
   }
 
   handleBack = () => {
     history.back();
   };
 
-  componentDidMount() {
-    const {
-      stocklist: { records },
-    } = this.props;
-
-    let detail = records[this.props.location.query.id];
-    if(!detail) {
-      router.push('/stock/stocklist');
-      return;
-    }
-
-    this.setState({detail: detail});
-
-    this.setStepDirection();
-    window.addEventListener('resize', this.setStepDirection, { passive: true });
-  }
-
   componentWillUnmount() {
     window.removeEventListener('resize', this.setStepDirection);
     this.setStepDirection.cancel();
   }
-
-  onOperationTabChange = key => {
-    this.setState({ operationkey: key });
-  };
 
   @Bind()
   @Debounce(200)
@@ -125,14 +110,56 @@ class StockView extends Component {
   }
 
   render() {
-    const { stepDirection, operationkey } = this.state;
+    const { stepDirection, operationkey, detail, } = this.state;
     const {
-      loading
+      gamelist: { gameRecord },
+      loading,
     } = this.props;
 
-    let detail = this.state.detail || {};
+    /** 
+      type = 1:
+      addr: "tb1qz4aesprvtz36rhjml78ls5z4yx05lv7j25vz3s"
+      cid: "628e5800-a585-11e9-8d3d-5b0483df26be"
+      period: 1543
+      price: 1000000
+      sell_price: 20
+      sell_sum: 200
+      sum: 300 
 
-    console.log('stock record', detail);
+      type = 2:
+      audit_state_id: 2
+      cpid: "628e5800-a585-11e9-8d3d-5b0483df26be"
+      cpname: "cp010061"
+      hisPrice: 1000000
+      hisSum: 500
+      price: 1000000
+      sell_limit_date: 1564329724.861
+      sum: 500
+     */
+
+    console.log('stockview', detail, gameRecord);
+    /**
+      cp_desc: "Supply elite soldiers with tons of equipment: hi-tech armor, deadly weapons, implants, and gadgets. ? Upgrade your base and research futuristic technology to gain access to advanced war"
+      cp_id: "628e5800-a585-11e9-8d3d-5b0483df26be"
+      cp_name: "cp010061"
+      cp_state: 1
+      cp_text: "Mercs of Boom(cp010061)"
+      cp_type: "SHT"
+      cp_url: "http://localhost:9701/mock"
+      cp_version: "V1.0"
+      develop_name: "GAME INSIGHT UAB Strategy"
+      face_url: "http://127.0.0.1:9701/image/1/large_img.jpg"
+      icon_url: "http://127.0.0.1:9701/image/1/icon_img.jpg"
+      id: 628
+      invite_share: 15
+      operator_id: 4026
+      pic_urls: (3) ["http://127.0.0.1:9701/image/1/pic1.jpg", "http://127.0.0.1:9701/image/1/pic2.jpg", "http://127.0.0.1:9701/image/1/pic3.jpg"]
+      picture_url: "{"icon_url":"http://127.0.0.1:9701/image/1/icon_img.jpg","face_url":"http://127.0.0.1:9701/image/1/large_img.jpg","pic_urls":["http://127.0.0.1:9701/image/1/pic1.jpg","http://127.0.0.1:9701/image/1/pic2.jpg","http://127.0.0.1:9701/image/1/pic3.jpg"]}"
+      publish_time: 1545606613
+      update_content: "更新了最新场景和新的地图"
+      update_time: 1545706613
+      wallet_addr: "tb1qpfcyzl3ck9wv2gfywjaf6pdtan0etkgvhc98qd"
+     */
 
     return (
       <PageHeaderWrapper

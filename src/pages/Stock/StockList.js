@@ -192,7 +192,7 @@ class StockList extends PureComponent {
   };
 
   handleView = (flag, record) => {
-    router.push('/stock/stockview?id='+record.cid);
+    router.push('/stock/stockview?type=2&id='+record.cid);
   };
 
   renderForm() {

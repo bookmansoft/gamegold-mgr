@@ -469,19 +469,19 @@ export async function getGameFromUrl(params) {
     console.log(error);
     return { code: -100, data: null, message: "react service层错误。方法名：getGameFromUrl" };
   }
-
 }
 
-
-// 游戏详情
-// params.id 查看的页面参数值。（其中params对应于model中的payload）
+/**
+ * 查询游戏详情
+ * @param {*} params.id 查询游戏的编码
+ */
 export async function getGameView(params) {
   try {
     let ret = await remote.fetching({ 
       func: "cp.Retrieve", 
       id: params.id 
     });
-    if (ret.data === null) {
+    if (!ret.data) {
       return { code: -200, data: null, message: "react service层无返回值。方法名：getGameView" };
     }
 

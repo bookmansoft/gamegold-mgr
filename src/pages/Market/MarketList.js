@@ -208,7 +208,7 @@ class MarketList extends PureComponent {
     dispatch({
       type: 'stocklist/getStockOri',
     }).then(ret=>{
-      this.props.history.push("/stock/stockview?id=" + record.cpid);
+      this.props.history.push("/stock/stockview?type=1&id=" + record.cpid);
     });
   };
 

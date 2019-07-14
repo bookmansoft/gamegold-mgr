@@ -139,7 +139,7 @@ class GameView extends Component {
     console.log(this.props.location.query.id);
     dispatch({
       type: 'gamelist/getGameRecord',
-      payload: { id: this.props.location.query.id },//这里
+      payload: { id: this.props.location.query.id },
     });
 
     this.setStepDirection();
