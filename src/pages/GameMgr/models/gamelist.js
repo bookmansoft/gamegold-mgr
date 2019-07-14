@@ -1,4 +1,4 @@
-import { queryGameMgr, ListCpType } from '@/services/gamegoldapi';
+import { payOrder, queryGameMgr, ListCpType } from '@/services/gamegoldapi';
 
 export default {
   namespace: 'gamelist',
@@ -17,6 +17,10 @@ export default {
         type: 'save',
         payload: response,
       });
+    },
+
+    *payOrder({ payload }, { call, put }) {
+      yield call(payOrder, payload);
     },
 
     *fetchCpType({ payload }, { call, put }) {

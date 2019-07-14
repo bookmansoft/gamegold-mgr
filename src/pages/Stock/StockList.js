@@ -45,6 +45,7 @@ class StockList extends PureComponent {
       loading: false,
       visible: false,
     },
+    current: {},
     //#endregion
   };
 

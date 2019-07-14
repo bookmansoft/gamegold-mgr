@@ -1356,3 +1356,21 @@ export async function getStockView(params) {
     return { code: -100, data: null, message: "react service层错误。方法名：getGameView" };
   }
 }
+
+/**
+ * 生成订单
+ */
+export async function payOrder(params) {
+  try {
+    await remote.fetching({
+      func: "cp.payOrder", 
+      params: {
+        cid: params.cid,
+        amount: params.amount,
+      }
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
+

@@ -1,3 +1,4 @@
+import { formatMessage } from 'umi/locale';
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
@@ -11,6 +12,7 @@ import {
   Button,
   Steps,
   Radio,
+  Modal,
 } from 'antd';
 import SimpleTable from '@/components/SimpleTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
@@ -38,44 +40,14 @@ class GameList extends PureComponent {
     selectedRows: [],
     formValues: {},
     stepFormValues: {},
+    //#region 控制模态框的显示状态
+    purchase: {
+      loading: false,
+      visible: false,
+    },
+    current: {},
+    //#endregion
   };
-
-  columns = [
-    {
-      title: '流水号',
-      dataIndex: 'id',
-    },
-    {
-      title: '游戏ID',
-      dataIndex: 'cp_id',
-    },
-    {
-      title: '游戏全名',
-      dataIndex: 'cp_text',
-    },
-    {
-      title: '游戏类型',
-      dataIndex: 'cp_type',
-    },
-    {
-      title: '游戏状态',
-      dataIndex: 'cp_state',
-      render: val => <span>{(val == '0') ? '未上线' : '正常运营'}</span>
-    },
-    {
-      title: '添加时间',
-      dataIndex: 'publish_time',
-      render: val => <span>{moment(val * 1000).format('YYYY-MM-DD HH:mm:ss')}</span>,
-    },
-    {
-      title: '操作',
-      render: (text, record) => (
-        <Fragment>
-          <a onClick={() => this.handleView(true, record)}>详情</a>&nbsp;
-        </Fragment>
-      ),
-    },
-  ];
 
   componentDidMount() {
     const { dispatch } = this.props;
@@ -87,6 +59,43 @@ class GameList extends PureComponent {
     });
   }
 
+  //查看页面
+  handleOrder = (flag, record) => {
+    console.log(record);
+    this.setState({current: record, purchase: {visible: true}});
+  };
+
+  handleOk(e) {
+    const { dispatch, form } = this.props;
+    e.preventDefault();
+
+    this.setState({purchase: {loading: true, visible: true}});
+    form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+        this.props.dispatch({
+          type: 'gamelist/payOrder',
+          payload: {cid: this.state.current.cp_id, amount: values['amount']*100000}, //转化为尘
+        }).then(ret=>{
+          dispatch({
+            type: 'gamelist/fetch',
+          });
+          form.resetFields();
+          this.setState({purchase: {visible: false, loading: false}});
+        }).catch(e=>{
+          form.resetFields();
+          this.setState({purchase: {visible: false, loading: false}});
+        });
+      } else {
+        form.resetFields();
+        this.setState({purchase: {visible: false, loading: false}});
+      }
+    });
+  }
+
+  handleCancel() {
+    this.setState({purchase: {visible: false}});
+  }
+  
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
     const { dispatch } = this.props;
     const { formValues } = this.state;
@@ -156,14 +165,6 @@ class GameList extends PureComponent {
     this.props.history.push("./gameview?id=" + record.id);
   };
 
-  //赠送道具
-  handleDeal = (flag, record) => {
-    this.setState({
-      updateModalVisible: !!flag,
-      stepFormValues: record || {},
-    });
-  };
-
   //显示下拉框
   renderOptions = () => {
     // console.log(this.props.gamelist.data);
@@ -204,25 +205,10 @@ class GameList extends PureComponent {
               )}
             </FormItem>
           </Col>
-          {/* <Col md={6} sm={9}>
-            <FormItem label="状态：">
-              {getFieldDecorator('cp_state')(
-                <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="1">待审核</Option>
-                  <Option value="2">已上架</Option>
-                  <Option value="3">审核不通过</Option>
-                </Select>
-              )}
-            </FormItem>
-          </Col> */}
           <Col md={6} sm={9}>
             <span className={styles.submitButtons}>
-              <Button type="primary" htmlType="submit">
-                搜索
-              </Button>
-              <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
-                重置
-              </Button>
+              <Button type="primary" htmlType="submit">搜索</Button>
+              <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>
             </span>
           </Col>
         </Row>
@@ -230,15 +216,84 @@ class GameList extends PureComponent {
     );
   }
 
+  columns = [
+    {
+      title: '流水号',
+      dataIndex: 'id',
+    },
+    {
+      title: '游戏ID',
+      dataIndex: 'cp_id',
+    },
+    {
+      title: '游戏全名',
+      dataIndex: 'cp_text',
+    },
+    {
+      title: '游戏类型',
+      dataIndex: 'cp_type',
+    },
+    {
+      title: '游戏状态',
+      dataIndex: 'cp_state',
+      render: val => <span>{(val == '0') ? '未上线' : '正常运营'}</span>
+    },
+    {
+      title: '添加时间',
+      dataIndex: 'publish_time',
+      render: val => <span>{moment(val * 1000).format('YYYY-MM-DD HH:mm:ss')}</span>,
+    },
+    {
+      title: '操作',
+      render: (text, record) => (
+        <Fragment>
+          <a onClick={() => this.handleView(true, record)}>详情</a>&nbsp; | &nbsp;
+          <a onClick={() => this.handleOrder(true, record)}>消费</a>
+        </Fragment>
+      ),
+    },
+  ];
+
   render() {
     const {
       gamelist: { data },
       loading,
+      form: { getFieldDecorator },
     } = this.props;
     const { selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;
 
+    const getModalContent = record => {
+      record = record || {};
+      return (
+        <Form onSubmit={this.handleOk.bind(this)}>
+          <FormItem label="消费金额" {...this.formLayout}>
+            {getFieldDecorator('amount', {
+              rules: [{ required: false, message: '请输入消费金额' }],
+              initialValue: 0,
+            })(
+              <Input addonAfter="千克" style={{ width: "50%" }} />
+            )}
+          </FormItem>
+          <FormItem label="归属游戏" {...this.formLayout}>{`${record.cp_id}`}</FormItem>
+        </Form>
+      );
+    };
+
     return (
       <PageHeaderWrapper title="游戏列表">
+        <Modal 
+          ref="modal"
+          width={800}
+          destroyOnClose
+          onCancel={this.handleCancel.bind(this)}
+          visible={this.state.purchase.visible}
+          title="游戏消费" 
+          footer={[
+            <button key="back" className="ant-btn ant-btn-primary" onClick={this.handleCancel.bind(this)}>返 回</button>,
+            <button key="submit" className={'ant-btn ant-btn-primary ' + (this.state.purchase.loading?'ant-btn-loading':'')} onClick={this.handleOk.bind(this)}>提 交</button>
+          ]}>
+          {getModalContent(this.state.current)}
+        </Modal>
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderForm()}</div>
