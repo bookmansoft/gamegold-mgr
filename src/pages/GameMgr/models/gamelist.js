@@ -13,10 +13,12 @@ export default {
   effects: {
     *fetch({ payload }, { call, put }) {
       const response = yield call(queryGameMgr, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
+      if(response.code == 0) {
+        yield put({
+          type: 'save',
+          payload: response.data,
+        });
+      }
     },
 
     *payOrder({ payload }, { call, put }) {

@@ -32,9 +32,9 @@ const { Step } = Steps;
 
 const getWindowWidth = () => window.innerWidth || document.documentElement.clientWidth;
 
-@connect(({ marketlist, loading }) => ({
-  marketlist,
-  loading: loading.models.marketlist,
+@connect(({ stocklist, loading }) => ({
+  stocklist,
+  loading: loading.models.stocklist,
 }))
 @Form.create()
 class MarketView extends Component {
@@ -120,7 +120,7 @@ class MarketView extends Component {
   componentDidMount() {
     const { 
       dispatch,
-      marketlist: { stockMap },
+      stocklist: { stockMap },
     } = this.props;
     
     //根据传入的cpid(query.id), 查询并设置当前凭证条目
@@ -136,7 +136,7 @@ class MarketView extends Component {
 
     //拉去该凭证条目的流水信息
     dispatch({
-      type: 'marketlist/fetchTableData',
+      type: 'stocklist/fetchTableData',
       payload: { cid: cpid, type:2},
     });
 
@@ -205,12 +205,10 @@ class MarketView extends Component {
   render() {
     const { stepDirection, operationkey } = this.state;
     const {
-      marketlist: { data, tableData },
+      stocklist: { tableData },
       loading
     } = this.props;
     const { selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;
-
-    console.log('marketview.render', tableData);
 
     return (
       <PageHeaderWrapper

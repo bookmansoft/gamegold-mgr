@@ -24,6 +24,7 @@ import classNames from 'classnames';
 import DescriptionList from '@/components/DescriptionList';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import styles from './StockView.less';
+import router from 'umi/router';
 
 const FormItem = Form.Item;
 const { Step } = Steps;
@@ -36,7 +37,6 @@ const getWindowWidth = () => window.innerWidth || document.documentElement.clien
 }))
 
 class StockView extends Component {
-
   renderImg = (text) => {
     if (text && text.length) {
       const imgs = text.map((item, index) =>
@@ -46,12 +46,11 @@ class StockView extends Component {
     }
   }
 
-
-
   state = {
     visible: false, //发布更新表单可见性
     operationkey: 'tab1',
     stepDirection: 'horizontal',
+    detail: {},
   };
   //显示发布更新表单
   showModal = () => {
@@ -84,12 +83,17 @@ class StockView extends Component {
   };
 
   componentDidMount() {
-    const { dispatch } = this.props;
-    console.log(this.props.location.query.id);
-    dispatch({
-      type: 'stocklist/detail',
-      payload: { id: this.props.location.query.id },//这里
-    });
+    const {
+      stocklist: { records },
+    } = this.props;
+
+    let detail = records[this.props.location.query.id];
+    if(!detail) {
+      router.push('/stock/stocklist');
+      return;
+    }
+
+    this.setState({detail: detail});
 
     this.setStepDirection();
     window.addEventListener('resize', this.setStepDirection, { passive: true });
@@ -123,10 +127,10 @@ class StockView extends Component {
   render() {
     const { stepDirection, operationkey } = this.state;
     const {
-      stocklist: { detail },
       loading
     } = this.props;
 
+    let detail = this.state.detail || {};
 
     return (
       <PageHeaderWrapper
@@ -143,14 +147,14 @@ class StockView extends Component {
                 <Col span={24}><h3><b>当前挂牌价（游戏金）</b></h3></Col>
               </Row>
               <Row style={{ marginBottom: 16 }}>
-                <Col span={24}><h1 style={{color:'red'}}>{parseInt(detail.sell_stock_amount/100)/1000}千克</h1></Col>
+                <Col span={24}><h1 style={{color:'red'}}>{parseInt(detail.sell_price/100)/1000}千克</h1></Col>
               </Row>
               <Row style={{ marginBottom: 16 }}>
                 <Col span={12}>
                   流通凭证总数(份)
                 </Col>
                 <Col span={12}>
-                  {detail.total_num}
+                  {detail.sell_sum}
                 </Col>
               </Row>
               <Row style={{ marginBottom: 16 }}>
@@ -158,7 +162,7 @@ class StockView extends Component {
                   当前流通市值(Kg)
                 </Col>
                 <Col span={12}>
-                  {parseInt(detail.total_num*detail.sell_stock_amount/100)/1000}
+                  {parseInt(detail.sell_sum*detail.sell_price/100)/1000}
                 </Col>
               </Row>
               <Row style={{ marginBottom: 16 }}>
@@ -166,7 +170,7 @@ class StockView extends Component {
                   最新挂单价格
                 </Col>
                 <Col span={12}>
-                {parseInt(detail.sell_stock_amount/100)/1000}
+                {parseInt(detail.sell_price/100)/1000}
                 </Col>
               </Row>
               <Row style={{ marginBottom: 16 }}>
@@ -174,7 +178,7 @@ class StockView extends Component {
                   挂单数量
                 </Col>
                 <Col span={12}>
-                  {detail.sell_stock_num}
+                  {detail.sum}
                 </Col>
               </Row>
               <Row style={{ marginBottom: 16 }}>
@@ -182,7 +186,7 @@ class StockView extends Component {
                   发行价格
                 </Col>
                 <Col span={12}>
-                  {parseInt(detail.base_amount/100)/1000}
+                  {parseInt(detail.price/100)/1000}
                 </Col>
               </Row>
               <Row style={{ marginBottom: 16 }}>
@@ -190,7 +194,7 @@ class StockView extends Component {
                   挂单价/发行价
                 </Col>
                 <Col span={12}>
-                  {(detail.sell_stock_amount*100/detail.base_amount)+'%'}
+                  {(detail.sum*100/detail.price)+'%'}
                 </Col>
               </Row>
 
@@ -207,13 +211,16 @@ class StockView extends Component {
           </Row>
           <Row style={{ marginBottom: 32 }}>
             <Col span={8}>
-              游戏名称：{detail.cp_text}
+              游戏名称：
+              {detail.cid}
             </Col>
             <Col span={8}>
-              游戏类型：{detail.cp_type}
+              游戏类型：
+              {/* {detail.cp_type} */}
             </Col>
             <Col span={8}>
-              开发者：{detail.develop_name}
+              开发者：
+              {/* {detail.develop_name} */}
             </Col>
           </Row>
           <Row style={{ marginBottom: 32 }}>

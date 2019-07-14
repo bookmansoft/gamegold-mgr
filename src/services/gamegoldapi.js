@@ -1334,30 +1334,6 @@ export async function queryStockBase(params) {
 }
 
 /**
- * 获取凭证详情
- * @param {Object} params 
- */
-export async function getStockView(params) {
-  try {
-    console.log(params.id);
-    //接下来好好查询并返回这个页面的数据
-    let ret = await remote.fetching({ 
-      func: "cpstockbase.Retrieve", 
-      id: params.id 
-    });
-    if (ret.data === null) {
-      return { code: -200, data: null, message: "react service层无返回值。方法名：getGameView" };
-    }
-    //有数据
-    console.log(ret);
-    return ret.data;
-  } catch (error) {
-    console.log(error);
-    return { code: -100, data: null, message: "react service层错误。方法名：getGameView" };
-  }
-}
-
-/**
  * 生成订单
  */
 export async function payOrder(params) {

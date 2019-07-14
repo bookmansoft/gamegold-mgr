@@ -26,9 +26,9 @@ const getValue = obj =>
     .join(',');
 
 /* eslint react/no-multi-comp:0 */
-@connect(({ marketlist, loading }) => ({
-  marketlist,
-  loading: loading.models.marketlist,
+@connect(({ stocklist, loading }) => ({
+  stocklist,
+  loading: loading.models.stocklist,
 }))
 @Form.create()
 class MarketList extends PureComponent {
@@ -42,7 +42,8 @@ class MarketList extends PureComponent {
     purchase: {
       loading: false,
       visible: false,
-    }
+    },
+    current: {},
   };
 
   columns = [
@@ -78,6 +79,7 @@ class MarketList extends PureComponent {
       render: (text, record) => (
         <Fragment>
           <a onClick={() => this.handleView(record)}>详情</a>&nbsp;|&nbsp;
+          <a onClick={() => this.handleStockView(record)}>行情</a>&nbsp;|&nbsp;
           <a onClick={() => this.handlePurchase(record)}>购买</a>
         </Fragment>
       ),
@@ -92,11 +94,11 @@ class MarketList extends PureComponent {
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         this.props.dispatch({
-          type: 'marketlist/purchase',
+          type: 'stocklist/purchase',
           payload: {cid: this.state.current.cpid, num: values['stockNum']},
         }).then(ret=>{
           dispatch({
-            type: 'marketlist/fetch',
+            type: 'stocklist/getStockExchange',
           });
           this.setState({purchase: {visible: false, loading: false}});
         }).catch(e=>{
@@ -118,10 +120,10 @@ class MarketList extends PureComponent {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'marketlist/fetch',
+      type: 'stocklist/getStockExchange',
     });
     dispatch({
-      type: 'marketlist/fetchCpType'
+      type: 'stocklist/fetchCpType'
     });
   }
 
@@ -146,7 +148,7 @@ class MarketList extends PureComponent {
     }
 
     dispatch({
-      type: 'marketlist/fetch',
+      type: 'stocklist/getStockExchange',
       payload: params,
     });
   };
@@ -158,7 +160,7 @@ class MarketList extends PureComponent {
       formValues: {},
     });
     dispatch({
-      type: 'marketlist/fetch',
+      type: 'stocklist/getStockExchange',
       payload: {},
     });
   };
@@ -181,7 +183,7 @@ class MarketList extends PureComponent {
       });
 
       dispatch({
-        type: 'marketlist/fetch',
+        type: 'stocklist/getStockExchange',
         payload: values,
       });
     });
@@ -190,6 +192,16 @@ class MarketList extends PureComponent {
   //查看页面
   handleView = record => {
     this.props.history.push("./marketview?id=" + record.cpid);
+  };
+
+  //查看页面
+  handleStockView = record => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'stocklist/getStockOri',
+    }).then(ret=>{
+      this.props.history.push("/stock/stockview?id=" + record.cpid);
+    });
   };
 
   handlePurchase = record => {
@@ -206,9 +218,8 @@ class MarketList extends PureComponent {
 
   //显示下拉框
   renderOptions = () => {
-    // console.log(this.props.marketlist.data);
-    if (this.props.marketlist.cp_type_list != null) {
-      return this.props.marketlist.cp_type_list.map(element =>
+    if (this.props.stocklist.cp_type_list != null) {
+      return this.props.stocklist.cp_type_list.map(element =>
         <Option key={element.id} value={element.cp_type_id}> {element.cp_type_id}</Option>);
     }
     else {
@@ -238,7 +249,7 @@ class MarketList extends PureComponent {
 
   render() {
     const {
-      marketlist: { data },
+      stocklist: { stockList },
       loading,
       form: { getFieldDecorator },
     } = this.props;
@@ -312,7 +323,7 @@ class MarketList extends PureComponent {
             <SimpleTable
               selectedRows={selectedRows}
               loading={loading}
-              data={data}
+              data={stockList}
               columns={this.columns}
               onSelectRow={null}
               onChange={this.handleStandardTableChange}

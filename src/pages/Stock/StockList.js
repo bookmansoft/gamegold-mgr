@@ -18,6 +18,7 @@ import SimpleTable from '@/components/SimpleTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
 import styles from './StockList.less';
+import router from 'umi/router';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -70,7 +71,8 @@ class StockList extends PureComponent {
       title: '操作',
       render: (text, record) => (
         <Fragment>
-          <a onClick={() => this.handleAuction(true, record)}>购买</a>&nbsp;
+          <a onClick={() => this.handleView(true, record)}>行情</a>&nbsp;|&nbsp;
+          <a onClick={() => this.handleAuction(true, record)}>购买</a>
         </Fragment>
       ),
     },
@@ -82,7 +84,7 @@ class StockList extends PureComponent {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'stocklist/fetch',
+      type: 'stocklist/getStockOri',
     });
     dispatch({
       type: 'stocklist/fetchCpType'
@@ -101,7 +103,7 @@ class StockList extends PureComponent {
           payload: {cid: this.state.current.cid, srcAddr: this.state.current.addr, num: values['stockNum'], price: this.state.current.sell_price},
         }).then(ret=>{
           dispatch({
-            type: 'stocklist/fetch',
+            type: 'stocklist/getStockOri',
           });
           form.resetFields();
           this.setState({purchase: {visible: false, loading: false}});
@@ -141,7 +143,7 @@ class StockList extends PureComponent {
     }
 
     dispatch({
-      type: 'stocklist/fetch',
+      type: 'stocklist/getStockOri',
       payload: params,
     });
   };
@@ -153,7 +155,7 @@ class StockList extends PureComponent {
       formValues: {},
     });
     dispatch({
-      type: 'stocklist/fetch',
+      type: 'stocklist/getStockOri',
       payload: {},
     });
   };
@@ -176,15 +178,18 @@ class StockList extends PureComponent {
       });
 
       dispatch({
-        type: 'stocklist/fetch',
+        type: 'stocklist/getStockOri',
         payload: values,
       });
     });
   };
 
-  //查看页面
   handleAuction = (flag, record) => {
     this.setState({current: record, purchase: {visible: true}});
+  };
+
+  handleView = (flag, record) => {
+    router.push('/stock/stockview?id='+record.cid);
   };
 
   renderForm() {
