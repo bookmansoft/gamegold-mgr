@@ -4,8 +4,11 @@ export default {
   namespace: 'gamelist',
 
   state: {
-    record: {},
+    //从游戏厂商获取的集采信息
+    record: {},         
+    //从中台查询而得的CP对象
     gameRecord: {},
+    //从中台查询而得的CP列表
     data: {
       list: [],
       pagination: {},
@@ -13,14 +16,15 @@ export default {
   },
 
   effects: {
-    //从url中获取信息
+    //从游戏厂商获取集采信息
     *fetchGame({ payload }, { call, put }) {
       const response = yield call(getGameFromUrl, payload);
       yield put({
-        type: 'fetchGame',
+        type: 'saveGame',   //reducer 的名称，注意不要和 effect 同名，会因混淆而造成死循环
         payload: response,
       });
     },
+
     *addGame({ payload }, { call }) {
       let ret=yield call(addGameMgr, payload);
       return ret;
@@ -56,10 +60,10 @@ export default {
   },
 
   reducers: {
-    fetchGame(state, action) {
+    saveGame(state, action) {
       return {
         ...state,
-        data: action.payload,
+        record: action.payload,
       };
     },
     saveGameRecord(state, action) {

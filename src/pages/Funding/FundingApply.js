@@ -27,12 +27,12 @@ const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
 @connect(({ 
-  fundingapply, gamelist,
+  fundinglist, gamelist,
   loading 
 }) => ({
-  fundingapply, gamelist,
-  loading: loading.models.fundingapply,
-  submitting: loading.effects['fundingapply/add'],
+  fundinglist, gamelist,
+  loading: loading.models.fundinglist,
+  submitting: loading.effects['fundinglist/newFunding'],
 }))
 @Form.create()
 class FundingApply extends PureComponent {
@@ -45,7 +45,7 @@ class FundingApply extends PureComponent {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'fundingapply/fetchCp'
+      type: 'fundinglist/fetchCp'
     });
   };
 
@@ -54,7 +54,7 @@ class FundingApply extends PureComponent {
     const { dispatch, form } = this.props;
     console.log(theData, theState);
     dispatch({
-      type: 'fundingapply/add',
+      type: 'fundinglist/newFunding',
       payload: {
         data: theData, state: theState
       },
@@ -90,7 +90,7 @@ class FundingApply extends PureComponent {
     this.state.stock_num = parseInt(e.target.value);
   }
   handleStockAmountChange = e => {
-    this.state.stock_amount = parseInt(e.target.value) * 100000;
+    this.state.stock_amount = parseInt(e.target.value);
   }
   handleDevelopTextChange = e => {
     console.log(e.target.value);
@@ -99,7 +99,7 @@ class FundingApply extends PureComponent {
 
   //显示下拉框
   renderOptions = () => {
-    const {fundingapply: { cp_list }} = this.props;
+    const {fundinglist: { cp_list }} = this.props;
 
     if (cp_list != null) {
       return cp_list.map(element =>
@@ -115,7 +115,6 @@ class FundingApply extends PureComponent {
     const { submitting } = this.props;
     const {
       gamelist: { gameRecord },
-      fundingapply: { stock_amount, stock_num },
       form: { getFieldDecorator, getFieldValue },
     } = this.props;
 
@@ -181,7 +180,7 @@ class FundingApply extends PureComponent {
             </Row>
             <Row gutter={16} style={{ marginBottom: 16 }}>
               <Col span={3}>
-                <div align="right" style={{ fontWeight: 'bold', marginTop: 5 }}>发行价(游戏金):</div>
+                <div align="right" style={{ fontWeight: 'bold', marginTop: 5 }}>发行价(千克):</div>
               </Col>
               <Col span={5}>
                 <FormItem >
@@ -189,7 +188,7 @@ class FundingApply extends PureComponent {
                     rules: [
                       {
                         required: true,
-                        message: "请输入发行价(游戏金)",
+                        message: "请输入发行价(千克)",
                       },
                     ],
                   })(<Input placeholder="请输入" style={{ width: '100%' }} onChange={this.handleStockAmountChange} />)}
@@ -209,8 +208,8 @@ class FundingApply extends PureComponent {
             </Row>
             <Row gutter={16} style={{ marginBottom: 16 }}>
               <Col span={8}><div style={{ fontWeight: 'bold' }}>发行凭证总数(份)：{this.state.stock_num}</div></Col>
-              <Col span={8}><div style={{ fontWeight: 'bold' }}>发行价(千克/份)：{parseInt(this.state.stock_amount/100)/1000}</div></Col>
-              <Col span={8}><div style={{ fontWeight: 'bold' }}>众筹总金额：{parseInt(this.state.stock_amount/100)/1000 * parseInt(this.state.stock_num)}</div></Col>
+              <Col span={8}><div style={{ fontWeight: 'bold' }}>发行价(千克/份)：{this.state.stock_amount}</div></Col>
+              <Col span={8}><div style={{ fontWeight: 'bold' }}>众筹总金额：{parseInt(this.state.stock_amount) * parseInt(this.state.stock_num)}</div></Col>
             </Row>
             <Row gutter={16} style={{ marginBottom: 16 }}>
               <Col span={3}>
@@ -230,9 +229,7 @@ class FundingApply extends PureComponent {
               </Col>
             </Row>
             <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
-              <Button type="primary" onClick={() => this.handleCreate(gameRecord, this.state)}>
-                提交
-              </Button>
+              <Button type="primary" onClick={() => this.handleCreate(gameRecord, this.state)}>提交</Button>
             </FormItem>
           </Card>
         </Form>

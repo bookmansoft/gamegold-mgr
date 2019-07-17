@@ -82,6 +82,7 @@ class LoginPage extends Component {
     });
 
   handleSubmit = (err, values) => {
+    let $form = this.loginForm;
     if (!err) {
       const { dispatch } = this.props;
       const { prefix, type } = this.state;
@@ -91,6 +92,8 @@ class LoginPage extends Component {
           ...values,
           prefix, type,
         },
+      }).then(()=>{
+        $form.resetFields();
       });
     }
   };

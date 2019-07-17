@@ -12,7 +12,7 @@ const salt = "038292cfb50d8361a0feb0e3697461c9";
 let remote = new toolkit.gameconn({
     "UrlHead": "http",            //协议选择: http/https
     "webserver": {
-      "host": "127.0.0.1",        //开发使用本地ip：127.0.0.1 打包使用远程主机地址 114.115.167.168
+      "host": "114.116.14.176",   //@warning 开发使用本地ip 127.0.0.1 打包使用远程主机地址 114.116.14.176
       "port": 9901                //远程主机端口
     }
 });
@@ -1087,7 +1087,9 @@ export async function queryFunding(params) {
   }
 }
 
-//--众筹页面调用的ListCp方法
+/**
+ * 众筹页面调用的ListCp方法
+ */
 export async function ListCp(params) {
   try {
     let ret = { code: -200, data: null, message: "react service层无返回值。方法名：ListCp" };
@@ -1108,19 +1110,11 @@ export async function addFunding(params) {
     console.log("调用保存记录的方法:" + JSON.stringify(params));
     let retSave = await remote.fetching({
       func: "cpfunding.CreateRecord", 
-      cpid: params.data.id,
       stock_num: params.state.stock_num,
       stock_amount: params.state.stock_amount,
-      total_amount: params.state.stock_num * params.state.stock_amount,
       stock_rmb: params.state.stock_amount / 100000,//人民币值初始为1000分
       audit_state_id: 1,
       audit_text: '',
-      modify_date: new Date().getTime() / 1000,
-      cp_name: params.data.cp_name,
-      cp_text: params.data.cp_text,
-      cp_type: params.data.cp_type,
-      cp_url: params.data.cp_url,
-      develop_name: params.data.develop_name,
       develop_text: params.state.develop_text,
       cid: params.data.cp_id,
     });

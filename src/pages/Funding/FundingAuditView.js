@@ -34,7 +34,6 @@ const getWindowWidth = () => window.innerWidth || document.documentElement.clien
 @connect(({ fundingauditview, loading }) => ({
   fundingauditview,
   loading: loading.models.fundingauditview,
-  submitting: loading.effects['fundingapply/update'],
 }))
 @Form.create()
 class FundingAuditView extends Component {

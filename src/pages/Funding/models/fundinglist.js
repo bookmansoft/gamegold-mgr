@@ -1,4 +1,4 @@
-import { queryFunding } from '@/services/gamegoldapi';
+import { addFunding, ListCp, queryFunding } from '@/services/gamegoldapi';
 
 export default {
   namespace: 'fundinglist',
@@ -8,6 +8,7 @@ export default {
       list: [],
       pagination: {},
     },
+    cp_list: [],
   },
 
   effects: {
@@ -18,14 +19,31 @@ export default {
         payload: response,
       });
     },
+    *fetchCp({ payload }, { call, put }) {
+      const response = yield call(ListCp, payload);
+      yield put({
+        type: 'saveCp',
+        payload: response,
+      });
+    },
+    //保存整个表单的内容（到数据库）
+    *newFunding({ payload }, { call }) {
+      let ret = yield call(addFunding, payload);
+      return ret;
+    },
   },
 
   reducers: {
-    //注意这里的data
     save(state, action) {
       return {
         ...state,
         data: action.payload,
+      };
+    },
+    saveCp(state, action) {
+      return {
+        ...state,
+        cp_list: action.payload,
       };
     },
   },

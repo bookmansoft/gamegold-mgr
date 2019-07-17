@@ -118,6 +118,8 @@ class Register extends Component {
             ...values,
             prefix,
           },
+        }).then(()=>{
+          form.resetFields();
         });
       }
     });
