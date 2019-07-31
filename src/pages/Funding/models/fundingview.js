@@ -10,8 +10,8 @@ export default {
 
   effects: {
     *fetch({ payload }, { call, put }) {
-      console.log("getFundingView model："+payload.id);
       const response = yield call(getFundingView, payload);
+      console.log('getFundingView return:', response);
       if(response.code == 0) {
         yield put({
           type: 'save',

@@ -12,7 +12,7 @@ const salt = "038292cfb50d8361a0feb0e3697461c9";
 let remote = new toolkit.gameconn({
     "UrlHead": "http",            //协议选择: http/https
     "webserver": {
-      "host": "114.116.14.176",   //@warning 开发使用本地ip 127.0.0.1 打包使用远程主机地址 114.116.14.176
+      "host": "crm.vallnet.cn",   //@warning 开发使用本地ip 127.0.0.1 打包使用远程主机地址 114.116.14.176
       "port": 9901                //远程主机端口
     }
 });
@@ -1148,10 +1148,10 @@ export async function getFundingView(params) {
     });
     console.log("cp信息", retCp);
     if (!!retCp.data.stock) {
-      ret.data.reside_num = retCp.data.stock.sum;
+      ret.data.residue_num = retCp.data.stock.sum;
     }
     else {
-      ret.data.residue = 0;//暂时设置为0
+      ret.data.residue_num = 0;//暂时设置为0
     }
     console.log("最后的结果：", ret.data);
     return ret;

@@ -219,7 +219,12 @@ class MyStock extends PureComponent {
       if (!err) {
         this.props.dispatch({
           type: 'stocklist/bidstock',
-          payload: {cid: this.state.current.cid, srcAddr: this.state.current.addr, num: values['stockNum'], price: values['price']},
+          payload: {
+            cid: this.state.current.cid, 
+            srcAddr: this.state.current.addr, 
+            num: values['stockNum'], 
+            price: 100000*values['price'], //转化为尘
+        },
         }).then(ret=>{
           dispatch({
             type: 'stocklist/mystock',

@@ -51,7 +51,7 @@ class FundingView extends Component {
   }
 
   getCurrentStep() {
-    console.log(this.props.fundingview.data);
+    console.log('fundingview', this.props.fundingview.data);
     return this.props.fundingview.data.audit_state_id;
   }
 
@@ -160,13 +160,13 @@ class FundingView extends Component {
           </Row>
           <Row style={{ marginBottom: 32 }}>
           <Col span={4}>
-              <Pie percent={parseInt((data.stock_num-data.reside_num)*100/data.stock_num+0.5)} subTitle={null} total={parseInt((data.stock_num-data.reside_num)*100/data.stock_num)+'%'} height={120} />
+              <Pie percent={parseInt((data.stock_num-data.residue_num)*100/data.stock_num+0.5)} subTitle={null} total={parseInt((data.stock_num-data.residue_num)*100/data.stock_num)+'%'} height={120} />
             </Col>
             <Col span={8} style={{ marginBottom: 16 }}>
               凭证总数量：{data.stock_num}
             </Col>
             <Col span={8} style={{ marginBottom: 16 }}>
-              未认购数量：{data.reside_num}
+              未认购数量：{data.residue_num}
             </Col>
             <Col span={8}>
               截止时间：{moment(data.sell_limit_date * 1000).format('YYYY-MM-DD HH:mm:ss')}
