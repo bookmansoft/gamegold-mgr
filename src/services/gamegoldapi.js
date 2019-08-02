@@ -451,7 +451,7 @@ export async function getGameFromUrl(params) {
   try {
     let data = await remote.fetching({ 
       func: "cp.getGameFromUrl", 
-      cp_url: `${params.cp_url}/${params.cp_name}` 
+      cp_url: params.cp_url, 
     });
     //patch 更改目录层次结构
     data = data.game;
@@ -783,7 +783,6 @@ export async function getCpPropsDetail(params) {
     func: "prop.getCpPropsDetail", 
     pid: params.pid,
     cp_url: params.cp_url,
-    //cp_url: 'http://localhost:9701/mock/cp122907',
   });
   return ret;
 }
@@ -804,7 +803,6 @@ export async function getGamePropsDetailById(params) {
       func: "prop.getCpPropsDetail", 
       cp_url: ret.data.cp_url,
       pid: ret.data.props_id,
-      //cp_url: 'http://localhost:9701/mock/cp122907',
     });
     return ret;
   }
@@ -822,7 +820,6 @@ export async function getPropsByGame(params) {
   let ret = await remote.fetching({
     func: "prop.getPropsByGame", 
     cp_url: params.cp_url,
-    //cp_url: 'http://localhost:9701/mock/cp122907',
   });
   return ret;
 }

@@ -63,9 +63,14 @@ let store = {
     *getStockOri({ payload }, { call, put }) {
       const response = yield call(queryStockBase, payload);
       if(response.code == 0) {
+        let dt = response.data.map(item=>{
+          //转化下计量单位，直接提供给表单用. 这里顺带说明下 map 函数，虽然它最终生成并返回了一个新的数组，但下述写法中，对原数组元素内部属性的修改真实发生了
+          item.sell_price_kg = parseFloat(item.sell_price/100000).toFixed(3);
+          return item;
+        });
         yield put({
           type: 'saveStockOri',
-          payload: response.data,
+          payload: dt,
         });
       }
     },

@@ -68,7 +68,7 @@ class StockList extends PureComponent {
     },
     {
       title: '挂单价格(千克)',
-      dataIndex: 'sell_price',
+      dataIndex: 'sell_price_kg', //客户端包装出来的一个属性，单位为KG
     },
     {
       title: '操作',
@@ -103,7 +103,12 @@ class StockList extends PureComponent {
       if (!err) {
         this.props.dispatch({
           type: 'stocklist/auctionstock',
-          payload: {cid: this.state.current.cid, srcAddr: this.state.current.addr, num: values['stockNum'], price: this.state.current.sell_price},
+          payload: {
+            cid: this.state.current.cid, 
+            srcAddr: this.state.current.addr, 
+            num: values['stockNum'], 
+            price: this.state.current.sell_price
+          },
         }).then(ret=>{
           dispatch({
             type: 'stocklist/getStockOri',
@@ -225,6 +230,7 @@ class StockList extends PureComponent {
       form: { getFieldDecorator },
       loading,
     } = this.props;
+
     const { selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;
 
     const getModalContent = record => {
