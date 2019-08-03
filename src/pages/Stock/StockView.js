@@ -188,7 +188,7 @@ class StockView extends Component {
               </Row>
               <Row style={{ marginBottom: 16 }}>
                 <Col span={12}>
-                  当前流通市值(Kg)
+                  当前流通市值(千克)
                 </Col>
                 <Col span={12}>
                   {parseInt(detail.sell_sum*detail.sell_price/100)/1000}

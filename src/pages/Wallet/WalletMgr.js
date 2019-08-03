@@ -67,7 +67,7 @@ class WalletMgr extends PureComponent {
       dataIndex: 'category',
     },
     {
-      title: '金额(Kg)',
+      title: '金额(千克)',
       dataIndex: 'amount',
       render: val => <span>{parseInt(val * 1000000 + 0.5) / 1000}</span>
     },
@@ -238,15 +238,15 @@ class WalletMgr extends PureComponent {
           </Row>
           <Divider style={{ marginBottom: 16 }} />
           <Row>
-            <Col sm={24} xs={24}>已确认交易余额:&nbsp;{(info.data != null) && JSON.stringify(info.data.confirmed / 100000)} Kg</Col>
+            <Col sm={24} xs={24}>已确认交易余额:&nbsp;{!!info && !!info.data && JSON.stringify(info.data.confirmed / 100000)} 千克</Col>
           </Row>
           <Row>
             <Col sm={8} xs={8}>
-              未确认交易余额:&nbsp;{(info.data != null) && JSON.stringify((info.data.unconfirmed - info.data.confirmed) / 100000)} Kg
+              未确认交易余额:&nbsp;{!!info && !!info.data && JSON.stringify((info.data.unconfirmed - info.data.confirmed) / 100000)} 千克
             </Col>
           </Row>
         </Card>
-        {data != null && data.list != null &&
+        {!!data && !!data.list &&
           <Card bordered={false} style={{ marginTop: 24 }}>
             <div className={styles.tableList}>
               <div className={styles.tableListForm}>{this.renderForm()}</div>

@@ -77,20 +77,20 @@ class WalletLog extends PureComponent {
             </Row>
             <Row style={{ marginBottom: 32 }}>
               <Col sm={8} xs={12}>
-                交易类型：{(data.details!=null) && (data.details[0].category)}
+                交易类型：{!!data.details && (data.details[0].category)}
               </Col>
               <Col sm={8} xs={12}>
-                交易游戏金数量：{(data.details!=null) && (data.details[0].amount.toFixed(6) * 1000 + 'Kg')}
+                交易游戏金数量：{!!data.details && (data.details[0].amount.toFixed(6) * 1000 + '千克')}
               </Col>
               <Col sm={8} xs={12}>
                 交易时间：{moment(data.time*1000).format('YYYY-MM-DD HH:mm:ss')}
               </Col>
             </Row>
             <Row style={{ marginBottom: 32 }}>
-              <Col sm={24} xs={24}>对方钱包地址：{(data.details!=null) && (data.details[0].address)}</Col>
+              <Col sm={24} xs={24}>对方钱包地址：{!!data.details && (data.details[0].address)}</Col>
             </Row>
             <Row style={{ marginBottom: 32 }}>
-              <Col sm={24} xs={24}>交易描述：{(data.details!=null) && (data.details[0].label)}</Col>
+              <Col sm={24} xs={24}>交易描述：{!!data.details && (data.details[0].label)}</Col>
             </Row>
             <Row style={{ marginBottom: 32 }}>
               <Col sm={4} xs={8}>

@@ -82,7 +82,7 @@ class MarketView extends Component {
       dataIndex: 'sn',
     },
     {
-      title: '金额(Kg)',
+      title: '金额(千克)',
       dataIndex: 'sum',
       render: val => <span>{parseInt(val)/100 / 1000}</span>
     },

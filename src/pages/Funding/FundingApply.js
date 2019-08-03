@@ -101,7 +101,7 @@ class FundingApply extends PureComponent {
   renderOptions = () => {
     const {fundinglist: { cp_list }} = this.props;
 
-    if (cp_list != null) {
+    if (!!cp_list) {
       return cp_list.map(element =>
         <Option key={element.id} value={element.id}> {element.cp_text}</Option>);
     }
@@ -188,10 +188,10 @@ class FundingApply extends PureComponent {
                     rules: [
                       {
                         required: true,
-                        message: "请输入发行价(千克)",
+                        message: "请输入发行价",
                       },
                     ],
-                  })(<Input placeholder="请输入" style={{ width: '100%' }} onChange={this.handleStockAmountChange} />)}
+                  })(<Input addonAfter="千克" placeholder="请输入" style={{ width: '100%' }} onChange={this.handleStockAmountChange} />)}
                 </FormItem>
               </Col>
               <Col span={8}>

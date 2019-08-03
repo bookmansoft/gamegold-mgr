@@ -547,7 +547,7 @@ export async function getWalletLog(params) {
       items: [params.id] 
     });
     console.log("获取钱包收支详情结果：" + JSON.stringify(ret));
-    if (ret.data != null) {
+    if (!!ret.data) {
       return ret.data;
     }
     else {
@@ -951,7 +951,7 @@ export async function getRedpacket(params) {
       id: params.id,
     });
     console.log("获取钱包收支详情结果：" + JSON.stringify(ret));
-    if (ret.data != null) {
+    if (!!ret.data) {
       return ret.data;
     }
     else {

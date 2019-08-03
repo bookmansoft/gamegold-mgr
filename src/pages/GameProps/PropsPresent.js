@@ -283,7 +283,7 @@ class PropsPresent extends PureComponent {
 
           <Card title="结算" bordered={false} headStyle={{ fontWeight: 600 }}>
             <FormItem {...formItemLayout} label="道具商城标价">
-            { currentPropDetail.props_price ? Math.round(currentPropDetail.props_price / 100000 * 100000)/100000 : ''}千克/件
+            { currentPropDetail.props_price ? parseFloat(currentPropDetail.props_price/100000).toFixed(3) : ''}千克/件
             </FormItem>
             <FormItem {...formItemLayout} label="道具含金等级">
               {this.getRankNote(currentPropDetail.props_rank)}
@@ -292,7 +292,7 @@ class PropsPresent extends PureComponent {
               {totalPrice} 千克
             </FormItem>
             <FormItem {...formItemLayout} label="账户备用金余额">
-              { Math.round(confirmed / 100000 * 100000)/100000}千克
+              { parseFloat(confirmed / 100000).toFixed(3)}千克
             </FormItem>
           </Card>
 

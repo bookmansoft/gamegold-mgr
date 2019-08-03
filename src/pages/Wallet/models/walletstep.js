@@ -39,7 +39,7 @@ export default {
         console.log('walletstep fetch');
         const response = yield call(getKeyMaster, payload);
         console.log(response);
-        if (response.data!=null && response.data.mnemonic!=null) {
+        if (!!response.data && !!response.data.mnemonic) {
           //符合条件时才传递
           let orignRememberWord=response.data.mnemonic.phrase;
           // console.log("43:初始化文本");

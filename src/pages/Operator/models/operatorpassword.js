@@ -13,7 +13,7 @@ export default {
   effects: {
     *change({ payload }, { call }) {
       let ret=yield call(changeOperatorPassword, payload);
-      if (ret.code==0 && ret.data!=null) {
+      if (ret.code==0 && !!ret.data) {
         message.success('密码修改成功!');
         return ret;
       }

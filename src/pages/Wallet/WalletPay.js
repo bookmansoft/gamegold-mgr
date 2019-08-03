@@ -122,7 +122,7 @@ class WalletPay extends PureComponent {
                     message: "请输入发送金额(单位Kg)",
                   },
                 ],
-              })(<Input placeholder="请输入发送金额(单位Kg)" />)}
+              })(<Input addonAfter="千克" placeholder="请输入发送金额" />)}
             </FormItem>
             <FormItem {...formItemLayout} label="发送说明">
               {getFieldDecorator('gameDesc', {

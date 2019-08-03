@@ -167,7 +167,7 @@ class GameList extends PureComponent {
   renderOptions = () => {
     const {gamelist: { cp_type_list }} = this.props;
 
-    if (cp_type_list != null) {
+    if (!!cp_type_list) {
       return cp_type_list.map(element =>
         <Option key={element.id} value={element.cp_type_id}> {element.cp_type_id}</Option>);
     }

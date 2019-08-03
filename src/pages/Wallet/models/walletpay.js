@@ -24,7 +24,7 @@ export default {
     *add({ payload }, { call }) {
       let ret = yield call(addWalletPay, payload);
       message.success('提交成功!');
-      if (ret.code==0 && ret.data!=null && ret.data.hash!=null) {
+      if (ret.code==0 && !!ret.data && !!ret.data.hash) {
         return ret.data;
       }
       else {
