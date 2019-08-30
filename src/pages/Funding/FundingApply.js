@@ -209,7 +209,7 @@ class FundingApply extends PureComponent {
             <Row gutter={16} style={{ marginBottom: 16 }}>
               <Col span={8}><div style={{ fontWeight: 'bold' }}>发行凭证总数(份)：{this.state.stock_num}</div></Col>
               <Col span={8}><div style={{ fontWeight: 'bold' }}>发行价(千克/份)：{this.state.stock_amount}</div></Col>
-              <Col span={8}><div style={{ fontWeight: 'bold' }}>众筹总金额：{parseInt(this.state.stock_amount) * parseInt(this.state.stock_num)}</div></Col>
+              <Col span={8}><div style={{ fontWeight: 'bold' }}>众筹总金额(千克)：{this.state.stock_amount*this.state.stock_num}</div></Col>
             </Row>
             <Row gutter={16} style={{ marginBottom: 16 }}>
               <Col span={3}>

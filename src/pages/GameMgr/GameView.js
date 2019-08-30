@@ -87,7 +87,6 @@ const customDot = (dot, { status }) =>
 }))
 
 class GameView extends Component {
-
   renderImg = (text) => {
     if (text && text.length) {
       const imgs = text.map((item, index) =>
@@ -96,8 +95,6 @@ class GameView extends Component {
       return imgs;
     }
   }
-
-
 
   state = {
     visible: false, //发布更新表单可见性
@@ -178,7 +175,6 @@ class GameView extends Component {
       loading
     } = this.props;
 
-
     return (
       <PageHeaderWrapper
         title={gameRecord.cp_name}
@@ -257,9 +253,7 @@ class GameView extends Component {
           </Row>
           <Row style={{ marginBottom: 32 }}>
             <Col sm={4} xs={8}>
-              <Button type="primary" onClick={this.handleBack}>
-                返回游戏列表
-                </Button>
+              <Button type="primary" onClick={this.handleBack}>返回游戏列表</Button>
             </Col>
           </Row>
         </Card>

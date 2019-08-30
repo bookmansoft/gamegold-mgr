@@ -268,7 +268,7 @@ export async function queryUserMgr(params) {
 export async function queryCurrentUser(params) {
   return {
     name: 'Serati Ma',
-    avatar: 'http://114.115.167.168:9701/static/headicon.png',
+    avatar: '',
     userid: '00000001',
     email: 'antdesign@alipay.com',
     signature: '海纳百川，有容乃大',
@@ -499,7 +499,6 @@ export async function getGameView(params) {
     console.log(error);
     return { code: -100, data: null, message: "react service层错误。方法名：getGameView" };
   }
-
 }
 
 /**

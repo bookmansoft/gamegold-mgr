@@ -145,16 +145,16 @@ class StockView extends Component {
       cp_state: 1
       cp_text: "Mercs of Boom(cp010061)"
       cp_type: "SHT"
-      cp_url: "http://localhost:9701/mock"
+      cp_url: "http://h5.gamegold.xin/mock"
       cp_version: "V1.0"
       develop_name: "GAME INSIGHT UAB Strategy"
-      face_url: "http://127.0.0.1:9701/image/1/large_img.jpg"
-      icon_url: "http://127.0.0.1:9701/image/1/icon_img.jpg"
+      face_url: "http://h5.gamegold.xin/image/1/large_img.jpg"
+      icon_url: "http://h5.gamegold.xin/image/1/icon_img.jpg"
       id: 628
       invite_share: 15
       operator_id: 4026
-      pic_urls: (3) ["http://127.0.0.1:9701/image/1/pic1.jpg", "http://127.0.0.1:9701/image/1/pic2.jpg", "http://127.0.0.1:9701/image/1/pic3.jpg"]
-      picture_url: "{"icon_url":"http://127.0.0.1:9701/image/1/icon_img.jpg","face_url":"http://127.0.0.1:9701/image/1/large_img.jpg","pic_urls":["http://127.0.0.1:9701/image/1/pic1.jpg","http://127.0.0.1:9701/image/1/pic2.jpg","http://127.0.0.1:9701/image/1/pic3.jpg"]}"
+      pic_urls: (3) ["http://h5.gamegold.xin/image/1/pic1.jpg", "http://h5.gamegold.xin/image/1/pic2.jpg", "http://h5.gamegold.xin/image/1/pic3.jpg"]
+      picture_url: "{"icon_url":"http://h5.gamegold.xin/image/1/icon_img.jpg","face_url":"http://h5.gamegold.xin/image/1/large_img.jpg","pic_urls":["http://h5.gamegold.xin/image/1/pic1.jpg","http://h5.gamegold.xin/image/1/pic2.jpg","http://h5.gamegold.xin/image/1/pic3.jpg"]}"
       publish_time: 1545606613
       update_content: "更新了最新场景和新的地图"
       update_time: 1545706613
@@ -229,7 +229,7 @@ class StockView extends Component {
 
             </Col>
             <Col span={18}>
-              <iframe src={"http://"+location.hostname+":9701/echart/kline/index.html?cid="+detail.cid} frameBorder="0" width="100%" height="600px" scrolling="no" />
+              <iframe src={"http://"+location.hostname+"/echart/kline/index.html?cid="+detail.cid} frameBorder="0" width="100%" height="600px" scrolling="no" />
             </Col>
           </Row>
 

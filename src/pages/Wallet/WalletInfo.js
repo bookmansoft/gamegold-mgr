@@ -127,7 +127,7 @@ class WalletInfo extends PureComponent {
             </Row>
             <Row style={{ marginBottom: 32 }}>
               <Col sm={24} xs={24}>
-                <img src={!!data && (location.protocol+'//'+location.hostname+':9701/qrcode/'+data.data)} width="300" height="300"/>
+                <img src={!!data && (location.protocol+'//'+location.hostname+'/qrcode/'+data.data)} width="300" height="300"/>
               </Col>
             </Row>
             <Row style={{ marginBottom: 32 }}>

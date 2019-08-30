@@ -5,7 +5,7 @@
 现有的CP创建流程描述如下：
 
 1. 用户登录，访问 游戏管理/添加新游戏 页面，填写 URL地址 和结算钱包地址，其格式举例如下：
-    URL： http://localhost:9701/mock/cp010002
+    URL： http://h5.gamegold.xin/mock/cp010002
     地址：tb1qhv7h493pmfhthel3nf7rrf7f25deywy9ca7suj
 2. 点击验证，系统自动从上述URL地址集采CP信息填入表单
 3. 点击提交，系统提交中台，中台首先向全节点提交创建CP请求，再将CP信息插入中台数据库
