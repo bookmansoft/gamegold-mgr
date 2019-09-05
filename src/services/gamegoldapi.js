@@ -35,13 +35,15 @@ remote.events.on('comm', msg=>{
  */
 export async function RegisterAuthCode(params) {
   let password = crypto.createHash("sha1").update(params.password + salt).digest("hex");
-  let ret = await remote.init().login({
+  let payload = {
     domain: 'auth2step.CRM',                        //指定验证方式为两阶段认证
     openid: params.mail,                            //用户名称
     openkey: password,                              //用户密码，经过了加密转换
-    addrType: 'phone',                              //指定验证方式为手机
-    address: `+${params.prefix}${params.mobile}`,   //作为验证地址的手机号码
-  });
+    addrType: 'phone',                              //验证码接收方式为手机
+    address: `+${params.prefix}${params.mobile}`,   //手机号码
+  };
+  console.log('register', payload);
+  let ret = await remote.init().login(payload);
   
   return { status: "waitingAuthCode" }; //如果返回 ok 则页面将跳转至注册成功页面
 }
