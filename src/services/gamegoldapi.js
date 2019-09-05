@@ -54,9 +54,9 @@ export async function RegisterSubmit(params) {
   let ret = new Promise(resolve => {
     remote.events.once('logined', result => {
       if(result.code == 0) {
-        resolve(afterLogin(true));
+        resolve(afterLogin());
       } else {
-        resolve(afterLogin(false));
+        resolve(afterLogin(new Error('验证码错误')));
       }
     });
   });
@@ -73,11 +73,12 @@ export async function accountLogin(params) {
     switch(params.type) {
       //使用用户名/密码对方式登录
       case 'account' : {
-        return afterLogin(await remote.init().login({ 
+        let ret = await remote.init().login({ 
           domain: 'authpwd.CRM',
           openid: params.userName,
           openkey: crypto.createHash("sha1").update(params.password + salt).digest("hex"), //将密码做加密转换
-        }));
+        });
+        return afterLogin(!!ret? null : new Error('用户名或密码错误'));
       }
 
       //使用两阶段验证模式进行用户登录的第一步：上行手机号码，向服务端请求下发手机验证码
@@ -97,9 +98,9 @@ export async function accountLogin(params) {
         let ret = new Promise(resolve => {
           remote.events.once('logined', result => {
             if(result.code == 0) {
-              resolve(afterLogin(true));
+              resolve(afterLogin());
             } else {
-              resolve(afterLogin(false));
+              resolve(afterLogin(new Error('验证码错误')));
             }
           });
         });
@@ -115,7 +116,7 @@ export async function accountLogin(params) {
     }
   } catch (error) {
     console.log(error);
-    return afterLogin(false);
+    return afterLogin(error);
   }
 }
 
@@ -129,6 +130,7 @@ export async function remoteRelogin() {
       openid = Cookies.get('openid');
       token = Cookies.get('token');
     }
+
     let ret = await remote.init().setUserInfo({domain: 'auth2step.CRM', openid: openid}).setLB(true);
     if(ret) {
       if(remote.rpcMode == remote.CommMode.ws) {
@@ -137,10 +139,11 @@ export async function remoteRelogin() {
       let result = await remote.setUserInfo({domain: 'auth2step.CRM', openid: openid, token: token}).fetching({func:'login.UserLogin'});
       if(result.code == 0) {
         remote.setUserInfo({openid: result.data.openid, token: result.data.token, currentAuthority: result.data.currentAuthority});
-        return afterLogin(true, true); //视为利用缓存重登
+        return afterLogin(null, true); //视为利用缓存重登
       } 
     }
-    return afterLogin(false);
+
+    return afterLogin(new Error('令牌已失效'));
   } catch(e) {
     return Promise.reject(e);
   }
@@ -148,11 +151,11 @@ export async function remoteRelogin() {
 
 /**
  * 收到登录请求的应答后，执行后续操作，返回最终的状态值
- * @param {Boolean} result  登录请求是否被批准
- * @param {Boolean} cookie  是页面刷新/关闭重开后利用缓存进行的重登
+ * @param {Boolean} error  登录成功时为 null 否则为错误对象
+ * @param {Boolean} cookie 是页面刷新/关闭重开后利用缓存进行的重登
  */
-function afterLogin(result, cookie=false) {
-  if (!!result) {
+function afterLogin(error, cookie=false) {
+  if (!error) {
     console.log(`您已成功登录${JSON.stringify(remote.userInfo)}`);
     message.success(`您已成功登录`);
 
@@ -181,9 +184,8 @@ function afterLogin(result, cookie=false) {
     sessionStorage.removeItem('username');
     sessionStorage.removeItem('token');
     sessionStorage.setItem('currentAuthority', JSON.stringify(['guest']));
-    //Cookies.remove('openid');
-    //Cookies.remove('token');
-    return { status: "error" };
+    message.error(error.message);
+    return { status: error.message };
   }
 }
 
@@ -191,6 +193,10 @@ function afterLogin(result, cookie=false) {
  * 用户签退，清除状态缓存
  */
 export async function accountLogout() {
+  sessionStorage.removeItem('username');
+  sessionStorage.removeItem('token');
+  sessionStorage.setItem('currentAuthority', JSON.stringify(['guest']));
+
   //清除 Cookie
   Cookies.remove('openid');
   Cookies.remove('token');
