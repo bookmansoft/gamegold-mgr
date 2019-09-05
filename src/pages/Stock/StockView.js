@@ -145,7 +145,7 @@ class StockView extends Component {
       cp_state: 1
       cp_text: "Mercs of Boom(cp010061)"
       cp_type: "SHT"
-      cp_url: "http://h5.gamegold.xin/mock"
+      cp_url: "http://h5.gamegold.xin/mock/cp010061"
       cp_version: "V1.0"
       develop_name: "GAME INSIGHT UAB Strategy"
       face_url: "http://h5.gamegold.xin/image/1/large_img.jpg"

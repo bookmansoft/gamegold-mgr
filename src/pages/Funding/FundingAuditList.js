@@ -69,7 +69,7 @@ class FundingAuditList extends PureComponent {
     {
       title: '筹款目标金额(千克)',
       dataIndex: 'total_amount',
-      render: val => <span>{parseInt(val/100)/1000}</span>
+      render: val => <span>{parseFloat(val/100000).toFixed(3)}</span>
     },
     {
       title: '操作',

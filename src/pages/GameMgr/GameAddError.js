@@ -1,9 +1,21 @@
-import React, { Fragment } from 'react';
-import { formatMessage, FormattedMessage } from 'umi/locale';
-import { Button, Row, Col, Icon, Steps, Card } from 'antd';
+import React, { PureComponent, Fragment } from 'react';
 import router from 'umi/router';
-import Result from '@/components/Result';
+import {
+  Steps,
+  Form,
+  Button,
+  Card,
+  Row,
+  Col,
+  Divider,
+  InputNumber,
+  Radio,
+  Icon,
+  Tooltip,
+} from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
+import Result from '@/components/Result';
+import styles from './style.less';
 
 const onPrev = () => {
   router.push('/gamemgr/gameadd');
@@ -19,17 +31,25 @@ const actions = (
   </Fragment>
 );
 
-export default () => (
-  <PageHeaderWrapper>
-    <Card bordered={false}>
-      <Result
-        type="error"
-        title="提交失败"
-        description="错误信息：您提交的游戏信息不符合规范，请核实后重新提交！"
-        extra=""
-        actions={actions}
-        style={{ marginTop: 48, marginBottom: 16 }}
-      />
-    </Card>
-  </PageHeaderWrapper>
-);
+class GameAddError extends PureComponent {
+  render() {
+    let msg = this.props.location.query.message;
+
+    return (
+      <PageHeaderWrapper>
+        <Card bordered={false}>
+          <Result
+            type="error"
+            title="提交失败"
+            description={msg}
+            extra=""
+            actions={actions}
+            style={{ marginTop: 48, marginBottom: 16 }}
+          />
+        </Card>
+      </PageHeaderWrapper>
+    )
+  }
+}
+
+export default GameAddError;

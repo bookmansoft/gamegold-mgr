@@ -25,7 +25,7 @@ export default () => (
       <Result
         type="error"
         title="提交失败"
-        description="错误信息：您提交的游戏信息不符合规范，请核实后重新提交！"
+        description="错误信息：您提交的信息不符合规范，请核实后重新提交！"
         extra=""
         actions={actions}
         style={{ marginTop: 48, marginBottom: 16 }}

@@ -439,14 +439,14 @@ export async function addGameMgr(params) {
       func: "cp.Create", 
       items: [params.cp_name, params.cp_url, null, params.cp_type, params.invite_share]
     });
-    //判断返回值是否正确
-    if (ret.code != 0 || ret.data == null) {
-      return { code: -1, message: "调用区块链创建游戏失败！" };
+
+    if (ret.code === 0) {
+      return { code: 0, message: "请求已提交" };
     }
-    return { code: 0, message: "请求已提交" };
+    return { code: ret.code, message: ret.msg };
   } catch (error) {
     console.log(error);
-    return { code: -100, data: null, message: "react service层错误。方法名：addGameMgr" };
+    return { code: -100, data: null, message: `addGameMgr: ${error.message}` };
   }
 }
 
@@ -1108,7 +1108,10 @@ export async function ListCp(params) {
     return { code: -100, data: null, message: "react service层错误。方法名：ListCp" };
   }
 }
-//增加众筹信息
+/**
+ * 增加众筹信息
+ * @param {*} params 
+ */
 export async function addFunding(params) {
   try {
     console.log("调用保存记录的方法:" + JSON.stringify(params));
@@ -1116,8 +1119,6 @@ export async function addFunding(params) {
       func: "cpfunding.CreateRecord", 
       stock_num: params.state.stock_num,
       stock_amount: params.state.stock_amount,
-      stock_rmb: params.state.stock_amount / 100000,//人民币值初始为1000分
-      audit_state_id: 1,
       audit_text: '',
       develop_text: params.state.develop_text,
       cid: params.data.cp_id,

@@ -44,10 +44,11 @@ class GameAdd extends PureComponent {
       type: 'gamelist/addGame',
       payload: theData,
     }).then((ret) => {
+      console.log('addGame', ret);
       if (ret.code === 0) {
         router.push('/gamemgr/gameaddsuccess');
       } else {
-        router.push('/gamemgr/gameadderror');
+        router.push(`/gamemgr/gameadderror?code=${ret.code}&message=${ret.message}`);
       };
     }
     );

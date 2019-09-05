@@ -211,10 +211,10 @@ class FundingAuditView extends Component {
               发行凭证总数(份)：{data.stock_num}
             </Col>
             <Col span={8}>
-              发行价(千克/份)：{data.stock_amount}
+              发行价(千克/份)：{parseFloat(data.stock_amount/100000).toFixed(3)}
             </Col>
             <Col span={8}>
-              众筹总金额(千克)：{data.total_amount}
+              众筹总金额(千克)：{parseFloat(data.total_amount/100000).toFixed(3)}
             </Col>
           </Row>
           <Row style={{ marginBottom: 32 }}>
