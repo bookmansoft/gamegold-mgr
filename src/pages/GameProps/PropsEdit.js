@@ -35,7 +35,6 @@ class PropsEdit extends PureComponent {
     const id = this.state.id;
     return (
         <PageHeaderWrapper title= "修改道具" content= "在这里您可以修改道具">
-
             <Card bordered={false} headStyle={{fontWeight:600}} title={detail.name}>
               <DescriptionList size="large" title="生产信息" style={{ marginBottom: 32 }}>
                 <Description term="生产总量">{detail.num}</Description>

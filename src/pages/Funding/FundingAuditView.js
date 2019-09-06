@@ -44,7 +44,7 @@ class FundingAuditView extends Component {
     // 自定义的state
     id: 0,
     stock_rmb: 10,
-    audit_state_id:1,//审核状态，按下按钮后改为指定的值。
+    audit_state_id:0,//审核状态，按下按钮后改为指定的值。
     audit_text: '',
     cid:'', //链cid
   };
@@ -71,7 +71,7 @@ class FundingAuditView extends Component {
   // }
   //审核通过
   handleAuditPass = (theState,theData) => {
-    this.state.audit_state_id = 2;
+    this.state.audit_state_id = 1;
     this.state.cid=theData.cid;
     //以下代码与审核不通过相同
     const { dispatch, form } = this.props;
@@ -253,7 +253,6 @@ class FundingAuditView extends Component {
             </Col>
           </Row>
 
-
           <Row gutter={16} style={{ marginBottom: 16 }}>
             <Col span={3}>
               <div align="right" style={{ fontWeight: 'bold', marginTop: 5 }}>审核意见:</div>
@@ -289,11 +288,15 @@ class FundingAuditView extends Component {
               </FormItem>
             </Col>
           </Row>
-          <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
-            <Button type="primary" onClick={() => this.handleAuditPass(this.state, data)}>通过</Button>
-            &nbsp;&nbsp;&nbsp;
-            <Button type="primary" onClick={() => this.handleAuditNoPass(this.state, data)}>不通过</Button>
-          </FormItem>
+          {
+            this.state.audit_state_id == 0 && 
+            <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
+              <Button type="primary" onClick={() => this.handleAuditPass(this.state, data)}>通过</Button>
+              &nbsp;&nbsp;&nbsp;
+              <Button type="primary" onClick={() => this.handleAuditNoPass(this.state, data)}>不通过</Button>
+            </FormItem>
+          }
+          
         </Card>
 
       </PageHeaderWrapper>

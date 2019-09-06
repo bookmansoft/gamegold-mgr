@@ -1097,7 +1097,7 @@ export async function queryFunding(params) {
 export async function ListCp(params) {
   try {
     let ret = { code: -200, data: null, message: "react service层无返回值。方法名：ListCp" };
-    console.log("从数据库查询游戏列表cpfunding.ListCp");
+    console.log("从数据库查询游戏列表 cpfunding.ListCp");
     ret = await remote.fetching({
       func: "cpfunding.ListCp", 
     });
@@ -1145,20 +1145,6 @@ export async function getFundingView(params) {
     if (!ret.data) {
       return { code: -200, data: null, message: "react service层无返回值。方法名：getFundingView" };
     }
-
-    //调用链，获取剩余数量
-    let retCp = await remote.fetching({ 
-      func: "cp.ById", 
-      items: [ret.data.cid] 
-    });
-    console.log("cp信息", retCp);
-    if (!!retCp.data.stock) {
-      ret.data.residue_num = retCp.data.stock.sum;
-    }
-    else {
-      ret.data.residue_num = 0;//暂时设置为0
-    }
-    console.log("最后的结果：", ret.data);
     return ret;
   } catch (error) {
     console.log(error);
@@ -1210,7 +1196,6 @@ export async function auditFunding(params) {
 
     let ret = await remote.fetching({
       func: "cpfunding.UpdateRecord", 
-
       id: params.id,
       stock_rmb: params.stock_rmb,//人民币值初始为1000分
       audit_state_id: params.audit_state_id,

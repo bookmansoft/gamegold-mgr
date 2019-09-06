@@ -72,6 +72,11 @@ class FundingAuditList extends PureComponent {
       render: val => <span>{parseFloat(val/100000).toFixed(3)}</span>
     },
     {
+      title: '审核状态',
+      dataIndex: 'audit_state_id',
+      render: val =><span>{this.renderAuditState(val)}</span>
+    },
+    {
       title: '操作',
       render: (text, record) => (
         <Fragment>
@@ -171,7 +176,18 @@ class FundingAuditList extends PureComponent {
     });
   };
 
-
+  renderAuditState(audit_state_id) {
+    switch (parseInt(audit_state_id)) {
+      case 0:
+        return '未审核';
+      case 1:
+        return '已审核';
+      case 2:
+        return '已发行';
+      case 3:
+        return '已被拒';
+    }
+  }
 
   renderForm() {
     const {
@@ -187,10 +203,12 @@ class FundingAuditList extends PureComponent {
           </Col>
           <Col span={6}>
             <FormItem label="审核状态：">
-              {getFieldDecorator('audit_state_id',{initialValue:"1"})(
+              {getFieldDecorator('audit_state_id',{initialValue:"0"})(
                 <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="1">未审核</Option>
-                  <Option value="2">已审核</Option>
+                  <Option value="0">未审核</Option>
+                  <Option value="1">已审核</Option>
+                  <Option value="2">已发布</Option>
+                  <Option value="3">已被拒</Option>
                 </Select>
               )}
             </FormItem>
