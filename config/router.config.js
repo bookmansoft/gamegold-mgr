@@ -267,45 +267,20 @@ export default [
           {
             path: '/usermgr/userlist',
             name: 'userlist',
-            component: './UserMgr/UserList',
-          },
-        ],
-      },
-      // propMgr
-      {
-        name: 'gameprops',
-        icon: 'build',
-        path: '/gameprops',
-        authority: ['user','admin'],
-        routes: [
-          {
-            path: '/gameprops/list',
-            name: 'propslist',
-            component: './GameProps/PropsList',
+            component: './usermgr/UserList',
           },
           {
-            path: '/gameprops/detail/:id',
-            name: 'propsdetail',
-            component: './GameProps/PropsDetail',
-            hideInMenu: true,
-          },
-          {
-            path: '/gameprops/create',
-            name: 'propscreate',
-            component: './GameProps/PropsCreate',
-          },
-          {
-            path: '/gameprops/present/:addr',
+            path: '/usermgr/present/:addr',
             name: 'propspresent',
-            component: './GameProps/PropsPresent',
+            component: './usermgr/PropsPresent',
             hideInMenu: true,
           },
           {
-            path: '/gameprops/present',
+            path: '/usermgr/present',
             name: 'propspresent',
-            component: './GameProps/PropsPresent',
+            component: './usermgr/PropsPresent',
             hideInMenu: true,
-          }
+          },
         ],
       },
       // redpacket
@@ -313,7 +288,7 @@ export default [
         path: '/redpacket',
         name: 'redpacket',
         icon: 'table',
-        authority: ['admin'],
+        authority: ['nobody'],
         routes: [
           {
             path: '/redpacket/redpacketlist',

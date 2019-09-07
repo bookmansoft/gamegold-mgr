@@ -141,7 +141,7 @@ class UserList extends PureComponent {
         $idx++;
       }
       addr = JSON.stringify(addr);
-      router.push('/gameprops/present/'+addr);
+      router.push('/usermgr/present/'+addr);
 
     }else{
       Modal.error({
@@ -190,7 +190,7 @@ class UserList extends PureComponent {
   //赠送道具
   handleDeal = (flag, record) => {
     console.log(record.addr);
-    this.props.history.push("../gameprops/present?address=" + record.addr);
+    this.props.history.push("../usermgr/present?address=" + record.addr);
   };
   //显示下拉框
   renderOptions = () => {

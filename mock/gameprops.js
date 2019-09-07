@@ -25,57 +25,6 @@ function getList(cur = 1, pageSize = 10) {
   return tableListDataSource;
 }
 
-
-function getGamePropsList(req, res, u) {
-  let url = u;
-  if (!url || Object.prototype.toString.call(url) !== '[object String]') {
-    url = req.url; // eslint-disable-line
-  }
-
-  const params = parse(url, true).query;
-
-  let dataSource = getList(params.currentPage, params.pageSize);
-
-  if (params.sorter) {
-    const s = params.sorter.split('_');
-    dataSource = dataSource.sort((prev, next) => {
-      if (s[1] === 'descend') {
-        return next[s[0]] - prev[s[0]];
-      }
-      return prev[s[0]] - next[s[0]];
-    });
-  }
-
-  if (params.id) {
-    dataSource = dataSource.filter(data => data.id.indexOf(params.id) > -1);
-  }
-
-  if (params.name) {
-    dataSource = dataSource.filter(data => data.name.indexOf(params.name) > -1);
-  }
-
-  if (params.game) {
-    dataSource = dataSource.filter(data => data.game.indexOf(params.game) > -1);
-  }
-
-  let pageSize = 10;
-  if (params.pageSize) {
-    pageSize = params.pageSize * 1;
-  }
-
-  const result = {
-    list: dataSource,
-    pagination: {
-      total: 200,
-      pageSize,
-      current: parseInt(params.currentPage, 10) || 1,
-    },
-  };
-
-  return res.json(result);
-}
-
-
 function getUserAllList(cur = 1, pageSize = 10) {
   var myDate = new Date();
   let userAll = [];
@@ -167,58 +116,6 @@ function getAllGame(req, res, u) {
   return res.json(allGame);
 }
 
-
-function getPropsByGame(req, res, u) {
-  let url = u;
-  if (!url || Object.prototype.toString.call(url) !== '[object String]') {
-    url = req.url; // eslint-disable-line
-  }
-
-  const params = parse(url, true).query;
-  let gameId = params.id || '';
-  var myDate = new Date();
-  let gameProps = [];
-  let type_cap = ["装备","消耗","装饰","其他"];
-  for (let i = 1; i < 5; i++) {
-    gameProps.push({
-      id: `${i}`,
-      oid: 'xxxxxxxx-game-gold-boss-tokenxxx00042',
-      name: `游戏道具`+type_cap[Math.floor(Math.random()*type_cap.length)],
-    });
-  }
-  return res.json(gameProps);
-}
-
-function getGamePropsDetail(req, res, u) {
-  let url = u;
-  if (!url || Object.prototype.toString.call(url) !== '[object String]') {
-    url = req.url; // eslint-disable-line
-  }
-
-  const params = parse(url, true).query;
-  var myDate = new Date();
-  let type_cap = ["装备","消耗","装饰","其他"];
-  let cur = 1;
-  let i = params.id || 0;
-  let detailDataSource = {
-    id: `${cur}${i}`,
-    disabled: i % 6 === 0,
-    name: `三级头盔 ${cur}-${i}`,
-    type: Math.floor(Math.random() * 10),
-    type_cap: type_cap[Math.floor(Math.random()*type_cap.length)],
-    game: `守望先锋 ${cur}-${i}`,
-    desc: `这是${cur}-${i}的一段描述`,
-    num: Math.floor(Math.random() * 1000),
-    unstock: Math.floor(Math.random() * 1000),
-    stock: Math.floor(Math.random() * 1000),
-    status: Math.floor(Math.random() * 10) % 4,
-    updatedAt: myDate.setDate(myDate.getDate() + i),
-    createdAt: myDate.setDate(myDate.getDate() + i),
-    iconImg: 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png',
-    moreImg: ['https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png','https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png','https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png','https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png']
-  };
-  return res.json(detailDataSource);
-}
 function getCpPropsDetail(req, res, u) {
   let url = u;
   if (!url || Object.prototype.toString.call(url) !== '[object String]') {
@@ -242,10 +139,7 @@ function getCpPropsDetail(req, res, u) {
 }
 
 export default {
-  'GET /api/gamepropslist': getGamePropsList,
-  'GET /api/gamepropsdetail': getGamePropsDetail,
   'GET /api/allgame': getAllGame,
-  'GET /api/gameprops': getPropsByGame,
   'GET /api/getcppropsdetail': getCpPropsDetail,
   'GET /api/userall': getUserAll,
 };

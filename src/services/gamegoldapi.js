@@ -250,27 +250,21 @@ export async function resetPassword(params) {
 
 //--用户
 export async function queryUserMgr(params) {
-  try {
-    let ret = { code: -200, data: null, message: "react service层无返回值。方法名：queryUserMgr" };
-    if (params == null) {
-      params = {
-        currentPage: 1,
-        pageSize: 10,
-        cp_type: null,
-        amount: null,
-        max_second: null, //90天(3600*24*90)
-      };
-    };
-    ret = await remote.fetching({
-      func: "address.Filter", 
-      items: [params.cp_type, params.amount * 100000000, params.max_second * 3600 * 24, params.currentPage, params.pageSize]
-    });
-    console.log("操作员管理结果列表：" + JSON.stringify(ret));
-    return ret;
-  } catch (error) {
-    console.log(error);
-    return { code: -100, data: null, message: "react service层错误。方法名：queryUserMgr" };
-  }
+  params = params || {
+    currentPage: 1,
+    pageSize: 10,
+    cp_type: '',
+    amount: 0,
+    max_second: 0, //90天(3600*24*90)
+  };
+
+  let ret = await remote.fetching({
+    func: "address.Filter", 
+    items: [params.cp_type, params.amount * 100000000, params.max_second * 3600 * 24, params.currentPage, params.pageSize]
+  });
+
+  console.log("查询用户集合列表：" + JSON.stringify(ret));
+  return ret;
 }
 
 export async function queryCurrentUser(params) {
@@ -650,93 +644,6 @@ export async function addWalletPay(params) {
 
 /**
  *
- * 从本地获取游戏道具列表
- * @export
- * @param {*} params
- * @returns
- */
-export async function getGamePropsList(params) {
-  let result = {};
-  if (params == null) {
-    params = {
-      currentPage: 1,
-      pageSize: 10,
-      pid: '',
-      props_name: '',
-      cid: '',
-    };
-  };
-  result = await remote.fetching({
-    func: "prop.LocalList", 
-    currentPage: params.currentPage,
-    pageSize: params.pageSize,
-    id: typeof (params.id) == "undefined" ? '' : params.id,
-    props_name: typeof (params.props_name) == "undefined" ? '' : params.props_name,
-    cid: typeof (params.cid) == "undefined" ? '' : params.cid,
-  });
-  return result;
-}
-/**
- *
- * 本地创建游戏道具
- * @export
- * @param {*} params
- * @returns
- */
-export async function CreatePropLocal(params) {
-  let res = await remote.fetching({
-    func: "prop.CreateLocal", 
-    props_id: params.props_id,
-    props_name: params.props_name,
-    props_type: params.props_type,
-    cid: params.cid,
-    props_desc: params.props_desc,
-    icon_url: params.icon_url,
-    icon_preview: params.icon_preview,
-    oid: params.oid,
-    status: params.status,
-    props_price: params.props_price,
-    props_rank: params.props_rank,
-    propsAt: params.propsAt,
-  });
-  if (remote.isSuccess(res)) {
-    return res;
-  } else if (res.code == 3) {
-    return { code: 3, msg: '道具已经存在' };
-  }
-  else {
-    return { code: 1, msg: res.msg ? res.msg : '创建失败' };
-  }
-}
-/**
- *
- * 本地游戏道具刷新更新
- * @export
- * @param {*} params
- * @returns
- */
-export async function EditPropLocal(params) {
-  let res = await remote.fetching({
-    func: "prop.EditProp", 
-    id: params.id,
-    props_id: params.props_id,
-    status: params.status,
-    props_name: params.props_name,
-    props_type: params.props_type,
-    props_desc: params.props_desc,
-    icon_url: params.icon_url,
-    icon_preview: params.icon_preview,
-    propsAt: params.propsAt,
-  });
-  if (remote.isSuccess(res)) {
-    return { code: 0 };
-  } else {
-    return { code: 1 };
-  }
-}
-
-/**
- *
  * 游戏道具上链批量
  * @export
  * @param {*} params
@@ -759,27 +666,6 @@ export async function PropCreateListRemote(params) {
 }
 
 /**
- *
- * 本地库获取游戏道具的详情
- * @export
- * @param {*} params
- * @returns
- */
-
-export async function getGamePropsDetail(params) {
-  //本地库直接读取详情
-  let res = await remote.fetching({ 
-    func: "prop.LocalDetail", 
-    id: params.id 
-  });
-  if (remote.isSuccess(res)) {
-    return res;
-  } else {
-    return [];
-  }
-}
-
-/**
  * 游戏接口获取道具详情
  * @export
  * @param {*} params
@@ -788,31 +674,9 @@ export async function getGamePropsDetail(params) {
 export async function getCpPropsDetail(params) {
   let ret = await remote.fetching({
     func: "prop.getCpPropsDetail", 
-    pid: params.pid,
     cp_url: params.cp_url,
+    pid: params.pid,
   });
-  return ret;
-}
-
-/**
- * 根据道具id 从游戏接口获取道具详情
- * @export
- * @param {*} params
- * @returns
- */
-export async function getGamePropsDetailById(params) {
-  let ret = await remote.fetching({
-    func: "prop.LocalDetail", 
-    id: params.id,
-  });
-  if (ret.code == 0) {
-    ret = await remote.fetching({
-      func: "prop.getCpPropsDetail", 
-      cp_url: ret.data.cp_url,
-      pid: ret.data.props_id,
-    });
-    return ret;
-  }
   return ret;
 }
 
@@ -850,26 +714,7 @@ export async function getAllGameList() {
   }
   return ret;
 }
-/**
- *
- * 本地库获取道具根据游戏和状态
- * @export
- * @param {*} params
- * @returns
- */
-export async function getAllPropsByParams(params) {
-  let ret = [];
-  let res = await remote.fetching({
-    func: "prop.getAllPropsByParams", 
-    cid: typeof (params.cid) == "undefined" ? '' : params.cid
-  });
-  if (remote.isSuccess(res)) {
-    for (let i in res['data']) {
-      ret.push(res['data'][i]); //属性
-    }
-  }
-  return ret;
-}
+
 /**
  * 道具赠送
  * @export
@@ -879,14 +724,17 @@ export async function getAllPropsByParams(params) {
 export async function sendListRemote(params) {
   let res = await remote.fetching({
     func: "prop.PropSendListRemote", 
-    id: params.id,
-    addr: params.addr
+    data: {
+      id: params.prop.id,
+      props_price: params.prop.props_price,
+      cid: params.prop.cid,
+      addr: params.addr
+    }
   });
-  console.log(res);
   if (remote.isSuccess(res)) {
-    return { code: 1 };
+    return { code: 0 };
   } else {
-    return { code: 0, msg: res.msg || "道具赠送失败" };
+    return { code: 1, msg: res.msg || "道具赠送失败" };
   }
 }
 

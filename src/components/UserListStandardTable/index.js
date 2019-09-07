@@ -90,19 +90,11 @@ class UserListStandardTable extends PureComponent {
         <div className={styles.tableAlert}>
           <Alert
             message={
-               <Fragment>
-               本次搜索到{total ? total : '-'}位用户,
-               已选择   <a style={{ fontWeight: 600 }}>{selectedRowKeys.length}</a> 位用户&nbsp;&nbsp;
-               {selectedRowKeys.length >0 ? 
-               <Button type="primary" onClick={handlePropsSend} style={{ marginLeft: '50%' }} >
-               赠送道具
-               </Button>
-              : 
-              <Button disabled style={{ marginLeft: '50%' }} >
-                赠送道具
-                </Button>
-              }
-               
+              <Fragment>
+                本次搜索到{total ? total : '-'}位用户, 已选择<a style={{ fontWeight: 600 }}>{selectedRowKeys.length}</a>位用户&nbsp;&nbsp;
+                {selectedRowKeys.length >0 ? 
+                  <Button type="primary" onClick={handlePropsSend} style={{ marginLeft: '50%' }} >赠送道具</Button> : <Button disabled style={{ marginLeft: '50%' }} >赠送道具</Button>
+                }
              </Fragment>
             }
             type="info"

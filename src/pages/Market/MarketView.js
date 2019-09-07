@@ -21,7 +21,6 @@ import {
 
 } from 'antd';
 import classNames from 'classnames';
-import DescriptionList from '@/components/DescriptionList';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import styles from './MarketView.less';
 import { Pie } from '@/components/Charts';
