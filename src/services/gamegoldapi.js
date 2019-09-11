@@ -666,21 +666,6 @@ export async function PropCreateListRemote(params) {
 }
 
 /**
- * 游戏接口获取道具详情
- * @export
- * @param {*} params
- * @returns
- */
-export async function getCpPropsDetail(params) {
-  let ret = await remote.fetching({
-    func: "prop.getCpPropsDetail", 
-    cp_url: params.cp_url,
-    pid: params.pid,
-  });
-  return ret;
-}
-
-/**
  *
  * 游戏厂商获取所有游戏道具
  * @export

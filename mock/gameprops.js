@@ -116,31 +116,8 @@ function getAllGame(req, res, u) {
   return res.json(allGame);
 }
 
-function getCpPropsDetail(req, res, u) {
-  let url = u;
-  if (!url || Object.prototype.toString.call(url) !== '[object String]') {
-    url = req.url; // eslint-disable-line
-  }
-
-  const params = parse(url, true).query;
-  var myDate = new Date();
-  let type_cap = ["装备","消耗","装饰","其他"];
-  let cur = 1;
-  let i = params.id || 0;
-  let detailDataSource = {
-    oid: `xxxxxxxx-game-gold-boss-tokenxxx00042`,
-    name: type_cap[Math.floor(Math.random()*type_cap.length)],
-    type: Math.floor(Math.random() * 10),
-    desc: `这是${cur}-${i}的一段描述`,
-    iconImg: 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png',
-    moreImg: ['https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png','https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png','https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png','https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png']
-  };
-  return res.json(detailDataSource);
-}
-
 export default {
   'GET /api/allgame': getAllGame,
-  'GET /api/getcppropsdetail': getCpPropsDetail,
   'GET /api/userall': getUserAll,
 };
 

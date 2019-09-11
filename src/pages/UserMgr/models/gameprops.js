@@ -1,6 +1,5 @@
 import { 
-  getCpPropsDetail, getPropsByGame, 
-  getAllGameList, PropCreateListRemote,getBalanceAll,sendListRemote
+  getPropsByGame, getAllGameList, PropCreateListRemote,getBalanceAll,sendListRemote
 } from '@/services/gamegoldapi';
 
 export default {
@@ -21,10 +20,6 @@ export default {
         type: 'allList',
         allListData: response,
       });
-    },
-    *cpPropsDetail({ payload }, { call, put }) {
-      const res = yield call(getCpPropsDetail, payload);
-      return res;
     },
     *getPropsByGame({ payload }, { call, put }) {
       const response = yield call(getPropsByGame, payload);
