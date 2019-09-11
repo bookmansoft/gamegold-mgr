@@ -39,6 +39,7 @@ class GameList extends PureComponent {
     expandForm: false,
     selectedRows: [],
     formValues: {},
+    query: {},
     stepFormValues: {},
     //#region 控制模态框的显示状态
     purchase: {
@@ -48,16 +49,6 @@ class GameList extends PureComponent {
     current: {},
     //#endregion
   };
-
-  componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'gamelist/fetch',
-    });
-    dispatch({
-      type: 'gamelist/fetchCpType'
-    });
-  }
 
   //查看页面
   handleOrder = (flag, record) => {
@@ -116,9 +107,11 @@ class GameList extends PureComponent {
       params.sorter = `${sorter.field}_${sorter.order}`;
     }
 
+    this.setState({query: params});
+
     dispatch({
       type: 'gamelist/fetch',
-      payload: params,
+      payload: this.state.query,
     });
   };
 
@@ -126,11 +119,11 @@ class GameList extends PureComponent {
     const { form, dispatch } = this.props;
     form.resetFields();
     this.setState({
-      formValues: {},
+      query: {},
     });
     dispatch({
       type: 'gamelist/fetch',
-      payload: {},
+      payload: this.state.query,
     });
   };
 
@@ -142,18 +135,17 @@ class GameList extends PureComponent {
     form.validateFields((err, fieldsValue) => {
       if (err) return;
 
-      const values = {
+      this.setState({formValues: {
         ...fieldsValue,
         updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
-      };
-
-      this.setState({
-        formValues: values,
-      });
-
+      }});
+      this.setState({query: {
+        ...fieldsValue,
+        updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
+      }});
       dispatch({
         type: 'gamelist/fetch',
-        payload: values,
+        payload: this.state.query,
       });
     });
   };
@@ -162,6 +154,37 @@ class GameList extends PureComponent {
   handleView = (flag, record) => {
     this.props.history.push("./gameview?id=" + record.id);
   };
+
+  getOperation = (record) => {
+    switch(record.cp_state) {
+      case 0: return '激活';
+      case 1: return '禁用';
+    }
+  }
+
+  handleState = (record) => {
+    const { dispatch } = this.props;
+
+    switch(record.cp_state) {
+      case 0: 
+        dispatch({
+          type: 'gamelist/setstatus',
+          payload: {cp_id:record.id, cp_st:1},
+        });
+        break;
+
+      case 1: 
+        dispatch({
+          type: 'gamelist/setstatus',
+          payload: {cp_id:record.id, cp_st:0},
+        });
+        break;
+    }
+    dispatch({
+      type: 'gamelist/fetch',
+      payload: this.state.query,
+    });
+  }
 
   //显示下拉框
   renderOptions = () => {
@@ -235,7 +258,7 @@ class GameList extends PureComponent {
     {
       title: '游戏状态',
       dataIndex: 'cp_state',
-      render: val => <span>{(val == '0') ? '未上线' : '正常运营'}</span>
+      render: val => <span>{(val == '0') ? '待审核' : '已上线'}</span>
     },
     {
       title: '添加时间',
@@ -246,6 +269,7 @@ class GameList extends PureComponent {
       title: '操作',
       render: (text, record) => (
         <Fragment>
+          <a onClick={() => this.handleState(record)}>{this.getOperation(record)}</a>&nbsp; | &nbsp;
           <a onClick={() => this.handleView(true, record)}>详情</a>&nbsp; | &nbsp;
           <a onClick={() => this.handleOrder(true, record)}>消费</a>
         </Fragment>
@@ -309,6 +333,16 @@ class GameList extends PureComponent {
         </Card>
       </PageHeaderWrapper>
     );
+  };
+
+  componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'gamelist/fetchCpType'
+    });
+    dispatch({
+      type: 'gamelist/fetch',
+    });
   }
 }
 

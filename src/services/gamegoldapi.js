@@ -445,6 +445,28 @@ export async function addGameMgr(params) {
 }
 
 /**
+ * 激活/禁用游戏
+ * @param {*} params 
+ */
+export async function changeGame(params) {
+  try {
+    //向主网发起CP注册请求
+    let ret = await remote.fetching({
+      func: "cp.UpdateRecord", 
+      ...params,
+    });
+
+    if (ret.code === 0) {
+      return { code: 0, message: "请求已提交" };
+    }
+    return { code: ret.code, message: ret.msg };
+  } catch (error) {
+    console.log(error);
+    return { code: -100, data: null, message: `addGameMgr: ${error.message}` };
+  }
+}
+
+/**
  * 从指定URL中集采游戏信息
  * @param {*} params 
  * @param {String} params.cp_url 准备保存为cp_url的外部URL字段值
