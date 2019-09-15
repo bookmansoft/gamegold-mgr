@@ -2,6 +2,7 @@ import { formatMessage } from 'umi/locale';
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
+import Indicator from '../../utils/Indicator';
 import {
   Row,
   Col,
@@ -18,6 +19,12 @@ import SimpleTable from '@/components/SimpleTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
 import styles from './GameList.less';
+
+//CP状态位标志
+let CpStatus = {
+  Forbid: 1,  //禁用
+  Top: 2,     //置顶
+}
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -156,30 +163,57 @@ class GameList extends PureComponent {
   };
 
   getOperation = (record) => {
-    switch(record.cp_state) {
-      case 0: return '激活';
-      case 1: return '禁用';
+    if(Indicator.inst(record.status).check(CpStatus.Forbid)) {
+      return '激活';
+    } else {
+      return '禁用';
     }
   }
 
   handleState = (record) => {
     const { dispatch } = this.props;
 
-    switch(record.cp_state) {
-      case 0: 
-        dispatch({
-          type: 'gamelist/setstatus',
-          payload: {cp_id:record.id, cp_st:1},
-        });
-        break;
-
-      case 1: 
-        dispatch({
-          type: 'gamelist/setstatus',
-          payload: {cp_id:record.id, cp_st:0},
-        });
-        break;
+    if(Indicator.inst(record.status).check(CpStatus.Forbid)) {
+      dispatch({
+        type: 'gamelist/setstatus',
+        payload: {cp_id:record.id, cp_st:1},
+      });
+    } else {
+      dispatch({
+        type: 'gamelist/setstatus',
+        payload: {cp_id:record.id, cp_st:0},
+      });
     }
+
+    dispatch({
+      type: 'gamelist/fetch',
+      payload: this.state.query,
+    });
+  }
+
+  getRanking = (record) => {
+    if(Indicator.inst(record.status).check(CpStatus.Top)) {
+      return '取消置顶';
+    } else {
+      return '置顶';
+    }
+  }
+
+  handleRanking = (record) => {
+    const { dispatch } = this.props;
+
+    if(Indicator.inst(record.status).check(CpStatus.Top)) { 
+      dispatch({
+        type: 'gamelist/setstatus',
+        payload: {cp_id:record.id, ranking:0},
+      });
+    } else {
+      dispatch({
+        type: 'gamelist/setstatus',
+        payload: {cp_id:record.id, ranking:1},
+      });
+    }
+
     dispatch({
       type: 'gamelist/fetch',
       payload: this.state.query,
@@ -269,6 +303,7 @@ class GameList extends PureComponent {
       title: '操作',
       render: (text, record) => (
         <Fragment>
+          <a onClick={() => this.handleRanking(record)}>{this.getRanking(record)}</a>&nbsp; | &nbsp;
           <a onClick={() => this.handleState(record)}>{this.getOperation(record)}</a>&nbsp; | &nbsp;
           <a onClick={() => this.handleView(true, record)}>详情</a>&nbsp; | &nbsp;
           <a onClick={() => this.handleOrder(true, record)}>消费</a>
