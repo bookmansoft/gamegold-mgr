@@ -22,8 +22,9 @@ import styles from './GameList.less';
 
 //CP状态位标志
 let CpStatus = {
-  Forbid: 1,  //禁用
-  Top: 2,     //置顶
+  Activate: 1, //激活
+  Forbid: 2,   //禁用
+  Top: 4,      //置顶
 }
 
 const FormItem = Form.Item;
@@ -163,8 +164,10 @@ class GameList extends PureComponent {
   };
 
   getOperation = (record) => {
-    if(Indicator.inst(record.status).check(CpStatus.Forbid)) {
+    if(record.cp_state == 0) {
       return '激活';
+    } else if(Indicator.inst(record.cp_state).check(CpStatus.Forbid)) {
+      return '解禁';
     } else {
       return '禁用';
     }
@@ -173,15 +176,20 @@ class GameList extends PureComponent {
   handleState = (record) => {
     const { dispatch } = this.props;
 
-    if(Indicator.inst(record.status).check(CpStatus.Forbid)) {
+    if(record.cp_state == 0) {
       dispatch({
         type: 'gamelist/setstatus',
-        payload: {cp_id:record.id, cp_st:1},
+        payload: {cp_id:record.id, activate:1},
+      });
+    } else if(Indicator.inst(record.cp_state).check(CpStatus.Forbid)) {
+      dispatch({
+        type: 'gamelist/setstatus',
+        payload: {cp_id:record.id, forbid:0},
       });
     } else {
       dispatch({
         type: 'gamelist/setstatus',
-        payload: {cp_id:record.id, cp_st:0},
+        payload: {cp_id:record.id, forbid:1},
       });
     }
 
@@ -192,7 +200,9 @@ class GameList extends PureComponent {
   }
 
   getRanking = (record) => {
-    if(Indicator.inst(record.status).check(CpStatus.Top)) {
+    if(record.cp_state == 0) {
+      return '';
+    } else if(Indicator.inst(record.cp_state).check(CpStatus.Top)) {
       return '取消置顶';
     } else {
       return '置顶';
@@ -200,9 +210,13 @@ class GameList extends PureComponent {
   }
 
   handleRanking = (record) => {
+    if(record.cp_state == 0) {
+      return;
+    }
+
     const { dispatch } = this.props;
 
-    if(Indicator.inst(record.status).check(CpStatus.Top)) { 
+    if(Indicator.inst(record.cp_state).check(CpStatus.Top)) { 
       dispatch({
         type: 'gamelist/setstatus',
         payload: {cp_id:record.id, ranking:0},
