@@ -140,7 +140,7 @@ class PropsPresent extends PureComponent {
     });
   };
 
-  //"props_rank": "{props_rank}", //白绿蓝紫橙,对应于1-5%,2-10%,3-20%,4-50%,5-80%
+  //"prop_rank": "{prop_rank}", //白绿蓝紫橙,对应于1-5%,2-10%,3-20%,4-50%,5-80%
   getRankNote(rank) {
     let rankNote = '';
     switch (parseInt(rank)) {
@@ -226,7 +226,7 @@ class PropsPresent extends PureComponent {
                   ],
                 })(
                   <Select onChange={this.onPropsChange}>
-                    {gamePropsList.map(propbyparams => <Option key={propbyparams.id} value={JSON.stringify(propbyparams)}>{propbyparams.props_name}</Option>)}
+                    {gamePropsList.map(propbyparams => <Option key={propbyparams.id} value={JSON.stringify(propbyparams)}>{propbyparams.prop_name}</Option>)}
                   </Select>
                 )}
               </FormItem>
@@ -236,14 +236,14 @@ class PropsPresent extends PureComponent {
           <Card bordered={false} headStyle={{ fontWeight: 600 }} title="道具信息预览">
             <DescriptionList size="large" style={{ marginBottom: 32 }}>
               <Description term="道具ID">{currentPropDetail.id || ''}</Description>
-              <Description term="道具名称">{currentPropDetail.props_name || ''}</Description>
-              <Description term="道具属性">{currentPropDetail.props_type || ''}</Description>
+              <Description term="道具名称">{currentPropDetail.prop_name || ''}</Description>
+              <Description term="道具属性">{currentPropDetail.prop_type || ''}</Description>
               <Description term="所属游戏">{this.state.cp_text || ''}</Description>
-              <Description term="商城标价">{currentPropDetail.props_price || ''}</Description>
-              <Description term="含金等级">{this.getRankNote(currentPropDetail.props_rank)}</Description>
+              <Description term="商城标价">{currentPropDetail.prop_price || ''}</Description>
+              <Description term="含金等级">{this.getRankNote(currentPropDetail.prop_rank)}</Description>
             </DescriptionList>
             <DescriptionList size="large">
-              <Description term="道具描述">{currentPropDetail.props_desc || ''}</Description>
+              <Description term="道具描述">{currentPropDetail.prop_desc || ''}</Description>
               <Description span={24} style={{ marginTop: 32 }}>
                 <img width={120} src={currentPropDetail.icon || ''} />
               </Description>
@@ -251,8 +251,8 @@ class PropsPresent extends PureComponent {
           </Card>            
 
           <Card title="结算" bordered={false} headStyle={{ fontWeight: 600 }}>
-            <FormItem {...formItemLayout} label="单 价">{parseFloat(currentPropDetail.props_price/100000).toFixed(3)}千克/件</FormItem>
-            <FormItem {...formItemLayout} label="含 金 量">{this.getRankNote(currentPropDetail.props_rank)}</FormItem>
+            <FormItem {...formItemLayout} label="单 价">{parseFloat(currentPropDetail.prop_price/100000).toFixed(3)}千克/件</FormItem>
+            <FormItem {...formItemLayout} label="含 金 量">{this.getRankNote(currentPropDetail.prop_rank)}</FormItem>
             <FormItem {...formItemLayout} label="费 用">{totalPrice}千克</FormItem>
             <FormItem {...formItemLayout} label="备 用 金">{ parseFloat(confirmed / 100000).toFixed(3)}千克</FormItem>
           </Card>

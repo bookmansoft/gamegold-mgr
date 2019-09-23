@@ -733,7 +733,7 @@ export async function sendListRemote(params) {
     func: "prop.PropSendListRemote", 
     data: {
       id: params.prop.id,
-      props_price: params.prop.props_price,
+      prop_price: params.prop.prop_price,
       cid: params.prop.cid,
       addr: params.addr
     }
