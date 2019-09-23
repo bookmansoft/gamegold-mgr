@@ -239,8 +239,6 @@ class PropsPresent extends PureComponent {
               <Description term="道具名称">{currentPropDetail.props_name || ''}</Description>
               <Description term="道具属性">{currentPropDetail.props_type || ''}</Description>
               <Description term="所属游戏">{this.state.cp_text || ''}</Description>
-              <Description term="添加时间">{currentPropDetail.props_createtime || ''}</Description>
-              <Description term="销售状态">{currentPropDetail.props_status || ''}</Description>
               <Description term="商城标价">{currentPropDetail.props_price || ''}</Description>
               <Description term="含金等级">{this.getRankNote(currentPropDetail.props_rank)}</Description>
             </DescriptionList>
