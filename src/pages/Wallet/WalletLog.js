@@ -29,25 +29,19 @@ import styles from './WalletLog.less';
 
 const FormItem = Form.Item;
 const { RangePicker } = DatePicker;
-const getValue = obj =>
-  Object.keys(obj)
-    .map(key => obj[key])
-    .join(',');
-
-
-
+const getValue = obj => Object.keys(obj).map(key => obj[key]).join(',');
 
 /* eslint react/no-multi-comp:0 */
-@connect(({ walletlog, loading }) => ({
-  walletlog,
-  loading: loading.models.walletlog,
+@connect(({ walletinfo, loading }) => ({
+  walletinfo,
+  loading: loading.models.walletinfo,
 }))
 @Form.create()
 class WalletLog extends PureComponent {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'walletlog/fetch',
+      type: 'walletinfo/fetchLog',
       payload: {id:this.props.location.query.id},//这里传入交易id值
     });
   }
@@ -58,7 +52,7 @@ class WalletLog extends PureComponent {
 
   render() {
     const {
-      walletlog: { data },
+      walletinfo: { data },
       loading,
     } = this.props;
 

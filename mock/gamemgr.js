@@ -137,9 +137,6 @@ function getWalletInfo(req, res, u) {
   return res.json(result2);
 }
 
-
-
-
 const gameDataJson={
     gameState:2,
     publishDate:'2017-11-08 10:23:22',

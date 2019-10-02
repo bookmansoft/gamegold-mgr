@@ -15,9 +15,9 @@ const formItemLayout = {
   },
 };
 
-@connect(({ walletstep, loading }) => ({
-  data: walletstep,
-  loading: loading.models.walletstep,
+@connect(({ walletinfo, loading }) => ({
+  data: walletinfo,
+  loading: loading.models.walletinfo,
 }))
 @Form.create()
 class WalletStep1 extends React.PureComponent {
@@ -25,7 +25,7 @@ class WalletStep1 extends React.PureComponent {
     console.log("didmount");
     const { dispatch } = this.props;
     dispatch({
-      type: 'walletstep/fetch',
+      type: 'walletinfo/fetchSteps',
     });
     console.log("didmount ok");
   }
@@ -36,7 +36,7 @@ class WalletStep1 extends React.PureComponent {
       validateFields((err, values) => {
         if (!err) {
           dispatch({
-            type: 'walletstep/saveStepFormData',
+            type: 'walletinfo/saveStepFormData',
             payload: values,
           });
           router.push('/wallet/step-form/confirm');

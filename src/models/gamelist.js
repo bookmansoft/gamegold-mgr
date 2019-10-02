@@ -1,4 +1,4 @@
-import { changeGame, addGameMgr, getGameView, getGameFromUrl, payOrder, queryGameMgr, ListCpType } from '@/services/gamegoldapi';
+import { getGuiderAddress, changeGame, addGameMgr, getGameView, getGameFromUrl, payOrder, queryGameMgr, ListCpType } from '@/services/gamegoldapi';
 
 export default {
   namespace: 'gamelist',
@@ -24,7 +24,6 @@ export default {
         payload: response,
       });
     },
-
     *addGame({ payload }, { call }) {
       let ret=yield call(addGameMgr, payload);
       return ret;
@@ -32,12 +31,16 @@ export default {
     *setstatus({ payload }, { call }) {
       yield call(changeGame, payload);
     },
+    *guiderAddr({ payload }, { call }) {
+      return yield call(getGuiderAddress, payload);
+    },
     *getGameRecord({ payload }, { call, put }) {
       const response = yield call(getGameView, payload);
       yield put({
         type: 'saveGameRecord',
         payload: response,
       });
+      return response;
     },
     *fetch({ payload }, { call, put }) {
       const response = yield call(queryGameMgr, payload);

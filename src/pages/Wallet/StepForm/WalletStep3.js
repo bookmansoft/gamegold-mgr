@@ -5,8 +5,8 @@ import router from 'umi/router';
 import Result from '@/components/Result';
 import styles from './style.less';
 
-@connect(({ walletstep }) => ({
-  data: walletstep.step,
+@connect(({ walletinfo }) => ({
+  data: walletinfo.steps,
 }))
 class WalletStep3 extends React.PureComponent {
   render() {

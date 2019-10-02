@@ -48,10 +48,8 @@ class OperatorPassword extends PureComponent {
     })
   };
 
-  //转出
   handleCancel = () => {
     history.back();
-    // router.push('/wallet/walletpay');
   };
 
   render() {

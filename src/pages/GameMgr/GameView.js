@@ -3,8 +3,10 @@ import { connect } from 'dva';
 import Debounce from 'lodash-decorators/debounce';
 import Bind from 'lodash-decorators/bind';
 import moment from 'moment';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import {
+  message,
   Button,
   Menu,
   Dropdown,
@@ -25,12 +27,24 @@ import DescriptionList from '@/components/DescriptionList';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import styles from './GameView.less';
 
+/**
+ * 二维码可视组件, 注意当前发现的一个问题：如果 value 未设置或设置为null ，将会抛出未捕获错误，打断页面的正常显示
+ * @description
+ * <QRCode value="http://www.vallnet.cn/" />
+ *  [prop]      [type]              [default value]
+ *  value       string              需要编码的内容，例如一个URL地址
+ *  size        number              128
+ *  bgColor     string (CSS color)  "#FFFFFF"
+ *  fgColor     string (CSS color)  "#000000"
+ *  level       string (L/M/Q/H)    'L'
+ */
+import QRCode from 'qrcode.react';
+
 const FormItem = Form.Item;
 const { Step } = Steps;
 
 const PublishForm = Form.create()(
   class extends React.Component {
-
     render() {
       const { visible, onCancel, onCreate, form } = this.props;
       const { getFieldDecorator } = form;
@@ -66,9 +80,7 @@ const PublishForm = Form.create()(
 const getWindowWidth = () => window.innerWidth || document.documentElement.clientWidth;
 
 const popoverContent = (
-  <div style={{ width: 160 }}>
-    审核细节内容
-  </div>
+  <div style={{ width: 160 }}>审核细节内容</div>
 );
 
 const customDot = (dot, { status }) =>
@@ -137,6 +149,13 @@ class GameView extends Component {
     dispatch({
       type: 'gamelist/getGameRecord',
       payload: { id: this.props.location.query.id },
+    }).then(record=>{
+      dispatch({
+        type: 'gamelist/guiderAddr',
+        payload: { cid: record.cp_id },
+      }).then(rt=>{
+        this.setState({gaddr: rt.data});
+      });
     });
 
     this.setStepDirection();
@@ -169,11 +188,14 @@ class GameView extends Component {
   }
 
   render() {
-    const { stepDirection, operationkey } = this.state;
+    const { gaddr, stepDirection, operationkey } = this.state;
     const {
       gamelist: { gameRecord },
       loading
     } = this.props;
+
+    let qrPlatform = `http://wallet.gamegold.xin/?path=/guider/${encodeURIComponent(JSON.stringify({gaddr: gaddr}))}`;
+    let qrGame = `http://wallet.gamegold.xin/?path=/guider/${encodeURIComponent(JSON.stringify({cid: gameRecord.cp_id, gaddr: gaddr}))}`;
 
     return (
       <PageHeaderWrapper
@@ -212,8 +234,25 @@ class GameView extends Component {
               )}
             </Col>
           </Row>
+
           <Row style={{ marginBottom: 32 }}>
-            <Col sm={24} xs={24}>URL地址：{gameRecord.cp_url}</Col>
+            <Col sm={24} xs={24}>官方地址:&nbsp;{gameRecord.cp_url}</Col>
+            <Col sm={24} xs={24}>平台二维码
+              <QRCode size={150} value={qrPlatform} />
+            </Col>
+            <Col sm={24} xs={24}>
+              <CopyToClipboard text={qrPlatform} onCopy={()=>{message.success(`已成功拷贝至剪贴板`);}}>
+                <Button block icon="copy">{'拷贝地址'}</Button>
+              </CopyToClipboard>
+            </Col>
+            <Col sm={24} xs={24}>产品二维码
+              <QRCode size={150} value={qrGame} />
+            </Col>
+            <Col sm={24} xs={24}>
+              <CopyToClipboard text={qrGame} onCopy={()=>{message.success(`已成功拷贝至剪贴板`);}}>
+                <Button block icon="copy">{'拷贝地址'}</Button>
+              </CopyToClipboard>
+            </Col>
           </Row>
 
           <Divider style={{ margin: '20px 0' }} />

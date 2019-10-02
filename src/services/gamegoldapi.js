@@ -633,7 +633,10 @@ export async function getWalletInfo(params) {
   }
 }
 
-//--账户余额
+/**
+ * 查询账户余额
+ * @param {*} params 
+ */
 export async function getBalanceAll(params) {
   try {
     let ret = { code: -200, data: null, message: "react service层无返回值。方法名：getBalanceAll" };
@@ -644,6 +647,22 @@ export async function getBalanceAll(params) {
     return ret;
   } catch (error) {
     console.log(error);
+    return { code: -100, data: null, message: "react service层错误。方法名：getBalanceAll" };
+  }
+}
+
+/**
+ * 查询媒体识别码
+ * @param {*} params 
+ */
+export async function getGuiderAddress(params) {
+  try {
+    let ret = await remote.fetching({ 
+      func: "cp.getGuiderAddress",
+      items: {cid: params.cid}
+    });
+    return ret;
+  } catch (error) {
     return { code: -100, data: null, message: "react service层错误。方法名：getBalanceAll" };
   }
 }

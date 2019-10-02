@@ -4,6 +4,7 @@ import { connect } from 'dva';
 import { formatMessage, FormattedMessage } from 'umi/locale';
 import router from 'umi/router';
 import moment from 'moment';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import {
   Row,
   Col,
@@ -27,6 +28,7 @@ import {
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
 import styles from './WalletInfo.less';
+import QRCode from 'qrcode.react';
 
 const FormItem = Form.Item;
 const { RangePicker } = DatePicker;
@@ -126,7 +128,12 @@ class WalletInfo extends PureComponent {
             </Row>
             <Row style={{ marginBottom: 32 }}>
               <Col sm={24} xs={24}>
-                <img src={!!data && (`http://crm.vallnet.cn/qrcode/${data.data}`)} width="300" height="300"/>
+                <QRCode size={300} value={(!!data && data.data)||''} />
+              </Col>
+              <Col sm={24} xs={24}>
+                <CopyToClipboard text={data.data} onCopy={()=>{message.success(`已成功拷贝至剪贴板`);}}>
+                  <Button block icon="copy">{'拷贝地址'}</Button>
+                </CopyToClipboard>
               </Col>
             </Row>
             <Row style={{ marginBottom: 32 }}>

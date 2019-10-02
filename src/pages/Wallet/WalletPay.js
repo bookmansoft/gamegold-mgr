@@ -23,11 +23,11 @@ const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
 @connect(({ 
-  walletpay,
+  walletinfo,
   loading 
 }) => ({ 
-  walletpay,
-  submitting: loading.effects['walletpay/add'],
+  walletinfo,
+  submitting: loading.effects['walletinfo/add'],
 }))
 @Form.create()
 class WalletPay extends PureComponent {
@@ -37,7 +37,7 @@ class WalletPay extends PureComponent {
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         dispatch({
-          type: 'walletpay/add',
+          type: 'walletinfo/add',
           payload: values,
         }).then((ret) => {
           console.log(ret);
@@ -60,18 +60,18 @@ class WalletPay extends PureComponent {
   };
 
   componentWillMount() {
-    const { walletpay, dispatch } = this.props;
+    const { walletinfo, dispatch } = this.props;
 
     if(!!this.props.location.query.id) {
       dispatch({
-        type: 'walletpay/getaddress',
+        type: 'walletinfo/getaddress',
         payload: {account: this.props.location.query.id}
       });
     }
   }
 
   render() {
-    const { walletpay, submitting } = this.props;
+    const { walletinfo, submitting } = this.props;
     const {
       form: { getFieldDecorator, getFieldValue },
     } = this.props;
@@ -104,7 +104,7 @@ class WalletPay extends PureComponent {
           <Form onSubmit={this.handleSubmit} hideRequiredMark={false} style={{ marginTop: 8 }}>
             <FormItem {...formItemLayout} label="收款地址">
               {getFieldDecorator('address', {
-                initialValue: walletpay.data.address,
+                initialValue: walletinfo.pay.address,
                 rules: [
                   {
                     required: true,

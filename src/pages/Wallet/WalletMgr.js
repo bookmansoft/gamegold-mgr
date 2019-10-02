@@ -37,9 +37,9 @@ const getValue = obj =>
     .join(',');
 
 /* eslint react/no-multi-comp:0 */
-@connect(({ walletmgr, loading }) => ({
-  walletmgr,
-  loading: loading.models.walletmgr,
+@connect(({ walletinfo, loading }) => ({
+  walletinfo,
+  loading: loading.models.walletinfo,
 }))
 @Form.create()
 class WalletMgr extends PureComponent {
@@ -84,11 +84,11 @@ class WalletMgr extends PureComponent {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'walletmgr/fetch',
+      type: 'walletinfo/fetchMgr',
       payload: { address: '' }
     });
     dispatch({
-      type: 'walletmgr/fetchBalanceAll',
+      type: 'walletinfo/fetchBalanceAll',
     });
   }
 
@@ -113,7 +113,7 @@ class WalletMgr extends PureComponent {
     }
 
     dispatch({
-      type: 'walletmgr/fetch',
+      type: 'walletinfo/fetchMgr',
       payload: params,
     });
   };
@@ -125,7 +125,7 @@ class WalletMgr extends PureComponent {
       formValues: {},
     });
     dispatch({
-      type: 'walletmgr/fetch',
+      type: 'walletinfo/fetchMgr',
       payload: {},
     });
   };
@@ -148,7 +148,7 @@ class WalletMgr extends PureComponent {
       });
 
       dispatch({
-        type: 'walletmgr/fetch',
+        type: 'walletinfo/fetchMgr',
         payload: values,
       });
     });
@@ -218,7 +218,7 @@ class WalletMgr extends PureComponent {
 
   render() {
     const {
-      walletmgr: { data, info },
+      walletinfo: { data, info },
       loading,
     } = this.props;
     const { selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;

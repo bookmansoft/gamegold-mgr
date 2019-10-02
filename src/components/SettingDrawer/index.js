@@ -221,14 +221,11 @@ class SettingDrawer extends PureComponent {
             </List.Item>
           </Body>
           <Divider />
-          <CopyToClipboard
-            text={JSON.stringify(omit(setting, ['colorWeak']), null, 2)}
-            onCopy={() => message.success(formatMessage({ id: 'app.setting.copyinfo' }))}
-          >
-            <Button block icon="copy">
-              {formatMessage({ id: 'app.setting.copy' })}
-            </Button>
+
+          <CopyToClipboard text={JSON.stringify(omit(setting, ['colorWeak']), null, 2)} onCopy={() => message.success(formatMessage({ id: 'app.setting.copyinfo' }))}>
+            <Button block icon="copy">{formatMessage({ id: 'app.setting.copy' })}</Button>
           </CopyToClipboard>
+
           <Alert
             type="warning"
             className={styles.productionHint}

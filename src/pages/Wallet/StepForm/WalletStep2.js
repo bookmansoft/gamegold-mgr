@@ -14,15 +14,15 @@ const formItemLayout = {
   },
 };
 
-@connect(({ walletstep, loading }) => ({
+@connect(({ walletinfo, loading }) => ({
   submitting: loading.effects['wallet/submitStepForm'],
-  data: walletstep,
+  data: walletinfo,
 }))
 @Form.create()
 class WalletStep2 extends React.PureComponent {
   appendText(theText) {
     this.props.dispatch({
-      type: 'walletstep/appendText',
+      type: 'walletinfo/appendText',
       payload: {
         theText,
       },
@@ -45,7 +45,7 @@ class WalletStep2 extends React.PureComponent {
             return;
           }
           dispatch({
-            type: 'walletstep/submitStepForm',
+            type: 'walletinfo/submitStepForm',
             payload: {
               ...data,
               ...values,

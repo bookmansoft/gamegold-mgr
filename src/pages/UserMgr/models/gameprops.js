@@ -1,5 +1,9 @@
 import { 
-  getPropsByGame, getAllGameList, PropCreateListRemote,getBalanceAll,sendListRemote
+  getPropsByGame, 
+  getAllGameList, 
+  PropCreateListRemote,
+  getBalanceAll,
+  sendListRemote
 } from '@/services/gamegoldapi';
 
 export default {
