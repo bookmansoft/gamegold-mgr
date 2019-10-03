@@ -7,7 +7,6 @@ import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
 const onPrev = () => {
     history.back();
-  //router.push('/funding/fundingauditview');
 };
 const actions = (
   <Fragment>

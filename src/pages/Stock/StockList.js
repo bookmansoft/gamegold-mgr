@@ -29,11 +29,9 @@ const getValue = obj =>
 
 /* eslint react/no-multi-comp:0 */
 @connect(({ 
-  stocklist, gamelist,
-  loading 
+  stocklist, gamelist, loading 
 }) => ({
-  stocklist, gamelist,
-  loading: loading.models.stocklist,
+  stocklist, gamelist, loading: loading.models.stocklist && loading.models.gamelist,
 }))
 @Form.create()
 class StockList extends PureComponent {
@@ -88,9 +86,13 @@ class StockList extends PureComponent {
     const { dispatch } = this.props;
     dispatch({
       type: 'stocklist/getStockOri',
+    }).catch(e=>{
+      console.log('stocklist/getStockOri', e.message);
     });
     dispatch({
       type: 'gamelist/fetchCpType'
+    }).catch(e=>{
+      console.log('gamelist/fetchCpType', e.message);
     });
   }
 

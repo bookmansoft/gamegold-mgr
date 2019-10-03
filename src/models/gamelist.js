@@ -1,4 +1,18 @@
-import { getGuiderAddress, changeGame, addGameMgr, getGameView, getGameFromUrl, payOrder, queryGameMgr, ListCpType } from '@/services/gamegoldapi';
+import { 
+  getPropsByGame, 
+  getAllGameList, 
+  PropCreateListRemote,
+  getBalanceAll,
+  sendListRemote,
+  getGuiderAddress, 
+  changeGame, 
+  addGameMgr, 
+  getGameView, 
+  getGameFromUrl, 
+  payOrder, 
+  queryGameMgr, 
+  ListCpType 
+} from '@/services/gamegoldapi';
 
 export default {
   namespace: 'gamelist',
@@ -13,9 +27,37 @@ export default {
       list: [],
       pagination: {},
     },
+    gameList: [],
+    gamePropsList: [],
   },
 
   effects: {
+    *getPropsByGame({ payload }, { call, put }) {
+      const response = yield call(getPropsByGame, payload);
+      yield put({
+        type: 'gamePropsByGame',
+        gamePropsList: response,
+      });
+    },
+    *getAllGameList({ payload }, { call, put }) {
+      const response = yield call(getAllGameList, payload);
+      yield put({
+        type: 'gameAllGameList',
+        gameList: response,
+      });
+    },
+    *propcreatelistremote({ payload }, { call }) {
+      const res = yield call(PropCreateListRemote, payload);
+      return res;
+    },
+    *getBalanceAll({ payload }, { call}) {
+      const res = yield call(getBalanceAll, payload);
+      return res;
+    },
+    *sendlistremote({ payload }, { call }) {
+      const res = yield call(sendListRemote, payload);
+      return res;
+    },
     //从游戏厂商获取集采信息
     *fetchGame({ payload }, { call, put }) {
       const response = yield call(getGameFromUrl, payload);
@@ -66,6 +108,18 @@ export default {
   },
 
   reducers: {
+    gamePropsByGame(state, { gamePropsList }) {
+      return {
+        ...state,
+        gamePropsList: gamePropsList
+      };
+    },
+    gameAllGameList(state, { gameList }) {
+      return {
+        ...state,
+        gameList: gameList
+      };
+    },
     saveGame(state, action) {
       return {
         ...state,

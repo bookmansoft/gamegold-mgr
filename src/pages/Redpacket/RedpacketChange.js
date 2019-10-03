@@ -28,9 +28,9 @@ const FormItem = Form.Item;
 
 const getWindowWidth = () => window.innerWidth || document.documentElement.clientWidth;
 
-@connect(({ redpacketchange, loading }) => ({
-  redpacketchange,
-  loading: loading.models.redpacketchange,
+@connect(({ redpacketlist, loading }) => ({
+  redpacketlist,
+  loading: loading.models.redpacketlist,
 }))
 @Form.create()
 class RedpacketAdd extends Component {
@@ -51,7 +51,7 @@ class RedpacketAdd extends Component {
   componentDidMount() {
     const { dispatch,form } = this.props;
     dispatch({
-      type: 'redpacketchange/fetch',
+      type: 'redpacketlist/getView',
       payload: { id: this.props.location.query.id },//这里
     }).then((ret)=> {
       console.log("刷新完成"+JSON.stringify(ret));
@@ -84,7 +84,7 @@ class RedpacketAdd extends Component {
       console.log(values);
       if (!err) {
         dispatch({
-          type: 'redpacketchange/change',
+          type: 'redpacketlist/change',
           payload: values,
         }).then((ret) => {
           console.log("B 执行完成！");
@@ -100,7 +100,7 @@ class RedpacketAdd extends Component {
   }
   render() {
     const {
-      redpacketchange: { data },
+      redpacketlist: { view },
       form: { getFieldDecorator, getFieldValue },
       loading
     } = this.props;
@@ -109,7 +109,7 @@ class RedpacketAdd extends Component {
 
     return (
       <PageHeaderWrapper
-        title={data.cp_name}
+        title={view.cp_name}
         action={null}
         content={null}
         extraContent={null}

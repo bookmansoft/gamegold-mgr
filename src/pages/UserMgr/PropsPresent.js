@@ -17,9 +17,9 @@ const { Option } = Select;
 import DescriptionList from '@/components/DescriptionList';
 const { Description } = DescriptionList;
 
-@connect(({ gameprops, loading }) => ({
-  gameprops,
-  loading: loading.models.gameprops,
+@connect(({ gamelist, loading }) => ({
+  gamelist,
+  loading: loading.models.gamelist,
 }))
 
 @Form.create()
@@ -44,11 +44,11 @@ class PropsPresent extends PureComponent {
     }
 
     dispatch({
-      type: 'gameprops/getAllGameList',
+      type: 'gamelist/getAllGameList',
       payload: {}
     });
     dispatch({
-      type: 'gameprops/getBalanceAll',
+      type: 'gamelist/getBalanceAll',
       payload: {}
     }).then((ret) => {
       if (ret.code === 0) {
@@ -79,7 +79,7 @@ class PropsPresent extends PureComponent {
       prop.cid = this.state.currentGame.cp_id,
 
       dispatch({
-        type: 'gameprops/sendlistremote',
+        type: 'gamelist/sendlistremote',
         payload: { 
           prop: prop, 
           addr: addr,
@@ -121,7 +121,7 @@ class PropsPresent extends PureComponent {
     //获取已经创建的本地道具库
     if (!!value) {
       dispatch({
-        type: 'gameprops/getPropsByGame',
+        type: 'gamelist/getPropsByGame',
         payload: {
           cp_url: value.cp_url,
         },
@@ -167,7 +167,7 @@ class PropsPresent extends PureComponent {
   };
 
   render() {
-    const { submitting, gameprops: { gameList, gamePropsList }, form: { getFieldDecorator } } = this.props;
+    const { submitting, gamelist: { gameList, gamePropsList }, form: { getFieldDecorator } } = this.props;
     const { currentAddr, currentPropDetail, totalPrice, confirmed } = this.state;
 
     const formItemLayout = {

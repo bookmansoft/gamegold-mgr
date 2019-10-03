@@ -160,7 +160,6 @@ class FundingList extends PureComponent {
   //查看页面
   handleView = (flag, record) => {
     console.log(record);
-    // this.props.history.push("./fundingview?id="+record.cp_id);
     this.props.history.push("./fundingview?id=" + record.id);
   };
 

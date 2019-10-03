@@ -34,9 +34,9 @@ const { Step } = Steps;
 
 const getWindowWidth = () => window.innerWidth || document.documentElement.clientWidth;
 
-@connect(({ fundingview, loading }) => ({
-  fundingview,
-  loading: loading.models.fundingview,
+@connect(({ fundinglist, loading }) => ({
+  fundinglist,
+  loading: loading.models.fundinglist,
 }))
 
 class FundingView extends Component {
@@ -51,8 +51,7 @@ class FundingView extends Component {
   }
 
   getCurrentStep() {
-    console.log('fundingview', this.props.fundingview.data);
-    return this.props.fundingview.data.audit_state_id;
+    return this.props.fundinglist.record.audit_state_id;
   }
 
   state = {
@@ -94,7 +93,7 @@ class FundingView extends Component {
     const { dispatch } = this.props;
     console.log(this.props.location.query.id);
     dispatch({
-      type: 'fundingview/fetch',
+      type: 'fundinglist/record',
       payload: { id: this.props.location.query.id },//这里
     });
 
@@ -130,7 +129,7 @@ class FundingView extends Component {
   render() {
     const { stepDirection, operationkey } = this.state;
     const {
-      fundingview: { data },
+      fundinglist: { record },
       loading
     } = this.props;
 
@@ -160,16 +159,16 @@ class FundingView extends Component {
           </Row>
           <Row style={{ marginBottom: 32 }}>
           <Col span={4}>
-              <Pie percent={parseInt((data.stock_num-data.residue_num)*100/data.stock_num)} subTitle={null} total={parseInt((data.stock_num-data.residue_num)*100/data.stock_num)+'%'} height={120} />
+              <Pie percent={parseInt((record.stock_num-record.residue_num)*100/record.stock_num)} subTitle={null} total={parseInt((record.stock_num-record.residue_num)*100/record.stock_num)+'%'} height={120} />
             </Col>
             <Col span={8} style={{ marginBottom: 16 }}>
-              凭证总数量：{data.stock_num}
+              凭证总数量：{record.stock_num}
             </Col>
             <Col span={8} style={{ marginBottom: 16 }}>
-              未认购数量：{data.residue_num}
+              未认购数量：{record.residue_num}
             </Col>
             <Col span={8}>
-              截止时间：{moment(data.sell_limit_date * 1000).format('YYYY-MM-DD HH:mm:ss')}
+              截止时间：{moment(record.sell_limit_date * 1000).format('YYYY-MM-DD HH:mm:ss')}
             </Col>
           </Row>
         </Card>
@@ -179,18 +178,18 @@ class FundingView extends Component {
           </Row>
           <Row style={{ marginBottom: 32 }}>
             <Col span={8}>
-              发行凭证总数(份)：{data.stock_num}
+              发行凭证总数(份)：{record.stock_num}
             </Col>
             <Col span={8}>
-              发行价(千克/份)：{parseFloat(data.stock_amount/100000).toFixed(3)}
+              发行价(千克/份)：{parseFloat(record.stock_amount/100000).toFixed(3)}
             </Col>
             <Col span={8}>
-              众筹总金额(千克)：{parseFloat(data.total_amount/100000).toFixed(3)}
+              众筹总金额(千克)：{parseFloat(record.total_amount/100000).toFixed(3)}
             </Col>
           </Row>
           <Row style={{ marginBottom: 32 }}>
             <Col span={24}>
-              提交申请时间：{moment(data.modify_date * 1000).format('YYYY-MM-DD HH:mm:ss')}
+              提交申请时间：{moment(record.modify_date * 1000).format('YYYY-MM-DD HH:mm:ss')}
             </Col>
           </Row>
         </Card>
@@ -201,17 +200,17 @@ class FundingView extends Component {
           </Row>
           <Row style={{ marginBottom: 32 }}>
           <Col span={8}>
-              游戏中文名：{data.cp_text}
+              游戏中文名：{record.cp_text}
             </Col>
             <Col span={8}>
-              游戏类型：{data.cp_type}
+              游戏类型：{record.cp_type}
             </Col>
             <Col span={8}>
-              开发者：{data.develop_name}
+              开发者：{record.develop_name}
             </Col>
           </Row>
           <Row style={{ marginBottom: 32 }}>
-            <Col span={24}>游戏详情页：{data.cp_url}</Col>
+            <Col span={24}>游戏详情页：{record.cp_url}</Col>
           </Row>
 
           <Divider style={{ margin: '20px 0' }} />
@@ -220,7 +219,7 @@ class FundingView extends Component {
           </Row>
           <Row style={{ marginBottom: 32 }}>
             <Col span={24}>
-              {data.develop_text}
+              {record.develop_text}
             </Col>
           </Row>
 

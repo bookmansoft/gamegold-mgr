@@ -23,7 +23,7 @@ const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
 @connect(({ loading }) => ({
-  submitting: loading.effects['operator/operatorpassword'],
+  submitting: loading.effects['operatorlist/changepwd'],
 }))
 @Form.create()
 class OperatorPassword extends PureComponent {
@@ -34,7 +34,7 @@ class OperatorPassword extends PureComponent {
       if (!err) {
         console.log(values);
         dispatch({
-          type: 'operatorpassword/change',
+          type: 'operatorlist/changepwd',
           payload: values,
         }).then((ret) => {
           console.log(ret);

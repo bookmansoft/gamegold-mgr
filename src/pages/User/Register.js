@@ -34,9 +34,9 @@ const passwordProgressMap = {
   poor: 'exception',
 };
 
-@connect(({ register, loading }) => ({
-  register,
-  submitting: loading.effects['register/submit'],
+@connect(({ user, loading }) => ({
+  user,
+  submitting: loading.effects['user/register'],
 }))
 @Form.create()
 class Register extends Component {
@@ -71,7 +71,7 @@ class Register extends Component {
       if (!err) {
         const { prefix } = this.state;
         dispatch({
-          type: 'register/authcode',
+          type: 'user/authcode',
           payload: {
             ...values,
             prefix,
@@ -95,14 +95,14 @@ class Register extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    const { form, dispatch, register } = this.props;
+    const { form, dispatch } = this.props;
     const account = form.getFieldValue('mail');
 
     form.validateFields({ force: true }, (err, values) => {
       if (!err) {
         const { prefix } = this.state;
         dispatch({
-          type: 'register/submit',
+          type: 'user/register',
           payload: {
             ...values,
             prefix,

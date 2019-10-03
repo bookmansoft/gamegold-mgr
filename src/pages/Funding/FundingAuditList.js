@@ -26,11 +26,11 @@ const getValue = obj =>
 
 /* eslint react/no-multi-comp:0 */
 @connect(({ 
-  fundingauditlist, gamelist,
+  fundinglist, gamelist,
   loading 
 }) => ({
-  fundingauditlist, gamelist,
-  loading: loading.models.fundingauditlist,
+  fundinglist, gamelist,
+  loading: loading.models.fundinglist,
 }))
 @Form.create()
 class FundingAuditList extends PureComponent {
@@ -114,7 +114,7 @@ class FundingAuditList extends PureComponent {
     }
 
     dispatch({
-      type: 'fundingauditlist/fetch',
+      type: 'fundinglist/fetchAudit',
       payload: params,
     });
   };
@@ -127,7 +127,7 @@ class FundingAuditList extends PureComponent {
       formValues: {},
     });
     dispatch({
-      type: 'fundingauditlist/fetch',
+      type: 'fundinglist/fetchAudit',
       payload: {},
     });
   };
@@ -150,7 +150,7 @@ class FundingAuditList extends PureComponent {
       });
 
       dispatch({
-        type: 'fundingauditlist/fetch',
+        type: 'fundinglist/fetchAudit',
         payload: values,
       });
     });
@@ -226,7 +226,7 @@ class FundingAuditList extends PureComponent {
 
   render() {
     const {
-      fundingauditlist: { data },
+      fundinglist: { audit },
       loading,
     } = this.props;
     const { selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;
@@ -240,7 +240,7 @@ class FundingAuditList extends PureComponent {
             <SimpleTable
               selectedRows={selectedRows}
               loading={loading}
-              data={data}
+              data={audit}
               columns={this.columns}
               onSelectRow={null}
               onChange={this.handleStandardTableChange}

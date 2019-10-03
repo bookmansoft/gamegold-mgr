@@ -38,11 +38,11 @@ const getValue = obj =>
 
 /* eslint react/no-multi-comp:0 */
 @connect(({ 
-  userlist, gamelist,
-  loading 
+  user, gamelist, 
+  loading,
 }) => ({
-  userlist, gamelist,
-  loading: loading.models.userlist,
+  user, gamelist,
+  loading: loading.models.user,
 }))
 @Form.create()
 class UserList extends PureComponent {
@@ -92,7 +92,7 @@ class UserList extends PureComponent {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'userlist/fetch',
+      type: 'user/getUsers',
     });
     dispatch({
       type: 'gamelist/fetchCpType'
@@ -125,7 +125,7 @@ class UserList extends PureComponent {
     }
 
     dispatch({
-      type: 'userlist/fetch',
+      type: 'user/getUsers',
       payload: params,
     });
   };
@@ -159,7 +159,7 @@ class UserList extends PureComponent {
       formValues: {},
     });
     dispatch({
-      type: 'userlist/fetch',
+      type: 'user/getUsers',
       payload: {},
     });
   };
@@ -181,7 +181,7 @@ class UserList extends PureComponent {
       });
 
       dispatch({
-        type: 'userlist/fetch',
+        type: 'user/getUsers',
         payload: values,
       });
     });
@@ -252,7 +252,7 @@ class UserList extends PureComponent {
 
   render() {
     const {
-      userlist: { data },
+      user: { users },
       loading,
     } = this.props;
     const { selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;
@@ -267,7 +267,7 @@ class UserList extends PureComponent {
               selectedRows={selectedRows}
               rowKey={'rank'}
               loading={loading}
-              data={data}
+              data={users}
               columns={this.columns}
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}

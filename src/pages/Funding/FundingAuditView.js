@@ -31,9 +31,9 @@ const { TextArea } = Input;
 
 const getWindowWidth = () => window.innerWidth || document.documentElement.clientWidth;
 
-@connect(({ fundingauditview, loading }) => ({
-  fundingauditview,
-  loading: loading.models.fundingauditview,
+@connect(({ fundinglist, loading }) => ({
+  fundinglist,
+  loading: loading.models.fundinglist,
 }))
 @Form.create()
 class FundingAuditView extends Component {
@@ -77,7 +77,7 @@ class FundingAuditView extends Component {
     const { dispatch, form } = this.props;
     console.log(theState);
     dispatch({
-      type: 'fundingauditview/audit',
+      type: 'fundinglist/audit',
       payload: {
         state: theState
       },
@@ -100,7 +100,7 @@ class FundingAuditView extends Component {
     const { dispatch, form } = this.props;
     console.log(theState);
     dispatch({
-      type: 'fundingauditview/audit',
+      type: 'fundinglist/audit',
       payload: {
         state: theState
       },
@@ -136,7 +136,7 @@ class FundingAuditView extends Component {
 
     this.state.id=parseInt(this.props.location.query.id);//设置到本页的state中备用
     dispatch({
-      type: 'fundingauditview/fetch',
+      type: 'fundinglist/auditview',
       payload: { id: this.state.id },
     });
 
@@ -172,7 +172,7 @@ class FundingAuditView extends Component {
   render() {
     const { stepDirection, operationkey } = this.state;
     const {
-      fundingauditview: { data },
+      fundinlist: { auditview },
       form: { getFieldDecorator, getFieldValue },
       loading
     } = this.props;

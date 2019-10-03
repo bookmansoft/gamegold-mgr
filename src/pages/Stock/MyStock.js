@@ -26,11 +26,9 @@ const getValue = obj => Object.keys(obj).map(key => obj[key]).join(',');
 
 /* eslint react/no-multi-comp:0 */
 @connect(({ 
-  stocklist, gamelist,
-  loading 
+  stocklist, gamelist, loading,
 }) => ({
-  stocklist, gamelist,
-  loading: loading.models.stocklist,
+  stocklist, gamelist, loading: loading.models.stocklist && loading.models.gamelist,
 }))
 @Form.create()
 class MyStock extends PureComponent {
@@ -97,9 +95,13 @@ class MyStock extends PureComponent {
     const { dispatch } = this.props;
     dispatch({
       type: 'stocklist/mystock',
+    }).catch(e=>{
+      console.log('stocklist/mystock', e.message);
     });
     dispatch({
       type: 'gamelist/fetchCpType'
+    }).catch(e=>{
+      console.log('gamelist/fetchCpType', e.message);
     });
   }
 

@@ -22,7 +22,6 @@ export default {
       });
     },
     *get({ payload }, { call,put }) {
-      console.log("redpacketchange model："+payload.id);
       const response = yield call(getRedpacket, payload);
       yield put({
         type: 'savePrize',
